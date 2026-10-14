@@ -128,7 +128,7 @@ export const TEMPLATES = {
                             </p>
                         </div>
                         <div class="pt-3 border-t border-zinc-800/80 mt-auto">
-                            <a href="#/about" class="text-xs sm:text-sm font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1">
+                            <a href="#/hakkimizda" class="text-xs sm:text-sm font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1">
                                 Detaylar &rarr;
                             </a>
                         </div>
@@ -959,11 +959,11 @@ export const TEMPLATES = {
                                 Üniversitendeki yurtları, hocaları, kulüpleri veya staj tecrübelerini anlat; tercih yapacak gençlere en samimi rehber sen ol. Yazıların hem platformda öne çıksın hem de topluluğa değer katsın.
                             </p>
                             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                <a href="#/review-form" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 text-zinc-950 font-bold hover:brightness-110 shadow-lg shadow-cyan-500/25 transition-all hover:scale-[1.02]">
+                                <a href="#/yazi-gonder" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 text-zinc-950 font-bold hover:brightness-110 shadow-lg shadow-cyan-500/25 transition-all hover:scale-[1.02]">
                                     <i data-lucide="send" class="w-4 h-4"></i> Yazı Gönder
                                 </a>
-                                <a href="#/about" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-zinc-800/80 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700 transition-all text-sm font-semibold">
-                                    Yayın İlkeleri <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                <a href="#/yayin-ilkeleri" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-zinc-800/80 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700 transition-all text-sm font-semibold">
+                                    Yayın İlkeleri <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
                                 </a>
                             </div>
                         </div>
@@ -1007,4 +1007,714 @@ export const TEMPLATES = {
                 </div>
             </div>
         </main>
-    `};
+    `,
+
+    yayinIlkeleri: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Aydinlatmalari -->
+            <div class="pointer-events-none absolute -top-32 -left-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute top-48 -right-32 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Baslik & Hero -->
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>Doğruluk, Şeffaflık & Bağımsızlık</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
+                        Yayın İlkeleri
+                    </h1>
+                    <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                        Kampüs Sesi topluluğunun temel direği; bağımsız, dürüst ve tarafsız öğrenci deneyimidir. Platformda yayımlanan her değerlendirme ve rehber aşağıdaki ilkeler doğrultusunda denetlenir.
+                    </p>
+                </div>
+
+                <!-- 4 Temel Ilke Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                    <!-- 1. Tarafsızlık ve Şeffaflık -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 hover:border-zinc-700 transition-all duration-200">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-5">
+                            <i data-lucide="scale" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2.5">1. Tarafsızlık ve Şeffaflık</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Deneyimlerin ticari veya kurumsal baskı olmadan tamamen öğrencilerin kendi hür iradeleriyle yazılması esastır. Hiçbir üniversite yönetimi veya sponsorlu kurum içeriğe müdahale edemez veya olumsuz yorumların silinmesini talep edemez.
+                        </p>
+                    </div>
+
+                    <!-- 2. Doğrulanabilirlik -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 hover:border-zinc-700 transition-all duration-200">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-5">
+                            <i data-lucide="check-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2.5">2. Doğrulanabilirlik</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Paylaşılan staj, yurt, yemekhane veya kulüp rehberlerinin güncel ve yanıltıcı olmayan bilgiler içermesi beklenir. Kulaktan dolma söylentiler yerine gerçek öğrenci yaşanmışlıkları ve doğrulanabilir bilgiler esas alınır.
+                        </p>
+                    </div>
+
+                    <!-- 3. İntihal ve Kopya İçerik Yasağı -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 hover:border-zinc-700 transition-all duration-200">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-5">
+                            <i data-lucide="file-x-2" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2.5">3. İntihal ve Kopya İçerik Yasağı</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Başka web sitelerinden veya resmi tanıtım bültenlerinden kopyalanmış tanıtım metinleri doğrudan reddedilir; yalnızca öğrencilerin kendi kaleminden çıkan orijinal deneyimler ve kılavuzlar kabul edilir.
+                        </p>
+                    </div>
+
+                    <!-- 4. Yapıcı Eleştiri Kültürü -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 hover:border-zinc-700 transition-all duration-200">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-5">
+                            <i data-lucide="message-square-quote" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2.5">4. Yapıcı Eleştiri Kültürü</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Üniversitelerin eksik yönleri veya kampüs imkanlarının yetersizliği; hakaret ve küfür olmadan, somut örneklerle ve yapıcı bir dille ifade edilmelidir. Amaç karalamak değil, aday öğrencileri doğru bilgilendirmektir.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- CTA Banner -->
+                <div class="rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-cyan-950/30 via-zinc-900/80 to-zinc-900 p-8 flex flex-col sm:flex-row items-center justify-between gap-6 backdrop-blur-md">
+                    <div>
+                        <h4 class="text-lg font-bold text-white mb-1">İlkelerimize aykırı bir içerik mi gördün?</h4>
+                        <p class="text-zinc-400 text-sm">Gözden kaçan veya taraflı olduğunu düşündüğün paylaşımları moderasyon ekibimize bildirebilirsin.</p>
+                    </div>
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <a href="#/iletisim" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-semibold transition-all">
+                            <i data-lucide="flag" class="w-4 h-4"></i> Bildir
+                        </a>
+                        <a href="#/review-form" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-zinc-950 text-sm font-bold shadow-lg shadow-cyan-500/20 transition-all">
+                            <i data-lucide="pen-line" class="w-4 h-4"></i> Yorum Yaz
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    `,
+
+    okulOner: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Aydinlatmalari -->
+            <div class="pointer-events-none absolute -top-32 -right-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-2xl mx-auto px-4 sm:px-6">
+                <!-- Baslik & Hero -->
+                <div class="text-center mb-10">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-4 backdrop-blur-md">
+                        <i data-lucide="building-2" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>Veritabanı Katkısı</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-3" style="font-family: var(--font-heading);">
+                        Sistemde Olmayan Bir Üniversite veya Kampüs Öner
+                    </h1>
+                    <p class="text-zinc-400 text-sm sm:text-base leading-relaxed">
+                        Aradığın üniversite, meslek yüksekokulu veya yeni kurulan bir yerleşke henüz listemizde yok mu? Bilgileri paylaş, ekibimiz 24 saat içinde doğrulayıp platforma eklesin.
+                    </p>
+                </div>
+
+                <!-- Form Kartı -->
+                <div class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 sm:p-10 shadow-2xl backdrop-blur-xl">
+                    <form id="suggest-uni-form" class="space-y-5">
+                        <div>
+                            <label for="suggest-uni-name" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                Üniversite Adı <span class="text-cyan-400">*</span>
+                            </label>
+                            <input type="text" id="suggest-uni-name" required placeholder="Örn: İzmir Bakırçay Üniversitesi" class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="suggest-city" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                    Bulunduğu Şehir <span class="text-cyan-400">*</span>
+                                </label>
+                                <input type="text" id="suggest-city" required placeholder="Örn: İzmir" class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                            </div>
+                            <div>
+                                <label for="suggest-campus" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                    Kampüs / Yerleşke Adı (Varsa)
+                                </label>
+                                <input type="text" id="suggest-campus" placeholder="Örn: Seyrek Ana Kampüsü" class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="suggest-website" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                Resmi Web Sitesi
+                            </label>
+                            <input type="url" id="suggest-website" placeholder="Örn: https://bakircay.edu.tr" class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                        </div>
+
+                        <div>
+                            <label for="suggest-email" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                Öneren E-posta <span class="text-cyan-400">*</span>
+                            </label>
+                            <input type="email" id="suggest-email" required placeholder="ornek@ogrenci.edu.tr" class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                            <p class="text-xs text-zinc-500 mt-1.5">Üniversite listeye eklendiğinde sana e-posta ile bildirelim.</p>
+                        </div>
+
+                        <div>
+                            <label for="suggest-notes" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                Ek Notlar veya Açıklama
+                            </label>
+                            <textarea id="suggest-notes" rows="3" placeholder="Fakülteler, yurt imkanları veya eklemek istediğin detaylar..." class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors resize-none"></textarea>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" id="suggest-submit-btn" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 text-zinc-950 font-bold hover:brightness-110 shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                                <i data-lucide="send" class="w-4 h-4"></i> Öneriyi Gönder
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    `,
+
+    yaziGonder: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Aydinlatmalari -->
+            <div class="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6">
+                <!-- Baslik & Hero -->
+                <div class="text-center mb-10">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-4 backdrop-blur-md">
+                        <i data-lucide="pen-tool" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>Blog & Rehber Katkısı</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-3" style="font-family: var(--font-heading);">
+                        Kampüs Sesine Yazı Gönder
+                    </h1>
+                    <p class="text-zinc-400 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
+                        Kendi kampüs deneyimini, yurt rehberini veya staj serüvenini binlerce öğrenciyle paylaş. Yazın editörlerimizce incelenip Blog & Rehberler bölümünde öne çıkarılsın.
+                    </p>
+                </div>
+
+                <!-- Form Kartı -->
+                <div class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 sm:p-10 shadow-2xl backdrop-blur-xl">
+                    <form id="post-submission-form" class="space-y-5">
+                        <div>
+                            <label for="post-title" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                Yazı Başlığı <span class="text-cyan-400">*</span>
+                            </label>
+                            <input type="text" id="post-title" required placeholder="Örn: İstanbul'da KYK Yurdunda Yaşamak: İlk Yıl Hayatta Kalma Taktikleri" class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="post-category" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                    Kategori Seçimi <span class="text-cyan-400">*</span>
+                                </label>
+                                <select id="post-category" required class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                                    <option value="" disabled selected>Bir kategori seçin...</option>
+                                    <option value="Kampüs Yaşamı">Kampüs Yaşamı</option>
+                                    <option value="Burs & Barınma">Burs & Barınma</option>
+                                    <option value="Staj & Kariyer">Staj & Kariyer</option>
+                                    <option value="Akademik Rehberler">Akademik Rehberler</option>
+                                    <option value="Şehir & Ulaşım">Şehir & Ulaşım</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="post-read-time" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                    Tahmini Okuma Süresi
+                                </label>
+                                <input type="text" id="post-read-time" placeholder="Örn: 4 dk okuma" class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="post-author" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                    Yazar Adı / Rumuz <span class="text-cyan-400">*</span>
+                                </label>
+                                <input type="text" id="post-author" required placeholder="Örn: Ali K." class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                            </div>
+                            <div>
+                                <label for="post-author-desc" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                    Üniversite, Bölüm ve Sınıf <span class="text-cyan-400">*</span>
+                                </label>
+                                <input type="text" id="post-author-desc" required placeholder="Örn: İTÜ - Endüstri Mühendisliği, 3. Sınıf" class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="post-summary" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                Kısa Özet (Kartta Görünecek Açıklama)
+                            </label>
+                            <input type="text" id="post-summary" placeholder="1-2 cümlelik dikkat çekici özet..." class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                        </div>
+
+                        <div>
+                            <label for="post-content" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                Yazı İçeriği <span class="text-cyan-400">*</span>
+                            </label>
+                            <textarea id="post-content" rows="8" required placeholder="Deneyimini, tavsiyelerini ve alt başlıklarını detaylı bir şekilde yazabilirsin..." class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors resize-y leading-relaxed"></textarea>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-zinc-950/60 border border-zinc-800 flex items-start gap-3">
+                            <input type="checkbox" id="post-consent" required class="mt-1 w-4 h-4 rounded border-zinc-700 text-cyan-400 focus:ring-cyan-400 cursor-pointer">
+                            <label for="post-consent" class="text-xs text-zinc-400 leading-relaxed cursor-pointer">
+                                Yazımın tamamen kendi deneyimlerime dayandığını, intihal içermediğini ve Kampüs Sesi <a href="#/yayin-ilkeleri" target="_blank" class="text-cyan-400 hover:underline">Yayın İlkeleri</a> ile <a href="#/topluluk-kurallari" target="_blank" class="text-cyan-400 hover:underline">Topluluk Kuralları</a>'na uygun olduğunu onaylıyorum.
+                            </label>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" id="post-submit-btn" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 text-zinc-950 font-bold hover:brightness-110 shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                                <i data-lucide="send" class="w-4 h-4"></i> Yazıyı Editörlere Gönder
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    `,
+
+    toplulukKurallari: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Aydinlatmalari -->
+            <div class="pointer-events-none absolute -top-32 -left-32 w-96 h-96 bg-red-500/5 rounded-full blur-3xl" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute top-48 -right-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Baslik & Hero -->
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
+                        <i data-lucide="users" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>Güvenli & Saygılı Topluluk</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
+                        Topluluk Kuralları
+                    </h1>
+                    <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                        Kampüs Sesi, öğrencilerin birbirlerine güvenle danışabildiği saygılı bir dayanışma alanıdır. Platformumuzda geçerli olan 4 temel kural:
+                    </p>
+                </div>
+
+                <!-- 4 Temel Kural Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                    <!-- 1. Sıfır Tolerans (Nefret Söylemi & Tehdit) -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 hover:border-zinc-700 transition-all duration-200">
+                        <div class="w-12 h-12 rounded-xl bg-red-950/60 border border-red-500/30 text-red-400 flex items-center justify-center mb-5">
+                            <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2.5">1. Sıfır Tolerans (Nefret Söylemi & Tehdit)</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Din, dil, ırk, cinsiyet veya cinsel yönelim üzerinden ayrımcılık içeren veya tehdit barındıran yorumlar süresiz olarak engellenir. Bu tür hesaplar ve içerikler hiçbir uyarı yapılmaksızın derhal platformdan uzaklaştırılır.
+                        </p>
+                    </div>
+
+                    <!-- 2. Kişisel Veri ve Mahremiyet (KVKK) -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 hover:border-zinc-700 transition-all duration-200">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-5">
+                            <i data-lucide="lock" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2.5">2. Kişisel Veri ve Mahremiyet</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Akademisyenlerin veya öğrencilerin kişisel telefon numaraları, özel sosyal medya profilleri veya özel hayatlarına dair detaylar paylaşılamaz. Değerlendirmeler yalnızca kurumsal ve akademik deneyimle sınırlıdır.
+                        </p>
+                    </div>
+
+                    <!-- 3. Reklam ve Ticari Kazanç Yasağı -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 hover:border-zinc-700 transition-all duration-200">
+                        <div class="w-12 h-12 rounded-xl bg-amber-950/60 border border-amber-500/30 text-amber-400 flex items-center justify-center mb-5">
+                            <i data-lucide="ban" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2.5">3. Reklam ve Ticari Kazanç Yasağı</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Özel yurt veya mekanların gizli reklamını yapan sahte hesapların tespiti ve silinmesi tavizsiz uygulanır. Referans linkleri, ticari promosyonlar veya yönlendirici bot faaliyetleri kesinlikle yasaktır.
+                        </p>
+                    </div>
+
+                    <!-- 4. Saygılı İletişim İlkesi -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 hover:border-zinc-700 transition-all duration-200">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-5">
+                            <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2.5">4. Saygılı İletişim İlkesi</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Farklı görüşlere ve kampüs deneyimlerine saygı gösterilmelidir. Tartışmalar kişiselleştirilmemeli, alaycı veya taciz edici üsluptan uzak durulmalı; amaca odaklı, yapıcı ve yardımcı bir dil kullanılmalıdır.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Bilgilendirme Kutusu -->
+                <div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-zinc-800 text-zinc-300 flex items-center justify-center shrink-0">
+                        <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white mb-1">Kurallara uymayan bir paylaşım mı var?</h4>
+                        <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                            Herhangi bir yorumun altındaki bayrak simgesine tıklayarak veya doğrudan <a href="#/iletisim" class="text-cyan-400 hover:underline">İletişim</a> sayfamız üzerinden ilgili içeriğin linkiyle birlikte bize bildirebilirsin. Moderasyon ekibimiz en geç 24 saat içinde inceleyip gerekli aksiyonu alır.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    `,
+
+    hakkimizda: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Aydinlatmalari -->
+            <div class="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Baslik & Hero -->
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>Öğrenciden Öğrenciye Gerçek Kampüs Rehberi</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
+                        Hakkımızda
+                    </h1>
+                    <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                        Üniversite tercihlerini süslü broşürlerin ve tanıtım günlerinin ötesine taşıyarak; amfilerde, yurtlarda ve kampüslerde gerçekten ne yaşandığını şeffaf bir şekilde öğrencilerin sesinden aktarmak için buradayız.
+                    </p>
+                </div>
+
+                <!-- Misyon & Vizyon -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8 hover:border-zinc-700 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-5">
+                            <i data-lucide="target" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Misyonumuz</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Üniversite tercihlerini süslü broşürlerin ve tanıtım günlerinin ötesine taşıyarak; amfilerde, yurtlarda ve kampüslerde gerçekten ne yaşandığını şeffaf bir şekilde öğrencilerin sesinden aktarmak.
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8 hover:border-zinc-700 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-sky-950/60 border border-sky-500/30 text-sky-400 flex items-center justify-center mb-5">
+                            <i data-lucide="compass" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Vizyonumuz</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Türkiye'nin en güvenilir, tarafsız ve öğrenci odaklı kampüs ekosistemi olmak; her adayın geleceğine karar verirken gerçek bilgilere özgürce ve sansürsüzce ulaşabilmesini sağlamak.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Ilkelerimiz (3 Kolon) -->
+                <div class="mb-16">
+                    <h3 class="text-xl font-bold text-white mb-6 text-center">İlkelerimiz</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                        <div class="rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-6 text-center">
+                            <div class="w-10 h-10 mx-auto rounded-lg bg-zinc-800 text-cyan-400 flex items-center justify-center mb-3">
+                                <i data-lucide="eye" class="w-5 h-5"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-1.5 text-base">Şeffaflık</h4>
+                            <p class="text-zinc-400 text-xs leading-relaxed">Tüm veriler, puanlar ve yorumlar manipülasyonsuz ve sansürsüz aktarılır.</p>
+                        </div>
+
+                        <div class="rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-6 text-center">
+                            <div class="w-10 h-10 mx-auto rounded-lg bg-zinc-800 text-cyan-400 flex items-center justify-center mb-3">
+                                <i data-lucide="handshake" class="w-5 h-5"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-1.5 text-base">Öğrenci Dayanışması</h4>
+                            <p class="text-zinc-400 text-xs leading-relaxed">Kâr amacı değil; birbirine yol gösteren gençlerin kolektif aklı ve yardımlaşması esastır.</p>
+                        </div>
+
+                        <div class="rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-6 text-center">
+                            <div class="w-10 h-10 mx-auto rounded-lg bg-zinc-800 text-cyan-400 flex items-center justify-center mb-3">
+                                <i data-lucide="shield" class="w-5 h-5"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-1.5 text-base">Bağımsızlık</h4>
+                            <p class="text-zinc-400 text-xs leading-relaxed">Hiçbir vakıf, üniversite yönetimi ya da ticari sponsordan bağımsız, tarafsız duruş.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sayaç Bandı -->
+                <div class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);">200+</div>
+                        <div class="text-xs text-zinc-400">Üniversite</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);">1.560+</div>
+                        <div class="text-xs text-zinc-400">KYK Yurdu</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);">15.000+</div>
+                        <div class="text-xs text-zinc-400">Öğrenci Yorumu</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);">81 İl</div>
+                        <div class="text-xs text-zinc-400">Tüm Türkiye</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    `,
+
+    iletisim: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Aydinlatmalari -->
+            <div class="pointer-events-none absolute -top-32 -left-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Baslik & Hero -->
+                <div class="text-center mb-14">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-4 backdrop-blur-md">
+                        <i data-lucide="mail" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>Her Zaman Yanındayız</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
+                        İletişim & Destek
+                    </h1>
+                    <p class="text-zinc-400 text-base max-w-xl mx-auto leading-relaxed">
+                        Bir sorun mu var, önerin mi var ya da iş birliği mi planlıyorsun? Ekibimizle doğrudan iletişime geç, en kısa sürede dönüş yapalım.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <!-- Sol Kolon: İletişim Bilgileri (md:col-span-5) -->
+                    <div class="md:col-span-5 space-y-6">
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 space-y-6">
+                            <div>
+                                <span class="text-xs font-semibold text-zinc-500 uppercase tracking-wider block mb-1">E-posta Adresi</span>
+                                <a href="mailto:destek@kampussesi.com" class="text-lg font-bold text-cyan-400 hover:underline flex items-center gap-2">
+                                    <i data-lucide="mail" class="w-4 h-4"></i> destek@kampussesi.com
+                                </a>
+                            </div>
+
+                            <div class="pt-4 border-t border-zinc-800">
+                                <span class="text-xs font-semibold text-zinc-500 uppercase tracking-wider block mb-1">Yanıt Süresi</span>
+                                <div class="flex items-center gap-2 text-sm text-zinc-300">
+                                    <i data-lucide="clock" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+                                    <span>En geç <strong>24 saat</strong> içinde dönüş yapıyoruz.</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 border-t border-zinc-800">
+                                <span class="text-xs font-semibold text-zinc-500 uppercase tracking-wider block mb-2">Sosyal Medyada Biz</span>
+                                <div class="flex items-center gap-3">
+                                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition-colors" title="Twitter / X">
+                                        <i data-lucide="twitter" class="w-4 h-4"></i>
+                                    </a>
+                                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition-colors" title="Instagram">
+                                        <i data-lucide="instagram" class="w-4 h-4"></i>
+                                    </a>
+                                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition-colors" title="LinkedIn">
+                                        <i data-lucide="linkedin" class="w-4 h-4"></i>
+                                    </a>
+                                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition-colors" title="GitHub">
+                                        <i data-lucide="github" class="w-4 h-4"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rounded-xl border border-zinc-800/80 bg-zinc-900/30 p-5 text-xs text-zinc-400 flex items-start gap-3">
+                            <i data-lucide="shield-check" class="w-5 h-5 text-cyan-400 shrink-0"></i>
+                            <span>Tüm bildirimleriniz ve mesajlarınız gizlilik politikamız kapsamında korunur ve üçüncü taraflarla paylaşılmaz.</span>
+                        </div>
+                    </div>
+
+                    <!-- Sağ Kolon: Minimalist İletişim Formu (md:col-span-7) -->
+                    <div class="md:col-span-7">
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
+                            <form id="contact-form" class="space-y-4">
+                                <div>
+                                    <label for="contact-name" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                        Adınız <span class="text-cyan-400">*</span>
+                                    </label>
+                                    <input type="text" id="contact-name" required placeholder="Örn: Deniz Yılmaz" class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                                </div>
+
+                                <div>
+                                    <label for="contact-email" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                        E-posta Adresiniz <span class="text-cyan-400">*</span>
+                                    </label>
+                                    <input type="email" id="contact-email" required placeholder="ornek@ogrenci.edu.tr" class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                                </div>
+
+                                <div>
+                                    <label for="contact-subject" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                        Konu <span class="text-cyan-400">*</span>
+                                    </label>
+                                    <select id="contact-subject" required class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                                        <option value="" disabled selected>Bir konu seçin...</option>
+                                        <option value="Öneri">Öneri</option>
+                                        <option value="Hata Bildirimi">Hata Bildirimi</option>
+                                        <option value="İş Birliği">İş Birliği</option>
+                                        <option value="Diğer">Diğer</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="contact-message" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                                        Mesajınız <span class="text-cyan-400">*</span>
+                                    </label>
+                                    <textarea id="contact-message" rows="5" required placeholder="Mesajınızı detaylıca açıklayın..." class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-xl px-4 py-3 text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors resize-none leading-relaxed"></textarea>
+                                </div>
+
+                                <div class="pt-2">
+                                    <button type="submit" id="contact-submit-btn" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 text-zinc-950 font-bold hover:brightness-110 shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                                        <i data-lucide="send" class="w-4 h-4"></i> Gönder
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    `,
+
+    gizlilik: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Aydinlatmalari -->
+            <div class="pointer-events-none absolute -top-32 -left-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Baslik & Hero -->
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>KVKK & Veri Güvenliği</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
+                        Gizlilik Politikası
+                    </h1>
+                    <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                        Kampüs Sesi olarak kullanıcılarımızın ve değerlendirme yapan öğrencilerimizin mahremiyetine en yüksek derecede önem veriyoruz.
+                    </p>
+                </div>
+
+                <!-- Icerik Kartlari -->
+                <div class="space-y-6">
+                    <!-- 1. KVKK Uyum Metni -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center">
+                                <i data-lucide="file-text" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">KVKK Uyum Metni</h3>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, Kampüs Sesi veri sorumlusu sıfatıyla hareket etmektedir. Platformumuza kayıt olurken veya içerik üretirken sağladığınız e-posta ve kullanıcı verileri yalnızca üyelik oturumunun sürdürülmesi ve topluluk güvenliğinin sağlanması amacıyla işlenir.
+                        </p>
+                        <p class="text-zinc-400 text-xs leading-relaxed">
+                            Kişisel verileriniz, yasal zorunluluklar hariç olmak kaydıyla hiçbir ticari şirketle, reklam ajansıyla veya üniversite yönetimiyle paylaşılmaz.
+                        </p>
+                    </div>
+
+                    <!-- 2. Anonimlik İlkesi -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center">
+                                <i data-lucide="user-x" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Anonimlik İlkesi</h3>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            Değerlendirme yapan öğrencilerin kimlik ve e-posta bilgileri <strong>asla üçüncü taraflarla veya üniversite yönetimleriyle paylaşılmaz</strong>.
+                        </p>
+                        <p class="text-zinc-400 text-xs leading-relaxed">
+                            Öğrenciler diledikleri takdirde değerlendirmelerini rumuz kullanarak veya tamamen anonim profille yayınlayabilir. Amacımız öğrencilerin korkusuzca, hür iradeleriyle doğru bilgiyi paylaşabilmesidir.
+                        </p>
+                    </div>
+
+                    <!-- 3. Çerez Politikası (Cookie Policy) -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center">
+                                <i data-lucide="cookie" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Çerez Politikası</h3>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            Sitede sadece oturum ve temel analitik çerezleri kullanılır; kullanıcıları takip eden üçüncü taraf reklam ve pazarlama çerezleri kesinlikle kullanılmaz.
+                        </p>
+                        <p class="text-zinc-400 text-xs leading-relaxed">
+                            Yalnızca oturum devamlılığını sağlayan kimlik doğrulama token'ı ve karanlık/aydınlık tema tercihini hatırlayan yerel tarayıcı depolaması (localStorage) aktiftir.
+                        </p>
+                    </div>
+
+                    <!-- 4. Veri Güvenliği ve Silme Hakkı -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center">
+                                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Veri Güvenliği ve Silme Hakkı</h3>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed">
+                            Kullanıcılar diledikleri zaman profil sayfalarından daha önce yaptıkları yorumları silebilir veya hesaplarının silinmesini talep edebilir. Silinen veriler sistemden geri döndürülemez biçimde kalıcı olarak kaldırılır.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    `,
+
+    kullanimSartlari: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Aydinlatmalari -->
+            <div class="pointer-events-none absolute -top-32 right-1/2 translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Baslik & Hero -->
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
+                        <i data-lucide="file-check" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>Yasal Koşullar</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
+                        Kullanım Şartları
+                    </h1>
+                    <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                        Kampüs Sesi web sitesini ziyaret ederek veya üye olarak aşağıdaki hizmet ve kullanım şartlarını kabul etmiş sayılırsınız.
+                    </p>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- 1. Hizmet Kapsamı -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                        <h3 class="text-xl font-bold text-white mb-3">1. Platformun Hizmet Kapsamı</h3>
+                        <p class="text-zinc-300 text-sm leading-relaxed">
+                            Kampüs Sesi; üniversite öğrencileri ve adayları için bilgilendirici, tarafsız bir değerlendirme, yurt ve kampüs rehberi platformudur. Platformda sunulan puanlar, sıralamalar ve değerlendirmeler rehberlik niteliğinde olup bağlayıcı resmi bir kayıt teşkil etmez.
+                        </p>
+                    </div>
+
+                    <!-- 2. Kullanıcı Sorumlulukları -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                        <h3 class="text-xl font-bold text-white mb-3">2. Kullanıcı Sorumlulukları</h3>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            Sitede yayınlanan yorumların ve içeriklerin hukuki sorumluluğu yazarına aittir.
+                        </p>
+                        <p class="text-zinc-400 text-xs leading-relaxed">
+                            Kullanıcılar; iftira, hakaret, yanlış beyan, telif ihlali veya kişi haklarını zedeleyici ifadelerden bizzat sorumludur.
+                        </p>
+                    </div>
+
+                    <!-- 3. Fikri Mülkiyet Hakları ve İçerik Moderasyon Yetkisi -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                        <h3 class="text-xl font-bold text-white mb-3">3. Fikri Mülkiyet Hakları ve İçerik Moderasyon Yetkisi</h3>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            Platform yönetimi, topluluk kurallarına ve yayın ilkelerine uymayan içerikleri silme, düzenleme veya kullanıcının hesabını askıya alma hakkını saklı tutar.
+                        </p>
+                        <p class="text-zinc-400 text-xs leading-relaxed">
+                            Sitenin tasarımı, kaynak kodları ve tescilli markası Kampüs Sesi'ne aittir; izinsiz kopyalanamaz veya ticari amaçla kullanılamaz.
+                        </p>
+                    </div>
+
+                    <!-- 4. Değişiklik Hakkı -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                        <h3 class="text-xl font-bold text-white mb-3">4. Değişiklik ve Güncelleme Hakkı</h3>
+                        <p class="text-zinc-300 text-sm leading-relaxed">
+                            Kampüs Sesi, bu kullanım şartlarını güncel mevzuat ve topluluk gereksinimlerine göre dilediği zaman güncelleme hakkını saklı tutar. Güncellemeler sitede yayımlandığı andan itibaren geçerlilik kazanır.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    `
+};

@@ -49,7 +49,7 @@ export function navigateTo(targetRoute, paramsObj = null) {
 
 function checkProtected() {
     const { route, params } = parseHash();
-    const protectedRoutes = ['review-form'];
+    const protectedRoutes = ['review-form', 'degerlendir'];
     if (route === 'profile' && !params.get('user')) {
         protectedRoutes.push('profile');
     }
@@ -1615,7 +1615,7 @@ export function renderCurrentRoute() {
     currentParams = params;
 
     // Check protected routes
-    const protectedRoutes = ['review-form'];
+    const protectedRoutes = ['review-form', 'degerlendir'];
     if (route === 'profile' && !params.get('user')) {
         protectedRoutes.push('profile');
     }
@@ -1640,9 +1640,28 @@ export function renderCurrentRoute() {
         'university': TEMPLATES.university,
         'compare': TEMPLATES.compare,
         'review-form': TEMPLATES.reviewForm,
+        'degerlendir': TEMPLATES.reviewForm,
         'profile': TEMPLATES.profile,
         'login': TEMPLATES.login,
-        'blog': TEMPLATES.blog
+        'blog': TEMPLATES.blog,
+        'yayin-ilkeleri': TEMPLATES.yayinIlkeleri,
+        'guide': TEMPLATES.yayinIlkeleri,
+        'okul-oner': TEMPLATES.okulOner,
+        'suggest': TEMPLATES.okulOner,
+        'yazi-gonder': TEMPLATES.yaziGonder,
+        'topluluk-kurallari': TEMPLATES.toplulukKurallari,
+        'rules': TEMPLATES.toplulukKurallari,
+        'hakkimizda': TEMPLATES.hakkimizda,
+        'about': TEMPLATES.hakkimizda,
+        'iletisim': TEMPLATES.iletisim,
+        'contact': TEMPLATES.iletisim,
+        'gizlilik': TEMPLATES.gizlilik,
+        'privacy': TEMPLATES.gizlilik,
+        'kullanim-sartlari': TEMPLATES.kullanimSartlari,
+        'terms': TEMPLATES.kullanimSartlari,
+        'cities': TEMPLATES.university,
+        'ranking': TEMPLATES.university,
+        'departments': TEMPLATES.university
     };
 
     const template = templateMap[route] || TEMPLATES.home;
@@ -1675,9 +1694,28 @@ export function renderCurrentRoute() {
         'university': 'Üniversite Detay — Kampüs Sesi',
         'compare': 'Karşılaştır — Kampüs Sesi',
         'review-form': 'Değerlendir — Kampüs Sesi',
+        'degerlendir': 'Değerlendir — Kampüs Sesi',
         'profile': 'Profilim — Kampüs Sesi',
         'login': 'Giriş Yap — Kampüs Sesi',
-        'blog': 'Blog & Rehberler — Kampüs Sesi'
+        'blog': 'Blog & Rehberler — Kampüs Sesi',
+        'yayin-ilkeleri': 'Yayın İlkeleri — Kampüs Sesi',
+        'guide': 'Yayın İlkeleri — Kampüs Sesi',
+        'okul-oner': 'Okul Öner — Kampüs Sesi',
+        'suggest': 'Okul Öner — Kampüs Sesi',
+        'yazi-gonder': 'Yazı Gönder — Kampüs Sesi',
+        'topluluk-kurallari': 'Topluluk Kuralları — Kampüs Sesi',
+        'rules': 'Topluluk Kuralları — Kampüs Sesi',
+        'hakkimizda': 'Hakkımızda — Kampüs Sesi',
+        'about': 'Hakkımızda — Kampüs Sesi',
+        'iletisim': 'İletişim & Destek — Kampüs Sesi',
+        'contact': 'İletişim & Destek — Kampüs Sesi',
+        'gizlilik': 'Gizlilik Politikası — Kampüs Sesi',
+        'privacy': 'Gizlilik Politikası — Kampüs Sesi',
+        'kullanim-sartlari': 'Kullanım Şartları — Kampüs Sesi',
+        'terms': 'Kullanım Şartları — Kampüs Sesi',
+        'cities': 'Şehirler — Kampüs Sesi',
+        'ranking': 'Sıralama — Kampüs Sesi',
+        'departments': 'Bölümler — Kampüs Sesi'
     };
     document.title = titles[route] || 'Kampüs Sesi';
 
@@ -1690,12 +1728,12 @@ export function renderCurrentRoute() {
     }
 
     // Initialize Route-Specific Logic
-    if (route === 'university') {
+    if (route === 'university' || route === 'cities' || route === 'ranking' || route === 'departments') {
         const initialUni = params.get('name') || selectedUniState || 'Boğaziçi Üniversitesi';
         activeRenderers.university = initUniversityPage(initialUni);
     } else if (route === 'compare') {
         activeRenderers.compare = initComparePage();
-    } else if (route === 'review-form') {
+    } else if (route === 'review-form' || route === 'degerlendir') {
         initReviewForm();
     } else if (route === 'profile') {
         activeRenderers.profile = initProfilePage(params);
@@ -1705,7 +1743,46 @@ export function renderCurrentRoute() {
         initHomePage();
     } else if (route === 'blog') {
         initBlogPage();
+    } else if (route === 'okul-oner' || route === 'suggest') {
+        initOkulOnerPage();
+    } else if (route === 'yazi-gonder') {
+        initYaziGonderPage();
+    } else if (route === 'iletisim' || route === 'contact') {
+        initIletisimPage();
     }
+}
+
+function initOkulOnerPage() {
+    const form = document.getElementById('suggest-uni-form');
+    if (!form) return;
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const uniName = document.getElementById('suggest-uni-name')?.value;
+        showToast(`🎉 "${uniName || 'Üniversite'}" öneriniz alındı! Ekibimiz 24 saat içinde doğrulayıp platforma ekleyecektir.`);
+        form.reset();
+    });
+}
+
+function initYaziGonderPage() {
+    const form = document.getElementById('post-submission-form');
+    if (!form) return;
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = document.getElementById('post-title')?.value;
+        showToast(`📝 "${title || 'Yazı'}" taslağınız alındı! Editörlerimiz onayladıktan sonra blogda yayımlanacaktır.`);
+        form.reset();
+    });
+}
+
+function initIletisimPage() {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('contact-name')?.value;
+        showToast(`📨 Teşekkürler ${name || ''}! Mesajınız başarıyla iletildi. En geç 24 saat içinde dönüş yapacağız.`);
+        form.reset();
+    });
 }
 
 

@@ -436,11 +436,35 @@ def get_universities(db: Session = Depends(get_db)):
     records = db.query(University).order_by(University.name).all()
     return [r.to_dict() for r in records]
 
-@app.get("/api/universities/{uni_id}/dorms")
-def get_university_dorms(uni_id: int, db: Session = Depends(get_db)):
-    """ID'si verilen üniversiteye ait tüm KYK ve özel yurtları getirir."""
-    dorms = db.query(KykDorm).filter(KykDorm.university_id == uni_id).all()
-    return [d.to_dict() for d in dorms]
+@app.get("/api/universities/{uni_identifier}/dorms")
+def get_university_dorms(uni_identifier: str, db: Session = Depends(get_db)):
+    """ID'si veya adı verilen üniversiteye ait tüm KYK ve özel yurtları getirir."""
+    # 1. Sayısal ID ile ara
+    if uni_identifier.isdigit():
+        uid = int(uni_identifier)
+        dorms = db.query(KykDorm).filter(KykDorm.university_id == uid).all()
+        if dorms:
+            return [d.to_dict() for d in dorms]
+        record = db.query(University).filter(University.id == uid).first()
+    else:
+        # 2. Üniversite adıyla ara
+        clean = uni_identifier.strip()
+        record = db.query(University).filter(University.name == clean).first()
+        if not record:
+            base_name = clean.split("(")[0].strip()
+            record = db.query(University).filter(
+                (University.name.ilike(f"%{base_name}%")) |
+                (University.name.ilike(f"%{clean}%"))
+            ).first()
+
+    if record:
+        dorms = db.query(KykDorm).filter(KykDorm.university_id == record.id).all()
+        if dorms:
+            return [d.to_dict() for d in dorms]
+
+    # 3. Son çare genel yurt fallback
+    fallback = db.query(KykDorm).limit(8).all()
+    return [d.to_dict() for d in fallback]
 
 @app.get("/api/universities/{uni_name}")
 def get_university(uni_name: str, db: Session = Depends(get_db)):

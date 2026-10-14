@@ -879,7 +879,11 @@ function initUniversityPage(initialUni) {
                     if (heroBlurImg) heroBlurImg.src = url;
                 }
             });
-            renderKykSection([]);
+            api.getDorms(selectedUni).then(dorms => {
+                renderKykSection(dorms);
+            }).catch(() => {
+                renderKykSection([]);
+            });
         });
 
         // 5. Update Transportation Cards based on structured array

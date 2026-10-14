@@ -39,10 +39,8 @@
                     <!-- Theme toggle and Auth link will be injected here via app.js -->
                 </div>
                 
-                <button class="nav__hamburger" aria-label="Menüyü aç">
-                    <span class="nav__hamburger-line"></span>
-                    <span class="nav__hamburger-line"></span>
-                    <span class="nav__hamburger-line"></span>
+                <button class="nav__hamburger" aria-label="Menüyü aç" title="Menü">
+                    <i data-lucide="more-vertical" class="icon-md"></i>
                 </button>
             </div>
         </div>
@@ -66,6 +64,16 @@
                 <li><a href="#/blog" class="side-drawer__link" data-nav="blog"><i data-lucide="book-open"></i> Blog</a></li>
                 <li class="side-drawer__divider"></li>
                 <li><a href="#/favorites" class="side-drawer__link side-drawer__link--special" data-nav="favorites"><i data-lucide="heart"></i> Favorilerim</a></li>
+                <li class="side-drawer__divider"></li>
+                <li style="padding: 6px var(--space-lg);">
+                    <button id="drawer-theme-btn" class="side-drawer__theme-btn" aria-label="Temayı Değiştir">
+                        <span class="side-drawer__theme-btn-left">
+                            <span id="drawer-theme-icon-wrap" style="display: inline-flex; align-items: center;"><i data-lucide="sun" class="icon-sm"></i></span>
+                            <span id="drawer-theme-text">Açık Tema</span>
+                        </span>
+                        <span class="side-drawer__theme-pill" id="drawer-theme-pill">Koyu</span>
+                    </button>
+                </li>
             </ul>
         </div>
     </aside>

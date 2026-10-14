@@ -103,50 +103,21 @@ function updateNavForUser(user) {
     const navActions = document.getElementById('nav-actions');
     if (!navActions) return;
 
-    const savedTheme = localStorage.getItem('kampus_sesi_theme') || 'dark';
-    const isLight = savedTheme === 'light';
-
-    let actionsHtml = `
-        <button id="theme-btn" class="nav__theme-btn" aria-label="Temayı Değiştir" style="background:transparent; border:1px solid var(--color-border); border-radius:var(--radius-sm); color:var(--color-text-muted); cursor:pointer; width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center; transition:all 0.2s ease;">
-            <i data-lucide="${isLight ? 'moon' : 'sun'}" class="icon-sm"></i>
-        </button>
-    `;
+    let actionsHtml = '';
 
     if (user && user.uid !== 'guest') {
-        actionsHtml += `
+        actionsHtml = `
             <a href="#/profile" class="btn btn--outline btn--sm"><i data-lucide="user" class="icon-xs"></i> <span>Profilim</span></a>
             <a href="#/home" id="logout-btn" class="btn btn--outline btn--sm" style="border-color: rgba(248, 113, 113, 0.3); color: var(--color-danger);"><i data-lucide="log-out" class="icon-xs"></i> <span>Çıkış</span></a>
         `;
     } else {
-        actionsHtml += `
+        actionsHtml = `
             <a href="#/login" class="btn btn--primary btn--sm"><i data-lucide="log-in" class="icon-xs"></i> <span>Giriş Yap</span></a>
         `;
     }
 
     navActions.innerHTML = actionsHtml;
     if (typeof lucide !== 'undefined') lucide.createIcons();
-
-    // Theme logic
-    const themeBtn = document.getElementById('theme-btn');
-    if (savedTheme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-    }
-
-    if (themeBtn) {
-        themeBtn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-            if (currentTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'light');
-                localStorage.setItem('kampus_sesi_theme', 'light');
-                themeBtn.innerHTML = '<i data-lucide="moon" class="icon-sm"></i>';
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-                localStorage.setItem('kampus_sesi_theme', 'dark');
-                themeBtn.innerHTML = '<i data-lucide="sun" class="icon-sm"></i>';
-            }
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        });
-    }
 
     // Logout logic
     const logoutBtn = document.getElementById('logout-btn');
@@ -476,6 +447,46 @@ function setupNavEvents() {
                 sideDrawer.classList.remove('active');
                 if (sideDrawerOverlay) sideDrawerOverlay.classList.remove('active');
             });
+        });
+    }
+
+    // Setup Theme Switcher inside 3-dots drawer menu
+    setupThemeToggle();
+}
+
+function setupThemeToggle() {
+    const drawerThemeBtn = document.getElementById('drawer-theme-btn');
+    const drawerThemeText = document.getElementById('drawer-theme-text');
+    const drawerThemePill = document.getElementById('drawer-theme-pill');
+
+    function syncThemeUI(theme) {
+        const isLight = theme === 'light';
+        if (isLight) {
+            document.documentElement.setAttribute('data-theme', 'light');
+            if (drawerThemeText) drawerThemeText.textContent = 'Koyu Tema';
+            if (drawerThemePill) drawerThemePill.textContent = 'Açık';
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            if (drawerThemeText) drawerThemeText.textContent = 'Açık Tema';
+            if (drawerThemePill) drawerThemePill.textContent = 'Koyu';
+        }
+        const iconWrap = document.getElementById('drawer-theme-icon-wrap');
+        if (iconWrap) {
+            iconWrap.innerHTML = `<i data-lucide="${isLight ? 'moon' : 'sun'}" class="icon-sm"></i>`;
+        }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    const savedTheme = localStorage.getItem('kampus_sesi_theme') || 'dark';
+    syncThemeUI(savedTheme);
+
+    if (drawerThemeBtn) {
+        drawerThemeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('kampus_sesi_theme', nextTheme);
+            syncThemeUI(nextTheme);
         });
     }
 }

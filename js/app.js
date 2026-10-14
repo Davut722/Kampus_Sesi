@@ -103,48 +103,50 @@ function updateNavForUser(user) {
     const navActions = document.getElementById('nav-actions');
     if (!navActions) return;
 
-    // Build the actions HTML based on auth state
+    const savedTheme = localStorage.getItem('kampus_sesi_theme') || 'dark';
+    const isLight = savedTheme === 'light';
+
     let actionsHtml = `
-        <button id="theme-btn" style="background:transparent; border:none; color:var(--color-text); cursor:pointer; font-size:1.2rem; display:flex; align-items:center;" aria-label="Temayı Değiştir">
-            <span id="theme-icon">🌞</span>
+        <button id="theme-btn" class="nav__theme-btn" aria-label="Temayı Değiştir" style="background:transparent; border:1px solid var(--color-border); border-radius:var(--radius-sm); color:var(--color-text-muted); cursor:pointer; width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center; transition:all 0.2s ease;">
+            <i data-lucide="${isLight ? 'moon' : 'sun'}" class="icon-sm"></i>
         </button>
     `;
 
     if (user && user.uid !== 'guest') {
         actionsHtml += `
-            <a href="#/profile" class="btn btn--outline" style="padding: 6px 12px; font-size:0.9rem;">Profilim</a>
-            <a href="#/home" id="logout-btn" class="btn btn--outline" style="padding: 6px 12px; font-size:0.9rem; border-color: var(--color-danger); color: var(--color-danger);">Çıkış</a>
+            <a href="#/profile" class="btn btn--outline btn--sm"><i data-lucide="user" class="icon-xs"></i> <span>Profilim</span></a>
+            <a href="#/home" id="logout-btn" class="btn btn--outline btn--sm" style="border-color: rgba(248, 113, 113, 0.3); color: var(--color-danger);"><i data-lucide="log-out" class="icon-xs"></i> <span>Çıkış</span></a>
         `;
     } else {
         actionsHtml += `
-            <a href="#/login" class="btn btn--primary" style="padding: 6px 16px; font-size:0.9rem;">Giriş Yap</a>
+            <a href="#/login" class="btn btn--primary btn--sm"><i data-lucide="log-in" class="icon-xs"></i> <span>Giriş Yap</span></a>
         `;
     }
 
     navActions.innerHTML = actionsHtml;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 
     // Theme logic
     const themeBtn = document.getElementById('theme-btn');
-    const themeIcon = document.getElementById('theme-icon');
-
-    const savedTheme = localStorage.getItem('kampus_sesi_theme') || 'dark';
     if (savedTheme === 'light') {
         document.documentElement.setAttribute('data-theme', 'light');
-        themeIcon.textContent = '🌙';
     }
 
-    themeBtn.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-        if (currentTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            localStorage.setItem('kampus_sesi_theme', 'light');
-            themeIcon.textContent = '🌙';
-        } else {
-            document.documentElement.removeAttribute('data-theme');
-            localStorage.setItem('kampus_sesi_theme', 'dark');
-            themeIcon.textContent = '🌞';
-        }
-    });
+    if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            if (currentTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('kampus_sesi_theme', 'light');
+                themeBtn.innerHTML = '<i data-lucide="moon" class="icon-sm"></i>';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('kampus_sesi_theme', 'dark');
+                themeBtn.innerHTML = '<i data-lucide="sun" class="icon-sm"></i>';
+            }
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+    }
 
     // Logout logic
     const logoutBtn = document.getElementById('logout-btn');
@@ -248,12 +250,13 @@ function updateInteractionUI(id, data) {
 
     if (likeBtn) {
         likeBtn.className = `btn-interaction btn-interaction-like ${isLiked ? 'btn-interaction--active-like' : ''}`;
-        likeBtn.innerHTML = `👍 <span>${data.likes.length}</span>`;
+        likeBtn.innerHTML = `<i data-lucide="thumbs-up" class="icon-xs"></i> <span>${data.likes.length}</span>`;
     }
     if (dislikeBtn) {
         dislikeBtn.className = `btn-interaction btn-interaction-dislike ${isDisliked ? 'btn-interaction--active-dislike' : ''}`;
-        dislikeBtn.innerHTML = `👎 <span>${data.dislikes.length}</span>`;
+        dislikeBtn.innerHTML = `<i data-lucide="thumbs-down" class="icon-xs"></i> <span>${data.dislikes.length}</span>`;
     }
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 document.addEventListener('click', (e) => {
@@ -272,13 +275,13 @@ document.addEventListener('click', (e) => {
 
 // ─── Utility Functions ───────────────────
 const AVAILABLE_TAGS = [
-    { id: 'kampus', label: '🏫 Kampüs', icon: '🏫' },
-    { id: 'yemekhane', label: '🍽️ Yemekhane', icon: '🍽️' },
-    { id: 'egitim', label: '📚 Eğitim', icon: '📚' },
-    { id: 'kutuphane', label: '📖 Kütüphane', icon: '📖' },
-    { id: 'sosyal', label: '🎉 Sosyal Hayat', icon: '🎉' },
-    { id: 'ulasim', label: '🚌 Ulaşım', icon: '🚌' },
-    { id: 'yurt', label: '🏠 Yurt Olanakları', icon: '🏠' },
+    { id: 'kampus', label: 'Kampüs', icon: 'building-2' },
+    { id: 'yemekhane', label: 'Yemekhane', icon: 'utensils' },
+    { id: 'egitim', label: 'Eğitim', icon: 'graduation-cap' },
+    { id: 'kutuphane', label: 'Kütüphane', icon: 'book-open' },
+    { id: 'sosyal', label: 'Sosyal Hayat', icon: 'sparkles' },
+    { id: 'ulasim', label: 'Ulaşım', icon: 'bus' },
+    { id: 'yurt', label: 'Yurt Olanakları', icon: 'home' },
 ];
 
 function getTagLabel(tagId) {
@@ -289,7 +292,7 @@ function getTagLabel(tagId) {
 function renderStars(rating, interactive = false) {
     let html = `<div class="stars${interactive ? ' stars--interactive' : ''}">`;
     for (let i = 1; i <= 5; i++) {
-        html += `<span class="stars__item${i <= rating ? ' stars__item--filled' : ''}" data-value="${i}">★</span>`;
+        html += `<span class="stars__item${i <= rating ? ' stars__item--filled' : ''}" data-value="${i}"><i data-lucide="star"></i></span>`;
     }
     html += '</div>';
     return html;
@@ -297,7 +300,12 @@ function renderStars(rating, interactive = false) {
 
 function renderTags(tagIds) {
     if (!tagIds) return '';
-    return tagIds.map(id => `<span class="tag">${getTagLabel(id)}</span>`).join('');
+    return tagIds.map(id => {
+        const tag = AVAILABLE_TAGS.find(t => t.id === id);
+        const iconHtml = tag ? `<i data-lucide="${tag.icon}" class="icon-xs"></i> ` : '';
+        const label = tag ? tag.label : id;
+        return `<span class="tag">${iconHtml}<span>${label}</span></span>`;
+    }).join('');
 }
 
 window.submitReply = async function (e, reviewId) {
@@ -376,20 +384,20 @@ function renderReviewCard(review, options = {}) {
         </a>
         ${renderStars(review.rating)}
       </div>
-      ${showUni ? `<div class="card__uni-name">📍 ${review.university}</div>` : ''}
+      ${showUni ? `<div class="card__uni-name"><i data-lucide="map-pin" class="icon-xs"></i> ${review.university}</div>` : ''}
       <div class="card__body">${review.text}</div>
       <div class="card__footer">
         <div class="card__tags">${renderTags(review.tags)}</div>
         <div class="card__actions">
             <div class="card__interactions">
                 <button class="btn-interaction btn-interaction-like ${isLiked ? 'btn-interaction--active-like' : ''}" data-id="${review.id}">
-                    👍 <span>${ints.likes.length}</span>
+                    <i data-lucide="thumbs-up" class="icon-xs"></i> <span>${ints.likes.length}</span>
                 </button>
                 <button class="btn-interaction btn-interaction-dislike ${isDisliked ? 'btn-interaction--active-dislike' : ''}" data-id="${review.id}">
-                    👎 <span>${ints.dislikes.length}</span>
+                    <i data-lucide="thumbs-down" class="icon-xs"></i> <span>${ints.dislikes.length}</span>
                 </button>
             </div>
-            ${showDelete ? `<button class="btn btn--danger btn--sm" onclick="deleteReview('${review.id}')">🗑️ Sil</button>` : ''}
+            ${showDelete ? `<button class="btn btn--danger btn--sm" onclick="deleteReview('${review.id}')"><i data-lucide="trash-2" class="icon-xs"></i> Sil</button>` : ''}
         </div>
       </div>
       <div class="card__thread">
@@ -400,16 +408,34 @@ function renderReviewCard(review, options = {}) {
   `;
 }
 
-/** Show toast notification */
+/** Show toast notification with modern monochrome icon */
 function showToast(message) {
     // Remove existing toast
     const existing = document.querySelector('.toast');
     if (existing) existing.remove();
 
+    // Clean any legacy emoji from message
+    const cleanMsg = message.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+
+    let icon = 'info';
+    let iconColor = 'color: var(--color-accent);';
+    if (message.includes('✅') || message.toLowerCase().includes('başarı') || message.toLowerCase().includes('eklendi')) {
+        icon = 'check-circle';
+        iconColor = 'color: var(--color-success);';
+    } else if (message.includes('❌') || message.toLowerCase().includes('hata') || message.toLowerCase().includes('başarısız')) {
+        icon = 'alert-circle';
+        iconColor = 'color: var(--color-danger);';
+    } else if (message.includes('⚠️') || message.toLowerCase().includes('lütfen') || message.toLowerCase().includes('giriş')) {
+        icon = 'alert-triangle';
+        iconColor = 'color: var(--color-star);';
+    }
+
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.textContent = message;
+    toast.innerHTML = `<i data-lucide="${icon}" class="icon-sm" style="${iconColor}"></i> <span>${cleanMsg}</span>`;
     document.body.appendChild(toast);
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 
     setTimeout(() => toast.remove(), 3200);
 }
@@ -724,11 +750,12 @@ function initUniversityPage(initialUni) {
 
 
     // Render filter buttons
-    let filterHTML = `<button class="tag tag--filter tag--active" data-filter="all">🔖 Tümü</button>`;
+    let filterHTML = `<button class="tag tag--filter tag--active" data-filter="all"><i data-lucide="layers" class="icon-xs"></i> <span>Tümü</span></button>`;
     AVAILABLE_TAGS.forEach(tag => {
-        filterHTML += `<button class="tag tag--filter" data-filter="${tag.id}">${tag.label}</button>`;
+        filterHTML += `<button class="tag tag--filter" data-filter="${tag.id}"><i data-lucide="${tag.icon}" class="icon-xs"></i> <span>${tag.label}</span></button>`;
     });
     filterBar.innerHTML = filterHTML;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 
     // Get reviews for the selected university
     function getAllReviews() {
@@ -754,15 +781,19 @@ function initUniversityPage(initialUni) {
         if (filtered.length === 0) {
             reviewsContainer.innerHTML = `
         <div class="empty-state">
-          <div class="empty-state__icon">🔍</div>
-          <p>Bu üniversite/etiket için değerlendirme bulunamadı.</p>
+          <div class="empty-state__icon"><i data-lucide="message-square" class="icon-md"></i></div>
+          <h4 style="font-weight: 600; color: var(--color-text); margin-bottom: 4px;">Henüz değerlendirme bulunamadı</h4>
+          <p style="color: var(--color-text-dim); font-size: 0.88rem; margin-bottom: var(--space-md);">Bu üniversite veya kategori için ilk deneyimi sen paylaş.</p>
+          <a href="#/review-form" class="btn btn--primary btn--sm">İlk Değerlendirmeyi Sen Yaz</a>
         </div>
       `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
             updateStats(allReviews);
             return;
         }
 
         reviewsContainer.innerHTML = filtered.map(r => renderReviewCard(r)).join('');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
         updateStats(allReviews);
     }
 

@@ -4,31 +4,65 @@
 
 export const TEMPLATES = {
     home: `
-        <main class="home page-view">
+        <main class="home page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen">
 
-            <!-- Animated background orbs -->
-            <div class="home-bg" aria-hidden="true">
-                <div class="home-bg__orb home-bg__orb--1"></div>
-                <div class="home-bg__orb home-bg__orb--2"></div>
-                <div class="home-bg__orb home-bg__orb--3"></div>
-                <div class="home-bg__orb home-bg__orb--4"></div>
-                <div class="home-bg__noise"></div>
-            </div>
+            <!-- Ambient Glow Aydınlatmaları (Köşelerden vuran ferah, yumuşak cyan ve gece mavisi gradientler) -->
+            <div class="pointer-events-none absolute -top-32 -left-32 w-[28rem] h-[28rem] bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute top-10 -right-32 w-[32rem] h-[32rem] bg-indigo-600/10 rounded-full blur-3xl" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute top-64 left-1/2 -translate-x-1/2 w-[40rem] h-[20rem] bg-cyan-400/[0.04] rounded-full blur-3xl" aria-hidden="true"></div>
 
-            <!-- Simplified Hero -->
-            <section class="home-hero-centered container" style="padding: var(--space-xl) var(--space-md); min-height: auto;">
-                <div class="hero-centered__content">
-                    <h1 class="hero-centered__title" style="font-size: 2rem;">
-                        Kampüsün Gerçek Sesine Kulak Ver
-                    </h1>
-                    <p class="hero-centered__desc" style="max-width: 600px; margin: 0 auto var(--space-lg) auto;">
-                        Broşürlerde yazanı değil, orada okuyanların gerçekten yaşadığını öğren.
-                    </p>
-                    
-                    <div class="hero-centered__search-wrapper" style="max-width: 500px; margin: 0 auto var(--space-md) auto;">
-                        <i data-lucide="search" class="search-icon"></i>
-                        <input type="text" class="hero-centered__search-input" placeholder="Üniversite veya bölüm ara...">
+            <!-- Hero & Arama Alanı (Adım 1) -->
+            <section class="home-hero-centered relative z-10 pt-16 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
+                
+                <!-- Üst Rozet (Badge) -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-6 backdrop-blur-md shadow-sm">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cyan-400"></i>
+                    <span>Türkiye'nin İlk Şeffaf Öğrenci ve Kampüs Ağı</span>
+                </div>
+
+                <!-- Ana Başlık (Typography) -->
+                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight" style="font-family: var(--font-heading);">
+                    Kampüsün <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300">Gerçek Sesine</span> Kulak Ver
+                </h1>
+
+                <!-- Alt Açıklama -->
+                <p class="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+                    Broşürlerdeki süslü reklamları değil; amfilerde sabahlayan, yurtlarda kalan ve yemekhaneyi deneyimleyen öğrencilerin sansürsüz yorumlarını keşfet.
+                </p>
+
+                <!-- Cam Efektli Geniş Arama Çubuğu (Glassmorphism Search Bar) -->
+                <div class="hero-centered__search-wrapper relative max-w-2xl mx-auto mb-6">
+                    <div class="relative flex items-center p-2 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl shadow-2xl shadow-cyan-950/20 hover:border-cyan-500/40 transition-all duration-300 group">
+                        <i data-lucide="search" class="w-5 h-5 text-zinc-400 ml-3 shrink-0 group-hover:text-cyan-400 transition-colors"></i>
+                        <input 
+                            type="text" 
+                            id="hero-search-input"
+                            class="hero-centered__search-input flex-1 bg-transparent px-4 py-3 text-sm sm:text-base text-white placeholder-zinc-500 focus:outline-none w-full" 
+                            placeholder="Üniversite, şehir veya bölüm ara (örn. İTÜ Bilgisayar)..."
+                            autocomplete="off"
+                        >
+                        <button 
+                            type="button" 
+                            id="hero-search-btn"
+                            class="px-5 sm:px-7 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-zinc-950 font-bold text-sm shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all flex items-center gap-2 cursor-pointer shrink-0 hover:scale-[1.02] active:scale-[0.98]"
+                        >
+                            <span>Keşfet</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
                     </div>
+                </div>
+
+                <!-- Arama Altı Popüler Etiket Hapları (#İTÜ, #ODTÜ vb.) -->
+                <div class="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-zinc-400">
+                    <span class="text-zinc-500 font-medium mr-1 flex items-center gap-1">
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5 text-cyan-400"></i> Popüler:
+                    </span>
+                    <button class="hero-tag-pill" data-uni="İstanbul Teknik Üniversitesi">#İTÜ</button>
+                    <button class="hero-tag-pill" data-uni="Orta Doğu Teknik Üniversitesi (ODTÜ)">#ODTÜ</button>
+                    <button class="hero-tag-pill" data-uni="Boğaziçi Üniversitesi">#Boğaziçi</button>
+                    <button class="hero-tag-pill" data-uni="Hacettepe Üniversitesi">#Hacettepe</button>
+                    <button class="hero-tag-pill" data-uni="Yıldız Teknik Üniversitesi (YTÜ)">#YTÜ</button>
+                    <button class="hero-tag-pill" data-uni="Koç Üniversitesi">#Koç</button>
                 </div>
             </section>
 
@@ -98,7 +132,7 @@ export const TEMPLATES = {
                 <div class="faq-accordion-list" style="display: flex; flex-direction: column; gap: var(--space-sm);">
                     <details class="faq-details">
                         <summary class="faq-summary">
-                            <span>Üye olmak şart mı kanka?</span>
+                            <span>Üye olmak şart mı?</span>
                             <i data-lucide="plus" class="faq-icon"></i>
                         </summary>
                         <div class="faq-content">
@@ -111,7 +145,7 @@ export const TEMPLATES = {
                             <i data-lucide="plus" class="faq-icon"></i>
                         </summary>
                         <div class="faq-content">
-                            <p>Kanka her şeyi olabildiğince güncel tutmaya çalışıyoruz. Yurtlar, ulaşım falan hepsi sistemde var ama en iyi güncellemeyi yorumlarda okursun.</p>
+                            <p>Her şeyi olabildiğince güncel tutmaya çalışıyoruz. Yurtlar, ulaşım falan hepsi sistemde var ama en iyi güncellemeyi yorumlarda okursun.</p>
                         </div>
                     </details>
                     <details class="faq-details">
@@ -120,7 +154,7 @@ export const TEMPLATES = {
                             <i data-lucide="plus" class="faq-icon"></i>
                         </summary>
                         <div class="faq-content">
-                            <p>Bizzat sizlerin oylarıyla! Eğitim, sosyallik, yemekler falan... Herkesin notunun şeffaf ortalamasını alıp sıralıyoruz.</p>
+                            <p>Bizzat sizlerin oylarıyla! Eğitim, sosyallik, yemekler ... Herkesin notunun şeffaf ortalamasını alıp sıralıyoruz.</p>
                         </div>
                     </details>
                 </div>

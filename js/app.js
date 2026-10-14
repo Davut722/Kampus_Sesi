@@ -1932,7 +1932,47 @@ function initBlogPage() {
 }
 
 function initHomePage() {
-    // Wire university pill buttons
+    // 1. Search Bar Functionality (Adım 1)
+    const searchInput = document.getElementById('hero-search-input');
+    const searchBtn = document.getElementById('hero-search-btn');
+
+    function handleHeroSearch() {
+        if (!searchInput) return;
+        const q = searchInput.value.trim().toLowerCase();
+        if (!q) {
+            navigateTo('university');
+            return;
+        }
+        if (typeof TURKISH_UNIVERSITIES !== 'undefined') {
+            const match = TURKISH_UNIVERSITIES.find(u => u.toLowerCase().includes(q));
+            if (match) {
+                selectedUniState = match;
+                navigateTo('university', { name: match });
+                return;
+            }
+        }
+        navigateTo('university');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', handleHeroSearch);
+    if (searchInput) {
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleHeroSearch();
+        });
+    }
+
+    // 2. Tag Pills Navigation (#İTÜ, #ODTÜ vb.)
+    document.querySelectorAll('.hero-tag-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+            const uni = pill.dataset.uni;
+            if (uni) {
+                selectedUniState = uni;
+                navigateTo('university', { name: uni });
+            }
+        });
+    });
+
+    // 3. Existing university pill buttons
     document.querySelectorAll('[data-university]').forEach(btn => {
         btn.addEventListener('click', () => {
             const uniName = btn.dataset.university;
@@ -1943,7 +1983,7 @@ function initHomePage() {
         });
     });
 
-    // Update live review count
+    // 4. Update live review count
     const statReviews = document.getElementById('stat-reviews');
     if (statReviews) {
         const count = getSavedReviews().length;
@@ -2029,123 +2069,4 @@ window.addEventListener('hashchange', () => {
     renderCurrentRoute();
 });
 
-// Vanta.js Background
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof VANTA !== 'undefined') {
-        VANTA.WAVES({
-            el: "#vanta-bg",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0x111111,
-            shininess: 20,
-            waveHeight: 10,
-            waveSpeed: 0.5,
-            zoom: 1.2
-        });
-    }
-});
-
-
-// GSAP ScrollTrigger for Home Parallax & Search Pin
-export function initGSAPHome() {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-    gsap.registerPlugin(ScrollTrigger);
-
-    const hero = document.querySelector('.home-hero-centered');
-    if (hero) {
-        // Parallax effect on hero title and subtitle
-        gsap.to('.hero-centered__title, .hero-centered__desc', {
-            y: 150,
-            opacity: 0.2,
-            ease: "none",
-            scrollTrigger: {
-                trigger: '.home-hero-centered',
-                start: "top top",
-                end: "bottom top",
-                scrub: true
-            }
-        });
-
-        // Pin Search Bar
-        const searchBox = document.querySelector('.hero-centered__search-wrapper');
-        if (searchBox) {
-            ScrollTrigger.create({
-                trigger: searchBox,
-                start: "top center",
-                end: "+=350",
-                pin: true,
-                pinSpacing: false,
-                scrub: true
-            });
-        }
-    }
-    
-    // Blog Shared Layout Morphing
-    const blogCards = document.querySelectorAll('.blog-card');
-    let overlay = document.querySelector('.blog-expanded-overlay');
-    
-    if (!overlay && blogCards.length > 0) {
-        if (typeof Flip === 'undefined') return;
-        
-        overlay = document.createElement('div');
-        overlay.className = 'blog-expanded-overlay';
-        overlay.innerHTML = `
-            <div class="blog-expanded-card" id="blog-detail-container">
-                <button class="blog-expanded-close"><i data-lucide="x"></i></button>
-                <div class="blog-expanded-content" style="margin-top:20px;"></div>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-        lucide.createIcons();
-        
-        overlay.querySelector('.blog-expanded-close').addEventListener('click', () => {
-            const activeCard = document.querySelector('.blog-card.is-active');
-            if (activeCard) {
-                const detailContainer = document.querySelector('#blog-detail-container');
-                const state = Flip.getState(detailContainer);
-                activeCard.appendChild(detailContainer);
-                overlay.classList.remove('active');
-                activeCard.classList.remove('is-active');
-                
-                Flip.from(state, {
-                    duration: 0.5,
-                    ease: "power3.inOut",
-                    onComplete: () => {
-                        detailContainer.style.display = 'none';
-                    }
-                });
-            }
-        });
-    }
-
-    blogCards.forEach(card => {
-        card.addEventListener('click', (e) => {
-            if (e.target.closest('button') || e.target.closest('a')) return;
-            if (typeof Flip === 'undefined') return;
-            
-            const detailContainer = document.querySelector('#blog-detail-container');
-            detailContainer.style.display = 'block';
-            
-            const content = detailContainer.querySelector('.blog-expanded-content');
-            content.innerHTML = card.innerHTML;
-            
-            const state = Flip.getState(card);
-            
-            overlay.appendChild(detailContainer);
-            overlay.classList.add('active');
-            card.classList.add('is-active');
-            
-            Flip.from(state, {
-                duration: 0.6,
-                ease: "power4.inOut",
-                absolute: true,
-                scale: true
-            });
-        });
-    });
-}
+// Vanta.js removed for clean dark aesthetic

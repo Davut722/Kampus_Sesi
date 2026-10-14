@@ -6,155 +6,207 @@ export const TEMPLATES = {
     home: `
         <main class="home page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen">
 
-            <!-- Ambient Glow Aydınlatmaları (Köşelerden vuran ferah, yumuşak cyan ve gece mavisi gradientler) -->
+            <!-- Ambient Glow Aydınlatmaları (Cyan & Gece Mavisi) -->
             <div class="pointer-events-none absolute -top-32 -left-32 w-[28rem] h-[28rem] bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
             <div class="pointer-events-none absolute top-10 -right-32 w-[32rem] h-[32rem] bg-indigo-600/10 rounded-full blur-3xl" aria-hidden="true"></div>
-            <div class="pointer-events-none absolute top-64 left-1/2 -translate-x-1/2 w-[40rem] h-[20rem] bg-cyan-400/[0.04] rounded-full blur-3xl" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute top-72 left-1/2 -translate-x-1/2 w-[44rem] h-[22rem] bg-cyan-400/[0.04] rounded-full blur-3xl" aria-hidden="true"></div>
 
-            <!-- Hero & Arama Alanı (Adım 1) -->
-            <section class="home-hero-centered relative z-10 pt-16 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
-                
-                <!-- Üst Rozet (Badge) -->
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-6 backdrop-blur-md shadow-sm">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cyan-400"></i>
-                    <span>Türkiye'nin İlk Şeffaf Öğrenci ve Kampüs Ağı</span>
-                </div>
-
-                <!-- Ana Başlık (Typography) -->
-                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight" style="font-family: var(--font-heading);">
-                    Kampüsün <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300">Gerçek Sesine</span> Kulak Ver
-                </h1>
-
-                <!-- Alt Açıklama -->
-                <p class="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-                    Broşürlerdeki süslü reklamları değil; amfilerde sabahlayan, yurtlarda kalan ve yemekhaneyi deneyimleyen öğrencilerin sansürsüz yorumlarını keşfet.
-                </p>
-
-                <!-- Cam Efektli Geniş Arama Çubuğu (Glassmorphism Search Bar) -->
-                <div class="hero-centered__search-wrapper relative max-w-2xl mx-auto mb-6">
-                    <div class="relative flex items-center p-2 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl shadow-2xl shadow-cyan-950/20 hover:border-cyan-500/40 transition-all duration-300 group">
-                        <i data-lucide="search" class="w-5 h-5 text-zinc-400 ml-3 shrink-0 group-hover:text-cyan-400 transition-colors"></i>
-                        <input 
-                            type="text" 
-                            id="hero-search-input"
-                            class="hero-centered__search-input flex-1 bg-transparent px-4 py-3 text-sm sm:text-base text-white placeholder-zinc-500 focus:outline-none w-full" 
-                            placeholder="Üniversite, şehir veya bölüm ara (örn. İTÜ Bilgisayar)..."
-                            autocomplete="off"
-                        >
-                        <button 
-                            type="button" 
-                            id="hero-search-btn"
-                            class="px-5 sm:px-7 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-zinc-950 font-bold text-sm shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all flex items-center gap-2 cursor-pointer shrink-0 hover:scale-[1.02] active:scale-[0.98]"
-                        >
-                            <span>Keşfet</span>
-                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </button>
+            <!-- 1. Hero & Arama Alanı (Baştan Aşağıya Düzgün Dikey Akış) -->
+            <section class="home-hero-centered relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
+                <div class="hero-centered__content w-full flex flex-col items-center text-center">
+                    
+                    <!-- Üst Rozet (Badge) -->
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-6 backdrop-blur-md shadow-sm">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>Türkiye'nin İlk Şeffaf Öğrenci ve Kampüs Ağı</span>
                     </div>
-                </div>
 
-                <!-- Arama Altı Popüler Etiket Hapları (#İTÜ, #ODTÜ vb.) -->
-                <div class="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-zinc-400">
-                    <span class="text-zinc-500 font-medium mr-1 flex items-center gap-1">
-                        <i data-lucide="trending-up" class="w-3.5 h-3.5 text-cyan-400"></i> Popüler:
-                    </span>
-                    <button class="hero-tag-pill" data-uni="İstanbul Teknik Üniversitesi">#İTÜ</button>
-                    <button class="hero-tag-pill" data-uni="Orta Doğu Teknik Üniversitesi (ODTÜ)">#ODTÜ</button>
-                    <button class="hero-tag-pill" data-uni="Boğaziçi Üniversitesi">#Boğaziçi</button>
-                    <button class="hero-tag-pill" data-uni="Hacettepe Üniversitesi">#Hacettepe</button>
-                    <button class="hero-tag-pill" data-uni="Yıldız Teknik Üniversitesi (YTÜ)">#YTÜ</button>
-                    <button class="hero-tag-pill" data-uni="Koç Üniversitesi">#Koç</button>
+                    <!-- Ana Başlık (Typography) -->
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight max-w-4xl" style="font-family: var(--font-heading);">
+                        Kampüsün <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300">Gerçek Sesine</span> Kulak Ver
+                    </h1>
+
+                    <!-- Alt Açıklama -->
+                    <p class="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+                        Broşürlerdeki süslü reklamları değil; amfilerde sabahlayan, yurtlarda kalan ve yemekhaneyi deneyimleyen öğrencilerin sansürsüz yorumlarını keşfet.
+                    </p>
+
+                    <!-- Cam Efektli Geniş Arama Çubuğu (Glassmorphism Search Bar) -->
+                    <div class="hero-centered__search-wrapper relative w-full max-w-2xl mx-auto mb-6">
+                        <div class="relative flex items-center p-2 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl shadow-2xl shadow-cyan-950/20 hover:border-cyan-500/40 transition-all duration-300 group">
+                            <i data-lucide="search" class="w-5 h-5 text-zinc-400 ml-3 shrink-0 group-hover:text-cyan-400 transition-colors"></i>
+                            <input 
+                                type="text" 
+                                id="hero-search-input"
+                                class="hero-centered__search-input flex-1 bg-transparent px-4 py-3 text-sm sm:text-base text-white placeholder-zinc-500 focus:outline-none w-full" 
+                                placeholder="Üniversite, şehir veya bölüm ara (örn. İTÜ Bilgisayar)..."
+                                autocomplete="off"
+                            >
+                            <button 
+                                type="button" 
+                                id="hero-search-btn"
+                                class="px-5 sm:px-7 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-zinc-950 font-bold text-sm shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all flex items-center gap-2 cursor-pointer shrink-0 hover:scale-[1.02] active:scale-[0.98]"
+                            >
+                                <span>Keşfet</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Arama Altı Popüler Etiket Hapları (#İTÜ, #ODTÜ vb.) -->
+                    <div class="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-zinc-400">
+                        <span class="text-zinc-500 font-medium mr-1 flex items-center gap-1">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-cyan-400"></i> Popüler:
+                        </span>
+                        <button class="hero-tag-pill" data-uni="İstanbul Teknik Üniversitesi">#İTÜ</button>
+                        <button class="hero-tag-pill" data-uni="Orta Doğu Teknik Üniversitesi (ODTÜ)">#ODTÜ</button>
+                        <button class="hero-tag-pill" data-uni="Boğaziçi Üniversitesi">#Boğaziçi</button>
+                        <button class="hero-tag-pill" data-uni="Hacettepe Üniversitesi">#Hacettepe</button>
+                        <button class="hero-tag-pill" data-uni="Yıldız Teknik Üniversitesi (YTÜ)">#YTÜ</button>
+                        <button class="hero-tag-pill" data-uni="Koç Üniversitesi">#Koç</button>
+                    </div>
+
                 </div>
             </section>
 
-            <!-- Minimalist Features Section -->
-            <section class="home-features container reveal-up" style="padding-bottom: var(--space-xl); position: relative; z-index: 10;">
-                <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-lg);">
-                    <div class="feature-card minimal-card" style="background: var(--color-bg-card); padding: var(--space-xl) var(--space-lg); border-radius: var(--radius-lg); border: 1px solid var(--color-border); text-align: center; transition: all 0.3s ease;">
-                        <div class="feature-icon" style="color: var(--color-accent); font-size: 2rem; margin-bottom: var(--space-sm);"><i data-lucide="shield-check" style="width: 40px; height: 40px;"></i></div>
-                        <h3 class="feature-title" style="margin-bottom: var(--space-xs); font-family: var(--font-heading); font-size: 1.25rem;">Doğrulanmış Deneyimler</h3>
-                        <p class="feature-desc" style="color: var(--color-text-muted); font-size: 0.95rem;">Şeffaflığı ön planda tutarak, kampüs yaşamını birinci ağızdan, dürüst yorumlarla sunuyoruz.</p>
+            <!-- 2. Özellikler Bölümü (Ferah Koyu Antrasit & Camgöbeği Temalı) -->
+            <section class="home-features w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Kart 1 -->
+                    <div class="group p-6 sm:p-8 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-cyan-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-950/20 text-center">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-950/70 border border-cyan-800/60 flex items-center justify-center text-cyan-400 mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2" style="font-family: var(--font-heading);">Doğrulanmış Deneyimler</h3>
+                        <p class="text-sm text-zinc-400 leading-relaxed">Şeffaflığı ön planda tutarak kampüs yaşamını birinci ağızdan, sansürsüz öğrenci yorumlarıyla sunuyoruz.</p>
                     </div>
-                    <div class="feature-card minimal-card" style="background: var(--color-bg-card); padding: var(--space-xl) var(--space-lg); border-radius: var(--radius-lg); border: 1px solid var(--color-border); text-align: center; transition: all 0.3s ease;">
-                        <div class="feature-icon" style="color: var(--color-accent-2); font-size: 2rem; margin-bottom: var(--space-sm);"><i data-lucide="git-compare-arrows" style="width: 40px; height: 40px;"></i></div>
-                        <h3 class="feature-title" style="margin-bottom: var(--space-xs); font-family: var(--font-heading); font-size: 1.25rem;">Akıllı Karşılaştırma</h3>
-                        <p class="feature-desc" style="color: var(--color-text-muted); font-size: 0.95rem;">Birden fazla üniversiteyi akademik, sosyal ve ulaşım gibi temel metriklerde yan yana kıyaslayın.</p>
+
+                    <!-- Kart 2 -->
+                    <div class="group p-6 sm:p-8 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-sky-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-950/20 text-center">
+                        <div class="w-12 h-12 rounded-xl bg-sky-950/70 border border-sky-800/60 flex items-center justify-center text-sky-400 mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="git-compare-arrows" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2" style="font-family: var(--font-heading);">Akıllı Karşılaştırma</h3>
+                        <p class="text-sm text-zinc-400 leading-relaxed">Birden fazla üniversiteyi akademik kadro, yurt ve ulaşım gibi temel kriterlerde yan yana kıyaslayın.</p>
                     </div>
-                    <div class="feature-card minimal-card" style="background: var(--color-bg-card); padding: var(--space-xl) var(--space-lg); border-radius: var(--radius-lg); border: 1px solid var(--color-border); text-align: center; transition: all 0.3s ease;">
-                        <div class="feature-icon" style="color: var(--color-success); font-size: 2rem; margin-bottom: var(--space-sm);"><i data-lucide="network" style="width: 40px; height: 40px;"></i></div>
-                        <h3 class="feature-title" style="margin-bottom: var(--space-xs); font-family: var(--font-heading); font-size: 1.25rem;">Topluluk Ağı</h3>
-                        <p class="feature-desc" style="color: var(--color-text-muted); font-size: 0.95rem;">Bölümünüzdeki veya hedeflediğiniz üniversitedeki kişilerle iletişim kurun, sorularınızı yöneltin.</p>
+
+                    <!-- Kart 3 -->
+                    <div class="group p-6 sm:p-8 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-indigo-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-950/20 text-center">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-950/70 border border-indigo-800/60 flex items-center justify-center text-indigo-400 mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="network" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2" style="font-family: var(--font-heading);">Topluluk Ağı</h3>
+                        <p class="text-sm text-zinc-400 leading-relaxed">Bölümünüzdeki veya hedeflediğiniz okuldaki kıdemli öğrencilerle iletişim kurun, sorularınızı yöneltin.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Minimalist Blog Section -->
-            <section class="home-blog container reveal-up" style="padding-bottom: var(--space-2xl); position: relative; z-index: 10;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--space-lg);">
-                    <h2 class="section-title" style="margin-bottom: 0;">Son <span>İçerikler</span></h2>
-                    <a href="#/home" style="color: var(--color-accent); font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 4px;">Tümünü Gör <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></a>
+            <!-- 3. Platformu Tanıyalım (Mini Tanıtım Kartları - Koyu Antrasit Temalı) -->
+            <section class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 relative z-10">
+                <div class="flex items-center justify-between mb-8 border-b border-zinc-800/80 pb-3">
+                    <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2" style="font-family: var(--font-heading);">
+                        <i data-lucide="compass" class="w-5 h-5 text-cyan-400"></i>
+                        Platformu <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-sky-300">Tanıyalım</span>
+                    </h2>
+                    <a href="#/blog" class="text-cyan-400 hover:text-cyan-300 font-medium text-xs sm:text-sm flex items-center gap-1 transition-colors">
+                        Tüm Bloglar <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
                 </div>
-                <div class="blog-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-lg);">
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Intro Blog 1 -->
-                    <article class="blog-card minimal-card" style="background: var(--color-bg-card); border-radius: var(--radius-md); border: 1px solid var(--color-border); padding: var(--space-lg); transition: all 0.3s ease; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">Hakkımızda</span>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">Kampüs Sesi Nedir?</h3>
-                        <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">Üniversitelerin resmi broşürlerindeki süslü lafları değil, orada okuyan öğrencilerin filtreden geçmemiş gerçek deneyimlerini paylaştığı özgür platformdur.</p>
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-sm); margin-top: auto;">
-                            <a href="#/about" style="font-size: 0.8rem; font-weight: 500; color: var(--color-text);">Detaylar &rarr;</a>
+                    <article class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-cyan-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-950/20 flex flex-col justify-between">
+                        <div>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-950/70 text-cyan-400 border border-cyan-800/50 mb-3 uppercase tracking-wider">
+                                Hakkımızda
+                            </span>
+                            <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2" style="font-family: var(--font-heading);">
+                                Kampüs Sesi Nedir?
+                            </h3>
+                            <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed mb-4">
+                                Üniversitelerin resmi broşürlerindeki süslü lafları değil, orada okuyan öğrencilerin filtreden geçmemiş gerçek deneyimlerini paylaştığı özgür platformdur.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-zinc-800/80 mt-auto">
+                            <a href="#/about" class="text-xs sm:text-sm font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1">
+                                Detaylar &rarr;
+                            </a>
                         </div>
                     </article>
 
                     <!-- Intro Blog 2 -->
-                    <article class="blog-card minimal-card" style="background: var(--color-bg-card); border-radius: var(--radius-md); border: 1px solid var(--color-border); padding: var(--space-lg); transition: all 0.3s ease; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">Kullanım Rehberi</span>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">Karşılaştırma Aracı</h3>
-                        <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">İki üniversite arasında mı kaldın? Şehir, yemekhane, ulaşım ve yurt olanaklarını tek ekranda yan yana koyarak en doğru seçimi yapmanı sağlar.</p>
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-sm); margin-top: auto;">
-                            <a href="#/compare" style="font-size: 0.8rem; font-weight: 500; color: var(--color-text);">Nasıl Kullanılır? &rarr;</a>
+                    <article class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-cyan-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-950/20 flex flex-col justify-between">
+                        <div>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-950/70 text-sky-400 border border-sky-800/50 mb-3 uppercase tracking-wider">
+                                Kullanım Rehberi
+                            </span>
+                            <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2" style="font-family: var(--font-heading);">
+                                Karşılaştırma Aracı
+                            </h3>
+                            <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed mb-4">
+                                İki üniversite arasında mı kaldın? Şehir, yemekhane, ulaşım ve yurt olanaklarını tek ekranda yan yana koyarak en doğru seçimi yapmanı sağlar.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-zinc-800/80 mt-auto">
+                            <a href="#/compare" class="text-xs sm:text-sm font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1">
+                                Nasıl Kullanılır? &rarr;
+                            </a>
                         </div>
                     </article>
 
                     <!-- Intro Blog 3 -->
-                    <article class="blog-card minimal-card" style="background: var(--color-bg-card); border-radius: var(--radius-md); border: 1px solid var(--color-border); padding: var(--space-lg); transition: all 0.3s ease; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">Topluluk</span>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">Nasıl Katkı Sağlarsın?</h3>
-                        <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">Kendi kampüsündeki iyi ve kötü yanları paylaşarak tercih dönemindeki adaylara yol gösterebilirsin. Üstelik tamamen anonim olarak yorum yapabilirsin.</p>
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-sm); margin-top: auto;">
-                            <a href="#/review-form" style="font-size: 0.8rem; font-weight: 500; color: var(--color-text);">Yorum Yaz &rarr;</a>
+                    <article class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-cyan-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-950/20 flex flex-col justify-between">
+                        <div>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-950/70 text-orange-400 border border-orange-800/50 mb-3 uppercase tracking-wider">
+                                Topluluk
+                            </span>
+                            <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2" style="font-family: var(--font-heading);">
+                                Nasıl Katkı Sağlarsın?
+                            </h3>
+                            <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed mb-4">
+                                Kendi kampüsündeki iyi ve kötü yanları paylaşarak tercih dönemindeki adaylara yol gösterebilirsin. Üstelik tamamen anonim olarak yorum yapabilirsin.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-zinc-800/80 mt-auto">
+                            <a href="#/review-form" class="text-xs sm:text-sm font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1">
+                                Yorum Yaz &rarr;
+                            </a>
                         </div>
                     </article>
                 </div>
             </section>
             
-            <!-- Compact FAQ Section (Interactive) -->
-            <section class="home-faq container" style="max-width: 600px; padding-top: var(--space-lg); padding-bottom: var(--space-xl);">
-                <h2 class="section-title" style="text-align: center; margin-bottom: var(--space-lg);">Merak Edilenler 🧐</h2>
-                <div class="faq-accordion-list" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <!-- 4. SSS / Merak Edilenler (Ferah Koyu Antrasit & Camgöbeği İkonlu) -->
+            <section class="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 relative z-10">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white text-center mb-8 flex items-center justify-center gap-2" style="font-family: var(--font-heading);">
+                    Merak Edilenler <span class="text-cyan-400">🧐</span>
+                </h2>
+                <div class="flex flex-col gap-3">
                     <details class="faq-details">
                         <summary class="faq-summary">
                             <span>Üye olmak şart mı?</span>
                             <i data-lucide="plus" class="faq-icon"></i>
                         </summary>
                         <div class="faq-content">
-                            <p>Okumak bedava! Ama "şu hocanın sınavları çok zor" diye isyan edeceksen veya soru soracaksan üye olman lazım ki trolleri uzak tutalım.</p>
+                            <p>Yorumları okumak ve üniversiteleri incelemek tamamen ücretsiz ve anonimdir. Kendi okulunuz hakkında yorum yazmak veya soru sormak istediğinizde spam'ı önlemek için üye girişi yapmanız yeterlidir.</p>
                         </div>
                     </details>
                     <details class="faq-details">
                         <summary class="faq-summary">
-                            <span>Üniversitelerin bilgileri güncel mi?</span>
+                            <span>Üniversite ve yurt bilgileri ne sıklıkla güncellenir?</span>
                             <i data-lucide="plus" class="faq-icon"></i>
                         </summary>
                         <div class="faq-content">
-                            <p>Her şeyi olabildiğince güncel tutmaya çalışıyoruz. Yurtlar, ulaşım falan hepsi sistemde var ama en iyi güncellemeyi yorumlarda okursun.</p>
+                            <p>Tüm resmi veriler dönem başlarında güncellenir; ayrıca bizzat o okulda okuyan öğrencilerin canlı yorumlarıyla en taze bilgilere anında ulaşırsınız.</p>
                         </div>
                     </details>
                     <details class="faq-details">
                         <summary class="faq-summary">
-                            <span>Puanlamalar neye göre yapılıyor?</span>
+                            <span>Puanlamalar ve sıralamalar nasıl hesaplanıyor?</span>
                             <i data-lucide="plus" class="faq-icon"></i>
                         </summary>
                         <div class="faq-content">
-                            <p>Bizzat sizlerin oylarıyla! Eğitim, sosyallik, yemekler ... Herkesin notunun şeffaf ortalamasını alıp sıralıyoruz.</p>
+                            <p>Eğitim, kampüs olanakları, yemekhane kalitesi, sosyallik ve yurt şartları gibi temel metriklerde öğrencilerin verdiği oyların şeffaf ağırlıklı ortalamasıyla listelenir.</p>
                         </div>
                     </details>
                 </div>

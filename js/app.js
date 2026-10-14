@@ -1630,7 +1630,8 @@ export function renderCurrentRoute() {
         'compare': 'Karşılaştır — Kampüs Sesi',
         'review-form': 'Değerlendir — Kampüs Sesi',
         'profile': 'Profilim — Kampüs Sesi',
-        'login': 'Giriş Yap — Kampüs Sesi'
+        'login': 'Giriş Yap — Kampüs Sesi',
+        'blog': 'Blog & Rehberler — Kampüs Sesi'
     };
     document.title = titles[route] || 'Kampüs Sesi';
 
@@ -1656,6 +1657,277 @@ export function renderCurrentRoute() {
         initLoginPage();
     } else if (route === 'home') {
         initHomePage();
+    } else if (route === 'blog') {
+        initBlogPage();
+    }
+}
+
+
+function initBlogPage() {
+    // 1. Article database for reading modal
+    const BLOG_ARTICLES = {
+        'feat-1': {
+            title: 'Yeni Başlayanlar İçin Üniversite Hayatta Kalma Rehberi: İlk Yılda Yapılan 10 Hata',
+            category: 'Kampüs Yaşamı',
+            readTime: '5 dk okuma',
+            author: 'Can Berk D. · ODTÜ Endüstri',
+            initials: 'CB',
+            date: '12 Ekim 2026',
+            image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1200',
+            content: `
+                <p class="text-zinc-300 mb-4">Üniversiteye adım attığınız ilk aylar, hayatınızın en heyecan verici ama bir o kadar da kafa karıştırıcı dönemi olabilir. Lisedeki gibi bir zil çalmıyor, kimse ödevinizi yapmadınız diye arkanızdan koşmuyor. Bu sınırsız özgürlük, doğru yönetilmediğinde ciddi bir vize şoku ve motivasyon kaybına yol açabiliyor.</p>
+                
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">1. "Derslere Gitmesem de Slaytlardan Geçerim" Yanılgısı</h4>
+                <p class="text-zinc-300 mb-4">Öğretim görevlilerinin sınavda sorduğu en can alıcı sorular genellikle slaytlarda yazmayan, derste tahtaya çizdikleri veya vurguladıkları küçük örneklerden gelir. Devamsızlık sınırını sonuna kadar tüketmek yerine derslere aktif katılmak, finallerde sabahlamaktan kurtarır.</p>
+
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">2. Kulüplerde Aşırı Sorumluluk Yüklenmek</h4>
+                <p class="text-zinc-300 mb-4">İlk hafta oryantasyonda 10 farklı kulübe üye olmak çok yaygındır. Ancak bir anda 4 farklı komitede görev alıp vizeleri kaçırmak ilk sene ortalamanızı (GPA) telafi edilmesi güç seviyelere çekebilir. İlginizi çeken 1 veya 2 kulüpte derinleşin.</p>
+
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">3. Bütçe ve Yurt/Ev Dengesi</h4>
+                <p class="text-zinc-300 mb-4">Ayın ilk haftası burs ya da harçlık yattığında dışarıda kontrolsüz harcama yapıp son iki haftayı sadece makarna yiyerek geçirmek klasik bir birinci sınıf hatasıdır. Aylık sabit giderlerinizi baştan ayırın ve acil durum fonu oluşturun.</p>
+
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">4. İletişimden Çekinmek</h4>
+                <p class="text-zinc-300 mb-4">Üst sınıflarla, asistanlarla ve bölüm danışmanınızla tanışmaktan asla çekinmeyin. Onların vereceği bir çıkmış soru havuzu veya staj tavsiyesi, haftalarca sürecek arayışınızı bir günde çözebilir.</p>
+            `
+        },
+        'feat-2': {
+            title: 'KYK Yurt ve Burs Başvurularında Dikkat Edilmesi Gereken Kritik Detaylar',
+            category: 'Burs & Barınma',
+            readTime: '3 dk okuma',
+            author: 'Büşra Y. · İTÜ Mimarlık',
+            initials: 'BY',
+            date: '10 Ekim 2026',
+            image: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=800',
+            content: `
+                <p class="text-zinc-300 mb-4">Her yıl yüz binlerce öğrencinin beklediği KYK burs ve yurt başvuru takvimi başladığında en çok karşılaşılan sorun hatalı bilgi girişi ve yedek liste takipsizliğidir.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">Gelir Beyanında Dikkat Edilecekler</h4>
+                <p class="text-zinc-300 mb-4">E-Devlet entegrasyonu sayesinde tapu, araç ve vergi kayıtları otomatik çekilir. Aile hanesindeki kişi sayısı ve okuyan kardeş bilgisi puanlamada belirleyicidir. Yanıltıcı beyan durumunda burs kesilebilir.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">Yedek Sıralamalar Çok Hızlı İlerler</h4>
+                <p class="text-zinc-300 mb-4">İlk yerleştirmede yurt çıkmadıysa kesinlikle umutsuzluğa kapılmayın. İlk 3-4 yedek alımında sıralamalar binlerce kişi geriye doğru açılır. Yurt hakkı kazandığınızda depozito ödemesi ve taahhütname onayını belirtilen süre içinde tamamlamayı unutmayın.</p>
+            `
+        },
+        'feat-3': {
+            title: 'Teknoloji Sektöründe Staj Bulmanın En Etkili 5 Yolu: GitHub ve LinkedIn',
+            category: 'Staj & Kariyer',
+            readTime: '4 dk okuma',
+            author: 'Mert S. · Boğaziçi Bilgisayar',
+            initials: 'MS',
+            date: '8 Ekim 2026',
+            image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800',
+            content: `
+                <p class="text-zinc-300 mb-4">"Deneyimim yok, nasıl staj bulacağım?" sorusu hemen her mühendislik ve bilişim öğrencisinin ortak kabusudur. Şirketler stajyer adaylarında bitmiş bir kariyer değil, öğrenme tutkusu ve somut çaba ararlar.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">1. GitHub'ı Boş Bırakmayın</h4>
+                <p class="text-zinc-300 mb-4">Okul ödevlerinizi dahi temiz bir README dosyası, ekran görüntüleri ve düzgün commit mesajlarıyla paylaşın. Biten tek bir kaliteli proje, içi boş 5 sertifikadan daha ikna edicidir.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">2. LinkedIn Soğuk Mesajlar (Cold Outreach)</h4>
+                <p class="text-zinc-300 mb-4">İlgilendiğiniz şirkette çalışan mühendislere "Bana staj verir misiniz?" diye değil, "Şirketinizde kullandığınız teknoloji stack'i hakkında 10 dakika fikir danışabilir miyim?" şeklinde samimi ve profesyonel yaklaşın.</p>
+            `
+        },
+        'grid-1': {
+            title: 'Öğrenci Evi Mi, KYK Mı, Özel Yurt Mu? 2026 Maliyet ve Konfor Kıyaslaması',
+            category: 'Burs & Barınma',
+            readTime: '4 dk okuma',
+            author: 'Deniz A. · Hacettepe',
+            initials: 'DA',
+            date: '6 Ekim 2026',
+            image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=800',
+            content: `
+                <p class="text-zinc-300 mb-4">Büyükşehirlerde üniversite kazananların ilk ve en zorlu kararı: Nerede kalacağım? 2026 yılı güncel verileriyle üç alternatifi masaya yatırdık.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">KYK Yurtları</h4>
+                <p class="text-zinc-300 mb-4">Ekonomik açıdan en rakipsiz seçenektir. Sabah kahvaltısı ve akşam yemeği desteği sayesinde bütçeyi korur. Dezavantajı: Çok kişilik odalar ve giriş-çıkış saati kısıtlamaları.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">Öğrenci Evi</h4>
+                <p class="text-zinc-300 mb-4">Maksimum özgürlük ve kişisel alan sunar. Ancak kira, aidat, internet ve faturaların yanı sıra temizlik ve yemek sorumluluğu tamamen sizdedir. Ev arkadaşı seçimi hayatidir.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">Özel Yurtlar</h4>
+                <p class="text-zinc-300 mb-4">Otel konforuna en yakın modeldir; fatura derdi yoktur, çalışma salonları geniştir ancak maliyetleri çoğu zaman ev kiralarını aşabilmektedir.</p>
+            `
+        },
+        'grid-2': {
+            title: 'Öğrenci Kulüpleri Gerçekten Kariyerine Katkı Sağlar Mı? Sosyalleşmenin Ötesi',
+            category: 'Kampüs Yaşamı',
+            readTime: '3 dk okuma',
+            author: 'Selin K. · YTÜ',
+            initials: 'SK',
+            date: '4 Ekim 2026',
+            image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800',
+            content: `
+                <p class="text-zinc-300 mb-4">Kulüpler yalnızca kampüs çimlerinde gitar çalmaktan ibaret değildir. Aktif bir kulüp yöneticiliği, kurumsal bir şirkette stajyerlikten çok daha fazla inisiyatif alma fırsatı verir.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">Kriz ve Bütçe Yönetimi</h4>
+                <p class="text-zinc-300 mb-4">500 kişilik bir zirve düzenlerken konuşmacının uçağının rötar yapması veya ana sponsorun son anda çekilmesi gibi krizleri yönetmek, mülakatlarda anlatacağınız en güçlü başarı hikayesine dönüşür.</p>
+            `
+        },
+        'grid-3': {
+            title: 'Erasmus+ ve Yurt Dışı Staj Bursları: Başvuru Aşamasından Kabul Mektubuna',
+            category: 'Staj & Kariyer',
+            readTime: '5 dk okuma',
+            author: 'Emre T. · Koç Üni',
+            initials: 'ET',
+            date: '2 Ekim 2026',
+            image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=800',
+            content: `
+                <p class="text-zinc-300 mb-4">Avrupa'da bir dönem okumak veya yaz stajı yapmak, vizyonunuzu ve yabancı dil akıcılığınızı bir üst seviyeye taşır.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">Puan Hesaplama</h4>
+                <p class="text-zinc-300 mb-4">Genellikle %50 GANO (Genel Not Ortalaması) + %50 Yabancı Dil Sınavı puanı baz alınır. Dil sınavına hazırlanırken dinleme (listening) ve konuşma (speaking) pratiklerini ihmal etmeyin.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">Kabul Mektubu (Invitation Letter)</h4>
+                <p class="text-zinc-300 mb-4">Staj hareketliliğinde en önemli adım Avrupa'daki bir laboratuvar veya şirketten davet mektubu almaktır. Kişiselleştirilmiş e-postalar gönderin.</p>
+            `
+        },
+        'grid-4': {
+            title: 'Çift Anadal (ÇAP) ve Yandal Yapmak İsteyenler İçin Stratejik Planlama',
+            category: 'Akademik Rehberler',
+            readTime: '4 dk okuma',
+            author: 'Ayşe N. · Bilkent',
+            initials: 'AN',
+            date: '30 Eylül 2026',
+            image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=800',
+            content: `
+                <p class="text-zinc-300 mb-4">İki ayrı diploma ile mezun olmak kulağa çok prestijli gelse de dönem başına 7-8 ders almak ciddi bir disiplin gerektirir.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">Ortak Derslerin Tespiti</h4>
+                <p class="text-zinc-300 mb-4">ÇAP yapacağınız bölümle kendi bölümünüzün ortak havuz derslerini (Matematik, Fizik, İktisat vb.) önceden analiz edin. Ortak ders sayısı ne kadar çoksa, ders çakışması ve dönem uzama riski o kadar azalır.</p>
+            `
+        },
+        'grid-5': {
+            title: 'Vize ve Final Döneminde Tükenmişliği Önleme: Pomodoro ve Not Tutma',
+            category: 'Akademik Rehberler',
+            readTime: '3 dk okuma',
+            author: 'Kaan V. · Ankara Tıp',
+            initials: 'KV',
+            date: '28 Eylül 2026',
+            image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800',
+            content: `
+                <p class="text-zinc-300 mb-4">Sınav haftalarında arka arkaya içilen enerji içecekleri ve uykusuz geçen geceler zihinsel performansı düşürür.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">Pomodoro ve Aktif Hatırlama</h4>
+                <p class="text-zinc-300 mb-4">50 dakika odaklanma + 10 dakika mola döngüleri kurun. Sayfalarca notu sadece okumak yerine kendi cümlelerinizle birine anlatıyormuş gibi özetleyin (Feynman Tekniği).</p>
+            `
+        },
+        'grid-6': {
+            title: 'Şehir Değiştirecek Üniversitelilere Tavsiyeler: İstanbul, Ankara ve İzmir',
+            category: 'Kampüs Yaşamı',
+            readTime: '4 dk okuma',
+            author: 'Ece D. · Ege Üniversitesi',
+            initials: 'ED',
+            date: '25 Eylül 2026',
+            image: 'https://images.unsplash.com/photo-1477959858617-67f30bc75b82?auto=format&fit=crop&q=80&w=800',
+            content: `
+                <p class="text-zinc-300 mb-4">Farklı bir şehre taşınmak bağımsız bir birey olmanın ilk adımıdır. Ancak her şehrin kendine has dinamikleri vardır.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">İstanbul: Fırsatlar ve Mesafe</h4>
+                <p class="text-zinc-300 mb-4">Sektörün kalbidir, staj ve etkinlikler sınırsızdır. Ancak ulaşım sürelerini hesaba katmalı, kampüse yakın konaklama tercih edilmelidir.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">Ankara: Tam Bir Öğrenci Şehri</h4>
+                <p class="text-zinc-300 mb-4">Milli Kütüphane, Tunalı, Kızılay hattı ve sakin yapısıyla öğrencilerin ders çalışmaya ve akademik üretime en kolay odaklandığı şehirdir.</p>
+                <h4 class="text-lg font-bold text-white mt-6 mb-2">İzmir: Özgürlük ve Sakinlik</h4>
+                <p class="text-zinc-300 mb-4">Bornova ve Alsancak hattı, keyifli iklimi ve öğrencilere kucak açan sıcak atmosferiyle eşsiz bir üniversite deneyimi sunar.</p>
+            `
+        }
+    };
+
+    // 2. Kategori Filtreleme
+    const filterButtons = document.querySelectorAll('#blog-category-filters .ks-blog-pill');
+    const allCards = document.querySelectorAll('.ks-blog-card');
+    const countBadge = document.getElementById('blog-articles-count');
+    const featuredSection = document.getElementById('blog-featured-section');
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const selectedCategory = btn.dataset.category;
+            let visibleCount = 0;
+
+            allCards.forEach(card => {
+                const cardCategory = card.dataset.category;
+                const match = selectedCategory === 'all' || cardCategory === selectedCategory;
+                
+                if (match) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Adjust featured section visibility if no featured cards match
+            if (featuredSection) {
+                const featuredCards = featuredSection.querySelectorAll('.ks-blog-card');
+                const hasVisibleFeatured = Array.from(featuredCards).some(c => c.style.display !== 'none');
+                featuredSection.style.display = hasVisibleFeatured ? '' : 'none';
+            }
+
+            if (countBadge) {
+                countBadge.textContent = `${visibleCount} rehber listeleniyor`;
+            }
+        });
+    });
+
+    // 3. Okuma Modalı Mantığı
+    const modal = document.getElementById('ks-blog-modal');
+    const modalClose = document.getElementById('ks-modal-close');
+    const modalBottomClose = document.getElementById('ks-modal-bottom-close');
+    const modalImg = document.getElementById('ks-modal-img');
+    const modalBadge = document.getElementById('ks-modal-badge');
+    const modalReadtime = document.getElementById('ks-modal-readtime');
+    const modalTitle = document.getElementById('ks-modal-title');
+    const modalAuthor = document.getElementById('ks-modal-author');
+    const modalAvatar = document.getElementById('ks-modal-avatar');
+    const modalDate = document.getElementById('ks-modal-date');
+    const modalBody = document.getElementById('ks-modal-body');
+
+    function openModal(postId) {
+        const post = BLOG_ARTICLES[postId];
+        if (!post || !modal) return;
+
+        modalImg.src = post.image;
+        modalBadge.textContent = post.category;
+        modalReadtime.innerHTML = `<i data-lucide="clock" class="w-3.5 h-3.5 text-cyan-400"></i> ${post.readTime}`;
+        modalTitle.textContent = post.title;
+        modalAuthor.textContent = post.author;
+        modalAvatar.textContent = post.initials || 'KS';
+        modalDate.textContent = post.date;
+        modalBody.innerHTML = post.content;
+
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    function closeModal() {
+        if (!modal) return;
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // Attach click events to blog cards
+    allCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Don't open if clicked on direct link or button inside card
+            if (e.target.closest('a') && !e.target.closest('a').href.endsWith('#/blog')) return;
+            const postId = card.dataset.postId;
+            if (postId) {
+                openModal(postId);
+            }
+        });
+    });
+
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (modalBottomClose) modalBottomClose.addEventListener('click', closeModal);
+
+    // Close on backdrop click
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && modal.classList.contains('open')) {
+            closeModal();
+        }
+    });
+
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
 }
 

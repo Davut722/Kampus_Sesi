@@ -62,9 +62,9 @@ export const TEMPLATES = {
                 <div class="blog-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-lg);">
                     <!-- Intro Blog 1 -->
                     <article class="blog-card minimal-card" style="background: var(--color-bg-card); border-radius: var(--radius-md); border: 1px solid var(--color-border); padding: var(--space-lg); transition: all 0.3s ease; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">Hakk�m�zda</span>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">Kamp�s Sesi Nedir?</h3>
-                        <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">�niversitelerin resmi bro��rlerindeki s�sl� laflar� de�il, orada okuyan ��rencilerin filtreden ge�memi� ger�ek deneyimlerini payla�t��� �zg�r platformdur.</p>
+                        <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">Hakkımızda</span>
+                        <h3 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">Kampüs Sesi Nedir?</h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">Üniversitelerin resmi broşürlerindeki süslü lafları değil, orada okuyan öğrencilerin filtreden geçmemiş gerçek deneyimlerini paylaştığı özgür platformdur.</p>
                         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-sm); margin-top: auto;">
                             <a href="#/about" style="font-size: 0.8rem; font-weight: 500; color: var(--color-text);">Detaylar &rarr;</a>
                         </div>
@@ -72,19 +72,19 @@ export const TEMPLATES = {
 
                     <!-- Intro Blog 2 -->
                     <article class="blog-card minimal-card" style="background: var(--color-bg-card); border-radius: var(--radius-md); border: 1px solid var(--color-border); padding: var(--space-lg); transition: all 0.3s ease; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">Kullan�m Rehberi</span>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">Kar��la�t�rma Arac�</h3>
-                        <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">�ki �niversite aras�nda m� kald�n? �ehir, yemekhane, ula��m ve yurt olanaklar�n� tek ekranda yan yana koyarak en do�ru se�imi yapman� sa�lar.</p>
+                        <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">Kullanım Rehberi</span>
+                        <h3 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">Karşılaştırma Aracı</h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">İki üniversite arasında mı kaldın? Şehir, yemekhane, ulaşım ve yurt olanaklarını tek ekranda yan yana koyarak en doğru seçimi yapmanı sağlar.</p>
                         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-sm); margin-top: auto;">
-                            <a href="#/compare" style="font-size: 0.8rem; font-weight: 500; color: var(--color-text);">Nas�l Kullan�l�r? &rarr;</a>
+                            <a href="#/compare" style="font-size: 0.8rem; font-weight: 500; color: var(--color-text);">Nasıl Kullanılır? &rarr;</a>
                         </div>
                     </article>
 
                     <!-- Intro Blog 3 -->
                     <article class="blog-card minimal-card" style="background: var(--color-bg-card); border-radius: var(--radius-md); border: 1px solid var(--color-border); padding: var(--space-lg); transition: all 0.3s ease; display: flex; flex-direction: column;">
                         <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">Topluluk</span>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">Nas�l Katk� Sa�lars�n?</h3>
-                        <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">Kendi kamp�s�ndeki iyi ve k�t� yanlar� payla�arak tercih d�nemindeki adaylara yol g�sterebilirsin. �stelik tamamen anonim olarak yorum yapabilirsin.</p>
+                        <h3 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">Nasıl Katkı Sağlarsın?</h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">Kendi kampüsündeki iyi ve kötü yanları paylaşarak tercih dönemindeki adaylara yol gösterebilirsin. Üstelik tamamen anonim olarak yorum yapabilirsin.</p>
                         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-sm); margin-top: auto;">
                             <a href="#/review-form" style="font-size: 0.8rem; font-weight: 500; color: var(--color-text);">Yorum Yaz &rarr;</a>
                         </div>
@@ -482,14 +482,443 @@ export const TEMPLATES = {
         </div>
     `
 
-    , blog: `
-        <main class="page-view container" style="padding-top: var(--space-2xl);">
-            <header style="margin-bottom: var(--space-xl); text-align: center;">
-                <h1 class="hero-centered__title" style="font-size: 2.5rem; margin-bottom: var(--space-sm);">Blog & Rehberler</h1>
-                <p style="color: var(--color-text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">�niversite hayat�na dair bilmen gereken her �ey burada.</p>
-            </header>
-                        <!-- Minimalist Blog Section -->\n            <section class="home-blog container reveal-up" style="padding-bottom: var(--space-2xl); position: relative; z-index: 10;">\n                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--space-lg);">\n                    <h2 class="section-title" style="margin-bottom: 0;">Son <span>İçerikler</span></h2>\n                    <a href="#/home" style="color: var(--color-accent); font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 4px;">Tümünü Gör <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></a>\n                </div>\n                <div class="blog-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-lg);">\n                    <!-- Blog Card 1 -->\n                    <article class="blog-card minimal-card" style="background: var(--color-bg-card); border-radius: var(--radius-md); border: 1px solid var(--color-border); padding: var(--space-lg); transition: all 0.3s ease; display: flex; flex-direction: column;">\n                        <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">Rehber</span>\n                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">Üniversite Tercih Sürecinde Dikkat Edilmesi Gerekenler</h3>\n                        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">Tercih listenizi hazırlarken sıralamalar dışında kampüs olanakları ve akademik kadro gibi detaylara nasıl dikkat etmelisiniz?</p>\n                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-sm); margin-top: auto;">\n                            <span style="font-size: 0.8rem; color: var(--color-text-muted);">12 Mayıs</span>\n                            <a href="#/home" style="font-size: 0.85rem; font-weight: 500; color: var(--color-text);">Devamını Oku &rarr;</a>\n                        </div>\n                    </article>\n\n                    <!-- Blog Card 2 -->\n                    <article class="blog-card minimal-card" style="background: var(--color-bg-card); border-radius: var(--radius-md); border: 1px solid var(--color-border); padding: var(--space-lg); transition: all 0.3s ease; display: flex; flex-direction: column;">\n                        <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">Kampüs Hayatı</span>\n                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">KYK Yurtları vs. Özel Yurtlar: Hangisi Avantajlı?</h3>\n                        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">Barınma maliyetleri, giriş-çıkış saatleri ve sosyal olanaklar açısından devlet yurtları ile özel yurtların detaylı bir kıyaslaması.</p>\n                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-sm); margin-top: auto;">\n                            <span style="font-size: 0.8rem; color: var(--color-text-muted);">5 Mayıs</span>\n                            <a href="#/home" style="font-size: 0.85rem; font-weight: 500; color: var(--color-text);">Devamını Oku &rarr;</a>\n                        </div>\n                    </article>\n\n                    <!-- Blog Card 3 -->\n                    <article class="blog-card minimal-card" style="background: var(--color-bg-card); border-radius: var(--radius-md); border: 1px solid var(--color-border); padding: var(--space-lg); transition: all 0.3s ease; display: flex; flex-direction: column;">\n                        <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs);">Akademik</span>\n                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: var(--space-sm); color: var(--color-text); line-height: 1.4;">Mühendislik İçin Staj Bulma Taktikleri</h3>\n                        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: var(--space-md); flex: 1; line-height: 1.6;">Henüz 1. sınıftayken bile sektörle iç içe olmak mümkün. Portfolyo hazırlama ve kariyer fuarlarını verimli kullanma rehberi.</p>\n                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--space-sm); margin-top: auto;">\n                            <span style="font-size: 0.8rem; color: var(--color-text-muted);">28 Nisan</span>\n                            <a href="#/home" style="font-size: 0.85rem; font-weight: 500; color: var(--color-text);">Devamını Oku &rarr;</a>\n                        </div>\n                    </article>\n                </div>\n            </section>
-        </main>
-    `
+    ,
+    blog: `
+        <main class="ks-blog-page bg-zinc-950 text-zinc-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- 1. Hero & Kategori Filtreleri (Arama çubuğu OLMASIN) -->
+                <header class="text-center max-w-3xl mx-auto mb-10 pt-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-950/70 border border-cyan-800/60 text-cyan-400 mb-4 tracking-wider uppercase">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        Öğrenci Rehberi & Kampüs Deneyimleri
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4" style="font-family: var(--font-heading);">
+                        Blog & <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-orange-400">Rehberler</span>
+                    </h1>
+                    <p class="text-base sm:text-lg text-zinc-400 leading-relaxed max-w-2xl mx-auto">
+                        Üniversite tercihinden barınmaya, staj taktiklerinden ders çalışma stratejilerine kadar kıdemli öğrencilerin sansürsüz ve gerçek rehberleri.
+                    </p>
+                </header>
 
-};
+                <!-- Kategori Sekmeleri (Yatay Hap Butonlar) -->
+                <div class="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-3 mb-12 no-scrollbar" id="blog-category-filters">
+                    <button class="ks-blog-pill active" data-category="all">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i> Tümü
+                    </button>
+                    <button class="ks-blog-pill" data-category="kampus">
+                        <i data-lucide="coffee" class="w-4 h-4"></i> Kampüs Yaşamı
+                    </button>
+                    <button class="ks-blog-pill" data-category="burs-barinma">
+                        <i data-lucide="home" class="w-4 h-4"></i> Burs & Barınma
+                    </button>
+                    <button class="ks-blog-pill" data-category="staj-kariyer">
+                        <i data-lucide="briefcase" class="w-4 h-4"></i> Staj & Kariyer
+                    </button>
+                    <button class="ks-blog-pill" data-category="akademik">
+                        <i data-lucide="graduation-cap" class="w-4 h-4"></i> Akademik Rehberler
+                    </button>
+                </div>
+
+                <!-- 2. Öne Çıkanlar (Asimetrik Vitrin) -->
+                <section class="mb-16" id="blog-featured-section">
+                    <div class="flex items-center justify-between mb-6 border-b border-zinc-800/80 pb-3">
+                        <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2" style="font-family: var(--font-heading);">
+                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                            Öne Çıkan İçerikler
+                        </h2>
+                        <span class="text-xs uppercase tracking-wider text-zinc-500 font-medium">Haftanın Seçkisi</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Sol Taraf: 1 Büyük Kart (Haftanın Öne Çıkan Rehberi) -->
+                        <article class="ks-blog-card ks-featured-hero lg:col-span-7 group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/80 p-6 sm:p-7 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 hover:shadow-2xl hover:shadow-cyan-950/40" data-category="kampus" data-post-id="feat-1">
+                            <!-- Büyük Görsel -->
+                            <div class="relative h-64 sm:h-72 w-full overflow-hidden rounded-xl mb-6">
+                                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1200" alt="Kampüs Yaşamı" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/30 to-transparent"></div>
+                                <div class="absolute top-4 left-4 flex items-center gap-2">
+                                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/90 text-zinc-950 shadow-md">
+                                        ★ Haftanın Rehberi
+                                    </span>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-zinc-900/90 text-cyan-400 border border-zinc-700/80 backdrop-blur-md">
+                                        Kampüs Yaşamı
+                                    </span>
+                                </div>
+                                <div class="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs text-zinc-300">
+                                    <span class="flex items-center gap-1.5 bg-zinc-900/85 px-2.5 py-1 rounded-md backdrop-blur-sm border border-zinc-700/60">
+                                        <i data-lucide="clock" class="w-3.5 h-3.5 text-cyan-400"></i> 5 dk okuma
+                                    </span>
+                                    <span class="text-zinc-400">12 Ekim 2026</span>
+                                </div>
+                            </div>
+
+                            <!-- Başlık & Özet -->
+                            <div class="flex-1 flex flex-col justify-between">
+                                <div>
+                                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors line-clamp-2" style="font-family: var(--font-heading);">
+                                        Yeni Başlayanlar İçin Üniversite Hayatta Kalma Rehberi: İlk Yılda Yapılan 10 Hata
+                                    </h3>
+                                    <p class="text-zinc-400 text-sm sm:text-base leading-relaxed mb-6 line-clamp-3">
+                                        Liseden üniversiteye geçişte ders seçimi stratejileri, vize-final dengesi, kulüp aktiviteleri ve bütçe yönetimi konusunda üst sınıfların tecrübeleriyle hazırlanmış kapsamlı yol haritası.
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between pt-4 border-t border-zinc-800/80 mt-auto">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center font-bold text-xs text-cyan-400">
+                                            CB
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-semibold text-zinc-200">Can Berk D.</div>
+                                            <div class="text-xs text-zinc-500">ODTÜ · Endüstri Müh.</div>
+                                        </div>
+                                    </div>
+                                    <span class="inline-flex items-center gap-1 text-sm font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform">
+                                        Rehberi Oku <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Sağ Taraf: Dikey Dizilmiş 2 Küçük Trend Kart -->
+                        <div class="lg:col-span-5 flex flex-col gap-6">
+                            <!-- Trend Kart 1 -->
+                            <article class="ks-blog-card group relative flex flex-col sm:flex-row lg:flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/80 p-5 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-950/30 flex-1" data-category="burs-barinma" data-post-id="feat-2">
+                                <div class="relative h-44 sm:h-auto sm:w-44 lg:w-full lg:h-36 overflow-hidden rounded-xl mb-4 sm:mb-0 lg:mb-4 shrink-0">
+                                    <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=800" alt="Yurt Rehberi" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                                    <div class="absolute top-2.5 left-2.5">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-zinc-900/90 text-orange-400 border border-orange-500/30 backdrop-blur-md">
+                                            Burs & Barınma
+                                        </span>
+                                    </div>
+                                    <span class="absolute bottom-2.5 right-2.5 text-xs text-zinc-300 bg-zinc-900/80 px-2 py-0.5 rounded backdrop-blur-sm flex items-center gap-1">
+                                        <i data-lucide="clock" class="w-3 h-3 text-cyan-400"></i> 3 dk
+                                    </span>
+                                </div>
+                                <div class="flex-1 flex flex-col justify-between sm:pl-4 lg:pl-0">
+                                    <div>
+                                        <h3 class="text-base font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors line-clamp-2" style="font-family: var(--font-heading);">
+                                            KYK Yurt ve Burs Başvurularında Dikkat Edilmesi Gereken Kritik Detaylar
+                                        </h3>
+                                        <p class="text-xs text-zinc-400 line-clamp-2 mb-3">
+                                            Gelir beyanı, yedek yerleştirmeler ve nakil süreçlerinde yapılan hatalar bursunuzu riske atmasın.
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs text-zinc-400 pt-2 border-t border-zinc-800/60 mt-auto">
+                                        <span>Büşra Y. · İTÜ Mimarlık</span>
+                                        <span class="text-cyan-400 font-medium group-hover:translate-x-0.5 transition-transform">İncele &rarr;</span>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Trend Kart 2 -->
+                            <article class="ks-blog-card group relative flex flex-col sm:flex-row lg:flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/80 p-5 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-950/30 flex-1" data-category="staj-kariyer" data-post-id="feat-3">
+                                <div class="relative h-44 sm:h-auto sm:w-44 lg:w-full lg:h-36 overflow-hidden rounded-xl mb-4 sm:mb-0 lg:mb-4 shrink-0">
+                                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800" alt="Staj & Kariyer" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                                    <div class="absolute top-2.5 left-2.5">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-zinc-900/90 text-cyan-400 border border-cyan-500/30 backdrop-blur-md">
+                                            Staj & Kariyer
+                                        </span>
+                                    </div>
+                                    <span class="absolute bottom-2.5 right-2.5 text-xs text-zinc-300 bg-zinc-900/80 px-2 py-0.5 rounded backdrop-blur-sm flex items-center gap-1">
+                                        <i data-lucide="clock" class="w-3 h-3 text-cyan-400"></i> 4 dk
+                                    </span>
+                                </div>
+                                <div class="flex-1 flex flex-col justify-between sm:pl-4 lg:pl-0">
+                                    <div>
+                                        <h3 class="text-base font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors line-clamp-2" style="font-family: var(--font-heading);">
+                                            Teknoloji Sektöründe Staj Bulmanın En Etkili 5 Yolu: GitHub ve LinkedIn
+                                        </h3>
+                                        <p class="text-xs text-zinc-400 line-clamp-2 mb-3">
+                                            Henüz 1. veya 2. sınıftayken bile öne çıkmanızı sağlayacak açık kaynak projeler ve networking adımları.
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs text-zinc-400 pt-2 border-t border-zinc-800/60 mt-auto">
+                                        <span>Mert S. · Boğaziçi</span>
+                                        <span class="text-cyan-400 font-medium group-hover:translate-x-0.5 transition-transform">İncele &rarr;</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Son Eklenen Yazılar Grid'i (3 Sütunlu Sade Kart Dizilimi) -->
+                <section class="mb-20">
+                    <div class="flex items-center justify-between mb-8 border-b border-zinc-800/80 pb-3">
+                        <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2" style="font-family: var(--font-heading);">
+                            <i data-lucide="newspaper" class="w-5 h-5 text-cyan-400"></i>
+                            Tüm Yazılar & Rehberler
+                        </h2>
+                        <span class="text-xs text-zinc-500" id="blog-articles-count">6 rehber listeleniyor</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="blog-articles-grid">
+                        <!-- Kart 1: Burs & Barınma -->
+                        <article class="ks-blog-card group flex flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-950/30" data-category="burs-barinma" data-post-id="grid-1">
+                            <div class="relative aspect-video w-full overflow-hidden bg-zinc-950">
+                                <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=800" alt="Öğrenci Evi ve Barınma" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                                <span class="absolute top-3 left-3 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-900/90 text-orange-400 border border-orange-500/30 backdrop-blur-md">
+                                    Burs & Barınma
+                                </span>
+                                <span class="absolute bottom-3 right-3 text-xs text-zinc-300 bg-zinc-900/80 px-2 py-0.5 rounded backdrop-blur-sm flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3 h-3 text-cyan-400"></i> 4 dk
+                                </span>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between p-5">
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-cyan-300 transition-colors" style="font-family: var(--font-heading);">
+                                        Öğrenci Evi Mi, KYK Mı, Özel Yurt Mu? 2026 Maliyet ve Konfor Kıyaslaması
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-zinc-400 line-clamp-3 leading-relaxed mb-4">
+                                        Kira, aidat, faturalar, yemek ve ulaşım masraflarını tek bir tabloda çıkardık. Hangi şehirde hangi seçenek daha ekonomik ve konforlu?
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between pt-3 border-t border-zinc-800/80 mt-auto">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-300">
+                                            DA
+                                        </div>
+                                        <span class="text-xs text-zinc-300 font-medium">Deniz A. · Hacettepe</span>
+                                    </div>
+                                    <span class="text-xs font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform">Oku &rarr;</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Kart 2: Kampüs Yaşamı -->
+                        <article class="ks-blog-card group flex flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-950/30" data-category="kampus" data-post-id="grid-2">
+                            <div class="relative aspect-video w-full overflow-hidden bg-zinc-950">
+                                <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800" alt="Öğrenci Kulüpleri" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                                <span class="absolute top-3 left-3 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-900/90 text-cyan-400 border border-cyan-500/30 backdrop-blur-md">
+                                    Kampüs Yaşamı
+                                </span>
+                                <span class="absolute bottom-3 right-3 text-xs text-zinc-300 bg-zinc-900/80 px-2 py-0.5 rounded backdrop-blur-sm flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3 h-3 text-cyan-400"></i> 3 dk
+                                </span>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between p-5">
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-cyan-300 transition-colors" style="font-family: var(--font-heading);">
+                                        Öğrenci Kulüpleri Gerçekten Kariyerine Katkı Sağlar Mı? Sosyalleşmenin Ötesi
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-zinc-400 line-clamp-3 leading-relaxed mb-4">
+                                        Kulüpler sadece eğlence değil; bütçe yönetimi, sponsorluk görüşmeleri ve sektör profesyonelleriyle ilk teması kurma laboratuvarıdır.
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between pt-3 border-t border-zinc-800/80 mt-auto">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-300">
+                                            SK
+                                        </div>
+                                        <span class="text-xs text-zinc-300 font-medium">Selin K. · YTÜ</span>
+                                    </div>
+                                    <span class="text-xs font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform">Oku &rarr;</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Kart 3: Staj & Kariyer -->
+                        <article class="ks-blog-card group flex flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-950/30" data-category="staj-kariyer" data-post-id="grid-3">
+                            <div class="relative aspect-video w-full overflow-hidden bg-zinc-950">
+                                <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=800" alt="Erasmus Stajı" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                                <span class="absolute top-3 left-3 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-900/90 text-cyan-400 border border-cyan-500/30 backdrop-blur-md">
+                                    Staj & Kariyer
+                                </span>
+                                <span class="absolute bottom-3 right-3 text-xs text-zinc-300 bg-zinc-900/80 px-2 py-0.5 rounded backdrop-blur-sm flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3 h-3 text-cyan-400"></i> 5 dk
+                                </span>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between p-5">
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-cyan-300 transition-colors" style="font-family: var(--font-heading);">
+                                        Erasmus+ ve Yurt Dışı Staj Bursları: Başvuru Aşamasından Kabul Mektubuna
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-zinc-400 line-clamp-3 leading-relaxed mb-4">
+                                        İngilizce motivasyon mektubu nasıl yazılır? Hibe hesaplamaları, vize randevusu tüyoları ve Avrupa'da uygun konaklama bulma rehberi.
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between pt-3 border-t border-zinc-800/80 mt-auto">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-300">
+                                            ET
+                                        </div>
+                                        <span class="text-xs text-zinc-300 font-medium">Emre T. · Koç Üni</span>
+                                    </div>
+                                    <span class="text-xs font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform">Oku &rarr;</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Kart 4: Akademik Rehberler -->
+                        <article class="ks-blog-card group flex flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-950/30" data-category="akademik" data-post-id="grid-4">
+                            <div class="relative aspect-video w-full overflow-hidden bg-zinc-950">
+                                <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=800" alt="Kütüphane ÇAP" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                                <span class="absolute top-3 left-3 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-900/90 text-sky-400 border border-sky-500/30 backdrop-blur-md">
+                                    Akademik Rehberler
+                                </span>
+                                <span class="absolute bottom-3 right-3 text-xs text-zinc-300 bg-zinc-900/80 px-2 py-0.5 rounded backdrop-blur-sm flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3 h-3 text-cyan-400"></i> 4 dk
+                                </span>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between p-5">
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-cyan-300 transition-colors" style="font-family: var(--font-heading);">
+                                        Çift Anadal (ÇAP) ve Yandal Yapmak İsteyenler İçin Stratejik Planlama
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-zinc-400 line-clamp-3 leading-relaxed mb-4">
+                                        Ortalama barajını korurken iki bölümün ağır ders temposunu dengeleme, ders saydırma (intibak) ve dönem uzatmadan mezun olma sırları.
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between pt-3 border-t border-zinc-800/80 mt-auto">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-300">
+                                            AN
+                                        </div>
+                                        <span class="text-xs text-zinc-300 font-medium">Ayşe N. · Bilkent</span>
+                                    </div>
+                                    <span class="text-xs font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform">Oku &rarr;</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Kart 5: Akademik Rehberler -->
+                        <article class="ks-blog-card group flex flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-950/30" data-category="akademik" data-post-id="grid-5">
+                            <div class="relative aspect-video w-full overflow-hidden bg-zinc-950">
+                                <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800" alt="Ders Çalışma" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                                <span class="absolute top-3 left-3 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-900/90 text-sky-400 border border-sky-500/30 backdrop-blur-md">
+                                    Akademik Rehberler
+                                </span>
+                                <span class="absolute bottom-3 right-3 text-xs text-zinc-300 bg-zinc-900/80 px-2 py-0.5 rounded backdrop-blur-sm flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3 h-3 text-cyan-400"></i> 3 dk
+                                </span>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between p-5">
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-cyan-300 transition-colors" style="font-family: var(--font-heading);">
+                                        Vize ve Final Döneminde Tükenmişliği Önleme: Pomodoro ve Not Tutma
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-zinc-400 line-clamp-3 leading-relaxed mb-4">
+                                        Son gece sabahlamak yerine Notion ile sistematik özet çıkarma, çıkmış soru analizi ve zihinsel stresi kontrol altında tutma taktikleri.
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between pt-3 border-t border-zinc-800/80 mt-auto">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-300">
+                                            KV
+                                        </div>
+                                        <span class="text-xs text-zinc-300 font-medium">Kaan V. · Ankara Tıp</span>
+                                    </div>
+                                    <span class="text-xs font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform">Oku &rarr;</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Kart 6: Kampüs Yaşamı -->
+                        <article class="ks-blog-card group flex flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-950/30" data-category="kampus" data-post-id="grid-6">
+                            <div class="relative aspect-video w-full overflow-hidden bg-zinc-950">
+                                <img src="https://images.unsplash.com/photo-1477959858617-67f30bc75b82?auto=format&fit=crop&q=80&w=800" alt="Şehir Karşılaştırması" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                                <span class="absolute top-3 left-3 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-900/90 text-cyan-400 border border-cyan-500/30 backdrop-blur-md">
+                                    Kampüs Yaşamı
+                                </span>
+                                <span class="absolute bottom-3 right-3 text-xs text-zinc-300 bg-zinc-900/80 px-2 py-0.5 rounded backdrop-blur-sm flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3 h-3 text-cyan-400"></i> 4 dk
+                                </span>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between p-5">
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-cyan-300 transition-colors" style="font-family: var(--font-heading);">
+                                        Şehir Değiştirecek Üniversitelilere Tavsiyeler: İstanbul, Ankara ve İzmir
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-zinc-400 line-clamp-3 leading-relaxed mb-4">
+                                        Toplu taşıma abonmanları, sosyal mekanlar, 7/24 kütüphane erişimi ve öğrenci dostu semtler hakkında tarafsız şehir incelemeleri.
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between pt-3 border-t border-zinc-800/80 mt-auto">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-300">
+                                            ED
+                                        </div>
+                                        <span class="text-xs text-zinc-300 font-medium">Ece D. · Ege Üniversitesi</span>
+                                    </div>
+                                    <span class="text-xs font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform">Oku &rarr;</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- 4. Topluluk Çağrı Kutusu (CTA Banner) -->
+                <section class="mb-12">
+                    <div class="relative overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900/95 via-zinc-900/80 to-zinc-950 p-8 sm:p-12 text-center backdrop-blur-md shadow-2xl">
+                        <!-- Glow Ambient Effects -->
+                        <div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+                        <div class="pointer-events-none absolute -bottom-24 right-10 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+                        <div class="relative z-10 max-w-2xl mx-auto">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/15 border border-orange-500/35 text-orange-400 mb-4">
+                                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Katkıda Bulun
+                            </span>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-3" style="font-family: var(--font-heading);">
+                                Kendi kampüs deneyimini veya rehberini binlerce öğrenciyle paylaşmak ister misin?
+                            </h3>
+                            <p class="text-zinc-400 text-sm sm:text-base leading-relaxed mb-6">
+                                Üniversitendeki yurtları, hocaları, kulüpleri veya staj tecrübelerini anlat; tercih yapacak gençlere en samimi rehber sen ol. Yazıların hem platformda öne çıksın hem de topluluğa değer katsın.
+                            </p>
+                            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                                <a href="#/review-form" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 text-zinc-950 font-bold hover:brightness-110 shadow-lg shadow-cyan-500/25 transition-all hover:scale-[1.02]">
+                                    <i data-lucide="send" class="w-4 h-4"></i> Yazı Gönder
+                                </a>
+                                <a href="#/about" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-zinc-800/80 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700 transition-all text-sm font-semibold">
+                                    Yayın İlkeleri <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Blog Okuma Modalı (Minimalist Article Reader Modal) -->
+            <div id="ks-blog-modal" class="ks-blog-modal-backdrop" aria-hidden="true">
+                <div class="ks-blog-modal-box">
+                    <div class="relative h-64 sm:h-80 w-full overflow-hidden rounded-t-xl bg-zinc-950">
+                        <img id="ks-modal-img" src="" alt="Makale Görseli" class="h-full w-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#121215] via-transparent to-transparent"></div>
+                        <button id="ks-modal-close" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/80 flex items-center justify-center cursor-pointer transition-colors backdrop-blur-md shadow-lg" aria-label="Kapat">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                        <div class="absolute bottom-4 left-6 right-6 flex items-center gap-2">
+                            <span id="ks-modal-badge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-cyan-950/90 text-cyan-400 border border-cyan-800/80 backdrop-blur-md"></span>
+                            <span id="ks-modal-readtime" class="inline-flex items-center gap-1 text-xs text-zinc-300 bg-zinc-900/80 px-2.5 py-1 rounded-md border border-zinc-700/60 backdrop-blur-sm"></span>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-8">
+                        <h2 id="ks-modal-title" class="text-2xl sm:text-3xl font-extrabold text-white mb-4 leading-tight" style="font-family: var(--font-heading);"></h2>
+                        <div class="flex items-center justify-between pb-6 mb-6 border-b border-zinc-800 text-xs sm:text-sm text-zinc-400">
+                            <div class="flex items-center gap-3">
+                                <div id="ks-modal-avatar" class="w-8 h-8 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center font-bold text-xs text-cyan-400"></div>
+                                <span id="ks-modal-author" class="font-medium text-zinc-200"></span>
+                            </div>
+                            <span id="ks-modal-date" class="text-zinc-500"></span>
+                        </div>
+                        <div id="ks-modal-body" class="text-zinc-300 text-base leading-relaxed space-y-4"></div>
+                        <div class="mt-8 pt-6 border-t border-zinc-800/80 flex items-center justify-between">
+                            <a href="#/review-form" class="inline-flex items-center gap-2 text-sm text-cyan-400 hover:underline font-semibold">
+                                <i data-lucide="message-square" class="w-4 h-4"></i> Bu konuda bir yorum da sen ekle
+                            </a>
+                            <button id="ks-modal-bottom-close" class="px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-sm text-zinc-200 font-medium cursor-pointer transition-colors">
+                                Kapat
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    `};

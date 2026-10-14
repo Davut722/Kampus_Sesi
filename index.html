@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kampüs Sesi — Üniversite Değerlendirme Platformu</title>
     <link rel="stylesheet" href="css/style.css?v=57">
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('kampus_sesi_theme') === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                }
+            } catch (e) {}
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {

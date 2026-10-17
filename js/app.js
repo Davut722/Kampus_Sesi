@@ -13,6 +13,16 @@ function getInitials(name) {
     return initials;
 }
 
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 // ─── SPA Router State ─────────────────────
 let currentRoute = 'home';
 let currentParams = new URLSearchParams();
@@ -61,7 +71,7 @@ function checkProtected() {
 }
 
 // ─── User State & Auth Handlers ───────────
-let CURRENT_USER = { uid: 'guest', name: 'Misafir', initials: 'MS', email: '' };
+let CURRENT_USER = { uid: 'guest', name: 'Misafir', initials: 'MS', email: '', role: 'guest' };
 
 window.signUpBackend = async function(name, email, pass) {
     const user = await api.register(name, email, pass);
@@ -69,7 +79,8 @@ window.signUpBackend = async function(name, email, pass) {
         uid: user.id,
         name: user.name,
         initials: user.initials || getInitials(user.name),
-        email: user.email
+        email: user.email,
+        role: user.role || 'user'
     };
     updateNavForUser(CURRENT_USER);
     showToast(`🎉 Hoş geldin, ${user.name}!`);
@@ -83,7 +94,8 @@ window.signInBackend = async function(email, pass) {
         uid: user.id,
         name: user.name,
         initials: user.initials || getInitials(user.name),
-        email: user.email
+        email: user.email,
+        role: user.role || 'user'
     };
     updateNavForUser(CURRENT_USER);
     showToast(`👋 Tekrar hoş geldin, ${user.name}!`);
@@ -93,7 +105,7 @@ window.signInBackend = async function(email, pass) {
 
 window.signOutBackend = async function() {
     api.logout();
-    CURRENT_USER = { uid: 'guest', name: 'Misafir', initials: 'MS', email: '' };
+    CURRENT_USER = { uid: 'guest', name: 'Misafir', initials: 'MS', email: '', role: 'guest' };
     updateNavForUser(null);
     showToast('👋 Başarıyla çıkış yapıldı.');
     navigateTo('home');
@@ -101,12 +113,29 @@ window.signOutBackend = async function() {
 
 function updateNavForUser(user) {
     const navActions = document.getElementById('nav-actions');
+    const drawerAdminItem = document.getElementById('drawer-admin-item');
+    if (drawerAdminItem) {
+        if (user && (user.role === 'admin' || user.role === 'moderator')) {
+            drawerAdminItem.style.display = 'block';
+        } else {
+            drawerAdminItem.style.display = 'none';
+        }
+    }
+
     if (!navActions) return;
 
     let actionsHtml = '';
 
     if (user && user.uid !== 'guest') {
+        const isAdminOrMod = user.role === 'admin' || user.role === 'moderator';
+        const adminBtnHtml = isAdminOrMod ? `
+            <a href="#/admin" class="btn btn--outline btn--sm border-cyan-500/40 text-cyan-400 hover:bg-cyan-950/30">
+                <i data-lucide="shield" class="icon-xs"></i> <span>Admin Paneli</span>
+            </a>
+        ` : '';
+
         actionsHtml = `
+            ${adminBtnHtml}
             <a href="#/profile" class="btn btn--outline btn--sm"><i data-lucide="user" class="icon-xs"></i> <span>Profilim</span></a>
             <a href="#/home" id="logout-btn" class="btn btn--outline btn--sm" style="border-color: rgba(248, 113, 113, 0.3); color: var(--color-danger);"><i data-lucide="log-out" class="icon-xs"></i> <span>Çıkış</span></a>
         `;
@@ -1691,6 +1720,19 @@ export function renderCurrentRoute() {
         return;
     }
 
+    if (route === 'admin') {
+        if (!CURRENT_USER || CURRENT_USER.uid === 'guest') {
+            showToast('⚠️ Admin paneline erişmek için lütfen giriş yapın.');
+            window.location.hash = '#/login';
+            return;
+        }
+        if (CURRENT_USER.role !== 'admin' && CURRENT_USER.role !== 'moderator') {
+            showToast('⛔ Bu sayfaya yalnızca yöneticiler erişebilir.');
+            window.location.hash = '#/home';
+            return;
+        }
+    }
+
     if (route === 'login' && CURRENT_USER.uid !== 'guest') {
         window.location.hash = '#/home';
         return;
@@ -1727,7 +1769,8 @@ export function renderCurrentRoute() {
         'favorites': TEMPLATES.favorites,
         'cities': TEMPLATES.cities,
         'ranking': TEMPLATES.ranking,
-        'departments': TEMPLATES.departments
+        'departments': TEMPLATES.departments,
+        'admin': TEMPLATES.admin
     };
 
     const template = templateMap[route] || TEMPLATES.home;
@@ -1782,7 +1825,8 @@ export function renderCurrentRoute() {
         'favorites': 'Favorilerim — Kampüs Sesi',
         'cities': 'Şehirler — Kampüs Sesi',
         'ranking': 'Sıralama — Kampüs Sesi',
-        'departments': 'Bölümler — Kampüs Sesi'
+        'departments': 'Bölümler — Kampüs Sesi',
+        'admin': 'Admin & Moderasyon Paneli — Kampüs Sesi'
     };
     document.title = titles[route] || 'Kampüs Sesi';
 
@@ -1824,7 +1868,445 @@ export function renderCurrentRoute() {
         initIletisimPage();
     } else if (route === 'favorites') {
         initFavoritesPage();
+    } else if (route === 'admin') {
+        initAdminPage();
     }
+}
+
+// ─── Admin & Moderation Panel Controller ─────────────────────
+function initAdminPage() {
+    let currentAdminTab = 'dashboard';
+    let cachedUsers = [];
+    let cachedModeration = { suggestions: [], blogs: [] };
+    let cachedMessages = [];
+
+    // 1. Tab Navigation Handlers
+    const tabBtns = document.querySelectorAll('.admin-tab-btn');
+    const tabPanels = {
+        'dashboard': document.getElementById('admin-tab-dashboard'),
+        'users': document.getElementById('admin-tab-users'),
+        'moderation': document.getElementById('admin-tab-moderation'),
+        'messages': document.getElementById('admin-tab-messages')
+    };
+
+    function switchAdminTab(targetTab) {
+        currentAdminTab = targetTab;
+
+        // Update tab buttons style
+        tabBtns.forEach(btn => {
+            const isTarget = (btn.dataset.tab === targetTab);
+            if (isTarget) {
+                btn.className = 'admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-cyan-400 text-zinc-950 cursor-pointer transition-all active-tab flex items-center gap-1.5';
+            } else {
+                btn.className = 'admin-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white cursor-pointer transition-all flex items-center gap-1.5';
+            }
+        });
+
+        // Hide all panels, show target
+        Object.keys(tabPanels).forEach(key => {
+            if (tabPanels[key]) {
+                if (key === targetTab) {
+                    tabPanels[key].classList.remove('hidden');
+                } else {
+                    tabPanels[key].classList.add('hidden');
+                }
+            }
+        });
+
+        // Load data on switch
+        if (targetTab === 'dashboard') loadStats();
+        else if (targetTab === 'users') loadUsers();
+        else if (targetTab === 'moderation') loadModeration();
+        else if (targetTab === 'messages') loadMessages();
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => switchAdminTab(btn.dataset.tab));
+    });
+
+    // Quick Action Jump Buttons
+    document.querySelectorAll('.admin-quick-action').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const jumpTo = btn.dataset.jump;
+            if (jumpTo) switchAdminTab(jumpTo);
+        });
+    });
+
+    // 2. Dashboard Stats
+    async function loadStats() {
+        try {
+            const stats = await api.getAdminStats();
+            const elUsers = document.getElementById('admin-stat-users');
+            const elReviews = document.getElementById('admin-stat-reviews');
+            const elSug = document.getElementById('admin-stat-suggestions');
+            const elBlogs = document.getElementById('admin-stat-blogs');
+            const elMsg = document.getElementById('admin-stat-messages');
+            const elDorms = document.getElementById('admin-stat-dorms');
+
+            if (elUsers) elUsers.textContent = Number(stats.total_users || 0).toLocaleString('tr-TR');
+            if (elReviews) elReviews.textContent = Number(stats.total_reviews || 0).toLocaleString('tr-TR');
+            if (elSug) elSug.textContent = Number(stats.pending_suggestions || 0).toLocaleString('tr-TR');
+            if (elBlogs) elBlogs.textContent = Number(stats.pending_blogs || 0).toLocaleString('tr-TR');
+            if (elMsg) elMsg.textContent = Number(stats.unread_messages || 0).toLocaleString('tr-TR');
+            if (elDorms) elDorms.textContent = Number(stats.total_dorms || 0).toLocaleString('tr-TR');
+        } catch (err) {
+            console.error("Dashboard stats error:", err);
+            showToast("⚠️ İstatistikler yüklenemedi: " + err.message);
+        }
+    }
+
+    // 3. User Management
+    const userSearchInput = document.getElementById('admin-user-search');
+    const userRoleFilter = document.getElementById('admin-user-role-filter');
+
+    async function loadUsers() {
+        const tbody = document.getElementById('admin-users-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-zinc-500">Kullanıcılar yükleniyor...</td></tr>`;
+
+        try {
+            const q = userSearchInput?.value.trim() || '';
+            const role = userRoleFilter?.value || 'all';
+            cachedUsers = await api.getAdminUsers(q, role);
+            renderUsersTable(cachedUsers);
+        } catch (err) {
+            tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-rose-400">Kullanıcılar alınamadı: ${escapeHtml(err.message)}</td></tr>`;
+        }
+    }
+
+    function renderUsersTable(users) {
+        const tbody = document.getElementById('admin-users-tbody');
+        if (!tbody) return;
+
+        if (!users || users.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-zinc-500">Kriterlere uygun kayıtlı kullanıcı bulunamadı.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = users.map(u => {
+            const isSelf = (u.id === CURRENT_USER.uid);
+            const initials = (u.name || 'U').substring(0, 2).toUpperCase();
+
+            const statusBadge = u.is_active
+                ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-950/60 text-emerald-400 border border-emerald-500/30"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Aktif</span>`
+                : `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-950/60 text-rose-400 border border-rose-500/30"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Askıda</span>`;
+
+            return `
+                <tr class="hover:bg-zinc-800/30 transition-colors">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center font-bold text-xs text-cyan-400 shrink-0">
+                                ${initials}
+                            </div>
+                            <div>
+                                <div class="font-bold text-white flex items-center gap-1.5">
+                                    ${escapeHtml(u.name)}
+                                    ${isSelf ? '<span class="text-[10px] font-semibold text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded border border-cyan-500/30">Sen</span>' : ''}
+                                </div>
+                                <div class="text-[10px] text-zinc-500">Kayıt: #${u.id}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4 text-zinc-300 font-mono text-[11px]">${escapeHtml(u.email)}</td>
+                    <td class="p-4 text-zinc-400">${escapeHtml(u.university || 'Belirtilmedi')}</td>
+                    <td class="p-4">
+                        <select class="admin-role-select bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1 text-xs text-zinc-200 outline-none focus:border-cyan-400 transition-colors" data-user-id="${u.id}" ${isSelf ? 'disabled title="Kendi yetkinizi değiştiremezsiniz"' : ''}>
+                            <option value="user" ${u.role === 'user' ? 'selected' : ''}>Öğrenci (User)</option>
+                            <option value="moderator" ${u.role === 'moderator' ? 'selected' : ''}>Moderatör</option>
+                            <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Yönetici (Admin)</option>
+                        </select>
+                    </td>
+                    <td class="p-4">${statusBadge}</td>
+                    <td class="p-4 text-right">
+                        <div class="inline-flex items-center gap-1.5">
+                            <button class="admin-toggle-status-btn px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all ${u.is_active ? 'border-rose-800/60 text-rose-400 hover:bg-rose-950/40' : 'border-emerald-800/60 text-emerald-400 hover:bg-emerald-950/40'}" data-user-id="${u.id}" data-current-active="${u.is_active}" ${isSelf ? 'disabled style="opacity:0.35;cursor:not-allowed;" title="Kendi hesabınızı askıya alamazsınız"' : ''}>
+                                ${u.is_active ? 'Askıya Al' : 'Aktifleştir'}
+                            </button>
+                            <button class="admin-delete-user-btn p-1.5 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-zinc-800 transition-all" data-user-id="${u.id}" data-user-name="${escapeHtml(u.name)}" ${isSelf ? 'disabled style="opacity:0.25;cursor:not-allowed;" title="Kendi hesabınızı silemezsiniz"' : ''} title="Kullanıcıyı Kalıcı Sil">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+
+        // Bind role changes
+        tbody.querySelectorAll('.admin-role-select').forEach(sel => {
+            sel.addEventListener('change', async (e) => {
+                const userId = parseInt(e.target.dataset.userId);
+                const newRole = e.target.value;
+                try {
+                    await api.updateAdminUserRole(userId, newRole);
+                    showToast(`✅ Kullanıcı rolü "${newRole}" yapıldı.`);
+                    loadStats();
+                } catch (err) {
+                    showToast(`❌ Rol güncellenemedi: ${err.message}`);
+                    loadUsers();
+                }
+            });
+        });
+
+        // Bind status toggle
+        tbody.querySelectorAll('.admin-toggle-status-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const userId = parseInt(btn.dataset.userId);
+                const currentActive = btn.dataset.currentActive === 'true';
+                const nextActive = !currentActive;
+                const verb = nextActive ? 'aktifleştirilsin' : 'askıya alınsın';
+                if (!confirm(`Bu kullanıcının hesabı ${verb} mi?`)) return;
+
+                try {
+                    await api.toggleAdminUserStatus(userId, nextActive);
+                    showToast(nextActive ? '✅ Kullanıcı hesabı aktifleştirildi.' : '🚫 Kullanıcı hesabı askıya alındı.');
+                    loadUsers();
+                } catch (err) {
+                    showToast(`❌ İşlem başarısız: ${err.message}`);
+                }
+            });
+        });
+
+        // Bind user delete
+        tbody.querySelectorAll('.admin-delete-user-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const userId = parseInt(btn.dataset.userId);
+                const userName = btn.dataset.userName;
+                if (!confirm(`"${userName}" adlı kullanıcıyı ve tüm verilerini kalıcı olarak silmek istediğinizden emin misiniz?`)) return;
+
+                try {
+                    await api.deleteAdminUser(userId);
+                    showToast(`🗑️ "${userName}" hesabı tamamen silindi.`);
+                    loadUsers();
+                    loadStats();
+                } catch (err) {
+                    showToast(`❌ Silme hatası: ${err.message}`);
+                }
+            });
+        });
+    }
+
+    if (userSearchInput) {
+        let debounceTimer;
+        userSearchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => loadUsers(), 300);
+        });
+    }
+
+    if (userRoleFilter) {
+        userRoleFilter.addEventListener('change', () => loadUsers());
+    }
+
+    // 4. Moderation Tab (School Suggestions & Blog Submissions)
+    async function loadModeration() {
+        const container = document.getElementById('admin-moderation-list');
+        const countBadge = document.getElementById('admin-moderation-count');
+        if (!container) return;
+
+        container.innerHTML = `<div class="p-8 text-center text-zinc-500">Bekleyen içerikler taranıyor...</div>`;
+
+        try {
+            cachedModeration = await api.getPendingModeration();
+            const suggestions = cachedModeration.suggestions || [];
+            const blogs = cachedModeration.blogs || [];
+            const total = suggestions.length + blogs.length;
+
+            if (countBadge) countBadge.textContent = `${total} adet bekleyen içerik`;
+
+            if (total === 0) {
+                container.innerHTML = `
+                    <div class="p-12 text-center rounded-2xl border border-zinc-800 bg-zinc-900/40">
+                        <i data-lucide="check-circle" class="w-12 h-12 text-emerald-400 mx-auto mb-3"></i>
+                        <h4 class="text-base font-bold text-white mb-1">Harika! İncelenecek bekleyen içerik yok</h4>
+                        <p class="text-xs text-zinc-500">Tüm okul önerileri ve blog başvuruları onaylandı veya reddedildi.</p>
+                    </div>
+                `;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+                return;
+            }
+
+            let html = '';
+
+            // Render School Suggestions
+            suggestions.forEach(s => {
+                const dateStr = s.created_at ? new Date(s.created_at).toLocaleDateString('tr-TR') : '';
+                html += `
+                    <div class="p-5 rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-zinc-700 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="space-y-1.5 flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-950/70 text-purple-400 border border-purple-800/60 flex items-center gap-1">
+                                    <i data-lucide="building-2" class="w-3 h-3"></i> Okul Önerisi
+                                </span>
+                                <span class="text-[11px] text-zinc-500">${dateStr}</span>
+                            </div>
+                            <h4 class="text-base font-bold text-white">${escapeHtml(s.uni_name)}</h4>
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-400">
+                                <span><strong class="text-zinc-500">Şehir:</strong> ${escapeHtml(s.city)}</span>
+                                ${s.campus_name ? `<span><strong class="text-zinc-500">Yerleşke:</strong> ${escapeHtml(s.campus_name)}</span>` : ''}
+                                ${s.website ? `<span><strong class="text-zinc-500">Web:</strong> <a href="${escapeHtml(s.website)}" target="_blank" class="text-cyan-400 hover:underline">${escapeHtml(s.website)}</a></span>` : ''}
+                                <span><strong class="text-zinc-500">Öneren:</strong> ${escapeHtml(s.submitter_email || 'Anonim')}</span>
+                            </div>
+                            ${s.notes ? `<p class="text-xs text-zinc-400 bg-zinc-950/60 p-2.5 rounded-xl border border-zinc-800 mt-2">${escapeHtml(s.notes)}</p>` : ''}
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button class="admin-mod-btn px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 bg-emerald-950/30 text-emerald-400 hover:bg-emerald-900/40 transition-all flex items-center gap-1.5 cursor-pointer" data-type="suggestion" data-id="${s.id}" data-action="approved">
+                                <i data-lucide="check" class="w-3.5 h-3.5"></i> Onayla
+                            </button>
+                            <button class="admin-mod-btn px-4 py-2 rounded-xl text-xs font-semibold border border-rose-500/40 bg-rose-950/30 text-rose-400 hover:bg-rose-900/40 transition-all flex items-center gap-1.5 cursor-pointer" data-type="suggestion" data-id="${s.id}" data-action="rejected">
+                                <i data-lucide="x" class="w-3.5 h-3.5"></i> Reddet
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Render Blog Submissions
+            blogs.forEach(b => {
+                const dateStr = b.created_at ? new Date(b.created_at).toLocaleDateString('tr-TR') : '';
+                html += `
+                    <div class="p-5 rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-zinc-700 transition-all flex flex-col md:flex-row md:items-start justify-between gap-4">
+                        <div class="space-y-1.5 flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-sky-950/70 text-sky-400 border border-sky-800/60 flex items-center gap-1">
+                                    <i data-lucide="book-open" class="w-3 h-3"></i> Blog Başvurusu (${escapeHtml(b.category)})
+                                </span>
+                                <span class="text-[11px] text-zinc-500">${dateStr}</span>
+                            </div>
+                            <h4 class="text-base font-bold text-white">${escapeHtml(b.title)}</h4>
+                            <div class="text-xs text-zinc-400 mb-2">
+                                <strong class="text-zinc-500">Yazar:</strong> ${escapeHtml(b.author_info || 'Öğrenci')}
+                            </div>
+                            <div class="text-xs text-zinc-300 bg-zinc-950/60 p-3 rounded-xl border border-zinc-800 leading-relaxed whitespace-pre-wrap max-h-40 overflow-y-auto">
+                                ${escapeHtml(b.content)}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0 md:mt-1">
+                            <button class="admin-mod-btn px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 bg-emerald-950/30 text-emerald-400 hover:bg-emerald-900/40 transition-all flex items-center gap-1.5 cursor-pointer" data-type="blog" data-id="${b.id}" data-action="approved">
+                                <i data-lucide="check" class="w-3.5 h-3.5"></i> Onayla & Yayınla
+                            </button>
+                            <button class="admin-mod-btn px-4 py-2 rounded-xl text-xs font-semibold border border-rose-500/40 bg-rose-950/30 text-rose-400 hover:bg-rose-900/40 transition-all flex items-center gap-1.5 cursor-pointer" data-type="blog" data-id="${b.id}" data-action="rejected">
+                                <i data-lucide="x" class="w-3.5 h-3.5"></i> Reddet
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+
+            // Bind moderate actions
+            container.querySelectorAll('.admin-mod-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const type = btn.dataset.type;
+                    const id = parseInt(btn.dataset.id);
+                    const action = btn.dataset.action;
+                    const actionTr = (action === 'approved') ? 'onaylandı' : 'reddedildi';
+
+                    try {
+                        await api.moderateItem(type, id, action);
+                        showToast(`✅ İçerik başarıyla ${actionTr}.`);
+                        loadModeration();
+                        loadStats();
+                    } catch (err) {
+                        showToast(`❌ Moderasyon işlemi başarısız: ${err.message}`);
+                    }
+                });
+            });
+
+        } catch (err) {
+            container.innerHTML = `<div class="p-8 text-center text-rose-400">Moderasyon verileri alınamadı: ${escapeHtml(err.message)}</div>`;
+        }
+    }
+
+    // 5. Contact Messages Tab
+    async function loadMessages() {
+        const container = document.getElementById('admin-messages-list');
+        const countBadge = document.getElementById('admin-messages-count');
+        if (!container) return;
+
+        container.innerHTML = `<div class="p-8 text-center text-zinc-500">İletişim mesajları yükleniyor...</div>`;
+
+        try {
+            cachedMessages = await api.getAdminMessages();
+            const unreadCount = cachedMessages.filter(m => !m.is_read).length;
+
+            if (countBadge) countBadge.textContent = `${unreadCount} okunmamış / ${cachedMessages.length} toplam`;
+
+            if (cachedMessages.length === 0) {
+                container.innerHTML = `
+                    <div class="p-12 text-center rounded-2xl border border-zinc-800 bg-zinc-900/40">
+                        <i data-lucide="mail-open" class="w-12 h-12 text-zinc-600 mx-auto mb-3"></i>
+                        <h4 class="text-base font-bold text-white mb-1">Gelen mesaj kutusu boş</h4>
+                        <p class="text-xs text-zinc-500">Henüz iletişim formundan iletilen bir talep bulunmuyor.</p>
+                    </div>
+                `;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = cachedMessages.map(m => {
+                const dateStr = m.created_at ? new Date(m.created_at).toLocaleString('tr-TR') : '';
+                return `
+                    <div class="p-5 rounded-2xl border ${m.is_read ? 'border-zinc-800/80 bg-zinc-900/40' : 'border-cyan-500/30 bg-zinc-900/80 shadow-lg shadow-cyan-950/20'} transition-all flex flex-col md:flex-row md:items-start justify-between gap-4">
+                        <div class="space-y-2 flex-1">
+                            <div class="flex items-center gap-2">
+                                ${m.is_read 
+                                    ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-zinc-800 text-zinc-400 border border-zinc-700">Okundu</span>`
+                                    : `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-950/70 text-rose-400 border border-rose-800/60 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Yeni Mesaj</span>`
+                                }
+                                <span class="text-xs text-zinc-500">${dateStr}</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-x-3 text-xs">
+                                <span class="font-bold text-white text-sm">${escapeHtml(m.sender_name)}</span>
+                                <a href="mailto:${escapeHtml(m.sender_email)}" class="text-cyan-400 hover:underline font-mono text-[11px]">${escapeHtml(m.sender_email)}</a>
+                            </div>
+                            <div class="text-xs font-semibold text-zinc-300">
+                                <span class="text-zinc-500">Konu:</span> ${escapeHtml(m.subject)}
+                            </div>
+                            <div class="text-xs text-zinc-300 bg-zinc-950/60 p-3 rounded-xl border border-zinc-800/80 leading-relaxed whitespace-pre-wrap">
+                                ${escapeHtml(m.message)}
+                            </div>
+                        </div>
+                        <div class="shrink-0 md:mt-1">
+                            <button class="admin-toggle-msg-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-zinc-800 hover:border-zinc-700 bg-zinc-950/60 hover:bg-zinc-800 text-zinc-300 transition-all flex items-center gap-1.5 cursor-pointer" data-id="${m.id}" data-is-read="${m.is_read}">
+                                <i data-lucide="${m.is_read ? 'mail' : 'check'}" class="w-3.5 h-3.5 ${m.is_read ? 'text-zinc-400' : 'text-cyan-400'}"></i>
+                                <span>${m.is_read ? 'Okunmadı Yap' : 'Okundu Olarak İşaretle'}</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+
+            // Bind toggle read
+            container.querySelectorAll('.admin-toggle-msg-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = parseInt(btn.dataset.id);
+                    const currentRead = (btn.dataset.isRead === 'true');
+                    const nextRead = !currentRead;
+                    try {
+                        await api.toggleMessageRead(id, nextRead);
+                        loadMessages();
+                        loadStats();
+                    } catch (err) {
+                        showToast(`❌ Mesaj durumu güncellenemedi: ${err.message}`);
+                    }
+                });
+            });
+
+        } catch (err) {
+            container.innerHTML = `<div class="p-8 text-center text-rose-400">İletişim mesajları alınamadı: ${escapeHtml(err.message)}</div>`;
+        }
+    }
+
+    // Initialize with Dashboard
+    loadStats();
 }
 
 function initOkulOnerPage() {
@@ -3851,7 +4333,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 uid: me.id,
                 name: me.name,
                 initials: me.initials || getInitials(me.name),
-                email: me.email
+                email: me.email,
+                role: me.role || 'user'
             };
             updateNavForUser(CURRENT_USER);
         } else {

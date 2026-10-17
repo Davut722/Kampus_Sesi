@@ -87,6 +87,12 @@ class BlogSubmissionCreate(BaseModel):
 class FavoriteToggleRequest(BaseModel):
     university: str
 
+class UserRoleUpdate(BaseModel):
+    role: str
+
+class UserStatusUpdate(BaseModel):
+    is_active: bool
+
 # ─── Auth Dependency ──────────────────────
 
 def get_current_user(
@@ -118,7 +124,28 @@ def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Kullanıcı bulunamadı."
         )
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Hesabınız askıya alınmıştır. Destek ile iletişime geçin."
+        )
     return user
+
+def require_admin(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Bu işlem için yönetici (Admin) yetkisi gerekmektedir."
+        )
+    return current_user
+
+def require_moderator_or_admin(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role not in ["admin", "moderator"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Bu işlem için moderatör veya yönetici yetkisi gerekmektedir."
+        )
+    return current_user
 
 def get_optional_user(
     authorization: Optional[str] = Header(None),
@@ -167,14 +194,15 @@ def register(req: RegisterRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
 
-    token = create_access_token({"sub": user.id, "email": user.email, "name": user.name})
+    token = create_access_token({"sub": user.id, "email": user.email, "name": user.name, "role": user.role or "user"})
     return {
         "token": token,
         "user": {
             "id": user.id,
             "name": user.name,
             "email": user.email,
-            "initials": user.initials
+            "initials": user.initials,
+            "role": user.role or "user"
         }
     }
 
@@ -184,14 +212,21 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
     if not user or not verify_password(req.password, user.password_hash):
         raise HTTPException(status_code=400, detail="E-posta veya şifre hatalı.")
 
-    token = create_access_token({"sub": user.id, "email": user.email, "name": user.name})
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Hesabınız askıya alınmıştır. Lütfen destek ekibi ile iletişime geçin."
+        )
+
+    token = create_access_token({"sub": user.id, "email": user.email, "name": user.name, "role": user.role or "user"})
     return {
         "token": token,
         "user": {
             "id": user.id,
             "name": user.name,
             "email": user.email,
-            "initials": user.initials
+            "initials": user.initials,
+            "role": user.role or "user"
         }
     }
 
@@ -201,7 +236,9 @@ def get_me(user: User = Depends(get_current_user)):
         "id": user.id,
         "name": user.name,
         "email": user.email,
-        "initials": user.initials
+        "initials": user.initials,
+        "role": user.role or "user",
+        "is_active": user.is_active
     }
 
 @app.get("/api/users/me")
@@ -626,6 +663,191 @@ def remove_user_favorite(
         db.commit()
     favs = db.query(UserFavorite).filter(UserFavorite.user_id == current_user.id).all()
     return {"success": True, "message": "Favorilerden çıkarıldı.", "favorites": [f.university for f in favs]}
+
+# ─── Admin Panel API Endpoints ───────────
+
+@app.get("/api/admin/dashboard/stats")
+def get_admin_dashboard_stats(
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin)
+):
+    total_users = db.query(User).count()
+    total_reviews = db.query(Review).count()
+    pending_suggestions = db.query(SchoolSuggestion).filter(SchoolSuggestion.status == "pending").count()
+    pending_blogs = db.query(BlogSubmission).filter(BlogSubmission.status == "pending").count()
+    unread_messages = db.query(ContactMessage).filter(ContactMessage.status == "unread").count()
+    total_dorms = db.query(KykDorm).count()
+
+    return {
+        "total_users": total_users,
+        "total_reviews": total_reviews,
+        "pending_suggestions": pending_suggestions,
+        "pending_blogs": pending_blogs,
+        "unread_messages": unread_messages,
+        "total_dorms": total_dorms
+    }
+
+@app.get("/api/admin/users")
+def get_admin_users(
+    q: Optional[str] = None,
+    role: Optional[str] = None,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin)
+):
+    query = db.query(User)
+    if q:
+        kw = f"%{q.strip().lower()}%"
+        query = query.filter((User.name.ilike(kw)) | (User.email.ilike(kw)))
+    if role and role != "all":
+        query = query.filter(User.role == role)
+
+    users = query.order_by(User.id.desc()).limit(100).all()
+    result = []
+    for u in users:
+        reviews_count = db.query(Review).filter(Review.user_id == u.id).count()
+        result.append({
+            "id": u.id,
+            "name": u.name,
+            "email": u.email,
+            "role": u.role or "user",
+            "is_active": u.is_active if u.is_active is not None else True,
+            "university": u.university or "",
+            "department": u.department or "",
+            "reviews_count": reviews_count,
+            "created_at": u.created_at.strftime("%d.%m.%Y") if u.created_at else "—"
+        })
+    return result
+
+@app.patch("/api/admin/users/{user_id}/role")
+def update_user_role(
+    user_id: int,
+    data: UserRoleUpdate,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin)
+):
+    if admin.id == user_id:
+        raise HTTPException(status_code=400, detail="Kendi yöneticilik rolünüzü değiştiremezsiniz.")
+
+    if data.role not in ["user", "moderator", "admin"]:
+        raise HTTPException(status_code=400, detail="Geçersiz rol seçimi.")
+
+    target_user = db.query(User).filter(User.id == user_id).first()
+    if not target_user:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı.")
+
+    target_user.role = data.role
+    db.commit()
+    return {"success": True, "message": f"{target_user.name} kullanıcısının rolü '{data.role}' olarak güncellendi."}
+
+@app.patch("/api/admin/users/{user_id}/status")
+def toggle_user_status(
+    user_id: int,
+    data: UserStatusUpdate,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin)
+):
+    if admin.id == user_id:
+        raise HTTPException(status_code=400, detail="Kendi hesabınızı askıya alamazsınız.")
+
+    target_user = db.query(User).filter(User.id == user_id).first()
+    if not target_user:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı.")
+
+    target_user.is_active = data.is_active
+    db.commit()
+    status_text = "aktifleştirildi" if data.is_active else "askıya alındı"
+    return {"success": True, "message": f"{target_user.name} hesabı başarıyla {status_text}."}
+
+@app.delete("/api/admin/users/{user_id}")
+def delete_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin)
+):
+    if admin.id == user_id:
+        raise HTTPException(status_code=400, detail="Kendi hesabınızı silemezsiniz.")
+
+    target_user = db.query(User).filter(User.id == user_id).first()
+    if not target_user:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı.")
+
+    user_name = target_user.name
+    db.delete(target_user)
+    db.commit()
+    return {"success": True, "message": f"{user_name} kullanıcısı sistemden kalıcı olarak silindi."}
+
+@app.get("/api/admin/moderation/pending")
+def get_pending_moderations(
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_moderator_or_admin)
+):
+    suggestions = db.query(SchoolSuggestion).filter(SchoolSuggestion.status == "pending").order_by(SchoolSuggestion.id.desc()).all()
+    blogs = db.query(BlogSubmission).filter(BlogSubmission.status == "pending").order_by(BlogSubmission.id.desc()).all()
+    recent_reviews = db.query(Review).order_by(Review.id.desc()).limit(15).all()
+
+    return {
+        "suggestions": [s.to_dict() for s in suggestions],
+        "blogs": [b.to_dict() for b in blogs],
+        "recent_reviews": [r.to_dict() for r in recent_reviews]
+    }
+
+@app.patch("/api/admin/moderation/{content_type}/{content_id}")
+def moderate_content(
+    content_type: str,
+    content_id: int,
+    action: str,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_moderator_or_admin)
+):
+    new_status = "approved" if action in ["approve", "approved"] else "rejected"
+    if content_type == "suggestion":
+        item = db.query(SchoolSuggestion).filter(SchoolSuggestion.id == content_id).first()
+    elif content_type == "blog":
+        item = db.query(BlogSubmission).filter(BlogSubmission.id == content_id).first()
+    else:
+        raise HTTPException(status_code=400, detail="Geçersiz içerik türü.")
+
+    if not item:
+        raise HTTPException(status_code=404, detail="İçerik bulunamadı.")
+
+    item.status = new_status
+    db.commit()
+    return {"success": True, "message": f"İçerik '{new_status}' olarak güncellendi."}
+
+@app.delete("/api/admin/reviews/{review_id}")
+def admin_delete_review(
+    review_id: int,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_moderator_or_admin)
+):
+    review = db.query(Review).filter(Review.id == review_id).first()
+    if not review:
+        raise HTTPException(status_code=404, detail="Yorum bulunamadı.")
+
+    db.delete(review)
+    db.commit()
+    return {"success": True, "message": "Yorum yayından kaldırıldı."}
+
+@app.get("/api/admin/messages")
+def get_admin_contact_messages(
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin)
+):
+    messages = db.query(ContactMessage).order_by(ContactMessage.id.desc()).limit(100).all()
+    return [m.to_dict() for m in messages]
+
+@app.patch("/api/admin/messages/{message_id}/read")
+def toggle_message_read(
+    message_id: int,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin)
+):
+    msg = db.query(ContactMessage).filter(ContactMessage.id == message_id).first()
+    if not msg:
+        raise HTTPException(status_code=404, detail="Mesaj bulunamadı.")
+    msg.status = "read" if msg.status == "unread" else "unread"
+    db.commit()
+    return {"success": True, "status": msg.status, "is_read": (msg.status == "read")}
 
 # ─── Static Frontend Serving ──────────────
 

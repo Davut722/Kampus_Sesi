@@ -2,7 +2,7 @@ import os
 import json
 import time
 from datetime import datetime
-from sqlalchemy import create_engine, Column, Integer, BigInteger, String, Text, DateTime, ForeignKey, UniqueConstraint, JSON
+from sqlalchemy import create_engine, Column, Integer, BigInteger, String, Text, DateTime, ForeignKey, UniqueConstraint, JSON, Boolean, inspect, text
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
 # ---------------------------------------------------------------------------
@@ -37,10 +37,26 @@ class User(Base):
     photo_url = Column(String(255), default="")
     university = Column(String(150), default="")
     department = Column(String(150), default="")
+    role = Column(String(20), default="user", nullable=False)  # 'user', 'moderator', 'admin'
+    is_active = Column(Boolean, default=True, nullable=False)  # Account status: active or suspended
     created_at = Column(DateTime, default=datetime.utcnow)
 
     reviews = relationship("Review", back_populates="user", cascade="all, delete-orphan")
     favorites = relationship("UserFavorite", back_populates="user", cascade="all, delete-orphan")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "initials": self.initials,
+            "photo_url": self.photo_url or "",
+            "university": self.university or "",
+            "department": self.department or "",
+            "role": self.role or "user",
+            "is_active": self.is_active if self.is_active is not None else True,
+            "created_at": self.created_at.strftime("%d.%m.%Y") if self.created_at else None
+        }
 
 class Review(Base):
     __tablename__ = "reviews"
@@ -208,10 +224,13 @@ class ContactMessage(Base):
         return {
             "id": self.id,
             "name": self.name,
+            "sender_name": self.name,
             "email": self.email,
+            "sender_email": self.email,
             "subject": self.subject,
             "message": self.message,
             "status": self.status,
+            "is_read": self.status != "unread",
             "created_at": self.created_at.isoformat() if self.created_at else None
         }
 
@@ -269,9 +288,38 @@ def init_db():
     # Create missing tables without deleting persisted user data.
     Base.metadata.create_all(bind=engine)
 
+    # Automated lightweight migration: ensure 'role' and 'is_active' exist in 'users'
+    try:
+        insp = inspect(engine)
+        if 'users' in insp.get_table_names():
+            cols = [c['name'] for c in insp.get_columns('users')]
+            with engine.connect() as conn:
+                if 'role' not in cols:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'user'"))
+                    conn.commit()
+                if 'is_active' not in cols:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT 1"))
+                    conn.commit()
+    except Exception as e:
+        print(f"[WARN] User table migration check note: {e}")
+
     # Add sample seed data if the reviews table is empty
     db = SessionLocal()
     try:
+        # Ensure at least one admin user exists for management
+        admin_user = db.query(User).filter(User.role == "admin").first()
+        if not admin_user:
+            # Promote Davut or first user to admin
+            davut = db.query(User).filter(User.email.ilike("%davut%")).first()
+            if davut:
+                davut.role = "admin"
+                db.commit()
+            else:
+                first_u = db.query(User).first()
+                if first_u:
+                    first_u.role = "admin"
+                    db.commit()
+
         if db.query(Review).count() == 0:
             sample_reviews = [
                 Review(

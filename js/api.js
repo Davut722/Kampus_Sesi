@@ -198,5 +198,63 @@ export const api = {
         return await request(`/users/me/favorites/${encodeURIComponent(university)}`, {
             method: 'DELETE'
         });
+    },
+
+    // ─── Admin API ───
+    async getAdminStats() {
+        return await request('/admin/dashboard/stats');
+    },
+
+    async getAdminUsers(query = '', role = 'all') {
+        const params = new URLSearchParams();
+        if (query) params.append('q', query);
+        if (role && role !== 'all') params.append('role', role);
+        return await request(`/admin/users?${params.toString()}`);
+    },
+
+    async updateAdminUserRole(userId, newRole) {
+        return await request(`/admin/users/${userId}/role`, {
+            method: 'PATCH',
+            body: JSON.stringify({ role: newRole })
+        });
+    },
+
+    async toggleAdminUserStatus(userId, isActive) {
+        return await request(`/admin/users/${userId}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ is_active: isActive })
+        });
+    },
+
+    async deleteAdminUser(userId) {
+        return await request(`/admin/users/${userId}`, {
+            method: 'DELETE'
+        });
+    },
+
+    async getPendingModeration() {
+        return await request('/admin/moderation/pending');
+    },
+
+    async moderateItem(contentType, contentId, action) {
+        return await request(`/admin/moderation/${contentType}/${contentId}?action=${action}`, {
+            method: 'PATCH'
+        });
+    },
+
+    async deleteAdminReview(reviewId) {
+        return await request(`/admin/reviews/${reviewId}`, {
+            method: 'DELETE'
+        });
+    },
+
+    async getAdminMessages() {
+        return await request('/admin/messages');
+    },
+
+    async toggleMessageRead(messageId) {
+        return await request(`/admin/messages/${messageId}/read`, {
+            method: 'PATCH'
+        });
     }
 };

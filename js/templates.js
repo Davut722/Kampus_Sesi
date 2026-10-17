@@ -1932,5 +1932,221 @@ export const TEMPLATES = {
                 </div>
             </div>
         </main>
+    `,
+
+    admin: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-10 sm:py-16">
+            <!-- Ambient Glow -->
+            <div class="pointer-events-none absolute -top-32 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute top-80 -right-20 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                
+                <!-- Header & Tab Navigation -->
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 border-b border-zinc-800/80">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-950/40 text-cyan-400 border border-cyan-500/30 mb-2">
+                            <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+                            <span>Yönetim Merkezi · RBAC Güvenli</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight" style="font-family: var(--font-heading);">
+                            Admin & Moderasyon Paneli
+                        </h1>
+                        <p class="text-xs sm:text-sm text-zinc-400 mt-1">Platform metriklerini izleyin, kullanıcıları denetleyin ve bekleyen içerikleri onaylayın.</p>
+                    </div>
+
+                    <!-- Panel Tabs -->
+                    <div class="flex items-center gap-1.5 p-1.5 rounded-2xl bg-zinc-900 border border-zinc-800 overflow-x-auto" id="admin-panel-tabs">
+                        <button class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-cyan-400 text-zinc-950 cursor-pointer transition-all active-tab flex items-center gap-1.5" data-tab="dashboard">
+                            <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i> Dashboard
+                        </button>
+                        <button class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white cursor-pointer transition-all flex items-center gap-1.5" data-tab="users">
+                            <i data-lucide="users" class="w-3.5 h-3.5"></i> Kullanıcılar
+                        </button>
+                        <button class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white cursor-pointer transition-all flex items-center gap-1.5" data-tab="moderation">
+                            <i data-lucide="check-square" class="w-3.5 h-3.5"></i> Moderasyon
+                        </button>
+                        <button class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white cursor-pointer transition-all flex items-center gap-1.5" data-tab="messages">
+                            <i data-lucide="mail" class="w-3.5 h-3.5"></i> İletişim
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1. TAB: DASHBOARD -->
+                <div id="admin-tab-dashboard" class="space-y-8">
+                    <!-- Metric Cards Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 flex flex-col justify-between hover:border-zinc-700 transition-all">
+                            <div class="flex items-center justify-between text-zinc-500 mb-2">
+                                <span class="text-xs uppercase font-semibold">Kullanıcılar</span>
+                                <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
+                            </div>
+                            <div class="text-3xl font-extrabold text-white" id="admin-stat-users">—</div>
+                            <div class="text-[11px] text-zinc-500 mt-2">Kayıtlı üye profili</div>
+                        </div>
+
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 flex flex-col justify-between hover:border-zinc-700 transition-all">
+                            <div class="flex items-center justify-between text-zinc-500 mb-2">
+                                <span class="text-xs uppercase font-semibold">Öğrenci Yorumu</span>
+                                <i data-lucide="message-square" class="w-4 h-4 text-amber-400"></i>
+                            </div>
+                            <div class="text-3xl font-extrabold text-white" id="admin-stat-reviews">—</div>
+                            <div class="text-[11px] text-zinc-500 mt-2">Doğrulanmış deneyim</div>
+                        </div>
+
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 flex flex-col justify-between hover:border-zinc-700 transition-all">
+                            <div class="flex items-center justify-between text-zinc-500 mb-2">
+                                <span class="text-xs uppercase font-semibold">Okul Önerileri</span>
+                                <i data-lucide="building-2" class="w-4 h-4 text-purple-400"></i>
+                            </div>
+                            <div class="text-3xl font-extrabold text-white" id="admin-stat-suggestions">—</div>
+                            <div class="text-[11px] text-zinc-500 mt-2">Bekleyen başvuru</div>
+                        </div>
+
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 flex flex-col justify-between hover:border-zinc-700 transition-all">
+                            <div class="flex items-center justify-between text-zinc-500 mb-2">
+                                <span class="text-xs uppercase font-semibold">Blog Yazıları</span>
+                                <i data-lucide="book-open" class="w-4 h-4 text-sky-400"></i>
+                            </div>
+                            <div class="text-3xl font-extrabold text-white" id="admin-stat-blogs">—</div>
+                            <div class="text-[11px] text-zinc-500 mt-2">İncelenecek rehber</div>
+                        </div>
+
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 flex flex-col justify-between hover:border-zinc-700 transition-all">
+                            <div class="flex items-center justify-between text-zinc-500 mb-2">
+                                <span class="text-xs uppercase font-semibold">İletişim Mesajı</span>
+                                <i data-lucide="mail" class="w-4 h-4 text-rose-400"></i>
+                            </div>
+                            <div class="text-3xl font-extrabold text-white" id="admin-stat-messages">—</div>
+                            <div class="text-[11px] text-zinc-500 mt-2">Okunmamış bildirim</div>
+                        </div>
+
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 flex flex-col justify-between hover:border-zinc-700 transition-all">
+                            <div class="flex items-center justify-between text-zinc-500 mb-2">
+                                <span class="text-xs uppercase font-semibold">KYK Yurtları</span>
+                                <i data-lucide="home" class="w-4 h-4 text-emerald-400"></i>
+                            </div>
+                            <div class="text-3xl font-extrabold text-white" id="admin-stat-dorms">—</div>
+                            <div class="text-[11px] text-zinc-500 mt-2">Veritabanında kayıtlı</div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Navigation & Server Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 space-y-4">
+                            <h3 class="text-base font-bold text-white flex items-center gap-2">
+                                <i data-lucide="zap" class="w-4 h-4 text-cyan-400"></i> Hızlı Moderasyon Eylemleri
+                            </h3>
+                            <div class="space-y-2 text-xs">
+                                <button class="admin-quick-action w-full p-3 rounded-xl bg-zinc-950/60 border border-zinc-800 hover:border-zinc-700 hover:bg-zinc-800/80 transition-all text-left flex items-center justify-between text-zinc-200" data-jump="moderation">
+                                    <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-purple-400"></i> Bekleyen Okul ve Blog Başvurularını İncele</span>
+                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-zinc-500"></i>
+                                </button>
+                                <button class="admin-quick-action w-full p-3 rounded-xl bg-zinc-950/60 border border-zinc-800 hover:border-zinc-700 hover:bg-zinc-800/80 transition-all text-left flex items-center justify-between text-zinc-200" data-jump="users">
+                                    <span class="flex items-center gap-2"><i data-lucide="user-check" class="w-4 h-4 text-cyan-400"></i> Kullanıcı Yetkilerini & Rollerini Düzenle</span>
+                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-zinc-500"></i>
+                                </button>
+                                <button class="admin-quick-action w-full p-3 rounded-xl bg-zinc-950/60 border border-zinc-800 hover:border-zinc-700 hover:bg-zinc-800/80 transition-all text-left flex items-center justify-between text-zinc-200" data-jump="messages">
+                                    <span class="flex items-center gap-2"><i data-lucide="mail-open" class="w-4 h-4 text-rose-400"></i> Gelen İletişim & Destek Taleplerine Bak</span>
+                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-zinc-500"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 space-y-4">
+                            <h3 class="text-base font-bold text-white flex items-center gap-2">
+                                <i data-lucide="server" class="w-4 h-4 text-emerald-400"></i> Sistem & Güvenlik Mimarisi
+                            </h3>
+                            <div class="space-y-3 text-xs text-zinc-400">
+                                <div class="flex items-center justify-between pb-2 border-b border-zinc-800/80">
+                                    <span>Yetkilendirme Modeli:</span>
+                                    <span class="font-bold text-cyan-400">RBAC (Role-Based Access Control)</span>
+                                </div>
+                                <div class="flex items-center justify-between pb-2 border-b border-zinc-800/80">
+                                    <span>Oturum Protokolü:</span>
+                                    <span class="font-bold text-zinc-200">JWT Bearer (HS256)</span>
+                                </div>
+                                <div class="flex items-center justify-between pb-2 border-b border-zinc-800/80">
+                                    <span>Veritabanı Motoru:</span>
+                                    <span class="font-bold text-zinc-200">MySQL / SQLAlchemy ORM</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Erişim Koruması:</span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/60 text-emerald-400 border border-emerald-500/30">Backend & Route Guard Aktif</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. TAB: KULLANICILAR -->
+                <div id="admin-tab-users" class="hidden space-y-4">
+                    <!-- Search & Filter Controls -->
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="relative w-full sm:w-80">
+                            <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                            <input type="text" id="admin-user-search" placeholder="İsim veya e-posta ile kullanıcı ara..." class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs rounded-xl pl-10 pr-4 py-2.5 outline-none focus:border-cyan-400">
+                        </div>
+
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <select id="admin-user-role-filter" class="w-full sm:w-48 bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs rounded-xl px-4 py-2.5 outline-none focus:border-cyan-400">
+                                <option value="all">Tüm Roller</option>
+                                <option value="admin">Yöneticiler (Admin)</option>
+                                <option value="moderator">Moderatörler</option>
+                                <option value="user">Standart Öğrenciler</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Users Table Container -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 overflow-hidden overflow-x-auto shadow-xl">
+                        <table class="w-full text-left text-xs text-zinc-300">
+                            <thead class="bg-zinc-950/80 text-zinc-500 border-b border-zinc-800 uppercase font-semibold text-[11px]">
+                                <tr>
+                                    <th class="p-4">Kullanıcı Bilgisi</th>
+                                    <th class="p-4">E-posta</th>
+                                    <th class="p-4">Üniversite</th>
+                                    <th class="p-4">Rol (RBAC)</th>
+                                    <th class="p-4">Durum</th>
+                                    <th class="p-4 text-right">İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-users-tbody" class="divide-y divide-zinc-800/60">
+                                <tr><td colspan="6" class="p-8 text-center text-zinc-500">Kullanıcılar yükleniyor...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3. TAB: MODERASYON -->
+                <div id="admin-tab-moderation" class="hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="check-square" class="w-4 h-4 text-cyan-400"></i> Onay Bekleyen İçerikler
+                        </h3>
+                        <span id="admin-moderation-count" class="text-xs text-zinc-500">Taranıyor...</span>
+                    </div>
+
+                    <div id="admin-moderation-list" class="space-y-4">
+                        <div class="p-8 text-center text-zinc-500">Bekleyen içerikler yükleniyor...</div>
+                    </div>
+                </div>
+
+                <!-- 4. TAB: İLETİŞİM MESAJLARI -->
+                <div id="admin-tab-messages" class="hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="mail" class="w-4 h-4 text-rose-400"></i> Gelen İletişim Mesajları
+                        </h3>
+                        <span id="admin-messages-count" class="text-xs text-zinc-500">Yükleniyor...</span>
+                    </div>
+
+                    <div id="admin-messages-list" class="space-y-4">
+                        <div class="p-8 text-center text-zinc-500">Mesajlar yükleniyor...</div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
     `
 };

@@ -411,110 +411,379 @@ export const TEMPLATES = {
     `,
 
     profile: `
-        <main class="page-view profile-page-v2">
+        <main class="page-view profile-page-v2 relative bg-zinc-950 text-zinc-100 min-h-screen pb-20 overflow-hidden">
+            <!-- Ambient Glow Effects -->
+            <div class="pointer-events-none absolute -top-32 left-1/4 w-[32rem] h-[32rem] bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute top-64 -right-24 w-[28rem] h-[28rem] bg-indigo-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
 
-            <!-- Cover Banner -->
-            <div class="profile-cover">
-                <div class="profile-cover__gradient"></div>
-            </div>
-
-            <!-- Identity Block -->
-            <div class="container">
-                <div class="profile-identity">
-                    <div class="profile-identity__avatar-wrap">
-                        <div class="profile-identity__avatar" id="profile-avatar">MS</div>
+            <!-- 1. ÜST KISIM: ZARİF KAPAK (BANNER) & KULLANICI KİMLİK KARTI -->
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10">
+                <div class="rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur-xl overflow-hidden shadow-2xl">
+                    
+                    <!-- Cover Banner -->
+                    <div class="relative h-32 sm:h-44 w-full bg-gradient-to-r from-cyan-950/80 via-zinc-900 to-indigo-950/80 border-b border-zinc-800/80 overflow-hidden">
+                        <div class="absolute inset-0 opacity-25" style="background-image: radial-gradient(circle at 2px 2px, rgba(34,211,238,0.25) 1px, transparent 0); background-size: 24px 24px;"></div>
+                        <div class="absolute -bottom-16 -left-16 w-64 h-64 bg-cyan-400/15 rounded-full blur-2xl"></div>
+                        <div class="absolute -top-16 right-12 w-64 h-64 bg-sky-400/10 rounded-full blur-2xl"></div>
+                        <div class="absolute top-4 right-4 sm:top-6 sm:right-6 flex items-center gap-2">
+                            <span id="profile-role-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-zinc-950/70 border border-zinc-700/80 text-cyan-400 backdrop-blur-md">
+                                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                                <span id="profile-role-text">Öğrenci Üye</span>
+                            </span>
+                        </div>
                     </div>
-                    <div class="profile-identity__meta">
-                        <h1 class="profile-identity__name" id="profile-name">Yükleniyor...</h1>
-                        <p class="profile-identity__sub" id="profile-academic-info">Üniversite ve bölüm bilgisi eklenmemiş.</p>
-                    </div>
-                    <div class="profile-identity__actions">
-                        <button class="btn btn--danger btn--sm" id="profile-logout-btn" type="button">
-                            <i data-lucide="log-out" aria-hidden="true"></i> Çıkış Yap
-                        </button>
-                    </div>
-                </div>
 
-                <!-- Stats Strip -->
-                <div class="profile-strip" aria-label="Profil istatistikleri">
-                    <div class="profile-strip__item">
-                        <span class="profile-strip__val" id="stat-review-count">0</span>
-                        <span class="profile-strip__lbl">Değerlendirme</span>
-                    </div>
-                    <div class="profile-strip__divider"></div>
-                    <div class="profile-strip__item">
-                        <span class="profile-strip__val profile-strip__val--green" id="stat-upvotes">0</span>
-                        <span class="profile-strip__lbl">Beğeni</span>
-                    </div>
-                </div>
-
-                <!-- Tabs -->
-                <div class="profile-tabs-v2" role="tablist" aria-label="Profil bölümleri">
-                    <button class="profile-tab-v2 is-active" id="profile-reviews-tab" type="button" role="tab"
-                        aria-selected="true" aria-controls="profile-reviews-panel" data-profile-tab="reviews">
-                        Değerlendirmelerim
-                    </button>
-                    <button class="profile-tab-v2" id="profile-settings-tab" type="button" role="tab"
-                        aria-selected="false" aria-controls="profile-settings-panel" data-profile-tab="settings">
-                        Ayarlar
-                    </button>
-                </div>
-
-                <!-- Reviews Panel -->
-                <section class="profile-panel-v2" id="profile-reviews-panel" role="tabpanel" aria-labelledby="profile-reviews-tab">
-                    <div id="user-reviews-list" aria-live="polite"></div>
-                </section>
-
-                <!-- Settings Panel -->
-                <section class="profile-panel-v2" id="profile-settings-panel" role="tabpanel"
-                    aria-labelledby="profile-settings-tab" hidden>
-                    <form id="profile-settings-form" class="profile-settings-form-v2">
-                        <div class="psf-section">
-                            <div class="psf-section__header">
-                                <span class="psf-section__icon">👤</span>
-                                <h3 class="psf-section__title">Hesap Bilgileri</h3>
+                    <!-- Identity Row & Top Stats -->
+                    <div class="px-5 sm:px-8 pb-6 sm:pb-8">
+                        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-12 sm:-mt-14 relative z-10">
+                            
+                            <!-- Avatar & User Meta -->
+                            <div class="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-6">
+                                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-zinc-950 border-4 border-zinc-900 ring-1 ring-cyan-500/40 flex items-center justify-center text-2xl sm:text-3xl font-extrabold text-cyan-400 shadow-2xl shrink-0" id="profile-avatar">
+                                    MS
+                                </div>
+                                <div class="space-y-1.5 pt-1 sm:pb-1">
+                                    <div class="flex flex-wrap items-center gap-2.5">
+                                        <h1 class="text-2xl sm:text-3xl font-extrabold text-zinc-100 tracking-tight" id="profile-name" style="font-family: var(--font-heading);">
+                                            Yükleniyor...
+                                        </h1>
+                                        <span id="profile-grade-pill" class="hidden items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-cyan-950/50 border border-cyan-500/30 text-cyan-300"></span>
+                                    </div>
+                                    <p class="text-xs sm:text-sm text-zinc-400 flex items-center gap-1.5" id="profile-academic-info">
+                                        <i data-lucide="graduation-cap" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+                                        <span>Üniversite ve bölüm bilgisi eklenmemiş.</span>
+                                    </p>
+                                    <p class="text-xs text-zinc-500 max-w-2xl leading-relaxed" id="profile-bio-text"></p>
+                                </div>
                             </div>
-                            <div class="psf-section__body">
-                                <div class="form__group">
-                                    <label class="form__label" for="settings-name">Ad Soyad</label>
-                                    <input class="form__input" id="settings-name" name="name" autocomplete="name" required>
+
+                            <!-- Quick Actions -->
+                            <div class="flex flex-wrap items-center gap-2.5" id="profile-identity-actions">
+                                <a href="#/review-form" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-cyan-400 hover:bg-cyan-300 text-zinc-950 transition-all inline-flex items-center gap-1.5 shadow-lg shadow-cyan-500/10">
+                                    <i data-lucide="pen-line" class="w-3.5 h-3.5"></i>
+                                    <span>Değerlendir</span>
+                                </a>
+                                <button type="button" id="profile-edit-quick-btn" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 hover:border-zinc-700 transition-all inline-flex items-center gap-1.5 cursor-pointer">
+                                    <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                    <span>Profili Düzenle</span>
+                                </button>
+                                <button type="button" id="profile-logout-btn" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-rose-950/30 hover:bg-rose-950/60 text-rose-400 border border-rose-500/30 transition-all inline-flex items-center gap-1.5 cursor-pointer">
+                                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                                    <span>Çıkış Yap</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 4-Column Counter Strip -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6 pt-6 border-t border-zinc-800/80" aria-label="Profil istatistikleri">
+                            <div class="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+                                    <i data-lucide="message-square" class="w-5 h-5"></i>
                                 </div>
-                                <div class="form__group">
-                                    <label class="form__label" for="settings-university">Üniversite</label>
-                                    <input class="form__input" id="settings-university" name="university" autocomplete="organization">
+                                <div>
+                                    <div class="text-xl sm:text-2xl font-extrabold text-zinc-100 leading-none" id="stat-review-count">0</div>
+                                    <div class="text-[11px] text-zinc-500 font-medium mt-1">Değerlendirme</div>
                                 </div>
-                                <div class="form__group">
-                                    <label class="form__label" for="settings-department">Bölüm</label>
-                                    <input class="form__input" id="settings-department" name="department">
+                            </div>
+
+                            <div class="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-amber-950/60 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                                    <i data-lucide="thumbs-up" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xl sm:text-2xl font-extrabold text-zinc-100 leading-none" id="stat-upvotes">0</div>
+                                    <div class="text-[11px] text-zinc-500 font-medium mt-1">Toplam Beğeni</div>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                                    <i data-lucide="file-check-2" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xl sm:text-2xl font-extrabold text-zinc-100 leading-none" id="stat-submissions-count">0</div>
+                                    <div class="text-[11px] text-zinc-500 font-medium mt-1">Başvuru & Öneri</div>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-sky-950/60 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0">
+                                    <i data-lucide="bookmark" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xl sm:text-2xl font-extrabold text-zinc-100 leading-none" id="stat-favorites-count">0</div>
+                                    <div class="text-[11px] text-zinc-500 font-medium mt-1">Favori Üniversite</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. İKİ KOLONLU ANA DÜZEN (SOL %70 ANA ALAN / SAĞ %30 YAN PANEL) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8 items-start">
+
+                    <!-- SOL / ANA ALAN (%70 -> 8 Sütun) -->
+                    <div class="lg:col-span-8 space-y-6">
+
+                        <!-- Sekme Navigasyonu (Tabs) -->
+                        <div class="flex items-center gap-2 p-1.5 rounded-2xl bg-zinc-900/80 border border-zinc-800 overflow-x-auto" role="tablist" aria-label="Profil bölümleri">
+                            <button class="profile-tab-v2 is-active flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
+                                id="profile-reviews-tab" type="button" role="tab" aria-selected="true"
+                                aria-controls="profile-reviews-panel" data-profile-tab="reviews">
+                                <i data-lucide="message-square" class="w-4 h-4"></i>
+                                <span>Değerlendirmelerim</span>
+                                <span id="tab-badge-reviews" class="px-2 py-0.5 rounded-full text-[11px] bg-zinc-950/60 text-cyan-400 border border-zinc-700/60">0</span>
+                            </button>
+
+                            <button class="profile-tab-v2 flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
+                                id="profile-submissions-tab" type="button" role="tab" aria-selected="false"
+                                aria-controls="profile-submissions-panel" data-profile-tab="submissions">
+                                <i data-lucide="layers" class="w-4 h-4"></i>
+                                <span>Başvurularım & Önerilerim</span>
+                                <span id="tab-badge-submissions" class="px-2 py-0.5 rounded-full text-[11px] bg-zinc-950/60 text-zinc-400 border border-zinc-700/60">0</span>
+                            </button>
+
+                            <button class="profile-tab-v2 flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
+                                id="profile-settings-tab" type="button" role="tab" aria-selected="false"
+                                aria-controls="profile-settings-panel" data-profile-tab="settings">
+                                <i data-lucide="settings" class="w-4 h-4"></i>
+                                <span>Ayarlar</span>
+                            </button>
+                        </div>
+
+                        <!-- SEKME 1: DEĞERLENDİRMELERİM -->
+                        <section class="profile-panel-v2 space-y-4" id="profile-reviews-panel" role="tabpanel" aria-labelledby="profile-reviews-tab">
+                            <div id="user-reviews-list" class="space-y-4" aria-live="polite"></div>
+                        </section>
+
+                        <!-- SEKME 2: BAŞVURULARIM & ÖNERİLERİM -->
+                        <section class="profile-panel-v2 space-y-5" id="profile-submissions-panel" role="tabpanel" aria-labelledby="profile-submissions-tab" hidden>
+                            
+                            <!-- Filtre Çipleri & Hızlı Katkı Butonları -->
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+                                <div class="flex flex-wrap items-center gap-1.5" id="submission-status-filters">
+                                    <button type="button" data-sub-filter="all" class="sub-filter-chip px-3 py-1.5 rounded-xl text-xs font-medium border border-cyan-400 bg-cyan-950/30 text-cyan-400 transition-all cursor-pointer">
+                                        Tümü
+                                    </button>
+                                    <button type="button" data-sub-filter="pending" class="sub-filter-chip px-3 py-1.5 rounded-xl text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-400 hover:border-zinc-700 transition-all cursor-pointer inline-flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-amber-400"></span> İnceleniyor
+                                    </button>
+                                    <button type="button" data-sub-filter="approved" class="sub-filter-chip px-3 py-1.5 rounded-xl text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-400 hover:border-zinc-700 transition-all cursor-pointer inline-flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Onaylandı
+                                    </button>
+                                    <button type="button" data-sub-filter="rejected" class="sub-filter-chip px-3 py-1.5 rounded-xl text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-400 hover:border-zinc-700 transition-all cursor-pointer inline-flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-rose-400"></span> Reddedildi
+                                    </button>
+                                </div>
+
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <a href="#/okul-oner" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-zinc-950 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 transition-all inline-flex items-center gap-1.5">
+                                        <i data-lucide="building-2" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                        <span>Okul Öner</span>
+                                    </a>
+                                    <a href="#/yazi-gonder" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-zinc-950 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 transition-all inline-flex items-center gap-1.5">
+                                        <i data-lucide="book-open" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                        <span>Deneyim Paylaş</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Başvuru Durum Kartları Listesi -->
+                            <div id="user-submissions-list" class="space-y-4" aria-live="polite"></div>
+                        </section>
+
+                        <!-- SEKME 3: AYARLAR (PROFİL DÜZENLEME FORMU) -->
+                        <section class="profile-panel-v2" id="profile-settings-panel" role="tabpanel" aria-labelledby="profile-settings-tab" hidden>
+                            <form id="profile-settings-form" class="space-y-6">
+                                
+                                <!-- Bölüm 1: Akademik & Kişisel Bilgiler -->
+                                <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 space-y-5">
+                                    <div class="flex items-center gap-3 pb-4 border-b border-zinc-800/80">
+                                        <div class="w-9 h-9 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                                            <i data-lucide="user-check" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-base font-bold text-zinc-100">Kişisel ve Akademik Bilgiler</h3>
+                                            <p class="text-xs text-zinc-500">Yorumlarınızda ve profil kartınızda görünecek temel bilgileriniz.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div class="space-y-1.5">
+                                            <label class="block text-xs font-semibold text-zinc-300" for="settings-name">Ad Soyad</label>
+                                            <input class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-sm rounded-xl px-4 py-3 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-all"
+                                                id="settings-name" name="name" autocomplete="name" placeholder="Örn: Davut Örs" required>
+                                        </div>
+
+                                        <div class="space-y-1.5">
+                                            <label class="block text-xs font-semibold text-zinc-300" for="settings-grade">Sınıf Derecesi</label>
+                                            <select class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-sm rounded-xl px-4 py-3 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-all"
+                                                id="settings-grade" name="grade">
+                                                <option value="">Seçiniz...</option>
+                                                <option value="Hazırlık">Hazırlık Sınıfı</option>
+                                                <option value="1. Sınıf">1. Sınıf</option>
+                                                <option value="2. Sınıf">2. Sınıf</option>
+                                                <option value="3. Sınıf">3. Sınıf</option>
+                                                <option value="4. Sınıf">4. Sınıf</option>
+                                                <option value="Yüksek Lisans / Doktora">Yüksek Lisans / Doktora</option>
+                                                <option value="Mezun">Mezun</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="space-y-1.5">
+                                            <label class="block text-xs font-semibold text-zinc-300" for="settings-university">Üniversite</label>
+                                            <input class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-sm rounded-xl px-4 py-3 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-all"
+                                                id="settings-university" name="university" list="profile-uni-datalist" autocomplete="organization" placeholder="Üniversite seçin veya yazın...">
+                                            <datalist id="profile-uni-datalist"></datalist>
+                                        </div>
+
+                                        <div class="space-y-1.5">
+                                            <label class="block text-xs font-semibold text-zinc-300" for="settings-department">Bölüm / Program</label>
+                                            <input class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-sm rounded-xl px-4 py-3 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-all"
+                                                id="settings-department" name="department" placeholder="Örn: Bilgisayar Mühendisliği">
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-1.5">
+                                        <div class="flex items-center justify-between">
+                                            <label class="block text-xs font-semibold text-zinc-300" for="settings-bio">Kısa Biyografi</label>
+                                            <span class="text-[11px] text-zinc-500" id="settings-bio-counter">0 / 240</span>
+                                        </div>
+                                        <textarea class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-sm rounded-xl px-4 py-3 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-all resize-none"
+                                            id="settings-bio" name="bio" rows="3" maxlength="240"
+                                            placeholder="Kampüs hayatınız, ilgi alanlarınız veya aday öğrencilere tavsiyelerinizden kısaca bahsedin..."></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Bölüm 2: Şifre & Güvenlik -->
+                                <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 space-y-5">
+                                    <div class="flex items-center gap-3 pb-4 border-b border-zinc-800/80">
+                                        <div class="w-9 h-9 rounded-xl bg-amber-950/60 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                            <i data-lucide="lock" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-base font-bold text-zinc-100">Şifre ve Hesap Güvenliği</h3>
+                                            <p class="text-xs text-zinc-500">Şifrenizi değiştirmek istemiyorsanız bu alanları boş bırakabilirsiniz.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div class="space-y-1.5">
+                                            <label class="block text-xs font-semibold text-zinc-300" for="settings-current-password">Mevcut Şifre</label>
+                                            <input class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-sm rounded-xl px-4 py-3 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-all"
+                                                id="settings-current-password" name="current_password" type="password" autocomplete="current-password" placeholder="••••••••">
+                                        </div>
+
+                                        <div class="space-y-1.5">
+                                            <label class="block text-xs font-semibold text-zinc-300" for="settings-new-password">Yeni Şifre (En az 6 karakter)</label>
+                                            <input class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-sm rounded-xl px-4 py-3 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-all"
+                                                id="settings-new-password" name="new_password" type="password" minlength="6" autocomplete="new-password" placeholder="••••••••">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Kaydet Aksiyon Alanı -->
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
+                                    <p id="profile-settings-message" class="text-xs font-semibold text-cyan-400" role="status"></p>
+                                    <button class="px-6 py-3 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-zinc-950 font-bold text-sm transition-all inline-flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 cursor-pointer" type="submit">
+                                        <i data-lucide="save" class="w-4 h-4"></i>
+                                        <span>Değişiklikleri Kaydet</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+
+                    <!-- SAĞ YAN PANEL (SIDEBAR - %30 -> 4 Sütun) -->
+                    <aside class="lg:col-span-4 space-y-6">
+
+                        <!-- Widget 1: Hızlı Özet İstatistik & Profil Doluluk Kartı -->
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 space-y-5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-bold text-zinc-100 flex items-center gap-2">
+                                    <i data-lucide="bar-chart-3" class="w-4 h-4 text-cyan-400"></i>
+                                    <span>Hızlı Özet & Katkı</span>
+                                </h3>
+                                <span id="profile-completeness-pct" class="text-xs font-bold text-cyan-400">%0</span>
+                            </div>
+
+                            <!-- Profil Doluluk Çubuğu -->
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between text-[11px] text-zinc-400">
+                                    <span>Profil Tamamlanma Oranı</span>
+                                    <span id="profile-completeness-label">Başlangıç</span>
+                                </div>
+                                <div class="w-full h-2 rounded-full bg-zinc-950 overflow-hidden border border-zinc-800">
+                                    <div id="profile-completeness-bar" class="h-full bg-gradient-to-r from-cyan-400 to-sky-400 transition-all duration-500" style="width: 25%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Özet Metrik Satırları -->
+                            <div class="space-y-2.5 pt-2 border-t border-zinc-800/80 text-xs">
+                                <div class="flex items-center justify-between py-1">
+                                    <span class="text-zinc-400 flex items-center gap-2">
+                                        <i data-lucide="star" class="w-3.5 h-3.5 text-amber-400"></i> Ortalama Puanım
+                                    </span>
+                                    <span class="font-bold text-zinc-100" id="sidebar-avg-rating">0.0 / 5.0</span>
+                                </div>
+                                <div class="flex items-center justify-between py-1">
+                                    <span class="text-zinc-400 flex items-center gap-2">
+                                        <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i> Onaylanan Katkı
+                                    </span>
+                                    <span class="font-bold text-emerald-400" id="sidebar-approved-count">0 İçerik</span>
+                                </div>
+                                <div class="flex items-center justify-between py-1">
+                                    <span class="text-zinc-400 flex items-center gap-2">
+                                        <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400"></i> İncelenen Başvuru
+                                    </span>
+                                    <span class="font-bold text-amber-400" id="sidebar-pending-count">0 Başvuru</span>
+                                </div>
+                                <div class="flex items-center justify-between py-1">
+                                    <span class="text-zinc-400 flex items-center gap-2">
+                                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-cyan-400"></i> Katılım Tarihi
+                                    </span>
+                                    <span class="font-medium text-zinc-300" id="sidebar-join-date">Mart 2026</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="psf-section">
-                            <div class="psf-section__header">
-                                <span class="psf-section__icon">🔒</span>
-                                <h3 class="psf-section__title">Şifre Değiştir</h3>
+                        <!-- Widget 2: Kullanıcı Rozetleri (Badges) -->
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-bold text-zinc-100 flex items-center gap-2">
+                                    <i data-lucide="award" class="w-4 h-4 text-amber-400"></i>
+                                    <span>Kullanıcı Rozetleri</span>
+                                </h3>
+                                <span id="profile-badges-count" class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-950/50 text-amber-400 border border-amber-500/30">
+                                    1 / 6 Kazanıldı
+                                </span>
                             </div>
-                            <div class="psf-section__body">
-                                <div class="form__group">
-                                    <label class="form__label" for="settings-current-password">Mevcut şifre</label>
-                                    <input class="form__input" id="settings-current-password" name="current_password"
-                                        type="password" autocomplete="current-password">
-                                </div>
-                                <div class="form__group">
-                                    <label class="form__label" for="settings-new-password">Yeni şifre</label>
-                                    <input class="form__input" id="settings-new-password" name="new_password"
-                                        type="password" minlength="6" autocomplete="new-password">
-                                </div>
+
+                            <div id="profile-badges-grid" class="grid grid-cols-2 gap-3">
+                                <!-- JS tarafından dinamik doldurulur -->
                             </div>
                         </div>
 
-                        <div class="psf-actions">
-                            <p id="profile-settings-message" class="profile-settings-form__message" role="status"></p>
-                            <button class="btn btn--primary" type="submit">Kaydet</button>
+                        <!-- Widget 3: Favori / Takip Edilen Üniversiteler -->
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-bold text-zinc-100 flex items-center gap-2">
+                                    <i data-lucide="heart" class="w-4 h-4 text-rose-400"></i>
+                                    <span>Takip Edilen Okullar</span>
+                                </h3>
+                                <a href="#/favorites" class="text-[11px] font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1">
+                                    <span>Tümü</span>
+                                    <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+
+                            <div id="profile-favorites-list" class="space-y-2.5">
+                                <!-- JS tarafından dinamik doldurulur -->
+                            </div>
                         </div>
-                    </form>
-                </section>
+
+                    </aside>
+                </div>
             </div>
         </main>
     `,

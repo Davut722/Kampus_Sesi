@@ -1379,7 +1379,73 @@ function initReviewForm() {
 }
 
 
-// ─── Profile Page ─────────────────────────
+// ─── Profile Page (Two-Column Modern Layout) ─────────────────────────
+
+const SAMPLE_SUBMISSIONS_MOCK = [
+    {
+        id: 'mock-exp-1',
+        type: 'experience',
+        type_label: 'Deneyim & Blog',
+        title: 'İTÜ Ayazağa Kampüsü ve Yurt Başvuru Sürecim',
+        subtitle: 'Kampüs Rehberi · 5 dk okuma',
+        summary: 'Hazırlık senesinden itibaren Ayazağa yerleşkesinde ulaşım, yemekhane saatleri, kütüphane çalışma salonları ve gölet yurtları hakkında tüm gerçek deneyimlerim.',
+        status: 'approved',
+        admin_note: 'Deneyim yazınız yayın ilkelerimize uygun bulundu ve Kampüs Sesi Blog sayfasında yayına alındı.',
+        created_at: '2026-10-12T14:20:00',
+        is_sample: true
+    },
+    {
+        id: 'mock-sug-2',
+        type: 'school_suggestion',
+        type_label: 'Okul Önerisi',
+        title: 'Gebze Teknik Üniversitesi — Çayırova Yerleşkesi',
+        subtitle: 'Kocaeli · Çayırova Kampüsü',
+        summary: 'Mühendislik laboratuvarları ve Marmaray durağına yürüme mesafesindeki ana yerleşke bilgilerinin sisteme eklenmesi talebi.',
+        status: 'pending',
+        admin_note: 'Öneriniz moderasyon sırasındadır. Resmi yerleşke ve bölüm verileri kontrol edildikten sonra aktif edilecektir.',
+        created_at: '2026-10-15T09:45:00',
+        is_sample: true
+    },
+    {
+        id: 'mock-exp-3',
+        type: 'experience',
+        type_label: 'Deneyim & Blog',
+        title: 'Kampüs Çevresi Özel Yurt Fiyat Listesi 2026',
+        subtitle: 'Barınma & Yurt · 3 dk okuma',
+        summary: 'Kampüse yakın özel öğrenci apartlarının iletişim numaraları ve ticari kampanya bağlantıları.',
+        status: 'rejected',
+        admin_note: 'Topluluk Kuralları gereği doğrudan ticari reklam, fiyat broşürü veya iletişim numarası içeren paylaşımlar onaylanmamaktadır.',
+        created_at: '2026-10-08T18:10:00',
+        is_sample: true
+    }
+];
+
+const STATUS_BADGE_MAP = {
+    pending: {
+        label: 'İnceleniyor',
+        icon: 'clock',
+        badgeClass: 'bg-amber-950/60 text-amber-400 border-amber-500/30',
+        dotClass: 'bg-amber-400',
+        noteBoxClass: 'bg-amber-950/15 border-amber-500/25 text-amber-200/90',
+        noteIconColor: 'text-amber-400'
+    },
+    approved: {
+        label: 'Onaylandı',
+        icon: 'check-circle-2',
+        badgeClass: 'bg-emerald-950/60 text-emerald-400 border-emerald-500/30',
+        dotClass: 'bg-emerald-400',
+        noteBoxClass: 'bg-emerald-950/15 border-emerald-500/25 text-emerald-200/90',
+        noteIconColor: 'text-emerald-400'
+    },
+    rejected: {
+        label: 'Reddedildi',
+        icon: 'x-circle',
+        badgeClass: 'bg-rose-950/60 text-rose-400 border-rose-500/30',
+        dotClass: 'bg-rose-400',
+        noteBoxClass: 'bg-rose-950/15 border-rose-500/25 text-rose-200/90',
+        noteIconColor: 'text-rose-400'
+    }
+};
 
 function initProfilePage(params) {
     const listContainer = document.getElementById('user-reviews-list');
@@ -1387,82 +1453,478 @@ function initProfilePage(params) {
 
     const targetUser = params.get('user') || CURRENT_USER.name;
     const isCurrentUser = !params.get('user') || targetUser === CURRENT_USER.name;
+
+    const reviewsTab = document.getElementById('profile-reviews-tab');
+    const submissionsTab = document.getElementById('profile-submissions-tab');
     const settingsTab = document.getElementById('profile-settings-tab');
+
+    const reviewsPanel = document.getElementById('profile-reviews-panel');
+    const submissionsPanel = document.getElementById('profile-submissions-panel');
     const settingsPanel = document.getElementById('profile-settings-panel');
+
     const logoutButton = document.getElementById('profile-logout-btn');
+    const editQuickBtn = document.getElementById('profile-edit-quick-btn');
     const settingsForm = document.getElementById('profile-settings-form');
     const settingsMessage = document.getElementById('profile-settings-message');
+    const bioInput = document.getElementById('settings-bio');
+    const bioCounter = document.getElementById('settings-bio-counter');
+
     let profile = null;
     let reviews = isCurrentUser ? [] : getAllReviewsGlobal().filter(review => review.user === targetUser);
+    let submissions = [];
+    let favorites = [];
+    let activeSubmissionFilter = 'all';
 
-    if (!isCurrentUser) {
-        settingsTab.hidden = true;
-        settingsPanel.hidden = true;
-        logoutButton.hidden = true;
+    // Populate University Datalist in Settings Form
+    const uniDatalist = document.getElementById('profile-uni-datalist');
+    if (uniDatalist && typeof TURKISH_UNIVERSITIES !== 'undefined') {
+        uniDatalist.innerHTML = TURKISH_UNIVERSITIES.map(u => `<option value="${escapeHtml(u)}"></option>`).join('');
     }
 
+    if (bioInput && bioCounter) {
+        bioInput.addEventListener('input', () => {
+            bioCounter.textContent = `${bioInput.value.length} / 240`;
+        });
+    }
+
+    if (!isCurrentUser) {
+        if (submissionsTab) submissionsTab.hidden = true;
+        if (submissionsPanel) submissionsPanel.hidden = true;
+        if (settingsTab) settingsTab.hidden = true;
+        if (settingsPanel) settingsPanel.hidden = true;
+        if (logoutButton) logoutButton.hidden = true;
+        if (editQuickBtn) editQuickBtn.hidden = true;
+    }
+
+    // ─── Tab Switching Logic ───
     function setActiveTab(tabName) {
         document.querySelectorAll('[data-profile-tab]').forEach(tab => {
             const selected = tab.dataset.profileTab === tabName;
             tab.classList.toggle('is-active', selected);
             tab.setAttribute('aria-selected', String(selected));
         });
-        document.getElementById('profile-reviews-panel').hidden = tabName !== 'reviews';
-        settingsPanel.hidden = tabName !== 'settings' || !isCurrentUser;
+
+        if (reviewsPanel) {
+            const hideRev = tabName !== 'reviews';
+            reviewsPanel.hidden = hideRev;
+            reviewsPanel.classList.toggle('hidden', hideRev);
+        }
+        if (submissionsPanel) {
+            const hideSub = tabName !== 'submissions' || !isCurrentUser;
+            submissionsPanel.hidden = hideSub;
+            submissionsPanel.classList.toggle('hidden', hideSub);
+        }
+        if (settingsPanel) {
+            const hideSet = tabName !== 'settings' || !isCurrentUser;
+            settingsPanel.hidden = hideSet;
+            settingsPanel.classList.toggle('hidden', hideSet);
+        }
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     document.querySelectorAll('[data-profile-tab]').forEach(tab => {
         tab.addEventListener('click', () => setActiveTab(tab.dataset.profileTab));
     });
 
+    editQuickBtn?.addEventListener('click', () => {
+        setActiveTab('settings');
+        settingsPanel?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // ─── Submission Filter Chips ───
+    document.querySelectorAll('[data-sub-filter]').forEach(chip => {
+        chip.addEventListener('click', () => {
+            activeSubmissionFilter = chip.dataset.subFilter || 'all';
+            document.querySelectorAll('[data-sub-filter]').forEach(c => {
+                const isSelected = c.dataset.subFilter === activeSubmissionFilter;
+                c.className = isSelected
+                    ? 'sub-filter-chip px-3 py-1.5 rounded-xl text-xs font-medium border border-cyan-400 bg-cyan-950/30 text-cyan-400 transition-all cursor-pointer inline-flex items-center gap-1.5'
+                    : 'sub-filter-chip px-3 py-1.5 rounded-xl text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-400 hover:border-zinc-700 transition-all cursor-pointer inline-flex items-center gap-1.5';
+            });
+            renderSubmissionsList();
+        });
+    });
+
+    function formatSubmissionDate(isoStr) {
+        if (!isoStr) return 'Yakın zamanda';
+        try {
+            const d = new Date(isoStr);
+            if (isNaN(d.getTime())) return isoStr;
+            return d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        } catch (e) {
+            return isoStr;
+        }
+    }
+
+    // ─── Render Submissions Status Cards ───
+    function renderSubmissionsList() {
+        const subContainer = document.getElementById('user-submissions-list');
+        if (!subContainer) return;
+
+        // Combine real DB submissions with sample cards so all 3 status badges are demonstrable
+        const combined = [...submissions];
+        const existingStatuses = new Set(combined.map(item => item.status));
+        SAMPLE_SUBMISSIONS_MOCK.forEach(mock => {
+            if (!existingStatuses.has(mock.status) || combined.length === 0) {
+                combined.push(mock);
+            }
+        });
+
+        const tabBadgeSub = document.getElementById('tab-badge-submissions');
+        if (tabBadgeSub) tabBadgeSub.textContent = combined.length;
+
+        const statSubEl = document.getElementById('stat-submissions-count');
+        if (statSubEl) statSubEl.textContent = combined.length;
+
+        const filtered = activeSubmissionFilter === 'all'
+            ? combined
+            : combined.filter(item => item.status === activeSubmissionFilter);
+
+        if (filtered.length === 0) {
+            subContainer.innerHTML = `
+                <div class="p-10 rounded-2xl border border-zinc-800 bg-zinc-900/40 text-center space-y-3">
+                    <div class="w-12 h-12 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 mx-auto">
+                        <i data-lucide="folder-open" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-sm font-bold text-zinc-200">Bu filtrede başvuru veya öneri bulunamadı</h4>
+                    <p class="text-xs text-zinc-500 max-w-md mx-auto">Yeni bir üniversite önerebilir veya kampüs deneyimlerinizi blog yazısı olarak gönderebilirsiniz.</p>
+                </div>
+            `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            return;
+        }
+
+        subContainer.innerHTML = filtered.map(item => {
+            const st = STATUS_BADGE_MAP[item.status] || STATUS_BADGE_MAP.pending;
+            const isSchool = item.type === 'school_suggestion';
+            const typeIcon = isSchool ? 'building-2' : 'book-open';
+            const typeBadgeColor = isSchool
+                ? 'bg-purple-950/50 text-purple-300 border-purple-500/30'
+                : 'bg-sky-950/50 text-sky-300 border-sky-500/30';
+
+            return `
+                <article class="rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-zinc-700 transition-all duration-200 p-5 sm:p-6 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${typeBadgeColor}">
+                                <i data-lucide="${typeIcon}" class="w-3.5 h-3.5"></i>
+                                <span>${escapeHtml(item.type_label || (isSchool ? 'Okul Önerisi' : 'Deneyim & Blog'))}</span>
+                            </span>
+                            <span class="text-xs text-zinc-500 flex items-center gap-1">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                                <span>${escapeHtml(formatSubmissionDate(item.created_at))}</span>
+                            </span>
+                        </div>
+
+                        <!-- Status Badge (Pending / Approved / Rejected) -->
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${st.badgeClass}">
+                            <i data-lucide="${st.icon}" class="w-3.5 h-3.5"></i>
+                            <span>${st.label}</span>
+                        </span>
+                    </div>
+
+                    <div>
+                        <h4 class="text-base sm:text-lg font-bold text-zinc-100">${escapeHtml(item.title)}</h4>
+                        <p class="text-xs font-medium text-cyan-400/90 mt-0.5">${escapeHtml(item.subtitle || '')}</p>
+                        ${item.summary ? `<p class="text-xs sm:text-sm text-zinc-400 mt-2 leading-relaxed">${escapeHtml(item.summary)}</p>` : ''}
+                    </div>
+
+                    <!-- Admin / Moderator Durum Notu -->
+                    <div class="rounded-xl border p-3.5 flex items-start gap-3 ${st.noteBoxClass}">
+                        <i data-lucide="info" class="w-4 h-4 shrink-0 mt-0.5 ${st.noteIconColor}"></i>
+                        <div class="text-xs leading-relaxed">
+                            <span class="font-bold block mb-0.5">Moderasyon Notu & Durum:</span>
+                            <span>${escapeHtml(item.admin_note || 'Başvurunuz kayıt altına alınmıştır.')}</span>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }).join('');
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // ─── Render Right Sidebar Widgets ───
+    function renderSidebarWidgets(reviewLikeCount) {
+        const allSubs = [...submissions];
+        const existingStatuses = new Set(allSubs.map(i => i.status));
+        SAMPLE_SUBMISSIONS_MOCK.forEach(m => {
+            if (!existingStatuses.has(m.status) || allSubs.length === 0) allSubs.push(m);
+        });
+
+        const approvedCount = allSubs.filter(s => s.status === 'approved').length;
+        const pendingCount = allSubs.filter(s => s.status === 'pending').length;
+
+        // 1. Completeness Calculation
+        let completeness = 20; // Name exists
+        if (profile?.university) completeness += 25;
+        if (profile?.department) completeness += 25;
+        if (profile?.grade) completeness += 15;
+        if (profile?.bio) completeness += 15;
+        if (completeness > 100) completeness = 100;
+
+        const pctEl = document.getElementById('profile-completeness-pct');
+        const barEl = document.getElementById('profile-completeness-bar');
+        const lblEl = document.getElementById('profile-completeness-label');
+        if (pctEl) pctEl.textContent = `%${completeness}`;
+        if (barEl) barEl.style.width = `${completeness}%`;
+        if (lblEl) {
+            lblEl.textContent = completeness === 100 ? 'Tamamlandı' : completeness >= 70 ? 'Çok İyi' : 'Geliştirilebilir';
+        }
+
+        // Average rating
+        const avgRating = reviews.length > 0
+            ? (reviews.reduce((acc, r) => acc + (Number(r.rating) || 0), 0) / reviews.length).toFixed(1)
+            : '0.0';
+
+        const avgEl = document.getElementById('sidebar-avg-rating');
+        const appEl = document.getElementById('sidebar-approved-count');
+        const pendEl = document.getElementById('sidebar-pending-count');
+        const joinEl = document.getElementById('sidebar-join-date');
+
+        if (avgEl) avgEl.textContent = `${avgRating} / 5.0`;
+        if (appEl) appEl.textContent = `${approvedCount + reviews.length} İçerik`;
+        if (pendEl) pendEl.textContent = `${pendingCount} Başvuru`;
+        if (joinEl) joinEl.textContent = profile?.created_at || 'Mart 2026';
+
+        // 2. Badges Widget
+        const badges = [
+            {
+                title: 'Doğrulanmış Üye',
+                desc: 'Kampüs Sesi topluluk üyesi',
+                icon: 'shield-check',
+                unlocked: true,
+                color: 'text-cyan-400 bg-cyan-950/50 border-cyan-500/30'
+            },
+            {
+                title: 'İlk Ses',
+                desc: 'İlk kampüs yorumunu paylaştı',
+                icon: 'message-square',
+                unlocked: reviews.length >= 1,
+                color: 'text-emerald-400 bg-emerald-950/50 border-emerald-500/30'
+            },
+            {
+                title: 'Kampüs Kaşifi',
+                desc: 'Okul veya deneyim önerisi sundu',
+                icon: 'compass',
+                unlocked: allSubs.length >= 1,
+                color: 'text-sky-400 bg-sky-950/50 border-sky-500/30'
+            },
+            {
+                title: 'Beğeni Mıknatısı',
+                desc: 'Yorumları öğrencilerden destek aldı',
+                icon: 'thumbs-up',
+                unlocked: reviewLikeCount >= 1,
+                color: 'text-amber-400 bg-amber-950/50 border-amber-500/30'
+            },
+            {
+                title: 'Tam Profil',
+                desc: 'Akademik bilgilerini tamamladı',
+                icon: 'user-check',
+                unlocked: completeness >= 70,
+                color: 'text-indigo-400 bg-indigo-950/50 border-indigo-500/30'
+            },
+            {
+                title: 'Kampüs Elçisi',
+                desc: '3+ değerlendirme veya yönetici',
+                icon: 'award',
+                unlocked: reviews.length >= 3 || profile?.role === 'admin' || CURRENT_USER.role === 'admin',
+                color: 'text-purple-400 bg-purple-950/50 border-purple-500/30'
+            }
+        ];
+
+        const unlockedCount = badges.filter(b => b.unlocked).length;
+        const badgeCountEl = document.getElementById('profile-badges-count');
+        if (badgeCountEl) badgeCountEl.textContent = `${unlockedCount} / ${badges.length} Kazanıldı`;
+
+        const badgesGrid = document.getElementById('profile-badges-grid');
+        if (badgesGrid) {
+            badgesGrid.innerHTML = badges.map(b => `
+                <div class="p-3 rounded-xl border transition-all ${b.unlocked ? 'bg-zinc-950/70 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-950/30 border-zinc-800/40 opacity-45'} flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                        <div class="w-8 h-8 rounded-lg border flex items-center justify-center ${b.unlocked ? b.color : 'bg-zinc-900 border-zinc-800 text-zinc-500'}">
+                            <i data-lucide="${b.icon}" class="w-4 h-4"></i>
+                        </div>
+                        ${b.unlocked
+                            ? '<span class="text-[10px] font-bold text-emerald-400 px-1.5 py-0.5 rounded bg-emerald-950/40 border border-emerald-500/20">Aktif</span>'
+                            : '<i data-lucide="lock" class="w-3.5 h-3.5 text-zinc-600"></i>'
+                        }
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-zinc-100 leading-tight">${escapeHtml(b.title)}</div>
+                        <div class="text-[10px] text-zinc-500 mt-0.5 leading-snug">${escapeHtml(b.desc)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 3. Favorites Widget
+        const favCountHeader = document.getElementById('stat-favorites-count');
+        if (favCountHeader) favCountHeader.textContent = favorites.length;
+
+        const favListEl = document.getElementById('profile-favorites-list');
+        if (favListEl) {
+            if (favorites.length === 0) {
+                const defaultSuggestions = [
+                    'Boğaziçi Üniversitesi',
+                    'Orta Doğu Teknik Üniversitesi (ODTÜ)',
+                    'İstanbul Teknik Üniversitesi'
+                ];
+                favListEl.innerHTML = `
+                    <p class="text-xs text-zinc-500 mb-2">Henüz favori üniversite eklemediniz. Popüler kampüsleri inceleyin:</p>
+                    ${defaultSuggestions.map(u => `
+                        <a href="#/university?name=${encodeURIComponent(u)}" class="p-3 rounded-xl bg-zinc-950/60 border border-zinc-800 hover:border-cyan-500/40 transition-all flex items-center justify-between gap-2 group">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="w-7 h-7 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-cyan-400 shrink-0">
+                                    <i data-lucide="building-2" class="w-3.5 h-3.5"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-zinc-200 group-hover:text-cyan-400 transition-colors truncate">${escapeHtml(u)}</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-zinc-500 group-hover:text-cyan-400 shrink-0"></i>
+                        </a>
+                    `).join('')}
+                `;
+            } else {
+                favListEl.innerHTML = favorites.slice(0, 5).map(u => `
+                    <div class="p-3 rounded-xl bg-zinc-950/60 border border-zinc-800 hover:border-cyan-500/40 transition-all flex items-center justify-between gap-2 group">
+                        <a href="#/university?name=${encodeURIComponent(u)}" class="flex items-center gap-2.5 min-w-0 flex-1">
+                            <div class="w-7 h-7 rounded-lg bg-rose-950/50 border border-rose-500/30 flex items-center justify-center text-rose-400 shrink-0">
+                                <i data-lucide="heart" class="w-3.5 h-3.5"></i>
+                            </div>
+                            <span class="text-xs font-semibold text-zinc-200 group-hover:text-cyan-400 transition-colors truncate">${escapeHtml(u)}</span>
+                        </a>
+                        <a href="#/university?name=${encodeURIComponent(u)}" class="text-[11px] font-semibold text-cyan-400 hover:underline shrink-0">İncele</a>
+                    </div>
+                `).join('');
+            }
+        }
+    }
+
+    // ─── Main Render Function ───
     function render() {
         const targetReviews = reviews;
         const reviewLikeCount = targetReviews.reduce((sum, review) => {
             const interactions = getInteractions()[review.id] || { likes: [], dislikes: [] };
             return sum + interactions.likes.length;
         }, 0);
+
         const displayName = profile?.name || targetReviews[0]?.user || targetUser;
         const displayInitials = profile?.initials || targetReviews[0]?.initials || getInitials(displayName);
-        const academicInfo = [profile?.university, profile?.department].filter(Boolean).join(' · ');
+        const academicParts = [profile?.university, profile?.department].filter(Boolean);
+        const academicInfo = academicParts.join(' · ');
+        const totalUpvotes = profile?.stats?.upvote_count ?? reviewLikeCount;
+        const totalReviews = profile?.stats?.review_count ?? targetReviews.length;
 
-        document.getElementById('profile-avatar').textContent = displayInitials;
-        document.getElementById('profile-name').textContent = displayName;
-        document.getElementById('profile-academic-info').textContent = academicInfo || 'Üniversite ve bölüm bilgisi eklenmemiş.';
-        document.getElementById('stat-review-count').textContent = profile?.stats?.review_count ?? targetReviews.length;
-        document.getElementById('stat-upvotes').textContent = profile?.stats?.upvote_count ?? reviewLikeCount;
+        const avatarEl = document.getElementById('profile-avatar');
+        const nameEl = document.getElementById('profile-name');
+        const academicEl = document.getElementById('profile-academic-info');
+        const bioTextEl = document.getElementById('profile-bio-text');
+        const gradePillEl = document.getElementById('profile-grade-pill');
+        const roleTextEl = document.getElementById('profile-role-text');
 
-        if (isCurrentUser && profile) {
-            document.getElementById('settings-name').value = profile.name || '';
-            document.getElementById('settings-university').value = profile.university || '';
-            document.getElementById('settings-department').value = profile.department || '';
+        if (avatarEl) avatarEl.textContent = displayInitials;
+        if (nameEl) nameEl.textContent = displayName;
+        if (academicEl) {
+            academicEl.innerHTML = `
+                <i data-lucide="graduation-cap" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+                <span>${escapeHtml(academicInfo || 'Üniversite ve bölüm bilgisi henüz eklenmemiş.')}</span>
+            `;
         }
 
+        if (gradePillEl) {
+            if (profile?.grade) {
+                gradePillEl.textContent = profile.grade;
+                gradePillEl.classList.remove('hidden');
+                gradePillEl.classList.add('inline-flex');
+            } else {
+                gradePillEl.classList.add('hidden');
+            }
+        }
+
+        if (bioTextEl) {
+            bioTextEl.textContent = profile?.bio || 'Henüz kısa biyografi eklenmemiş. Ayarlar sekmesinden kendinizi tanıtabilirsiniz.';
+        }
+
+        if (roleTextEl) {
+            const roleVal = profile?.role || CURRENT_USER.role || 'user';
+            roleTextEl.textContent = roleVal === 'admin' ? 'Platform Yöneticisi (Admin)' : roleVal === 'moderator' ? 'Moderatör' : 'Doğrulanmış Öğrenci';
+        }
+
+        const statRevEl = document.getElementById('stat-review-count');
+        const statUpEl = document.getElementById('stat-upvotes');
+        const tabBadgeRev = document.getElementById('tab-badge-reviews');
+
+        if (statRevEl) statRevEl.textContent = totalReviews;
+        if (statUpEl) statUpEl.textContent = totalUpvotes;
+        if (tabBadgeRev) tabBadgeRev.textContent = totalReviews;
+
+        // Populate Settings Form
+        if (isCurrentUser && profile) {
+            const nameInp = document.getElementById('settings-name');
+            const uniInp = document.getElementById('settings-university');
+            const deptInp = document.getElementById('settings-department');
+            const gradeInp = document.getElementById('settings-grade');
+            const bioInp = document.getElementById('settings-bio');
+
+            if (nameInp) nameInp.value = profile.name || '';
+            if (uniInp) uniInp.value = profile.university || '';
+            if (deptInp) deptInp.value = profile.department || '';
+            if (gradeInp) gradeInp.value = profile.grade || '';
+            if (bioInp) {
+                bioInp.value = profile.bio || '';
+                if (bioCounter) bioCounter.textContent = `${bioInp.value.length} / 240`;
+            }
+        }
+
+        // Render Reviews List
         if (targetReviews.length === 0) {
             listContainer.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state__icon">📝</div>
-                    <p>${isCurrentUser ? 'Henüz bir değerlendirmeniz yok.' : 'Bu kullanıcının henüz bir değerlendirmesi yok.'}</p>
+                <div class="p-12 rounded-2xl border border-zinc-800 bg-zinc-900/40 text-center space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-950/50 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mx-auto">
+                        <i data-lucide="message-square" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="text-base font-bold text-zinc-100">${isCurrentUser ? 'Henüz bir değerlendirmeniz bulunmuyor' : 'Bu kullanıcının henüz değerlendirmesi yok'}</h4>
+                        <p class="text-xs text-zinc-500 max-w-md mx-auto">Okuduğunuz üniversitenin kampüs, eğitim, yemekhane veya yurt olanaklarını değerlendirerek aday öğrencilere yol gösterin.</p>
+                    </div>
+                    ${isCurrentUser ? `
+                        <a href="#/review-form" class="px-5 py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-zinc-950 font-bold text-xs inline-flex items-center gap-2 transition-all">
+                            <i data-lucide="pen-line" class="w-4 h-4"></i>
+                            <span>İlk Değerlendirmeyi Sen Yaz</span>
+                        </a>
+                    ` : ''}
                 </div>
             `;
-            return;
+        } else {
+            listContainer.innerHTML = targetReviews
+                .map(review => renderReviewCard(review, { showUni: true, showDelete: isCurrentUser }))
+                .join('');
         }
 
-        listContainer.innerHTML = targetReviews
-            .map(review => renderReviewCard(review, { showUni: true, showDelete: isCurrentUser }))
-            .join('');
+        // Render Submissions & Sidebar
+        renderSubmissionsList();
+        renderSidebarWidgets(totalUpvotes);
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     if (isCurrentUser) {
-        listContainer.innerHTML = '<p class="profile-loading">Değerlendirmeler yükleniyor...</p>';
-        Promise.all([api.getMyProfile(), api.getMyReviews()])
-            .then(([userProfile, userReviews]) => {
-                profile = userProfile;
-                reviews = userReviews || [];
-                render();
-            })
-            .catch(error => {
-                listContainer.innerHTML = `<p class="profile-loading profile-loading--error">${error.message}</p>`;
-            });
+        listContainer.innerHTML = '<div class="p-8 rounded-2xl border border-zinc-800 bg-zinc-900/40 text-center text-xs text-zinc-400">Profil verileri yükleniyor...</div>';
+        Promise.all([
+            api.getMyProfile().catch(() => null),
+            api.getMyReviews().catch(() => []),
+            api.getMySubmissions().catch(() => ({ submissions: [] })),
+            api.getFavorites().catch(() => [])
+        ]).then(([userProfile, userReviews, userSubmissions, userFavorites]) => {
+            profile = userProfile;
+            reviews = userReviews || [];
+            submissions = userSubmissions?.submissions || [];
+            favorites = Array.isArray(userFavorites) ? userFavorites : [];
+            render();
+        }).catch(error => {
+            listContainer.innerHTML = `<div class="p-8 rounded-2xl border border-rose-500/30 bg-rose-950/20 text-center text-xs text-rose-400">${escapeHtml(error.message)}</div>`;
+        });
     } else {
         render();
     }
@@ -1487,11 +1949,13 @@ function initProfilePage(params) {
 
             const formData = new FormData(settingsForm);
             const update = {
-                name: formData.get('name').trim(),
-                university: formData.get('university').trim(),
-                department: formData.get('department').trim()
+                name: (formData.get('name') || '').trim(),
+                university: (formData.get('university') || '').trim(),
+                department: (formData.get('department') || '').trim(),
+                grade: (formData.get('grade') || '').trim(),
+                bio: (formData.get('bio') || '').trim()
             };
-            const newPassword = formData.get('new_password');
+            const newPassword = (formData.get('new_password') || '').trim();
             if (newPassword) {
                 update.current_password = formData.get('current_password');
                 update.new_password = newPassword;
@@ -1509,11 +1973,16 @@ function initProfilePage(params) {
                     email: updated.email
                 };
                 updateNavForUser(CURRENT_USER);
-                settingsForm.reset();
+                const curPassInp = document.getElementById('settings-current-password');
+                const newPassInp = document.getElementById('settings-new-password');
+                if (curPassInp) curPassInp.value = '';
+                if (newPassInp) newPassInp.value = '';
                 render();
-                settingsMessage.textContent = 'Profil bilgileri güncellendi.';
+                settingsMessage.textContent = 'Değişiklikler başarıyla kaydedildi.';
+                showToast('Profil bilgileriniz güncellendi.');
             } catch (error) {
                 settingsMessage.textContent = error.message;
+                showToast(`Hata: ${error.message}`);
             } finally {
                 submitButton.disabled = false;
             }

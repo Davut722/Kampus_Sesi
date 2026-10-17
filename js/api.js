@@ -85,6 +85,10 @@ export const api = {
         return await request('/users/me/reviews');
     },
 
+    async getMySubmissions() {
+        return await request('/users/me/submissions');
+    },
+
     async updateMyProfile(profileData) {
         return await request('/users/me', {
             method: 'PATCH',

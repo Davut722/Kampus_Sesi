@@ -58,6 +58,8 @@ class ProfileUpdateRequest(BaseModel):
     name: Optional[str] = None
     university: Optional[str] = None
     department: Optional[str] = None
+    grade: Optional[str] = None
+    bio: Optional[str] = None
     current_password: Optional[str] = None
     new_password: Optional[str] = None
 
@@ -254,6 +256,13 @@ def get_my_profile(
         Interaction.interaction_type == "like"
     ).scalar() or 0
 
+    sug_count = db.query(SchoolSuggestion).filter(SchoolSuggestion.email.ilike(current_user.email)).count()
+    blog_count = db.query(BlogSubmission).filter(
+        (BlogSubmission.author_name.ilike(current_user.name)) |
+        (BlogSubmission.author_info.ilike(f"%{current_user.email}%"))
+    ).count()
+    fav_count = db.query(UserFavorite).filter(UserFavorite.user_id == current_user.id).count()
+
     return {
         "id": current_user.id,
         "name": current_user.name,
@@ -261,9 +270,15 @@ def get_my_profile(
         "initials": current_user.initials or calc_initials(current_user.name),
         "university": current_user.university or "",
         "department": current_user.department or "",
+        "grade": current_user.grade or "",
+        "bio": current_user.bio or "",
+        "role": current_user.role or "user",
+        "created_at": current_user.created_at.strftime("%d.%m.%Y") if current_user.created_at else "",
         "stats": {
             "review_count": review_count,
-            "upvote_count": upvote_count
+            "upvote_count": upvote_count,
+            "submission_count": sug_count + blog_count,
+            "favorite_count": fav_count
         }
     }
 
@@ -276,6 +291,73 @@ def get_my_reviews(
         Review.user_id == current_user.id
     ).order_by(Review.timestamp.desc()).all()
     return [review.to_dict() for review in reviews]
+
+@app.get("/api/users/me/submissions")
+def get_my_submissions(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    suggestions = db.query(SchoolSuggestion).filter(
+        SchoolSuggestion.email.ilike(current_user.email)
+    ).order_by(SchoolSuggestion.created_at.desc()).all()
+
+    experiences = db.query(BlogSubmission).filter(
+        (BlogSubmission.author_name.ilike(current_user.name)) |
+        (BlogSubmission.author_info.ilike(f"%{current_user.email}%"))
+    ).order_by(BlogSubmission.created_at.desc()).all()
+
+    items = []
+    for s in suggestions:
+        status_norm = "approved" if s.status in ("approved", "published") else ("rejected" if s.status == "rejected" else "pending")
+        default_note = (
+            "Üniversite/kampüs öneriniz doğrulandı ve platform veritabanına eklendi."
+            if status_norm == "approved" else
+            "Önerilen kurum sistemimizde zaten mevcut veya resmi YÖK kaydı doğrulanamadı."
+            if status_norm == "rejected" else
+            "Öneriniz moderasyon sırasındadır. Resmi bilgiler kontrol edildikten sonra eklenecektir."
+        )
+        items.append({
+            "id": f"sug-{s.id}",
+            "raw_id": s.id,
+            "type": "school_suggestion",
+            "type_label": "Okul Önerisi",
+            "title": s.uni_name,
+            "subtitle": f"{s.city}" + (f" · {s.campus}" if s.campus else ""),
+            "summary": s.notes or f"Resmi Web: {s.website or 'Belirtilmedi'}",
+            "status": status_norm,
+            "admin_note": s.admin_note or default_note,
+            "created_at": s.created_at.isoformat() if s.created_at else None
+        })
+
+    for b in experiences:
+        status_norm = "approved" if b.status in ("approved", "published") else ("rejected" if b.status == "rejected" else "pending")
+        default_note = (
+            "Deneyim yazınız yayın ilkelerimize uygun bulundu ve Kampüs Sesi Blog'da yayına alındı."
+            if status_norm == "approved" else
+            "Gönderiniz topluluk rehberi standartlarını veya özgünlük kriterlerini karşılamadığı için reddedildi."
+            if status_norm == "rejected" else
+            "Deneyim paylaşımınız editör ekibimiz tarafından inceleniyor. Kısa süre içinde yayına alınacaktır."
+        )
+        items.append({
+            "id": f"exp-{b.id}",
+            "raw_id": b.id,
+            "type": "experience",
+            "type_label": "Deneyim & Blog",
+            "title": b.title,
+            "subtitle": f"{b.category} · {b.read_time}",
+            "summary": b.summary or (b.content[:160] + "..." if len(b.content) > 160 else b.content),
+            "status": status_norm,
+            "admin_note": b.admin_note or default_note,
+            "created_at": b.created_at.isoformat() if b.created_at else None
+        })
+
+    items.sort(key=lambda x: x["created_at"] or "", reverse=True)
+
+    return {
+        "submissions": items,
+        "school_suggestions": [s.to_dict() for s in suggestions],
+        "experiences": [b.to_dict() for b in experiences]
+    }
 
 @app.patch("/api/users/me")
 def update_my_profile(
@@ -298,8 +380,12 @@ def update_my_profile(
         current_user.university = req.university.strip()
     if req.department is not None:
         current_user.department = req.department.strip()
+    if req.grade is not None:
+        current_user.grade = req.grade.strip()
+    if req.bio is not None:
+        current_user.bio = req.bio.strip()
 
-    if req.new_password is not None:
+    if req.new_password is not None and req.new_password.strip() != "":
         if not req.current_password or not verify_password(req.current_password, current_user.password_hash):
             raise HTTPException(status_code=400, detail="Mevcut şifreniz hatalı.")
         if len(req.new_password) < 6:
@@ -314,7 +400,10 @@ def update_my_profile(
         "email": current_user.email,
         "initials": current_user.initials,
         "university": current_user.university or "",
-        "department": current_user.department or ""
+        "department": current_user.department or "",
+        "grade": current_user.grade or "",
+        "bio": current_user.bio or "",
+        "role": current_user.role or "user"
     }
 
 # ─── Reviews Endpoints ────────────────────

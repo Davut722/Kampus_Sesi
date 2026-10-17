@@ -37,6 +37,8 @@ class User(Base):
     photo_url = Column(String(255), default="")
     university = Column(String(150), default="")
     department = Column(String(150), default="")
+    grade = Column(String(50), default="")  # e.g. "3. Sınıf", "Mezun"
+    bio = Column(Text, default="")
     role = Column(String(20), default="user", nullable=False)  # 'user', 'moderator', 'admin'
     is_active = Column(Boolean, default=True, nullable=False)  # Account status: active or suspended
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -53,6 +55,8 @@ class User(Base):
             "photo_url": self.photo_url or "",
             "university": self.university or "",
             "department": self.department or "",
+            "grade": self.grade or "",
+            "bio": self.bio or "",
             "role": self.role or "user",
             "is_active": self.is_active if self.is_active is not None else True,
             "created_at": self.created_at.strftime("%d.%m.%Y") if self.created_at else None
@@ -194,6 +198,7 @@ class SchoolSuggestion(Base):
     email = Column(String(150), nullable=False)
     notes = Column(Text, default="")
     status = Column(String(50), default="pending")  # pending, approved, rejected
+    admin_note = Column(Text, default="")
     created_at = Column(DateTime, default=datetime.utcnow)
 
     def to_dict(self):
@@ -202,10 +207,13 @@ class SchoolSuggestion(Base):
             "uni_name": self.uni_name,
             "city": self.city,
             "campus": self.campus,
+            "campus_name": self.campus,
             "website": self.website,
             "email": self.email,
+            "submitter_email": self.email,
             "notes": self.notes,
             "status": self.status,
+            "admin_note": self.admin_note or "",
             "created_at": self.created_at.isoformat() if self.created_at else None
         }
 
@@ -245,7 +253,8 @@ class BlogSubmission(Base):
     author_info = Column(String(200), nullable=False)
     summary = Column(Text, default="")
     content = Column(Text, nullable=False)
-    status = Column(String(50), default="pending")  # pending, published, rejected
+    status = Column(String(50), default="pending")  # pending, approved, published, rejected
+    admin_note = Column(Text, default="")
     created_at = Column(DateTime, default=datetime.utcnow)
 
     def to_dict(self):
@@ -259,6 +268,7 @@ class BlogSubmission(Base):
             "summary": self.summary,
             "content": self.content,
             "status": self.status,
+            "admin_note": self.admin_note or "",
             "created_at": self.created_at.isoformat() if self.created_at else None
         }
 
@@ -288,20 +298,39 @@ def init_db():
     # Create missing tables without deleting persisted user data.
     Base.metadata.create_all(bind=engine)
 
-    # Automated lightweight migration: ensure 'role' and 'is_active' exist in 'users'
+    # Automated lightweight migration: ensure new columns exist
     try:
         insp = inspect(engine)
-        if 'users' in insp.get_table_names():
-            cols = [c['name'] for c in insp.get_columns('users')]
-            with engine.connect() as conn:
+        table_names = insp.get_table_names()
+        with engine.connect() as conn:
+            if 'users' in table_names:
+                cols = [c['name'] for c in insp.get_columns('users')]
                 if 'role' not in cols:
                     conn.execute(text("ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'user'"))
                     conn.commit()
                 if 'is_active' not in cols:
                     conn.execute(text("ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT 1"))
                     conn.commit()
+                if 'grade' not in cols:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN grade VARCHAR(50) DEFAULT ''"))
+                    conn.commit()
+                if 'bio' not in cols:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN bio TEXT"))
+                    conn.commit()
+
+            if 'school_suggestions' in table_names:
+                s_cols = [c['name'] for c in insp.get_columns('school_suggestions')]
+                if 'admin_note' not in s_cols:
+                    conn.execute(text("ALTER TABLE school_suggestions ADD COLUMN admin_note TEXT"))
+                    conn.commit()
+
+            if 'blog_submissions' in table_names:
+                b_cols = [c['name'] for c in insp.get_columns('blog_submissions')]
+                if 'admin_note' not in b_cols:
+                    conn.execute(text("ALTER TABLE blog_submissions ADD COLUMN admin_note TEXT"))
+                    conn.commit()
     except Exception as e:
-        print(f"[WARN] User table migration check note: {e}")
+        print(f"[WARN] Table migration check note: {e}")
 
     # Add sample seed data if the reviews table is empty
     db = SessionLocal()

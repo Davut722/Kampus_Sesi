@@ -156,5 +156,47 @@ export const api = {
     
     async getDorms(uniId) {
         return await request(`/universities/${uniId}/dorms`);
+    },
+
+    // Suggestions
+    async suggestSchool(data) {
+        return await request('/suggestions/school', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    },
+
+    // Contact
+    async sendContactMessage(data) {
+        return await request('/contact', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    },
+
+    // Blog Submissions
+    async submitBlogPost(data) {
+        return await request('/blog/submissions', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    },
+
+    // User Favorites
+    async getFavorites() {
+        return await request('/users/me/favorites');
+    },
+
+    async addFavorite(university) {
+        return await request('/users/me/favorites', {
+            method: 'POST',
+            body: JSON.stringify({ university })
+        });
+    },
+
+    async removeFavorite(university) {
+        return await request(`/users/me/favorites/${encodeURIComponent(university)}`, {
+            method: 'DELETE'
+        });
     }
 };

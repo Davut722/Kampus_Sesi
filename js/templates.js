@@ -243,11 +243,16 @@ export const TEMPLATES = {
                 </div>
                 <div class="profile-hero__content container reveal-up">
                     <h1 class="profile-hero__title" id="uni-hero-title">Bandırma Onyedi Eylül Üniversitesi</h1>
-                    <p class="profile-hero__subtitle" id="uni-hero-subtitle">📍 Balıkesir, Türkiye</p>
-                    <a href="#" id="uni-website-btn" target="_blank" rel="noopener noreferrer"
-                        class="btn btn--outline profile-hero__btn">
-                        📍 Resmi Web Sitesine Git
-                    </a>
+                    <p class="profile-hero__subtitle" id="uni-hero-subtitle"><i data-lucide="map-pin" class="icon-sm"></i> Balıkesir, Türkiye</p>
+                    <div class="profile-hero__actions" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <a href="#" id="uni-website-btn" target="_blank" rel="noopener noreferrer"
+                            class="btn btn--outline profile-hero__btn">
+                            <i data-lucide="globe" class="icon-sm"></i> Resmi Web Sitesi
+                        </a>
+                        <button id="uni-fav-btn" class="btn btn--outline profile-hero__btn" type="button" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <i data-lucide="heart" id="uni-fav-icon" class="icon-sm"></i> <span id="uni-fav-text">Favorilere Ekle</span>
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -1712,6 +1717,36 @@ export const TEMPLATES = {
                         <p class="text-zinc-300 text-sm leading-relaxed">
                             Kampüs Sesi, bu kullanım şartlarını güncel mevzuat ve topluluk gereksinimlerine göre dilediği zaman güncelleme hakkını saklı tutar. Güncellemeler sitede yayımlandığı andan itibaren geçerlilik kazanır.
                         </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    `,
+
+    favorites: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow -->
+            <div class="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-rose-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Header -->
+                <div class="text-center mb-12">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-rose-300 mb-4 backdrop-blur-md">
+                        <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-400"></i>
+                        <span>Kişisel Listen</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
+                        Favori Üniversitelerim
+                    </h1>
+                    <p class="text-zinc-400 text-base max-w-xl mx-auto leading-relaxed">
+                        Tercih dönemi veya kampüs araştırman için kaydettiğin tüm üniversiteleri buradan tek ekranda takip edebilir ve inceleyebilirsin.
+                    </p>
+                </div>
+
+                <!-- Favoriler Grid Konteyneri -->
+                <div id="favorites-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="col-span-full py-16 text-center text-zinc-500">
+                        Favoriler yükleniyor...
                     </div>
                 </div>
             </div>

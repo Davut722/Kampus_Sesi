@@ -876,6 +876,71 @@ function initUniversityPage(initialUni) {
             }
         }
 
+        // 3.6 Favorite Button Sync
+        const favBtn = document.getElementById('uni-fav-btn');
+        const favText = document.getElementById('uni-fav-text');
+        const favIcon = document.getElementById('uni-fav-icon');
+        if (favBtn) {
+            async function checkIsFav() {
+                let favs = [];
+                if (CURRENT_USER && CURRENT_USER.uid !== 'guest') {
+                    try { favs = await api.getFavorites(); } catch(e) { }
+                } else {
+                    favs = JSON.parse(localStorage.getItem('kampus_sesi_favorites') || '[]');
+                }
+                const isFav = favs.includes(selectedUni);
+                if (favText) favText.textContent = isFav ? 'Favorilerden Çıkar' : 'Favorilere Ekle';
+                if (favBtn) {
+                    favBtn.classList.toggle('btn--primary', isFav);
+                    favBtn.classList.toggle('btn--outline', !isFav);
+                }
+                if (favIcon) {
+                    favIcon.setAttribute('fill', isFav ? 'currentColor' : 'none');
+                }
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+                return isFav;
+            }
+            checkIsFav();
+
+            favBtn.onclick = async (e) => {
+                e.preventDefault();
+                favBtn.disabled = true;
+                try {
+                    let favs = [];
+                    if (CURRENT_USER && CURRENT_USER.uid !== 'guest') {
+                        try {
+                            favs = await api.getFavorites();
+                        } catch(e) {
+                            favs = JSON.parse(localStorage.getItem('kampus_sesi_favorites') || '[]');
+                        }
+                    } else {
+                        favs = JSON.parse(localStorage.getItem('kampus_sesi_favorites') || '[]');
+                    }
+                    const isFav = favs.includes(selectedUni);
+                    if (isFav) {
+                        if (CURRENT_USER && CURRENT_USER.uid !== 'guest') {
+                            await api.removeFavorite(selectedUni);
+                        }
+                        favs = favs.filter(u => u !== selectedUni);
+                        localStorage.setItem('kampus_sesi_favorites', JSON.stringify(favs));
+                        showToast(`🗑️ "${selectedUni}" favorilerden çıkarıldı.`);
+                    } else {
+                        if (CURRENT_USER && CURRENT_USER.uid !== 'guest') {
+                            await api.addFavorite(selectedUni);
+                        }
+                        favs.push(selectedUni);
+                        localStorage.setItem('kampus_sesi_favorites', JSON.stringify(favs));
+                        showToast(`❤️ "${selectedUni}" favorilere eklendi!`);
+                    }
+                    await checkIsFav();
+                } catch(err) {
+                    showToast(`❌ Hata: ${err.message || 'Favori işlemi başarısız.'}`);
+                } finally {
+                    favBtn.disabled = false;
+                }
+            };
+        }
+
         // 4. Fetch dynamic data from API (MySQL)
         api.getUniversity(selectedUni).then(uniDb => {
             if (uniDb) {
@@ -1659,6 +1724,7 @@ export function renderCurrentRoute() {
         'privacy': TEMPLATES.gizlilik,
         'kullanim-sartlari': TEMPLATES.kullanimSartlari,
         'terms': TEMPLATES.kullanimSartlari,
+        'favorites': TEMPLATES.favorites,
         'cities': TEMPLATES.university,
         'ranking': TEMPLATES.university,
         'departments': TEMPLATES.university
@@ -1713,6 +1779,7 @@ export function renderCurrentRoute() {
         'privacy': 'Gizlilik Politikası — Kampüs Sesi',
         'kullanim-sartlari': 'Kullanım Şartları — Kampüs Sesi',
         'terms': 'Kullanım Şartları — Kampüs Sesi',
+        'favorites': 'Favorilerim — Kampüs Sesi',
         'cities': 'Şehirler — Kampüs Sesi',
         'ranking': 'Sıralama — Kampüs Sesi',
         'departments': 'Bölümler — Kampüs Sesi'
@@ -1749,39 +1816,230 @@ export function renderCurrentRoute() {
         initYaziGonderPage();
     } else if (route === 'iletisim' || route === 'contact') {
         initIletisimPage();
+    } else if (route === 'favorites') {
+        initFavoritesPage();
     }
 }
 
 function initOkulOnerPage() {
     const form = document.getElementById('suggest-uni-form');
+    const submitBtn = document.getElementById('suggest-submit-btn');
     if (!form) return;
-    form.addEventListener('submit', (e) => {
+
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const uniName = document.getElementById('suggest-uni-name')?.value;
-        showToast(`🎉 "${uniName || 'Üniversite'}" öneriniz alındı! Ekibimiz 24 saat içinde doğrulayıp platforma ekleyecektir.`);
-        form.reset();
+        const uniName = document.getElementById('suggest-uni-name')?.value.trim();
+        const city = document.getElementById('suggest-city')?.value.trim();
+        const campus = document.getElementById('suggest-campus')?.value.trim() || '';
+        const website = document.getElementById('suggest-website')?.value.trim() || '';
+        const email = document.getElementById('suggest-email')?.value.trim();
+        const notes = document.getElementById('suggest-notes')?.value.trim() || '';
+
+        if (!uniName || !city || !email) {
+            showToast('⚠️ Lütfen zorunlu alanları (Üniversite adı, Şehir, E-posta) doldurun.');
+            return;
+        }
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Kaydediliyor...`;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        try {
+            await api.suggestSchool({
+                uni_name: uniName,
+                city,
+                campus,
+                website,
+                email,
+                notes
+            });
+            showToast(`🎉 "${uniName}" öneriniz veritabanımıza başarıyla kaydedildi!`);
+            form.reset();
+        } catch (err) {
+            showToast(`❌ Hata: ${err.message || 'Öneri kaydedilemedi.'}`);
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> Öneriyi Gönder`;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+        }
     });
 }
 
 function initYaziGonderPage() {
     const form = document.getElementById('post-submission-form');
+    const submitBtn = document.getElementById('post-submit-btn');
     if (!form) return;
-    form.addEventListener('submit', (e) => {
+
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const title = document.getElementById('post-title')?.value;
-        showToast(`📝 "${title || 'Yazı'}" taslağınız alındı! Editörlerimiz onayladıktan sonra blogda yayımlanacaktır.`);
-        form.reset();
+        const title = document.getElementById('post-title')?.value.trim();
+        const category = document.getElementById('post-category')?.value;
+        const readTime = document.getElementById('post-read-time')?.value.trim() || '4 dk okuma';
+        const author = document.getElementById('post-author')?.value.trim();
+        const authorDesc = document.getElementById('post-author-desc')?.value.trim();
+        const summary = document.getElementById('post-summary')?.value.trim() || '';
+        const content = document.getElementById('post-content')?.value.trim();
+
+        if (!title || !category || !author || !authorDesc || !content) {
+            showToast('⚠️ Lütfen gerekli tüm alanları doldurun.');
+            return;
+        }
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> İletiliyor...`;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        try {
+            await api.submitBlogPost({
+                title,
+                category,
+                read_time: readTime,
+                author_name: author,
+                author_info: authorDesc,
+                summary,
+                content
+            });
+            showToast(`📝 "${title}" başlıklı yazınız veritabanımıza kaydedildi! İnceleme sonrası blogda yayınlanacak.`);
+            form.reset();
+        } catch (err) {
+            showToast(`❌ Hata: ${err.message || 'Yazı kaydedilemedi.'}`);
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> Yazıyı Editörlere Gönder`;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+        }
     });
 }
 
 function initIletisimPage() {
     const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('contact-submit-btn');
     if (!form) return;
-    form.addEventListener('submit', (e) => {
+
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = document.getElementById('contact-name')?.value;
-        showToast(`📨 Teşekkürler ${name || ''}! Mesajınız başarıyla iletildi. En geç 24 saat içinde dönüş yapacağız.`);
-        form.reset();
+        const name = document.getElementById('contact-name')?.value.trim();
+        const email = document.getElementById('contact-email')?.value.trim();
+        const subject = document.getElementById('contact-subject')?.value;
+        const message = document.getElementById('contact-message')?.value.trim();
+
+        if (!name || !email || !subject || !message) {
+            showToast('⚠️ Lütfen tüm iletişim formu alanlarını doldurun.');
+            return;
+        }
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> İletiliyor...`;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        try {
+            await api.sendContactMessage({
+                name,
+                email,
+                subject,
+                message
+            });
+            showToast(`📨 Teşekkürler ${name}! Mesajınız veritabanımıza başarıyla kaydedildi. En geç 24 saat içinde dönüş yapacağız.`);
+            form.reset();
+        } catch (err) {
+            showToast(`❌ Hata: ${err.message || 'Mesaj iletilemedi.'}`);
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> Gönder`;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+        }
+    });
+}
+
+async function initFavoritesPage() {
+    const container = document.getElementById('favorites-container');
+    if (!container) return;
+
+    let favorites = [];
+    if (CURRENT_USER && CURRENT_USER.uid !== 'guest') {
+        try {
+            favorites = await api.getFavorites();
+        } catch (e) {
+            favorites = JSON.parse(localStorage.getItem('kampus_sesi_favorites') || '[]');
+        }
+    } else {
+        favorites = JSON.parse(localStorage.getItem('kampus_sesi_favorites') || '[]');
+    }
+
+    if (!favorites || favorites.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-full py-16 text-center">
+                <div class="w-16 h-16 mx-auto rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-500 flex items-center justify-center mb-4">
+                    <i data-lucide="heart-off" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Henüz favori üniversiteniz yok</h3>
+                <p class="text-zinc-400 text-sm max-w-md mx-auto mb-6">
+                    İncelediğiniz üniversiteleri detay sayfasındaki "Favorilere Ekle" butonuna basarak listenize kaydedebilirsiniz.
+                </p>
+                <a href="#/university" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-zinc-950 font-bold transition-all shadow-lg shadow-cyan-500/20">
+                    <i data-lucide="building-2" class="w-4 h-4"></i> Üniversiteleri Keşfet
+                </a>
+            </div>
+        `;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        return;
+    }
+
+    container.innerHTML = favorites.map(uni => `
+        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 flex flex-col justify-between hover:border-zinc-700 transition-all">
+            <div>
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-950/60 border border-rose-500/30 text-rose-400">
+                        <i data-lucide="heart" class="w-3 h-3 fill-rose-400"></i> Favori
+                    </span>
+                    <button class="remove-fav-btn text-zinc-500 hover:text-rose-400 transition-colors p-1" data-uni="${encodeURIComponent(uni)}" title="Favorilerden Çıkar">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2 line-clamp-2">${uni}</h3>
+                <p class="text-zinc-400 text-xs mb-4">Öğrenci yorumları, yurt olanakları ve ulaşım rehberi mevcut.</p>
+            </div>
+            <div class="pt-4 border-t border-zinc-800/80 flex items-center justify-between">
+                <a href="#/university?name=${encodeURIComponent(uni)}" class="text-xs font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1">
+                    İncele &rarr;
+                </a>
+                <a href="#/compare" class="text-xs text-zinc-500 hover:text-zinc-300">
+                    Karşılaştır
+                </a>
+            </div>
+        </div>
+    `).join('');
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Event listeners for remove buttons
+    container.querySelectorAll('.remove-fav-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const uniName = decodeURIComponent(btn.dataset.uni);
+            if (CURRENT_USER && CURRENT_USER.uid !== 'guest') {
+                try {
+                    await api.removeFavorite(uniName);
+                } catch (err) { }
+            }
+            let localFavs = JSON.parse(localStorage.getItem('kampus_sesi_favorites') || '[]');
+            localFavs = localFavs.filter(u => u !== uniName);
+            localStorage.setItem('kampus_sesi_favorites', JSON.stringify(localFavs));
+            showToast(`🗑️ "${uniName}" favorilerden çıkarıldı.`);
+            initFavoritesPage();
+        });
     });
 }
 

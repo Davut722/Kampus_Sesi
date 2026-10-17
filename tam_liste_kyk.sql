@@ -173,7 +173,7 @@ INSERT INTO `kyk_dorms` (`university_id`, `name`, `type`, `distance`, `fee`, `ca
 (23, 'Ayvalık Kyk Kız Ve Erkek Öğrenci Yurdu', 'Kız', 'Kampüse 2 km', 'Standart KYK (₺570 - ₺850 / ay)', '650 Kişi'),
 (23, 'Fatma Ana Kyk Kız Öğrenci Yurdu', 'Kız', 'Otobüsle 12 dk', 'KYK 1. - 3. Tip (₺570 - ₺680 / ay)', '1.000 Kişi'),
 (23, 'Yarbay Vecihibey Kyk Kız Öğrenci Yurdu', 'Kız', 'Metroyla 8 dk', 'KYK 4. - 6. Tip (₺700 - ₺850 / ay)', '1.500 Kişi'),
-(23, 'Zağnos Paşa Kyk Erkek Öğrenci Yurdu', 'Erkek', 'Yürüme Mesafesinde (10 dk)', 'Standart KYK Ücreti', '2.100 Kişi'),
+(23, 'Zağnos Paşa Kyk Erkek Öğrenci Yurdu', 'Erkek', 'Yürüme Mesafesinde (10 dk)', '₺1560', '2.100 Kişi'),
 (23, 'Bandırma Kuş Cenneti Kyk Erkek Öğrenci Yurdu', 'Erkek', 'Kampüse 1.5 km', 'Standart KYK (₺570 - ₺850 / ay)', '650 Kişi'),
 (23, 'Altıeylül Kyk Kız Öğrenci Yurdu', 'Kız', 'Otobüsle 20 dk', 'KYK 1. - 3. Tip (₺570 - ₺680 / ay)', '1.000 Kişi'),
 (23, 'Burhaniye Kyk Kız Öğrenci Yurdu', 'Kız', 'Kampüs İçi', 'KYK 4. - 6. Tip (₺700 - ₺850 / ay)', '1.500 Kişi'),

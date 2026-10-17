@@ -10,7 +10,10 @@ from pydantic import BaseModel
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from database import init_db, get_db, User, Review, Reply, Interaction
+from database import (
+    init_db, get_db, User, Review, Reply, Interaction,
+    University, KykDorm, SchoolSuggestion, ContactMessage, BlogSubmission, UserFavorite
+)
 from auth_utils import hash_password, verify_password, create_access_token, decode_access_token
 
 # Initialize database tables & seed
@@ -57,6 +60,32 @@ class ProfileUpdateRequest(BaseModel):
     department: Optional[str] = None
     current_password: Optional[str] = None
     new_password: Optional[str] = None
+
+class SchoolSuggestionCreate(BaseModel):
+    uni_name: str
+    city: str
+    campus: Optional[str] = ""
+    website: Optional[str] = ""
+    email: str
+    notes: Optional[str] = ""
+
+class ContactMessageCreate(BaseModel):
+    name: str
+    email: str
+    subject: str
+    message: str
+
+class BlogSubmissionCreate(BaseModel):
+    title: str
+    category: str
+    read_time: Optional[str] = "4 dk okuma"
+    author_name: str
+    author_info: str
+    summary: Optional[str] = ""
+    content: str
+
+class FavoriteToggleRequest(BaseModel):
+    university: str
 
 # ─── Auth Dependency ──────────────────────
 
@@ -481,6 +510,122 @@ def get_university(uni_name: str, db: Session = Depends(get_db)):
     if not record:
         raise HTTPException(status_code=404, detail="Üniversite bulunamadı")
     return record.to_dict()
+
+# ─── Suggestions, Contact, Blog & Favorites Endpoints ────
+
+@app.post("/api/suggestions/school")
+def create_school_suggestion(req: SchoolSuggestionCreate, db: Session = Depends(get_db)):
+    if not req.uni_name.strip() or not req.city.strip() or not req.email.strip():
+        raise HTTPException(status_code=400, detail="Üniversite adı, şehir ve e-posta zorunludur.")
+    
+    suggestion = SchoolSuggestion(
+        uni_name=req.uni_name.strip(),
+        city=req.city.strip(),
+        campus=req.campus.strip() if req.campus else "",
+        website=req.website.strip() if req.website else "",
+        email=req.email.strip(),
+        notes=req.notes.strip() if req.notes else ""
+    )
+    db.add(suggestion)
+    db.commit()
+    db.refresh(suggestion)
+    return {"success": True, "message": "Üniversite öneriniz başarıyla kaydedildi.", "data": suggestion.to_dict()}
+
+@app.get("/api/suggestions/school")
+def get_school_suggestions(db: Session = Depends(get_db)):
+    suggestions = db.query(SchoolSuggestion).order_by(SchoolSuggestion.created_at.desc()).all()
+    return [s.to_dict() for s in suggestions]
+
+@app.post("/api/contact")
+def create_contact_message(req: ContactMessageCreate, db: Session = Depends(get_db)):
+    if not req.name.strip() or not req.email.strip() or not req.message.strip():
+        raise HTTPException(status_code=400, detail="Ad, e-posta ve mesaj alanları zorunludur.")
+    
+    msg = ContactMessage(
+        name=req.name.strip(),
+        email=req.email.strip(),
+        subject=req.subject.strip(),
+        message=req.message.strip()
+    )
+    db.add(msg)
+    db.commit()
+    db.refresh(msg)
+    return {"success": True, "message": "Mesajınız başarıyla iletildi.", "data": msg.to_dict()}
+
+@app.get("/api/contact")
+def get_contact_messages(db: Session = Depends(get_db)):
+    msgs = db.query(ContactMessage).order_by(ContactMessage.created_at.desc()).all()
+    return [m.to_dict() for m in msgs]
+
+@app.post("/api/blog/submissions")
+def create_blog_submission(req: BlogSubmissionCreate, db: Session = Depends(get_db)):
+    if not req.title.strip() or not req.content.strip() or not req.author_name.strip():
+        raise HTTPException(status_code=400, detail="Başlık, yazar adı ve içerik alanları zorunludur.")
+    
+    sub = BlogSubmission(
+        title=req.title.strip(),
+        category=req.category.strip(),
+        read_time=req.read_time.strip() if req.read_time else "4 dk okuma",
+        author_name=req.author_name.strip(),
+        author_info=req.author_info.strip(),
+        summary=req.summary.strip() if req.summary else "",
+        content=req.content.strip()
+    )
+    db.add(sub)
+    db.commit()
+    db.refresh(sub)
+    return {"success": True, "message": "Blog yazınız başarıyla kaydedildi.", "data": sub.to_dict()}
+
+@app.get("/api/blog/submissions")
+def get_blog_submissions(db: Session = Depends(get_db)):
+    subs = db.query(BlogSubmission).order_by(BlogSubmission.created_at.desc()).all()
+    return [s.to_dict() for s in subs]
+
+@app.get("/api/users/me/favorites")
+def get_user_favorites(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    favs = db.query(UserFavorite).filter(UserFavorite.user_id == current_user.id).all()
+    return [f.university for f in favs]
+
+@app.post("/api/users/me/favorites")
+def add_user_favorite(
+    req: FavoriteToggleRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    uni = req.university.strip()
+    existing = db.query(UserFavorite).filter(
+        UserFavorite.user_id == current_user.id,
+        UserFavorite.university == uni
+    ).first()
+    if existing:
+        favs = db.query(UserFavorite).filter(UserFavorite.user_id == current_user.id).all()
+        return {"success": True, "message": "Zaten favorilerde ekli.", "favorites": [f.university for f in favs]}
+    
+    fav = UserFavorite(user_id=current_user.id, university=uni)
+    db.add(fav)
+    db.commit()
+    favs = db.query(UserFavorite).filter(UserFavorite.user_id == current_user.id).all()
+    return {"success": True, "message": "Favorilere eklendi.", "favorites": [f.university for f in favs]}
+
+@app.delete("/api/users/me/favorites/{uni_name}")
+def remove_user_favorite(
+    uni_name: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    uni = uni_name.strip()
+    fav = db.query(UserFavorite).filter(
+        UserFavorite.user_id == current_user.id,
+        UserFavorite.university == uni
+    ).first()
+    if fav:
+        db.delete(fav)
+        db.commit()
+    favs = db.query(UserFavorite).filter(UserFavorite.user_id == current_user.id).all()
+    return {"success": True, "message": "Favorilerden çıkarıldı.", "favorites": [f.university for f in favs]}
 
 # ─── Static Frontend Serving ──────────────
 

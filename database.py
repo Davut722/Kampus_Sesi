@@ -40,6 +40,7 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     reviews = relationship("Review", back_populates="user", cascade="all, delete-orphan")
+    favorites = relationship("UserFavorite", back_populates="user", cascade="all, delete-orphan")
 
 class Review(Base):
     __tablename__ = "reviews"
@@ -164,6 +165,104 @@ class KykDorm(Base):
             "mesafe": self.distance,
             "ucret": self.fee,
             "kapasite": self.capacity
+        }
+
+class SchoolSuggestion(Base):
+    __tablename__ = "school_suggestions"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    uni_name = Column(String(200), nullable=False)
+    city = Column(String(100), nullable=False)
+    campus = Column(String(200), default="")
+    website = Column(String(255), default="")
+    email = Column(String(150), nullable=False)
+    notes = Column(Text, default="")
+    status = Column(String(50), default="pending")  # pending, approved, rejected
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "uni_name": self.uni_name,
+            "city": self.city,
+            "campus": self.campus,
+            "website": self.website,
+            "email": self.email,
+            "notes": self.notes,
+            "status": self.status,
+            "created_at": self.created_at.isoformat() if self.created_at else None
+        }
+
+class ContactMessage(Base):
+    __tablename__ = "contact_messages"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    name = Column(String(100), nullable=False)
+    email = Column(String(150), nullable=False)
+    subject = Column(String(150), nullable=False)
+    message = Column(Text, nullable=False)
+    status = Column(String(50), default="unread")  # unread, read, replied
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "subject": self.subject,
+            "message": self.message,
+            "status": self.status,
+            "created_at": self.created_at.isoformat() if self.created_at else None
+        }
+
+class BlogSubmission(Base):
+    __tablename__ = "blog_submissions"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    title = Column(String(255), nullable=False)
+    category = Column(String(100), nullable=False)
+    read_time = Column(String(50), default="4 dk okuma")
+    author_name = Column(String(100), nullable=False)
+    author_info = Column(String(200), nullable=False)
+    summary = Column(Text, default="")
+    content = Column(Text, nullable=False)
+    status = Column(String(50), default="pending")  # pending, published, rejected
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "category": self.category,
+            "read_time": self.read_time,
+            "author_name": self.author_name,
+            "author_info": self.author_info,
+            "summary": self.summary,
+            "content": self.content,
+            "status": self.status,
+            "created_at": self.created_at.isoformat() if self.created_at else None
+        }
+
+class UserFavorite(Base):
+    __tablename__ = "user_favorites"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    university = Column(String(200), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "university", name="uq_user_university_favorite"),
+    )
+
+    user = relationship("User", back_populates="favorites")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "university": self.university,
+            "created_at": self.created_at.isoformat() if self.created_at else None
         }
 
 def init_db():

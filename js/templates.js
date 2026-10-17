@@ -1795,6 +1795,47 @@ export const TEMPLATES = {
                     <!-- Rendered dynamically via initCitiesPage -->
                 </div>
             </div>
+
+            <!-- City Universities Modal Dialog -->
+            <div id="city-unis-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-200">
+                <div class="relative w-full max-w-2xl max-h-[85vh] rounded-2xl border border-zinc-800 bg-zinc-900/95 shadow-2xl flex flex-col overflow-hidden transform scale-95 transition-all duration-200" id="city-unis-modal-box">
+                    <!-- Modal Header -->
+                    <div class="p-6 border-b border-zinc-800/80 flex items-start justify-between gap-4 bg-zinc-900/80 shrink-0">
+                        <div>
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-2">
+                                <i data-lucide="map-pin" class="w-3 h-3 text-cyan-400"></i>
+                                <span id="city-modal-badge">İstanbul</span>
+                            </div>
+                            <h3 id="city-modal-title" class="text-xl sm:text-2xl font-bold text-white tracking-tight">İstanbul'daki Üniversiteler</h3>
+                            <p id="city-modal-desc" class="text-xs text-zinc-400 mt-1">İncelemek istediğin üniversiteye tıklayarak öğrenci değerlendirmelerine ve kampüs rehberine ulaşabilirsin.</p>
+                        </div>
+                        <button id="city-modal-close-btn" class="w-9 h-9 rounded-xl bg-zinc-800/80 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer shrink-0" aria-label="Kapat">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Search Input inside Modal -->
+                    <div class="p-4 border-b border-zinc-800/60 bg-zinc-950/40 shrink-0">
+                        <div class="relative w-full">
+                            <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                            <input type="text" id="city-modal-search" placeholder="Bu şehirdeki üniversitelerde ara..." class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                        </div>
+                    </div>
+
+                    <!-- Universities List (Scrollable) -->
+                    <div id="city-modal-unis-list" class="p-6 overflow-y-auto space-y-2 max-h-[50vh]">
+                        <!-- Rendered dynamically -->
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="p-4 border-t border-zinc-800/80 bg-zinc-950/60 flex items-center justify-between text-xs text-zinc-500 shrink-0">
+                        <span id="city-modal-count">59 üniversite listeleniyor</span>
+                        <button id="city-modal-close-footer" class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            Kapat
+                        </button>
+                    </div>
+                </div>
+            </div>
         </main>
     `,
 

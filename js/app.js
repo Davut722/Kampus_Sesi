@@ -2056,6 +2056,19 @@ function initCitiesPage() {
     const grid = document.getElementById('cities-grid');
     const searchInput = document.getElementById('city-search-input');
     const filterPills = document.querySelectorAll('#city-filter-pills .city-filter-pill');
+    
+    // Modal elements
+    const modal = document.getElementById('city-unis-modal');
+    const modalBox = document.getElementById('city-unis-modal-box');
+    const modalCloseBtn = document.getElementById('city-modal-close-btn');
+    const modalCloseFooter = document.getElementById('city-modal-close-footer');
+    const modalTitle = document.getElementById('city-modal-title');
+    const modalBadge = document.getElementById('city-modal-badge');
+    const modalDesc = document.getElementById('city-modal-desc');
+    const modalSearch = document.getElementById('city-modal-search');
+    const modalList = document.getElementById('city-modal-unis-list');
+    const modalCount = document.getElementById('city-modal-count');
+
     if (!grid) return;
 
     const CITIES_DATA = [
@@ -2065,7 +2078,7 @@ function initCitiesPage() {
             category: 'metropol',
             categoryLabel: 'Büyükşehir / Metropol',
             tagline: 'Kültür, Staj ve Dünya Başkenti',
-            unisCount: '57 Üniversite',
+            unisCount: '59 Üniversite',
             studentsCount: '820.000+ Öğrenci',
             kykCount: '48 KYK Yurdu',
             rentIndex: 'Yüksek Maliyet',
@@ -2073,7 +2086,68 @@ function initCitiesPage() {
             rating: 4.8,
             description: 'Türkiye\'nin kültür, teknoloji, finans ve sanat kalbi. Sayısız global şirket genel merkeziyle staj ve kariyer olanakları sınırsız.',
             highlights: ['Metro & Metrobüs Ağı', 'Sonsuz Sosyal Etkinlik', 'Global Staj İmkanları'],
-            topUnis: ['Boğaziçi Üniversitesi', 'İstanbul Teknik Üniversitesi', 'Yıldız Teknik Üniversitesi', 'Koç Üniversitesi', 'Sabancı Üniversitesi']
+            topUnis: ['Boğaziçi Üniversitesi', 'İstanbul Teknik Üniversitesi', 'Yıldız Teknik Üniversitesi', 'Koç Üniversitesi', 'Sabancı Üniversitesi'],
+            allUnis: [
+                "Boğaziçi Üniversitesi",
+                "İstanbul Teknik Üniversitesi",
+                "Yıldız Teknik Üniversitesi",
+                "Galatasaray Üniversitesi",
+                "İstanbul Üniversitesi",
+                "İstanbul Üniversitesi-Cerrahpaşa",
+                "Marmara Üniversitesi",
+                "Mimar Sinan Güzel Sanatlar Üniversitesi",
+                "Türk-Alman Üniversitesi",
+                "İstanbul Medeniyet Üniversitesi",
+                "Sağlık Bilimleri Üniversitesi",
+                "Koç Üniversitesi",
+                "Sabancı Üniversitesi",
+                "İstanbul Bilgi Üniversitesi",
+                "Bahçeşehir Üniversitesi",
+                "Özyeğin Üniversitesi",
+                "Kadir Has Üniversitesi",
+                "Yeditepe Üniversitesi",
+                "Acıbadem Mehmet Ali Aydınlar Üniversitesi",
+                "Altınbaş Üniversitesi",
+                "Beykent Üniversitesi",
+                "Beykoz Üniversitesi",
+                "Bezmialem Vakıf Üniversitesi",
+                "Biruni Üniversitesi",
+                "Demiroğlu Bilim Üniversitesi",
+                "Doğuş Üniversitesi",
+                "Fatih Sultan Mehmet Vakıf Üniversitesi",
+                "Fenerbahçe Üniversitesi",
+                "Haliç Üniversitesi",
+                "Işık Üniversitesi",
+                "İbn Haldun Üniversitesi",
+                "İstanbul 29 Mayıs Üniversitesi",
+                "İstanbul Arel Üniversitesi",
+                "İstanbul Atlas Üniversitesi",
+                "İstanbul Aydın Üniversitesi",
+                "İstanbul Ayvansaray Üniversitesi",
+                "İstanbul Bilim Üniversitesi",
+                "İstanbul Esenyurt Üniversitesi",
+                "İstanbul Gedik Üniversitesi",
+                "İstanbul Gelişim Üniversitesi",
+                "İstanbul Kent Üniversitesi",
+                "İstanbul Kültür Üniversitesi",
+                "İstanbul Medipol Üniversitesi",
+                "İstanbul Okan Üniversitesi",
+                "İstanbul Rumeli Üniversitesi",
+                "İstanbul Sabahattin Zaim Üniversitesi",
+                "İstanbul Sağlık ve Sosyal Bilimler Meslek Yüksekokulu",
+                "İstanbul Sağlık ve Teknoloji Üniversitesi",
+                "İstanbul Ticaret Üniversitesi",
+                "İstanbul Topkapı Üniversitesi",
+                "İstanbul Yeni Yüzyıl Üniversitesi",
+                "İstinye Üniversitesi",
+                "Maltepe Üniversitesi",
+                "MEF Üniversitesi",
+                "Nişantaşı Üniversitesi",
+                "Piri Reis Üniversitesi",
+                "Türk Hava Kurumu Üniversitesi (İstanbul Kampüsü)",
+                "Türk-Japon Bilim ve Teknoloji Üniversitesi",
+                "Üsküdar Üniversitesi"
+            ]
         },
         {
             id: 'ankara',
@@ -2081,7 +2155,7 @@ function initCitiesPage() {
             category: 'student',
             categoryLabel: 'Öğrenci Kenti / Başkent',
             tagline: 'Bürokrasi, Bilim ve Dev Kampüsler',
-            unisCount: '23 Üniversite',
+            unisCount: '20 Üniversite',
             studentsCount: '340.000+ Öğrenci',
             kykCount: '36 KYK Yurdu',
             rentIndex: 'Dengeli / Orta',
@@ -2089,7 +2163,29 @@ function initCitiesPage() {
             rating: 4.9,
             description: 'Cumhuriyetin ve eğitimin başkenti. ODTÜ, Hacettepe ve Bilkent gibi devasa ormanlık kampüsleri, sakin kütüphane hayatı ve düzenli toplu taşımasıyla tam bir öğrenci kenti.',
             highlights: ['Düzenli Metro & Ego Ağı', 'Millet Kütüphanesi', 'Köklü Kampüs Kültürü'],
-            topUnis: ['Orta Doğu Teknik Üniversitesi', 'Hacettepe Üniversitesi', 'Bilkent Üniversitesi', 'Ankara Üniversitesi']
+            topUnis: ['Orta Doğu Teknik Üniversitesi', 'Hacettepe Üniversitesi', 'Bilkent Üniversitesi', 'Ankara Üniversitesi'],
+            allUnis: [
+                "Orta Doğu Teknik Üniversitesi",
+                "Hacettepe Üniversitesi",
+                "İhsan Doğramacı Bilkent Üniversitesi",
+                "Ankara Üniversitesi",
+                "Gazi Üniversitesi",
+                "Ankara Yıldırım Beyazıt Üniversitesi",
+                "Ankara Sosyal Bilimler Üniversitesi",
+                "Ankara Hacı Bayram Veli Üniversitesi",
+                "Ankara Müzik ve Güzel Sanatlar Üniversitesi",
+                "TOBB Ekonomi ve Teknoloji Üniversitesi",
+                "Başkent Üniversitesi",
+                "Çankaya Üniversitesi",
+                "TED Üniversitesi",
+                "Atılım Üniversitesi",
+                "Ankara Bilim Üniversitesi",
+                "Ankara Medipol Üniversitesi",
+                "Lokman Hekim Üniversitesi",
+                "OSTİM Teknik Üniversitesi",
+                "Ufuk Üniversitesi",
+                "Yüksek İhtisas Üniversitesi"
+            ]
         },
         {
             id: 'izmir',
@@ -2097,7 +2193,7 @@ function initCitiesPage() {
             category: 'coast',
             categoryLabel: 'Ege & Sahil Yaşamı',
             tagline: 'Özgürlük, Hoşgörü ve Sahil Meltemi',
-            unisCount: '9 Üniversite',
+            unisCount: '10 Üniversite',
             studentsCount: '190.000+ Öğrenci',
             kykCount: '22 KYK Yurdu',
             rentIndex: 'Orta / Yüksek',
@@ -2105,7 +2201,19 @@ function initCitiesPage() {
             rating: 4.8,
             description: 'Kordon boyu, Alsancak kafeleri, ferah bisiklet yolları ve sıcacık insanlarıyla öğrencilere Türkiye\'nin en rahat ve huzurlu sosyal atmosferini sunan sahil kenti.',
             highlights: ['Kordon & Sahil Yaşamı', 'İzban & Vapur Ulaşımı', 'Dinamik Kulüp Etkinlikleri'],
-            topUnis: ['Ege Üniversitesi', 'Dokuz Eylül Üniversitesi', 'İzmir Yüksek Teknoloji Enstitüsü (İYTE)', 'Yaşar Üniversitesi']
+            topUnis: ['Ege Üniversitesi', 'Dokuz Eylül Üniversitesi', 'İzmir Yüksek Teknoloji Enstitüsü (İYTE)', 'Yaşar Üniversitesi'],
+            allUnis: [
+                "Ege Üniversitesi",
+                "Dokuz Eylül Üniversitesi",
+                "İzmir Yüksek Teknoloji Enstitüsü",
+                "İzmir Katip Çelebi Üniversitesi",
+                "İzmir Bakırçay Üniversitesi",
+                "İzmir Demokrasi Üniversitesi",
+                "İzmir Ekonomi Üniversitesi",
+                "Yaşar Üniversitesi",
+                "İzmir Tınaztepe Üniversitesi",
+                "İzmir Kavram Meslek Yüksekokulu"
+            ]
         },
         {
             id: 'eskisehir',
@@ -2121,7 +2229,12 @@ function initCitiesPage() {
             rating: 4.9,
             description: 'Porsuk Çayı etrafında şekillenen kafe ve parkları, bisikletli ulaşımı, her bütçeye uygun mekanları ve canlı tiyatro/konser kültürüyle tartışmasız Türkiye\'nin 1 numaralı öğrenci şehri.',
             highlights: ['Bisiklet & Estram Tramvay', 'Porsuk Çayı & Adalar', 'Düşük Yaşam Maliyeti'],
-            topUnis: ['Anadolu Üniversitesi', 'Eskişehir Osmangazi Üniversitesi', 'Eskişehir Teknik Üniversitesi']
+            topUnis: ['Anadolu Üniversitesi', 'Eskişehir Osmangazi Üniversitesi', 'Eskişehir Teknik Üniversitesi'],
+            allUnis: [
+                "Anadolu Üniversitesi",
+                "Eskişehir Osmangazi Üniversitesi",
+                "Eskişehir Teknik Üniversitesi"
+            ]
         },
         {
             id: 'antalya',
@@ -2137,7 +2250,14 @@ function initCitiesPage() {
             rating: 4.6,
             description: 'Akdeniz Üniversitesi\'nin sahil şeridine ve Konyaaltı Plajı\'na yakın yeşil kampüsü, yıl boyu süren ılıman iklimi ve uluslararası turizm ortamı ile enerjik bir öğrencilik vadediyor.',
             highlights: ['Konyaaltı Plajına Yakınlık', 'Sıcak & Güneşli İklim', 'Uluslararası Turizm Stajları'],
-            topUnis: ['Akdeniz Üniversitesi', 'Antalya Bilim Üniversitesi']
+            topUnis: ['Akdeniz Üniversitesi', 'Antalya Bilim Üniversitesi', 'Alanya Alaaddin Keykubat Üniversitesi'],
+            allUnis: [
+                "Akdeniz Üniversitesi",
+                "Alanya Alaaddin Keykubat Üniversitesi",
+                "Alanya Hamdullah Emin Paşa Üniversitesi",
+                "Antalya Akev Üniversitesi",
+                "Antalya Bilim Üniversitesi"
+            ]
         },
         {
             id: 'bursa',
@@ -2153,7 +2273,12 @@ function initCitiesPage() {
             rating: 4.5,
             description: 'Görükle öğrenci yerleşkesinin 24 saat yaşayan dinamik atmosferi, Uludağ Üniversitesi\'nin devasa orman kampüsü ve otomotiv/makine sanayisinin sunduğu güçlü staj olanakları.',
             highlights: ['Görükle Öğrenci Mahallesi', 'Bursaray Raylı Sistem', 'Otomotiv Sanayi Stajları'],
-            topUnis: ['Bursa Uludağ Üniversitesi', 'Bursa Teknik Üniversitesi']
+            topUnis: ['Bursa Uludağ Üniversitesi', 'Bursa Teknik Üniversitesi', 'Mudanya Üniversitesi'],
+            allUnis: [
+                "Bursa Uludağ Üniversitesi",
+                "Bursa Teknik Üniversitesi",
+                "Mudanya Üniversitesi"
+            ]
         },
         {
             id: 'canakkale',
@@ -2169,7 +2294,10 @@ function initCitiesPage() {
             rating: 4.7,
             description: 'ÇOMÜ Terzioğlu Kampüsü\'nden izlenen boğaz manzarası, yürünebilir sakin sokakları ve öğrencilerin güven içinde yaşadığı samimi sahil kenti.',
             highlights: ['Boğaz Manzaralı Kampüs', 'Yürünebilir & Güvenli Şehir', 'Ekonomik Mekanlar'],
-            topUnis: ['Çanakkale Onsekiz Mart Üniversitesi (ÇOMÜ)']
+            topUnis: ['Çanakkale Onsekiz Mart Üniversitesi'],
+            allUnis: [
+                "Çanakkale Onsekiz Mart Üniversitesi"
+            ]
         },
         {
             id: 'trabzon',
@@ -2177,7 +2305,7 @@ function initCitiesPage() {
             category: 'anadolu',
             categoryLabel: 'Karadeniz & Teknik',
             tagline: 'Köklü Teknik Gelenek & Karadeniz',
-            unisCount: '2 Üniversite',
+            unisCount: '3 Üniversite',
             studentsCount: '48.000+ Öğrenci',
             kykCount: '12 KYK Yurdu',
             rentIndex: 'Ekonomik',
@@ -2185,7 +2313,12 @@ function initCitiesPage() {
             rating: 4.4,
             description: '1955 kuruluşlu Karadeniz Teknik Üniversitesi (KTÜ), Türkiye\'nin köklü teknik üniversitelerindendir. Deniz kıyısındaki yemyeşil kampüsü ve güçlü mühendislik mezun ağıyla bilinir.',
             highlights: ['Deniz Kıyısı Kanuni Kampüsü', 'Güçlü Mühendislik Mezun Ağı', 'Kalkınma Öğrenci Yaşamı'],
-            topUnis: ['Karadeniz Teknik Üniversitesi (KTÜ)', 'Trabzon Üniversitesi']
+            topUnis: ['Karadeniz Teknik Üniversitesi', 'Trabzon Üniversitesi', 'Avrasya Üniversitesi'],
+            allUnis: [
+                "Karadeniz Teknik Üniversitesi",
+                "Trabzon Üniversitesi",
+                "Avrasya Üniversitesi"
+            ]
         },
         {
             id: 'konya',
@@ -2201,7 +2334,14 @@ function initCitiesPage() {
             rating: 4.3,
             description: 'Selçuk Üniversitesi Alaeddin Keykubat Kampüsü kendi başına devasa bir kasaba gibidir. Düz ayak coğrafyası, Türkiye\'nin en uzun bisiklet yolları ve düşük yaşam maliyeti öne çıkar.',
             highlights: ['550 km Bisiklet Yolu Ağı', 'Tramvay ile Kampüs Ulaşımı', 'Hesaplı Yurt ve Kira Seçenekleri'],
-            topUnis: ['Selçuk Üniversitesi', 'Konya Teknik Üniversitesi (KTÜN)', 'Necmettin Erbakan Üniversitesi']
+            topUnis: ['Selçuk Üniversitesi', 'Konya Teknik Üniversitesi (KTÜN)', 'Necmettin Erbakan Üniversitesi'],
+            allUnis: [
+                "Selçuk Üniversitesi",
+                "Konya Teknik Üniversitesi",
+                "Necmettin Erbakan Üniversitesi",
+                "KTO Karatay Üniversitesi",
+                "Konya Gıda ve Tarım Üniversitesi"
+            ]
         },
         {
             id: 'kayseri',
@@ -2217,7 +2357,13 @@ function initCitiesPage() {
             rating: 4.4,
             description: 'Erciyes Üniversitesi\'nin araştırma üniversiteleri arasında yer alması ve Abdullah Gül Üniversitesi\'nin modern İngilizce odaklı yapısı şehri önemli bir akademi merkezine dönüştürmüştür.',
             highlights: ['Erciyes Kayak Merkezine 25 Dk', 'Araştırma Üniversitesi Altyapısı', 'Modern Tramvay Ulaşımı'],
-            topUnis: ['Erciyes Üniversitesi', 'Abdullah Gül Üniversitesi (AGÜ)']
+            topUnis: ['Erciyes Üniversitesi', 'Abdullah Gül Üniversitesi (AGÜ)', 'Kayseri Üniversitesi'],
+            allUnis: [
+                "Erciyes Üniversitesi",
+                "Abdullah Gül Üniversitesi",
+                "Kayseri Üniversitesi",
+                "Nuh Naci Yazgan Üniversitesi"
+            ]
         },
         {
             id: 'balikesir',
@@ -2233,7 +2379,11 @@ function initCitiesPage() {
             rating: 4.3,
             description: 'İstanbul ve Bursa\'ya komşu stratejik konumu, Bandırma Onyedi Eylül Üniversitesi\'nin deniz kenarındaki canlılığı ve sakin yaşam temposu ile öne çıkar.',
             highlights: ['İstanbul\'a İDO Deniz Otobüsü', 'Sakin & Masrafsız Şehir Yaşamı', 'Bandırma Sahil Şeridi'],
-            topUnis: ['Balıkesir Üniversitesi', 'Bandırma Onyedi Eylül Üniversitesi']
+            topUnis: ['Balıkesir Üniversitesi', 'Bandırma Onyedi Eylül Üniversitesi'],
+            allUnis: [
+                "Balıkesir Üniversitesi",
+                "Bandırma Onyedi Eylül Üniversitesi"
+            ]
         },
         {
             id: 'gaziantep',
@@ -2249,12 +2399,127 @@ function initCitiesPage() {
             rating: 4.5,
             description: 'Gaziantep Üniversitesi\'nin uluslararası öğrenci çeşitliliği, Teknopark ve Organize Sanayi Bölgesi ile entegre staj programları ve dünyaca ünlü mutfağıyla dinamik bir üniversite deneyimi.',
             highlights: ['UNESCO Tescilli Gastronomi', 'Sanayi Entegre Mühendislik', 'Tramvay & Kampüs Yaşamı'],
-            topUnis: ['Gaziantep Üniversitesi', 'Gaziantep İslam Bilim ve Teknoloji Üniversitesi', 'SANKO Üniversitesi']
+            topUnis: ['Gaziantep Üniversitesi', 'Gaziantep İslam Bilim ve Teknoloji Üniversitesi', 'SANKO Üniversitesi'],
+            allUnis: [
+                "Gaziantep Üniversitesi",
+                "Gaziantep İslam Bilim ve Teknoloji Üniversitesi",
+                "Hasan Kalyoncu Üniversitesi",
+                "SANKO Üniversitesi"
+            ]
         }
     ];
 
     let currentCategory = 'all';
     let searchQuery = '';
+    let activeModalCity = null;
+
+    // ─── Modal Functions ───
+
+    function openCityModal(city) {
+        if (!modal || !city) return;
+        activeModalCity = city;
+
+        if (modalBadge) modalBadge.textContent = city.name;
+        if (modalTitle) modalTitle.textContent = `${city.name}'daki Tüm Üniversiteler (${city.allUnis.length})`;
+        if (modalDesc) modalDesc.textContent = `${city.name} bünyesinde yer alan tüm devlet ve vakıf üniversiteleri listeleniyor. İncelemek istediğiniz üniversiteye tıklayarak detay sayfasına gidebilirsiniz.`;
+        if (modalSearch) modalSearch.value = '';
+
+        renderModalUnis('');
+
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        modal.classList.add('opacity-100');
+        if (modalBox) {
+            modalBox.classList.remove('scale-95');
+            modalBox.classList.add('scale-100');
+        }
+
+        if (modalSearch) {
+            setTimeout(() => modalSearch.focus(), 150);
+        }
+    }
+
+    function closeCityModal() {
+        if (!modal) return;
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        modal.classList.remove('opacity-100');
+        if (modalBox) {
+            modalBox.classList.add('scale-95');
+            modalBox.classList.remove('scale-100');
+        }
+        activeModalCity = null;
+    }
+
+    function renderModalUnis(query) {
+        if (!modalList || !activeModalCity) return;
+        const q = query.toLowerCase().trim();
+        const filtered = activeModalCity.allUnis.filter(u => !q || u.toLowerCase().includes(q));
+
+        if (modalCount) {
+            modalCount.textContent = `${filtered.length} / ${activeModalCity.allUnis.length} üniversite listeleniyor`;
+        }
+
+        if (filtered.length === 0) {
+            modalList.innerHTML = `
+                <div class="py-12 text-center text-zinc-500">
+                    <i data-lucide="search-x" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+                    <p class="text-sm font-medium text-zinc-400">"${query}" ile eşleşen üniversite bulunamadı.</p>
+                </div>
+            `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            return;
+        }
+
+        modalList.innerHTML = filtered.map((uni, idx) => `
+            <a href="#/university?name=${encodeURIComponent(uni)}" class="city-modal-uni-link p-3 sm:p-3.5 rounded-xl border border-zinc-800/80 bg-zinc-950/50 hover:bg-zinc-800 hover:border-cyan-500/40 text-zinc-200 hover:text-white transition-all flex items-center justify-between group">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-cyan-950/40 border border-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-xs shrink-0 group-hover:border-cyan-400 group-hover:bg-cyan-500/10">
+                        <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-semibold group-hover:text-cyan-300 transition-colors">${uni}</div>
+                        <div class="text-[11px] text-zinc-500">${activeModalCity.name} · Öğrenci Yorumları & Rehber</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform shrink-0">
+                    <span class="hidden sm:inline">İncele</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </div>
+            </a>
+        `).join('');
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+
+        // Close modal on item selection
+        modalList.querySelectorAll('.city-modal-uni-link').forEach(link => {
+            link.addEventListener('click', () => {
+                closeCityModal();
+            });
+        });
+    }
+
+    // Modal Event Listeners
+    if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeCityModal);
+    if (modalCloseFooter) modalCloseFooter.addEventListener('click', closeCityModal);
+
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeCityModal();
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('pointer-events-none')) {
+            closeCityModal();
+        }
+    });
+
+    if (modalSearch) {
+        modalSearch.addEventListener('input', (e) => {
+            renderModalUnis(e.target.value);
+        });
+    }
+
+    // ─── Render Main Cities Grid ───
 
     function renderCities() {
         const filtered = CITIES_DATA.filter(city => {
@@ -2264,7 +2529,7 @@ function initCitiesPage() {
                 city.name.toLowerCase().includes(q) ||
                 city.tagline.toLowerCase().includes(q) ||
                 city.description.toLowerCase().includes(q) ||
-                city.topUnis.some(u => u.toLowerCase().includes(q));
+                city.allUnis.some(u => u.toLowerCase().includes(q));
             return matchesCat && matchesSearch;
         });
 
@@ -2342,17 +2607,30 @@ function initCitiesPage() {
                                 ${u}
                             </a>
                         `).join('')}
-                        ${city.topUnis.length > 3 ? `<span class="text-[10px] text-zinc-500 self-center">+${city.topUnis.length - 3}</span>` : ''}
+                        ${city.allUnis.length > 3 ? `<span class="text-[10px] text-cyan-400 font-semibold self-center cursor-pointer open-city-modal-pill" data-city-id="${city.id}">+${city.allUnis.length - 3} daha</span>` : ''}
                     </div>
-                    <a href="#/university?name=${encodeURIComponent(city.topUnis[0])}" class="w-full py-2.5 px-3 rounded-xl bg-zinc-800 hover:bg-cyan-400 hover:text-zinc-950 text-zinc-200 font-semibold text-xs transition-all flex items-center justify-center gap-1.5 group/btn">
-                        <span>Şehirdeki Üniversiteleri İncele</span>
+                    <button type="button" class="open-city-modal-btn w-full py-2.5 px-3 rounded-xl bg-zinc-800 hover:bg-cyan-400 hover:text-zinc-950 text-zinc-200 font-semibold text-xs transition-all flex items-center justify-center gap-1.5 group/btn cursor-pointer" data-city-id="${city.id}">
+                        <i data-lucide="building-2" class="w-3.5 h-3.5"></i>
+                        <span>Şehirdeki Üniversiteleri İncele (${city.allUnis.length})</span>
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
         `).join('');
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
+
+        // Attach click events to "Şehirdeki Üniversiteleri İncele" buttons & pills
+        grid.querySelectorAll('.open-city-modal-btn, .open-city-modal-pill').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const cityId = btn.dataset.cityId;
+                const foundCity = CITIES_DATA.find(c => c.id === cityId);
+                if (foundCity) {
+                    openCityModal(foundCity);
+                }
+            });
+        });
     }
 
     // Filter pills event listeners
@@ -3136,20 +3414,17 @@ function initDepartmentsPage() {
                     </div>
                 </div>
 
-                <!-- Top Unis & Search Shortcut -->
+                <!-- Top Unis -->
                 <div class="pt-4 border-t border-zinc-800/80">
                     <div class="text-[11px] text-zinc-500 mb-2 font-medium">Bu Alanda Öne Çıkan Üniversiteler:</div>
-                    <div class="flex flex-wrap gap-1.5 mb-3">
+                    <div class="flex flex-wrap gap-1.5">
                         ${dept.topUnis.map(u => `
-                            <a href="#/university?name=${encodeURIComponent(u)}" class="text-xs text-cyan-400 hover:text-cyan-300 bg-cyan-950/30 hover:bg-cyan-950/60 border border-cyan-500/20 px-2.5 py-0.5 rounded-lg transition-colors font-medium">
-                                ${u}
+                            <a href="#/university?name=${encodeURIComponent(u)}" class="text-xs text-cyan-400 hover:text-cyan-300 bg-cyan-950/30 hover:bg-cyan-950/60 border border-cyan-500/20 px-2.5 py-1 rounded-lg transition-colors font-medium inline-flex items-center gap-1">
+                                <span>${u}</span>
+                                <i data-lucide="arrow-up-right" class="w-3 h-3 text-cyan-500/70"></i>
                             </a>
                         `).join('')}
                     </div>
-                    <a href="#/review-form" class="w-full py-2.5 px-3 rounded-xl bg-zinc-800 hover:bg-cyan-400 hover:text-zinc-950 text-zinc-200 font-semibold text-xs transition-all flex items-center justify-center gap-1.5 group/btn">
-                        <i data-lucide="pen-line" class="w-3.5 h-3.5"></i>
-                        <span>Bu Bölümü Değerlendir</span>
-                    </a>
                 </div>
             </div>
         `).join('');

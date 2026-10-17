@@ -1725,9 +1725,9 @@ export function renderCurrentRoute() {
         'kullanim-sartlari': TEMPLATES.kullanimSartlari,
         'terms': TEMPLATES.kullanimSartlari,
         'favorites': TEMPLATES.favorites,
-        'cities': TEMPLATES.university,
-        'ranking': TEMPLATES.university,
-        'departments': TEMPLATES.university
+        'cities': TEMPLATES.cities,
+        'ranking': TEMPLATES.ranking,
+        'departments': TEMPLATES.departments
     };
 
     const template = templateMap[route] || TEMPLATES.home;
@@ -1795,9 +1795,15 @@ export function renderCurrentRoute() {
     }
 
     // Initialize Route-Specific Logic
-    if (route === 'university' || route === 'cities' || route === 'ranking' || route === 'departments') {
+    if (route === 'university') {
         const initialUni = params.get('name') || selectedUniState || 'Boğaziçi Üniversitesi';
         activeRenderers.university = initUniversityPage(initialUni);
+    } else if (route === 'cities') {
+        initCitiesPage();
+    } else if (route === 'ranking') {
+        initRankingPage();
+    } else if (route === 'departments') {
+        initDepartmentsPage();
     } else if (route === 'compare') {
         activeRenderers.compare = initComparePage();
     } else if (route === 'review-form' || route === 'degerlendir') {
@@ -2043,6 +2049,1139 @@ async function initFavoritesPage() {
     });
 }
 
+
+// ─── Şehirler Sayfası Mantığı (Cities) ───────────────────
+
+function initCitiesPage() {
+    const grid = document.getElementById('cities-grid');
+    const searchInput = document.getElementById('city-search-input');
+    const filterPills = document.querySelectorAll('#city-filter-pills .city-filter-pill');
+    if (!grid) return;
+
+    const CITIES_DATA = [
+        {
+            id: 'istanbul',
+            name: 'İstanbul',
+            category: 'metropol',
+            categoryLabel: 'Büyükşehir / Metropol',
+            tagline: 'Kültür, Staj ve Dünya Başkenti',
+            unisCount: '57 Üniversite',
+            studentsCount: '820.000+ Öğrenci',
+            kykCount: '48 KYK Yurdu',
+            rentIndex: 'Yüksek Maliyet',
+            rentColor: 'text-amber-400 bg-amber-950/40 border-amber-500/30',
+            rating: 4.8,
+            description: 'Türkiye\'nin kültür, teknoloji, finans ve sanat kalbi. Sayısız global şirket genel merkeziyle staj ve kariyer olanakları sınırsız.',
+            highlights: ['Metro & Metrobüs Ağı', 'Sonsuz Sosyal Etkinlik', 'Global Staj İmkanları'],
+            topUnis: ['Boğaziçi Üniversitesi', 'İstanbul Teknik Üniversitesi', 'Yıldız Teknik Üniversitesi', 'Koç Üniversitesi', 'Sabancı Üniversitesi']
+        },
+        {
+            id: 'ankara',
+            name: 'Ankara',
+            category: 'student',
+            categoryLabel: 'Öğrenci Kenti / Başkent',
+            tagline: 'Bürokrasi, Bilim ve Dev Kampüsler',
+            unisCount: '23 Üniversite',
+            studentsCount: '340.000+ Öğrenci',
+            kykCount: '36 KYK Yurdu',
+            rentIndex: 'Dengeli / Orta',
+            rentColor: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            rating: 4.9,
+            description: 'Cumhuriyetin ve eğitimin başkenti. ODTÜ, Hacettepe ve Bilkent gibi devasa ormanlık kampüsleri, sakin kütüphane hayatı ve düzenli toplu taşımasıyla tam bir öğrenci kenti.',
+            highlights: ['Düzenli Metro & Ego Ağı', 'Millet Kütüphanesi', 'Köklü Kampüs Kültürü'],
+            topUnis: ['Orta Doğu Teknik Üniversitesi', 'Hacettepe Üniversitesi', 'Bilkent Üniversitesi', 'Ankara Üniversitesi']
+        },
+        {
+            id: 'izmir',
+            name: 'İzmir',
+            category: 'coast',
+            categoryLabel: 'Ege & Sahil Yaşamı',
+            tagline: 'Özgürlük, Hoşgörü ve Sahil Meltemi',
+            unisCount: '9 Üniversite',
+            studentsCount: '190.000+ Öğrenci',
+            kykCount: '22 KYK Yurdu',
+            rentIndex: 'Orta / Yüksek',
+            rentColor: 'text-sky-400 bg-sky-950/40 border-sky-500/30',
+            rating: 4.8,
+            description: 'Kordon boyu, Alsancak kafeleri, ferah bisiklet yolları ve sıcacık insanlarıyla öğrencilere Türkiye\'nin en rahat ve huzurlu sosyal atmosferini sunan sahil kenti.',
+            highlights: ['Kordon & Sahil Yaşamı', 'İzban & Vapur Ulaşımı', 'Dinamik Kulüp Etkinlikleri'],
+            topUnis: ['Ege Üniversitesi', 'Dokuz Eylül Üniversitesi', 'İzmir Yüksek Teknoloji Enstitüsü (İYTE)', 'Yaşar Üniversitesi']
+        },
+        {
+            id: 'eskisehir',
+            name: 'Eskişehir',
+            category: 'student',
+            categoryLabel: 'Öğrenci Dostu Başkent',
+            tagline: 'Avrupa Havasında, Tamamen Gençlik Şehri',
+            unisCount: '3 Üniversite',
+            studentsCount: '95.000+ Öğrenci',
+            kykCount: '16 KYK Yurdu',
+            rentIndex: 'Uygun / Ekonomik',
+            rentColor: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            rating: 4.9,
+            description: 'Porsuk Çayı etrafında şekillenen kafe ve parkları, bisikletli ulaşımı, her bütçeye uygun mekanları ve canlı tiyatro/konser kültürüyle tartışmasız Türkiye\'nin 1 numaralı öğrenci şehri.',
+            highlights: ['Bisiklet & Estram Tramvay', 'Porsuk Çayı & Adalar', 'Düşük Yaşam Maliyeti'],
+            topUnis: ['Anadolu Üniversitesi', 'Eskişehir Osmangazi Üniversitesi', 'Eskişehir Teknik Üniversitesi']
+        },
+        {
+            id: 'antalya',
+            name: 'Antalya',
+            category: 'coast',
+            categoryLabel: 'Akdeniz & Sahil',
+            tagline: 'Güneş, Turizm ve Palmiye Kampüsü',
+            unisCount: '5 Üniversite',
+            studentsCount: '90.000+ Öğrenci',
+            kykCount: '14 KYK Yurdu',
+            rentIndex: 'Orta / Yüksek',
+            rentColor: 'text-amber-400 bg-amber-950/40 border-amber-500/30',
+            rating: 4.6,
+            description: 'Akdeniz Üniversitesi\'nin sahil şeridine ve Konyaaltı Plajı\'na yakın yeşil kampüsü, yıl boyu süren ılıman iklimi ve uluslararası turizm ortamı ile enerjik bir öğrencilik vadediyor.',
+            highlights: ['Konyaaltı Plajına Yakınlık', 'Sıcak & Güneşli İklim', 'Uluslararası Turizm Stajları'],
+            topUnis: ['Akdeniz Üniversitesi', 'Antalya Bilim Üniversitesi']
+        },
+        {
+            id: 'bursa',
+            name: 'Bursa',
+            category: 'metropol',
+            categoryLabel: 'Sanayi & Üniversite',
+            tagline: 'Otomotiv Başkenti ve Uludağ Etekleri',
+            unisCount: '3 Üniversite',
+            studentsCount: '80.000+ Öğrenci',
+            kykCount: '15 KYK Yurdu',
+            rentIndex: 'Dengeli / Orta',
+            rentColor: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            rating: 4.5,
+            description: 'Görükle öğrenci yerleşkesinin 24 saat yaşayan dinamik atmosferi, Uludağ Üniversitesi\'nin devasa orman kampüsü ve otomotiv/makine sanayisinin sunduğu güçlü staj olanakları.',
+            highlights: ['Görükle Öğrenci Mahallesi', 'Bursaray Raylı Sistem', 'Otomotiv Sanayi Stajları'],
+            topUnis: ['Bursa Uludağ Üniversitesi', 'Bursa Teknik Üniversitesi']
+        },
+        {
+            id: 'canakkale',
+            name: 'Çanakkale',
+            category: 'coast',
+            categoryLabel: 'Sahil & Butik',
+            tagline: 'Boğaz Kıyısında Sakin ve Özgür Yaşam',
+            unisCount: '1 Üniversite',
+            studentsCount: '52.000+ Öğrenci',
+            kykCount: '10 KYK Yurdu',
+            rentIndex: 'Ekonomik / Uygun',
+            rentColor: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            rating: 4.7,
+            description: 'ÇOMÜ Terzioğlu Kampüsü\'nden izlenen boğaz manzarası, yürünebilir sakin sokakları ve öğrencilerin güven içinde yaşadığı samimi sahil kenti.',
+            highlights: ['Boğaz Manzaralı Kampüs', 'Yürünebilir & Güvenli Şehir', 'Ekonomik Mekanlar'],
+            topUnis: ['Çanakkale Onsekiz Mart Üniversitesi (ÇOMÜ)']
+        },
+        {
+            id: 'trabzon',
+            name: 'Trabzon',
+            category: 'anadolu',
+            categoryLabel: 'Karadeniz & Teknik',
+            tagline: 'Köklü Teknik Gelenek & Karadeniz',
+            unisCount: '2 Üniversite',
+            studentsCount: '48.000+ Öğrenci',
+            kykCount: '12 KYK Yurdu',
+            rentIndex: 'Ekonomik',
+            rentColor: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            rating: 4.4,
+            description: '1955 kuruluşlu Karadeniz Teknik Üniversitesi (KTÜ), Türkiye\'nin köklü teknik üniversitelerindendir. Deniz kıyısındaki yemyeşil kampüsü ve güçlü mühendislik mezun ağıyla bilinir.',
+            highlights: ['Deniz Kıyısı Kanuni Kampüsü', 'Güçlü Mühendislik Mezun Ağı', 'Kalkınma Öğrenci Yaşamı'],
+            topUnis: ['Karadeniz Teknik Üniversitesi (KTÜ)', 'Trabzon Üniversitesi']
+        },
+        {
+            id: 'konya',
+            name: 'Konya',
+            category: 'anadolu',
+            categoryLabel: 'Geniş Kampüsler & Anadolu',
+            tagline: 'Geniş Kampüs, Bisiklet ve Uygun Yaşam',
+            unisCount: '5 Üniversite',
+            studentsCount: '125.000+ Öğrenci',
+            kykCount: '24 KYK Yurdu',
+            rentIndex: 'Çok Uygun / Ekonomik',
+            rentColor: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            rating: 4.3,
+            description: 'Selçuk Üniversitesi Alaeddin Keykubat Kampüsü kendi başına devasa bir kasaba gibidir. Düz ayak coğrafyası, Türkiye\'nin en uzun bisiklet yolları ve düşük yaşam maliyeti öne çıkar.',
+            highlights: ['550 km Bisiklet Yolu Ağı', 'Tramvay ile Kampüs Ulaşımı', 'Hesaplı Yurt ve Kira Seçenekleri'],
+            topUnis: ['Selçuk Üniversitesi', 'Konya Teknik Üniversitesi (KTÜN)', 'Necmettin Erbakan Üniversitesi']
+        },
+        {
+            id: 'kayseri',
+            name: 'Kayseri',
+            category: 'anadolu',
+            categoryLabel: 'Anadolu & Girişimcilik',
+            tagline: 'Erciyes Dağı Eteklerinde Teknoloji ve Kampüs',
+            unisCount: '4 Üniversite',
+            studentsCount: '70.000+ Öğrenci',
+            kykCount: '13 KYK Yurdu',
+            rentIndex: 'Çok Uygun / Ekonomik',
+            rentColor: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            rating: 4.4,
+            description: 'Erciyes Üniversitesi\'nin araştırma üniversiteleri arasında yer alması ve Abdullah Gül Üniversitesi\'nin modern İngilizce odaklı yapısı şehri önemli bir akademi merkezine dönüştürmüştür.',
+            highlights: ['Erciyes Kayak Merkezine 25 Dk', 'Araştırma Üniversitesi Altyapısı', 'Modern Tramvay Ulaşımı'],
+            topUnis: ['Erciyes Üniversitesi', 'Abdullah Gül Üniversitesi (AGÜ)']
+        },
+        {
+            id: 'balikesir',
+            name: 'Balıkesir',
+            category: 'student',
+            categoryLabel: 'Öğrenci Kenti & Marmara',
+            tagline: 'Bandırma Sahili ve Çağış Kampüsü',
+            unisCount: '2 Üniversite',
+            studentsCount: '45.000+ Öğrenci',
+            kykCount: '11 KYK Yurdu',
+            rentIndex: 'Ekonomik / Uygun',
+            rentColor: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            rating: 4.3,
+            description: 'İstanbul ve Bursa\'ya komşu stratejik konumu, Bandırma Onyedi Eylül Üniversitesi\'nin deniz kenarındaki canlılığı ve sakin yaşam temposu ile öne çıkar.',
+            highlights: ['İstanbul\'a İDO Deniz Otobüsü', 'Sakin & Masrafsız Şehir Yaşamı', 'Bandırma Sahil Şeridi'],
+            topUnis: ['Balıkesir Üniversitesi', 'Bandırma Onyedi Eylül Üniversitesi']
+        },
+        {
+            id: 'gaziantep',
+            name: 'Gaziantep',
+            category: 'anadolu',
+            categoryLabel: 'Sanayi & Kültür',
+            tagline: 'Güneydoğu\'nun Sanayi ve Gastronomi Devi',
+            unisCount: '4 Üniversite',
+            studentsCount: '60.000+ Öğrenci',
+            kykCount: '12 KYK Yurdu',
+            rentIndex: 'Dengeli / Uygun',
+            rentColor: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            rating: 4.5,
+            description: 'Gaziantep Üniversitesi\'nin uluslararası öğrenci çeşitliliği, Teknopark ve Organize Sanayi Bölgesi ile entegre staj programları ve dünyaca ünlü mutfağıyla dinamik bir üniversite deneyimi.',
+            highlights: ['UNESCO Tescilli Gastronomi', 'Sanayi Entegre Mühendislik', 'Tramvay & Kampüs Yaşamı'],
+            topUnis: ['Gaziantep Üniversitesi', 'Gaziantep İslam Bilim ve Teknoloji Üniversitesi', 'SANKO Üniversitesi']
+        }
+    ];
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    function renderCities() {
+        const filtered = CITIES_DATA.filter(city => {
+            const matchesCat = currentCategory === 'all' || city.category === currentCategory;
+            const q = searchQuery.toLowerCase().trim();
+            const matchesSearch = !q || 
+                city.name.toLowerCase().includes(q) ||
+                city.tagline.toLowerCase().includes(q) ||
+                city.description.toLowerCase().includes(q) ||
+                city.topUnis.some(u => u.toLowerCase().includes(q));
+            return matchesCat && matchesSearch;
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full py-16 text-center">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-500 flex items-center justify-center mb-4">
+                        <i data-lucide="map-pin-off" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Eşleşen öğrenci şehri bulunamadı</h3>
+                    <p class="text-zinc-400 text-sm max-w-md mx-auto">
+                        Farklı bir arama terimi veya kategori filtresi deneyebilirsiniz.
+                    </p>
+                </div>
+            `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            return;
+        }
+
+        grid.innerHTML = filtered.map(city => `
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 flex flex-col justify-between hover:border-zinc-700 transition-all hover:bg-zinc-900/90 group shadow-lg">
+                <div>
+                    <!-- Header -->
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-1.5">
+                                <i data-lucide="map-pin" class="w-3 h-3 text-cyan-400"></i> ${city.categoryLabel}
+                            </span>
+                            <h3 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">${city.name}</h3>
+                        </div>
+                        <div class="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-950/40 border border-amber-500/30 text-amber-400 font-bold text-xs shrink-0">
+                            <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400"></i> ${city.rating.toFixed(1)}
+                        </div>
+                    </div>
+
+                    <p class="text-xs font-medium text-cyan-400/90 mb-2 italic">"${city.tagline}"</p>
+                    <p class="text-zinc-400 text-xs leading-relaxed mb-4">${city.description}</p>
+
+                    <!-- Metrics Grid -->
+                    <div class="grid grid-cols-2 gap-2 p-3 rounded-xl bg-zinc-950/60 border border-zinc-800/80 mb-4 text-xs">
+                        <div class="flex items-center gap-2 text-zinc-300">
+                            <i data-lucide="building-2" class="w-3.5 h-3.5 text-cyan-400 shrink-0"></i>
+                            <span class="font-medium">${city.unisCount}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-zinc-300">
+                            <i data-lucide="users" class="w-3.5 h-3.5 text-cyan-400 shrink-0"></i>
+                            <span class="font-medium">${city.studentsCount}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-zinc-300">
+                            <i data-lucide="home" class="w-3.5 h-3.5 text-cyan-400 shrink-0"></i>
+                            <span class="font-medium">${city.kykCount}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="wallet" class="w-3.5 h-3.5 text-zinc-400 shrink-0"></i>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold border ${city.rentColor}">${city.rentIndex}</span>
+                        </div>
+                    </div>
+
+                    <!-- Highlights pills -->
+                    <div class="flex flex-wrap gap-1.5 mb-4">
+                        ${city.highlights.map(h => `
+                            <span class="px-2 py-0.5 rounded-md text-[11px] bg-zinc-800/60 text-zinc-300 border border-zinc-700/50 flex items-center gap-1">
+                                <i data-lucide="check" class="w-3 h-3 text-cyan-400"></i> ${h}
+                            </span>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Footer Action & Top Unis -->
+                <div class="pt-4 border-t border-zinc-800/80">
+                    <div class="text-[11px] text-zinc-500 mb-2 font-medium">Öne Çıkan Üniversiteler:</div>
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        ${city.topUnis.slice(0, 3).map(u => `
+                            <a href="#/university?name=${encodeURIComponent(u)}" class="text-[11px] text-zinc-400 hover:text-cyan-400 bg-zinc-800/40 hover:bg-zinc-800 px-2 py-0.5 rounded transition-colors truncate max-w-[200px]" title="${u}">
+                                ${u}
+                            </a>
+                        `).join('')}
+                        ${city.topUnis.length > 3 ? `<span class="text-[10px] text-zinc-500 self-center">+${city.topUnis.length - 3}</span>` : ''}
+                    </div>
+                    <a href="#/university?name=${encodeURIComponent(city.topUnis[0])}" class="w-full py-2.5 px-3 rounded-xl bg-zinc-800 hover:bg-cyan-400 hover:text-zinc-950 text-zinc-200 font-semibold text-xs transition-all flex items-center justify-center gap-1.5 group/btn">
+                        <span>Şehirdeki Üniversiteleri İncele</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        `).join('');
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Filter pills event listeners
+    filterPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            filterPills.forEach(p => {
+                p.classList.remove('bg-cyan-950/40', 'text-cyan-400', 'border-cyan-500/40', 'active-pill');
+                p.classList.add('bg-zinc-900', 'text-zinc-400', 'border-zinc-800');
+            });
+            pill.classList.remove('bg-zinc-900', 'text-zinc-400', 'border-zinc-800');
+            pill.classList.add('bg-cyan-950/40', 'text-cyan-400', 'border-cyan-500/40', 'active-pill');
+
+            currentCategory = pill.dataset.category || 'all';
+            renderCities();
+        });
+    });
+
+    // Search input listener
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderCities();
+        });
+    }
+
+    renderCities();
+}
+
+// ─── Sıralama Sayfası Mantığı (Ranking) ───────────────────
+
+function initRankingPage() {
+    const podiumContainer = document.getElementById('top-podium-cards');
+    const listContainer = document.getElementById('ranking-list');
+    const searchInput = document.getElementById('ranking-search-input');
+    const tabButtons = document.querySelectorAll('#ranking-filter-tabs .rank-tab-btn');
+    if (!podiumContainer || !listContainer) return;
+
+    const RANKING_DATA = [
+        {
+            id: 'odtu',
+            name: 'Orta Doğu Teknik Üniversitesi (ODTÜ)',
+            shortName: 'ODTÜ',
+            city: 'Ankara',
+            type: 'Devlet',
+            overall: 9.8,
+            academic: 9.9,
+            campus: 9.8,
+            dorm: 9.4,
+            transport: 9.6,
+            reviewsCount: 1420,
+            badge: 'Türkiye 1.si',
+            quote: 'Yalıncak ormanı, Eymir Gölü, devrim stadyumu ve ödün vermeyen mühendislik disiplini.',
+            logoLetter: 'O'
+        },
+        {
+            id: 'boun',
+            name: 'Boğaziçi Üniversitesi',
+            shortName: 'Boğaziçi',
+            city: 'İstanbul',
+            type: 'Devlet',
+            overall: 9.7,
+            academic: 9.8,
+            campus: 9.9,
+            dorm: 8.8,
+            transport: 9.5,
+            reviewsCount: 1180,
+            badge: 'Türkiye 2.si',
+            quote: 'Güney Meydan manzarası, özgür düşünce ortamı ve dünya çapında mezun ağı.',
+            logoLetter: 'B'
+        },
+        {
+            id: 'itu',
+            name: 'İstanbul Teknik Üniversitesi (İTÜ)',
+            shortName: 'İTÜ',
+            city: 'İstanbul',
+            type: 'Devlet',
+            overall: 9.6,
+            academic: 9.8,
+            campus: 9.4,
+            dorm: 9.2,
+            transport: 9.8,
+            reviewsCount: 1650,
+            badge: 'Türkiye 3.sü',
+            quote: '250 yılı aşkın mühendislik hafızası, Arı Teknokent ve Ayazağa metro avantajı.',
+            logoLetter: 'İ'
+        },
+        {
+            id: 'bilkent',
+            name: 'Bilkent Üniversitesi',
+            shortName: 'Bilkent',
+            city: 'Ankara',
+            type: 'Vakıf',
+            overall: 9.5,
+            academic: 9.8,
+            campus: 9.6,
+            dorm: 9.6,
+            transport: 9.1,
+            reviewsCount: 890,
+            badge: 'Vakıf Lideri',
+            quote: 'Kütüphane olanakları, uluslararası yayın ortalaması ve kusursuz kampüs yönetimi.',
+            logoLetter: 'B'
+        },
+        {
+            id: 'koc',
+            name: 'Koç Üniversitesi',
+            shortName: 'Koç Üni',
+            city: 'İstanbul',
+            type: 'Vakıf',
+            overall: 9.5,
+            academic: 9.8,
+            campus: 9.7,
+            dorm: 9.7,
+            transport: 8.4,
+            reviewsCount: 760,
+            badge: 'Öne Çıkan',
+            quote: 'Sarıyer sırtlarında dünya standartlarında laboratuvarlar ve yüksek burs olanakları.',
+            logoLetter: 'K'
+        },
+        {
+            id: 'sabanci',
+            name: 'Sabancı Üniversitesi',
+            shortName: 'Sabancı',
+            city: 'İstanbul',
+            type: 'Vakıf',
+            overall: 9.4,
+            academic: 9.7,
+            campus: 9.5,
+            dorm: 9.6,
+            transport: 8.3,
+            reviewsCount: 680,
+            badge: 'Yenilikçi',
+            quote: 'Bölüm seçme özgürlüğü, disiplinlerarası müfredat ve güçlü teknoloji merkezi.',
+            logoLetter: 'S'
+        },
+        {
+            id: 'hacettepe',
+            name: 'Hacettepe Üniversitesi',
+            shortName: 'Hacettepe',
+            city: 'Ankara',
+            type: 'Devlet',
+            overall: 9.3,
+            academic: 9.6,
+            campus: 9.2,
+            dorm: 8.9,
+            transport: 9.1,
+            reviewsCount: 1340,
+            badge: 'Sağlık & Tıp Lideri',
+            quote: 'Beytepe yeşilliği, Sıhhiye tıp geleneği ve Türkiye\'nin en başarılı sağlık kadroları.',
+            logoLetter: 'H'
+        },
+        {
+            id: 'ytu',
+            name: 'Yıldız Teknik Üniversitesi (YTÜ)',
+            shortName: 'YTÜ',
+            city: 'İstanbul',
+            type: 'Devlet',
+            overall: 9.2,
+            academic: 9.3,
+            campus: 9.1,
+            dorm: 8.7,
+            transport: 9.6,
+            reviewsCount: 1450,
+            badge: 'Teknopark Öncüsü',
+            quote: 'Davutpaşa tarihi kışla yerleşkesi, devasa Yıldız Teknopark ve sanayi entegrasyonu.',
+            logoLetter: 'Y'
+        },
+        {
+            id: 'gsu',
+            name: 'Galatasaray Üniversitesi (GSÜ)',
+            shortName: 'GSÜ',
+            city: 'İstanbul',
+            type: 'Devlet',
+            overall: 9.1,
+            academic: 9.5,
+            campus: 8.9,
+            dorm: 7.9,
+            transport: 9.7,
+            reviewsCount: 520,
+            badge: 'Butik Frankofon',
+            quote: 'Ortaköy boğaz kıyısında Fransızca eğitim, güçlü hukuk ve diplomasi ekolü.',
+            logoLetter: 'G'
+        },
+        {
+            id: 'ege',
+            name: 'Ege Üniversitesi',
+            shortName: 'Ege Üni',
+            city: 'İzmir',
+            type: 'Devlet',
+            overall: 9.0,
+            academic: 9.1,
+            campus: 9.3,
+            dorm: 8.8,
+            transport: 9.5,
+            reviewsCount: 1120,
+            badge: 'Ege\'nin İncisi',
+            quote: 'Bornova kampüsünün metro bağlantısı, dev hastane kompleksi ve Akdeniz yaşam enerjisi.',
+            logoLetter: 'E'
+        },
+        {
+            id: 'anadolu',
+            name: 'Anadolu Üniversitesi',
+            shortName: 'Anadolu Üni',
+            city: 'Eskişehir',
+            type: 'Devlet',
+            overall: 8.9,
+            academic: 8.8,
+            campus: 9.6,
+            dorm: 9.2,
+            transport: 9.4,
+            reviewsCount: 960,
+            badge: 'Öğrenci Kenti',
+            quote: 'Yunus Emre Kampüsü\'nün sanatsal atmosferi, yeşil çimleri ve Eskişehir sosyal hayatı.',
+            logoLetter: 'A'
+        },
+        {
+            id: 'deu',
+            name: 'Dokuz Eylül Üniversitesi',
+            shortName: 'DEÜ',
+            city: 'İzmir',
+            type: 'Devlet',
+            overall: 8.8,
+            academic: 8.9,
+            campus: 8.7,
+            dorm: 8.4,
+            transport: 9.0,
+            reviewsCount: 880,
+            badge: 'Köklü Devlet',
+            quote: 'Tınaztepe kampüsü, Alsancak rektörlük çevresi ve Denizcilik/Tıp başarıları.',
+            logoLetter: 'D'
+        },
+        {
+            id: 'gtu',
+            name: 'Gebze Teknik Üniversitesi (GTÜ)',
+            shortName: 'GTÜ',
+            city: 'Kocaeli',
+            type: 'Devlet',
+            overall: 8.7,
+            academic: 9.4,
+            campus: 8.2,
+            dorm: 8.5,
+            transport: 8.9,
+            reviewsCount: 580,
+            badge: 'Araştırma Odağı',
+            quote: 'Marmaray durağı hemen kampüsün içinde; sanayinin kalbinde yüksek akademik yayın performansı.',
+            logoLetter: 'G'
+        }
+    ];
+
+    const metricLabels = {
+        'overall': 'Genel Memnuniyet',
+        'academic': 'Akademik Kalite',
+        'campus': 'Kampüs & Sosyal',
+        'dorm': 'Yurt & Yemekhane',
+        'transport': 'Ulaşım & Lokasyon'
+    };
+
+    let activeSort = 'overall';
+    let searchQuery = '';
+
+    function renderRanking() {
+        // 1. Filter
+        const q = searchQuery.toLowerCase().trim();
+        const filtered = RANKING_DATA.filter(uni => {
+            return !q ||
+                uni.name.toLowerCase().includes(q) ||
+                uni.city.toLowerCase().includes(q) ||
+                uni.quote.toLowerCase().includes(q);
+        });
+
+        // 2. Sort
+        const sorted = [...filtered].sort((a, b) => {
+            if (b[activeSort] !== a[activeSort]) {
+                return b[activeSort] - a[activeSort];
+            }
+            return b.reviewsCount - a.reviewsCount;
+        });
+
+        if (sorted.length === 0) {
+            podiumContainer.innerHTML = '';
+            listContainer.innerHTML = `
+                <div class="py-16 text-center">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-500 flex items-center justify-center mb-4">
+                        <i data-lucide="search-x" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Aramanızla eşleşen üniversite bulunamadı</h3>
+                    <p class="text-zinc-400 text-sm max-w-md mx-auto">
+                        Farklı bir okul adı veya şehir arayarak tekrar deneyebilirsiniz.
+                    </p>
+                </div>
+            `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            return;
+        }
+
+        // Render Podium if not searching or if at least 3 items exist
+        if (!q && sorted.length >= 3) {
+            podiumContainer.style.display = 'grid';
+            const first = sorted[0];
+            const second = sorted[1];
+            const third = sorted[2];
+
+            podiumContainer.innerHTML = `
+                <!-- 2. Sıra (Gümüş) -->
+                <div class="order-2 md:order-1 rounded-2xl border border-zinc-700 bg-zinc-900/70 p-6 flex flex-col justify-between hover:border-zinc-500 transition-all shadow-xl">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-zinc-800 border border-zinc-600 text-zinc-300">
+                                <i data-lucide="medal" class="w-3.5 h-3.5 text-zinc-300"></i> 2. Sıra
+                            </span>
+                            <span class="text-xs text-zinc-400 font-medium">${second.city} · ${second.type}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">${second.name}</h3>
+                        <p class="text-xs text-zinc-400 italic mb-4">"${second.quote}"</p>
+                    </div>
+                    <div class="pt-4 border-t border-zinc-800">
+                        <div class="flex items-end justify-between mb-3">
+                            <div>
+                                <span class="text-[11px] text-zinc-500 uppercase block font-semibold">${metricLabels[activeSort]}</span>
+                                <span class="text-3xl font-black text-zinc-200">${second[activeSort].toFixed(1)}<span class="text-xs text-zinc-500 font-normal"> /10</span></span>
+                            </div>
+                            <span class="text-xs text-zinc-400 flex items-center gap-1">
+                                <i data-lucide="message-square" class="w-3.5 h-3.5 text-cyan-400"></i> ${second.reviewsCount} Yorum
+                            </span>
+                        </div>
+                        <a href="#/university?name=${encodeURIComponent(second.name)}" class="w-full py-2.5 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs transition-all flex items-center justify-center gap-1.5">
+                            <span>Okulu İncele</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 1. Sıra (Altın - Zirve) -->
+                <div class="order-1 md:order-2 rounded-2xl border-2 border-amber-500/50 bg-gradient-to-b from-amber-950/20 via-zinc-900/90 to-zinc-900 p-6 flex flex-col justify-between hover:border-amber-400 transition-all shadow-2xl relative -translate-y-2 md:-translate-y-4">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 text-zinc-950 font-black text-xs shadow-lg uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="trophy" class="w-3.5 h-3.5"></i> Lider Şampiyon
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4 mt-2">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-500/20 border border-amber-500/40 text-amber-300">
+                                <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400"></i> 1. Sıra
+                            </span>
+                            <span class="text-xs text-zinc-400 font-medium">${first.city} · ${first.type}</span>
+                        </div>
+                        <h3 class="text-2xl font-black text-white mb-1">${first.name}</h3>
+                        <p class="text-xs text-amber-200/80 italic mb-4">"${first.quote}"</p>
+                    </div>
+                    <div class="pt-4 border-t border-amber-500/20">
+                        <div class="flex items-end justify-between mb-3">
+                            <div>
+                                <span class="text-[11px] text-amber-400/90 uppercase block font-semibold">${metricLabels[activeSort]}</span>
+                                <span class="text-4xl font-black text-amber-400">${first[activeSort].toFixed(1)}<span class="text-xs text-zinc-400 font-normal"> /10</span></span>
+                            </div>
+                            <span class="text-xs text-zinc-300 flex items-center gap-1">
+                                <i data-lucide="message-square" class="w-3.5 h-3.5 text-amber-400"></i> ${first.reviewsCount} Yorum
+                            </span>
+                        </div>
+                        <a href="#/university?name=${encodeURIComponent(first.name)}" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-400 hover:brightness-110 text-zinc-950 font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/20">
+                            <span>Okulu İncele</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 3. Sıra (Bronz) -->
+                <div class="order-3 md:order-3 rounded-2xl border border-amber-900/60 bg-zinc-900/70 p-6 flex flex-col justify-between hover:border-amber-700 transition-all shadow-xl">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-950/60 border border-amber-800/60 text-amber-400">
+                                <i data-lucide="award" class="w-3.5 h-3.5 text-amber-500"></i> 3. Sıra
+                            </span>
+                            <span class="text-xs text-zinc-400 font-medium">${third.city} · ${third.type}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">${third.name}</h3>
+                        <p class="text-xs text-zinc-400 italic mb-4">"${third.quote}"</p>
+                    </div>
+                    <div class="pt-4 border-t border-zinc-800">
+                        <div class="flex items-end justify-between mb-3">
+                            <div>
+                                <span class="text-[11px] text-zinc-500 uppercase block font-semibold">${metricLabels[activeSort]}</span>
+                                <span class="text-3xl font-black text-amber-500/90">${third[activeSort].toFixed(1)}<span class="text-xs text-zinc-500 font-normal"> /10</span></span>
+                            </div>
+                            <span class="text-xs text-zinc-400 flex items-center gap-1">
+                                <i data-lucide="message-square" class="w-3.5 h-3.5 text-cyan-400"></i> ${third.reviewsCount} Yorum
+                            </span>
+                        </div>
+                        <a href="#/university?name=${encodeURIComponent(third.name)}" class="w-full py-2.5 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs transition-all flex items-center justify-center gap-1.5">
+                            <span>Okulu İncele</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else {
+            podiumContainer.style.display = 'none';
+        }
+
+        // Render List for remaining ranks (or all if searched)
+        const itemsForList = (!q && sorted.length >= 3) ? sorted.slice(3) : sorted;
+        const startIndex = (!q && sorted.length >= 3) ? 3 : 0;
+
+        listContainer.innerHTML = itemsForList.map((item, idx) => {
+            const rank = startIndex + idx + 1;
+            return `
+                <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:border-zinc-700 hover:bg-zinc-900/90 transition-all group">
+                    <!-- Left: Rank & Uni Info -->
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-700/60 text-zinc-300 font-bold flex items-center justify-center text-sm shrink-0 group-hover:border-cyan-400 group-hover:text-cyan-400 transition-colors">
+                            #${rank}
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h4 class="text-base font-bold text-white group-hover:text-cyan-400 transition-colors">${item.name}</h4>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700/50">${item.city}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-cyan-950/40 text-cyan-400 border border-cyan-500/30">${item.type}</span>
+                            </div>
+                            <p class="text-xs text-zinc-400 line-clamp-1 italic">"${item.quote}"</p>
+                        </div>
+                    </div>
+
+                    <!-- Right: Scores & CTA -->
+                    <div class="flex flex-wrap items-center gap-4 sm:gap-6 w-full md:w-auto justify-between md:justify-end pt-3 md:pt-0 border-t md:border-t-0 border-zinc-800/80">
+                        <!-- Sub scores -->
+                        <div class="hidden sm:grid grid-cols-4 gap-3 text-center text-[11px]">
+                            <div>
+                                <div class="text-zinc-500 text-[10px]">Akademik</div>
+                                <div class="font-bold text-zinc-200">${item.academic.toFixed(1)}</div>
+                            </div>
+                            <div>
+                                <div class="text-zinc-500 text-[10px]">Kampüs</div>
+                                <div class="font-bold text-zinc-200">${item.campus.toFixed(1)}</div>
+                            </div>
+                            <div>
+                                <div class="text-zinc-500 text-[10px]">Yurt/Yemek</div>
+                                <div class="font-bold text-zinc-200">${item.dorm.toFixed(1)}</div>
+                            </div>
+                            <div>
+                                <div class="text-zinc-500 text-[10px]">Ulaşım</div>
+                                <div class="font-bold text-zinc-200">${item.transport.toFixed(1)}</div>
+                            </div>
+                        </div>
+
+                        <!-- Highlighted Score -->
+                        <div class="text-right shrink-0">
+                            <div class="text-xs text-zinc-500">${metricLabels[activeSort]}</div>
+                            <div class="text-xl sm:text-2xl font-black text-amber-400 flex items-center gap-1 justify-end">
+                                <i data-lucide="star" class="w-4 h-4 fill-amber-400 text-amber-400"></i>
+                                <span>${item[activeSort].toFixed(1)}</span>
+                                <span class="text-xs text-zinc-500 font-normal">/10</span>
+                            </div>
+                            <div class="text-[10px] text-zinc-500 flex items-center gap-1 justify-end">
+                                <i data-lucide="check-circle" class="w-3 h-3 text-emerald-400"></i> ${item.reviewsCount} onaylı yorum
+                            </div>
+                        </div>
+
+                        <a href="#/university?name=${encodeURIComponent(item.name)}" class="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-cyan-400 hover:text-zinc-950 text-zinc-200 font-semibold text-xs transition-all flex items-center gap-1.5 shrink-0">
+                            <span>İncele</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Tabs listener
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabButtons.forEach(b => {
+                b.classList.remove('bg-cyan-400', 'text-zinc-950', 'active-tab');
+                b.classList.add('bg-zinc-800', 'text-zinc-300');
+            });
+            btn.classList.remove('bg-zinc-800', 'text-zinc-300');
+            btn.classList.add('bg-cyan-400', 'text-zinc-950', 'active-tab');
+
+            activeSort = btn.dataset.sort || 'overall';
+            renderRanking();
+        });
+    });
+
+    // Search input listener
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderRanking();
+        });
+    }
+
+    renderRanking();
+}
+
+// ─── Bölümler Sayfası Mantığı (Departments) ───────────────
+
+function initDepartmentsPage() {
+    const grid = document.getElementById('departments-grid');
+    const searchInput = document.getElementById('dept-search-input');
+    const filterPills = document.querySelectorAll('#dept-filter-pills .dept-filter-pill');
+    if (!grid) return;
+
+    const DEPARTMENTS_DATA = [
+        {
+            id: 'ceng',
+            name: 'Bilgisayar Mühendisliği',
+            category: 'eng',
+            categoryLabel: 'Mühendislik & Bilişim',
+            icon: 'cpu',
+            demand: '%95 İstihdam Oranı',
+            demandBadge: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            satisfaction: 4.8,
+            difficulty: '4.6 / 5.0 (Yüksek)',
+            salary: '₺45.000 - ₺120.000+',
+            description: 'Yapay zeka, bulut sistemler, büyük veri ve yazılım mimarisi üzerine modern mühendislik eğitimi. Yurt dışı uzaktan çalışma (remote) ve staj olanakları en geniş alan.',
+            topUnis: ['ODTÜ', 'İTÜ', 'Boğaziçi', 'Bilkent', 'Koç'],
+            skills: ['Python / Go / Rust', 'Yapay Zeka & ML', 'Sistem Mimarisi', 'Algoritmalar']
+        },
+        {
+            id: 'tip',
+            name: 'Tıp Fakültesi',
+            category: 'health',
+            categoryLabel: 'Sağlık & Tıp',
+            icon: 'activity',
+            demand: '%100 İstihdam Garantisi',
+            demandBadge: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            satisfaction: 4.7,
+            difficulty: '4.9 / 5.0 (Çok Zor)',
+            salary: '₺55.000 - ₺140.000+',
+            description: '6 yıllık yoğun anatomi, patoloji ve klinik staj eğitimi. TUS (Tıpta Uzmanlık Sınavı) ile cerrahi veya dahili branşlaşma. Mezuniyet anında doğrudan kamu ataması.',
+            topUnis: ['Hacettepe Üniversitesi', 'İstanbul Üniversitesi-Cerrahpaşa', 'Ankara Üniversitesi', 'Koç Üniversitesi'],
+            skills: ['Klinik Teşhis', 'Cerrahi Pratik', 'Hasta İletişimi', 'Tıbbi Araştırma']
+        },
+        {
+            id: 'seng',
+            name: 'Yazılım Mühendisliği',
+            category: 'eng',
+            categoryLabel: 'Mühendislik & Bilişim',
+            icon: 'code',
+            demand: '%93 İstihdam Oranı',
+            demandBadge: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            satisfaction: 4.7,
+            difficulty: '4.2 / 5.0 (Orta-Zor)',
+            salary: '₺40.000 - ₺110.000+',
+            description: 'Büyük ölçekli yazılım geliştirme süreçleri, test mühendisliği, DevOps ve mobil uygulama geliştirme odaklı. Sektör stajları lisans döneminde başlar.',
+            topUnis: ['İTÜ', 'Bahçeşehir Üniversitesi', 'Yaşar Üniversitesi', 'KTÜ'],
+            skills: ['Mobil & Web Geliştirme', 'DevOps & CI/CD', 'Yazılım Testi', 'Mikroservisler']
+        },
+        {
+            id: 'ee',
+            name: 'Elektrik-Elektronik Mühendisliği',
+            category: 'eng',
+            categoryLabel: 'Mühendislik & Bilişim',
+            icon: 'zap',
+            demand: '%91 İstihdam Oranı',
+            demandBadge: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            satisfaction: 4.6,
+            difficulty: '4.8 / 5.0 (Çok Zor)',
+            salary: '₺45.000 - ₺115.000+',
+            description: 'Savunma sanayii (Aselsan, Baykar, Roketsan, TUSAŞ), haberleşme, yarıiletken çipler ve gömülü sistemlerin omurgası olan en köklü mühendislik dalı.',
+            topUnis: ['ODTÜ', 'İTÜ', 'Boğaziçi', 'Bilkent Üniversitesi'],
+            skills: ['Gömülü Sistemler (C/C++)', 'Sinyal İşleme', 'Mikroelektronik', 'RF & Haberleşme']
+        },
+        {
+            id: 'law',
+            name: 'Hukuk Fakültesi',
+            category: 'law',
+            categoryLabel: 'Sosyal & Hukuk',
+            icon: 'scale',
+            demand: 'Rekabetçi / Yüksek',
+            demandBadge: 'text-cyan-400 bg-cyan-950/40 border-cyan-500/30',
+            satisfaction: 4.4,
+            difficulty: '4.5 / 5.0 (Zor)',
+            salary: '₺30.000 - ₺90.000+',
+            description: 'Medeni hukuk, ceza, ticaret ve uluslararası hukuk. Hakimlik, savcılık, serbest avukatlık, kurum avukatlığı veya uluslararası şirket danışmanlığı.',
+            topUnis: ['İstanbul Üniversitesi', 'Galatasaray Üniversitesi', 'Ankara Üniversitesi', 'Bilkent Üniversitesi'],
+            skills: ['Ceza & Ticaret Hukuku', 'Dava & Savunma', 'Sözleşme Analizi', 'Müzakere']
+        },
+        {
+            id: 'ie',
+            name: 'Endüstri Mühendisliği',
+            category: 'eng',
+            categoryLabel: 'Mühendislik & Bilişim',
+            icon: 'trending-up',
+            demand: '%89 İstihdam Oranı',
+            demandBadge: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            satisfaction: 4.6,
+            difficulty: '4.0 / 5.0 (Orta)',
+            salary: '₺38.000 - ₺100.000+',
+            description: 'Tedarik zinciri, optimizasyon, veri analitiği ve yönetim danışmanlığı. Mühendislik ve iş dünyasını kusursuz harmanlayan en esnek mühendislik bölümü.',
+            topUnis: ['Boğaziçi Üniversitesi', 'ODTÜ', 'İTÜ', 'Koç Üniversitesi', 'Sabancı Üniversitesi'],
+            skills: ['Tedarik Zinciri', 'Veri Analitiği (SQL/Tableau)', 'Yöneylem Araştırması', 'Proje Yönetimi']
+        },
+        {
+            id: 'dent',
+            name: 'Diş Hekimliği',
+            category: 'health',
+            categoryLabel: 'Sağlık & Tıp',
+            icon: 'smile',
+            demand: '%88 İstihdam Oranı',
+            demandBadge: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            satisfaction: 4.5,
+            difficulty: '4.7 / 5.0 (Zor & El Becerisi)',
+            salary: '₺40.000 - ₺120.000+',
+            description: '5 yıllık yoğun preklinik ve klinik eğitimi. El becerisi, estetik görüş ve medikal anatominin birleştiği; özel klinik veya kamu istihdamı.',
+            topUnis: ['Hacettepe Üniversitesi', 'Yeditepe Üniversitesi', 'Marmara Üniversitesi', 'Ege Üniversitesi'],
+            skills: ['Endodonti & Protez', 'İmplant Cerrahi', 'Estetik Diş Hekimliği', 'Klinik Pratik']
+        },
+        {
+            id: 'econ',
+            name: 'İktisat / Ekonomi',
+            category: 'econ',
+            categoryLabel: 'İktisadi & İdari',
+            icon: 'bar-chart-2',
+            demand: '%84 İstihdam Oranı',
+            demandBadge: 'text-cyan-400 bg-cyan-950/40 border-cyan-500/30',
+            satisfaction: 4.5,
+            difficulty: '4.1 / 5.0 (Orta-Zor)',
+            salary: '₺35.000 - ₺95.000+',
+            description: 'Makroekonomi, para piyasaları, ekonometri ve bankacılık. Merkez Bankası, yatırım fonları, SPK veya denetim (Big 4) şirketlerinde kariyer.',
+            topUnis: ['Boğaziçi', 'Bilkent Üniversitesi', 'ODTÜ', 'Koç Üniversitesi'],
+            skills: ['Ekonometrik Modelleme (R/Stata)', 'Finansal Analiz', 'Para Piyasaları', 'Strateji Geliştirme']
+        },
+        {
+            id: 'bus',
+            name: 'İşletme (İngilizce)',
+            category: 'econ',
+            categoryLabel: 'İktisadi & İdari',
+            icon: 'briefcase',
+            demand: '%86 İstihdam Oranı',
+            demandBadge: 'text-cyan-400 bg-cyan-950/40 border-cyan-500/30',
+            satisfaction: 4.5,
+            difficulty: '3.7 / 5.0 (Dengeli)',
+            salary: '₺35.000 - ₺100.000+',
+            description: 'Pazarlama, insan kaynakları, kurumsal finans ve stratejik yönetim. FMCG devleri ve küresel yönetim danışmanlığı kariyerleri.',
+            topUnis: ['Koç Üniversitesi', 'Boğaziçi Üniversitesi', 'Sabancı Üniversitesi', 'ODTÜ'],
+            skills: ['Marka Yönetimi', 'Kurumsal Finans', 'Liderlik & Sunum', 'Dijital Pazarlama']
+        },
+        {
+            id: 'psy',
+            name: 'Psikoloji',
+            category: 'law',
+            categoryLabel: 'Sosyal & Hukuk',
+            icon: 'heart-handshake',
+            demand: 'Orta / Yüksek',
+            demandBadge: 'text-amber-400 bg-amber-950/40 border-amber-500/30',
+            satisfaction: 4.4,
+            difficulty: '3.8 / 5.0 (Orta)',
+            salary: '₺28.000 - ₺80.000+',
+            description: 'Klinik, gelişim, bilişsel ve endüstriyel psikoloji. Yüksek lisans sonrası klinik psikolog veya kurumsal İK danışmanı olma fırsatları.',
+            topUnis: ['Boğaziçi Üniversitesi', 'ODTÜ', 'Koç Üniversitesi', 'İstanbul Bilgi Üniversitesi'],
+            skills: ['Bilişsel Davranışçı Terapi', 'İstatistik & SPSS', 'Test Uygulama', 'Danışmanlık']
+        },
+        {
+            id: 'arch',
+            name: 'Mimarlık',
+            category: 'design',
+            categoryLabel: 'Mimarlık & Sanat',
+            icon: 'compass',
+            demand: '%74 İstihdam Oranı',
+            demandBadge: 'text-amber-400 bg-amber-950/40 border-amber-500/30',
+            satisfaction: 4.3,
+            difficulty: '4.8 / 5.0 (Yüksek Proje Yükü)',
+            salary: '₺30.000 - ₺85.000+',
+            description: 'Tasarım stüdyoları, yapı bilgisi, render ve mimari proje çizimi. Yaratıcılık, gece uykusuzluğu ve jüri eleştirileriyle yoğrulan bir sanat & teknik alanı.',
+            topUnis: ['İTÜ', 'ODTÜ', 'Mimar Sinan Güzel Sanatlar (MSGSÜ)', 'Yıldız Teknik'],
+            skills: ['AutoCAD & Revit BIM', 'Rhino / 3ds Max Render', 'Maket Tasarımı', 'Yapı Bilgisi']
+        },
+        {
+            id: 'interior',
+            name: 'İç Mimarlık ve Çevre Tasarımı',
+            category: 'design',
+            categoryLabel: 'Mimarlık & Sanat',
+            icon: 'layout',
+            demand: '%72 İstihdam Oranı',
+            demandBadge: 'text-amber-400 bg-amber-950/40 border-amber-500/30',
+            satisfaction: 4.2,
+            difficulty: '4.4 / 5.0 (Zorlu Çizimler)',
+            salary: '₺28.000 - ₺75.000+',
+            description: 'Mekan tasarımı, mobilya ergonomisi, aydınlatma ve malzeme detaylandırması. Konut, otel, kafe ve ofis projelerinde bağımsız veya stüdyo çalışması.',
+            topUnis: ['Mimar Sinan Güzel Sanatlar', 'Bilkent Üniversitesi', 'Hacettepe Üniversitesi', 'İTÜ'],
+            skills: ['Mekan Çözümleme', 'Malzeme & Detay', 'Mobilya Tasarımı', '3D Görselleştirme']
+        },
+        {
+            id: 'nurse',
+            name: 'Hemşirelik',
+            category: 'health',
+            categoryLabel: 'Sağlık & Tıp',
+            icon: 'shield-plus',
+            demand: '%98 İstihdam Oranı',
+            demandBadge: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+            satisfaction: 4.4,
+            difficulty: '4.1 / 5.0 (Nöbet Sistemi)',
+            salary: '₺38.000 - ₺70.000+',
+            description: 'Yoğun bakım, cerrahi ve acil servis bakım süreçleri. Yurt dışında (özellikle Almanya ve İngiltere) dil denkliği ile anında istihdam imkanı.',
+            topUnis: ['Hacettepe Üniversitesi', 'Ege Üniversitesi', 'Marmara Üniversitesi', 'Dokuz Eylül'],
+            skills: ['Acil Müdahale', 'Hasta Bakım Planı', 'İlaç Yönetimi', 'Klinik Etik']
+        }
+    ];
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    function renderDepartments() {
+        const q = searchQuery.toLowerCase().trim();
+        const filtered = DEPARTMENTS_DATA.filter(dept => {
+            const matchesCat = currentCategory === 'all' || dept.category === currentCategory;
+            const matchesSearch = !q ||
+                dept.name.toLowerCase().includes(q) ||
+                dept.categoryLabel.toLowerCase().includes(q) ||
+                dept.description.toLowerCase().includes(q) ||
+                dept.skills.some(s => s.toLowerCase().includes(q)) ||
+                dept.topUnis.some(u => u.toLowerCase().includes(q));
+            return matchesCat && matchesSearch;
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full py-16 text-center">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-500 flex items-center justify-center mb-4">
+                        <i data-lucide="graduation-cap" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Eşleşen bölüm bulunamadı</h3>
+                    <p class="text-zinc-400 text-sm max-w-md mx-auto">
+                        Farklı bir arama terimi veya kategori filtresi deneyebilirsiniz.
+                    </p>
+                </div>
+            `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            return;
+        }
+
+        grid.innerHTML = filtered.map(dept => `
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 flex flex-col justify-between hover:border-zinc-700 transition-all hover:bg-zinc-900/90 group shadow-lg">
+                <div>
+                    <!-- Category & Demand Badges -->
+                    <div class="flex items-start justify-between gap-2 mb-3">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/[0.04] border border-white/10 text-cyan-300">
+                            <i data-lucide="${dept.icon}" class="w-3.5 h-3.5 text-cyan-400"></i> ${dept.categoryLabel}
+                        </span>
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${dept.demandBadge} shrink-0">
+                            ${dept.demand}
+                        </span>
+                    </div>
+
+                    <!-- Title -->
+                    <h3 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors mb-2">${dept.name}</h3>
+
+                    <!-- Rating & Difficulty Stats -->
+                    <div class="flex items-center gap-4 mb-3 text-xs">
+                        <div class="flex items-center gap-1 text-amber-400 font-bold">
+                            <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400"></i> ${dept.satisfaction.toFixed(1)}
+                            <span class="text-zinc-500 font-normal">Memnuniyet</span>
+                        </div>
+                        <div class="text-zinc-500">·</div>
+                        <div class="text-zinc-400">
+                            <span class="text-zinc-500">Zorluk:</span> <strong class="text-zinc-300">${dept.difficulty}</strong>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-zinc-400 text-xs leading-relaxed mb-4">${dept.description}</p>
+
+                    <!-- Salary bracket -->
+                    <div class="p-3 rounded-xl bg-zinc-950/60 border border-zinc-800/80 mb-4 flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-2 text-zinc-400">
+                            <i data-lucide="briefcase" class="w-3.5 h-3.5 text-cyan-400 shrink-0"></i>
+                            <span>Ort. Başlangıç Maaşı:</span>
+                        </div>
+                        <span class="font-bold text-emerald-400">${dept.salary}</span>
+                    </div>
+
+                    <!-- Skills pills -->
+                    <div class="mb-4">
+                        <div class="text-[11px] text-zinc-500 mb-1.5 font-medium">Temel Beceriler:</div>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${dept.skills.map(s => `
+                                <span class="px-2 py-0.5 rounded-md text-[11px] bg-zinc-800/60 text-zinc-300 border border-zinc-700/50">
+                                    ${s}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Unis & Search Shortcut -->
+                <div class="pt-4 border-t border-zinc-800/80">
+                    <div class="text-[11px] text-zinc-500 mb-2 font-medium">Bu Alanda Öne Çıkan Üniversiteler:</div>
+                    <div class="flex flex-wrap gap-1.5 mb-3">
+                        ${dept.topUnis.map(u => `
+                            <a href="#/university?name=${encodeURIComponent(u)}" class="text-xs text-cyan-400 hover:text-cyan-300 bg-cyan-950/30 hover:bg-cyan-950/60 border border-cyan-500/20 px-2.5 py-0.5 rounded-lg transition-colors font-medium">
+                                ${u}
+                            </a>
+                        `).join('')}
+                    </div>
+                    <a href="#/review-form" class="w-full py-2.5 px-3 rounded-xl bg-zinc-800 hover:bg-cyan-400 hover:text-zinc-950 text-zinc-200 font-semibold text-xs transition-all flex items-center justify-center gap-1.5 group/btn">
+                        <i data-lucide="pen-line" class="w-3.5 h-3.5"></i>
+                        <span>Bu Bölümü Değerlendir</span>
+                    </a>
+                </div>
+            </div>
+        `).join('');
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Filter pills event listeners
+    filterPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            filterPills.forEach(p => {
+                p.classList.remove('bg-cyan-950/40', 'text-cyan-400', 'border-cyan-500/40', 'active-pill');
+                p.classList.add('bg-zinc-900', 'text-zinc-400', 'border-zinc-800');
+            });
+            pill.classList.remove('bg-zinc-900', 'text-zinc-400', 'border-zinc-800');
+            pill.classList.add('bg-cyan-950/40', 'text-cyan-400', 'border-cyan-500/40', 'active-pill');
+
+            currentCategory = pill.dataset.category || 'all';
+            renderDepartments();
+        });
+    });
+
+    // Search input listener
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderDepartments();
+        });
+    }
+
+    renderDepartments();
+}
 
 function initBlogPage() {
     // 1. Article database for reading modal
@@ -2402,6 +3541,14 @@ document.addEventListener('click', (e) => {
         if (href.includes('?')) query = href.substring(href.indexOf('?') + 1);
     } else if (href.startsWith('login.html') || href.startsWith('#/login')) {
         target = 'login';
+    } else if (href.startsWith('#/')) {
+        const clean = href.substring(2);
+        if (clean.includes('?')) {
+            target = clean.substring(0, clean.indexOf('?'));
+            query = clean.substring(clean.indexOf('?') + 1);
+        } else {
+            target = clean;
+        }
     }
 
     if (target) {

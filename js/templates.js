@@ -1751,5 +1751,145 @@ export const TEMPLATES = {
                 </div>
             </div>
         </main>
+    `,
+
+    cities: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Effects -->
+            <div class="pointer-events-none absolute -top-32 left-1/3 -translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute top-72 -right-24 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Header -->
+                <div class="text-center mb-12">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-4 backdrop-blur-md">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>81 İl · Üniversite & Şehir Rehberi</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
+                        Öğrenci Şehirleri
+                    </h1>
+                    <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                        Üniversite tercihi sadece okul seçmek değil; yaşayacağın şehri, ulaşımını, kira ve yurt imkanlarını seçmektir. Türkiye'nin öne çıkan öğrenci şehirlerini keşfet.
+                    </p>
+                </div>
+
+                <!-- Search & Filter Controls -->
+                <div class="mb-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="relative w-full sm:w-80">
+                        <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="city-search-input" placeholder="Şehir ara (örn: Eskişehir, İzmir)..." class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-sm rounded-xl pl-10 pr-4 py-3 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition-colors">
+                    </div>
+
+                    <div id="city-filter-pills" class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0">
+                        <button class="city-filter-pill px-4 py-2 rounded-xl text-xs font-semibold bg-cyan-950/40 text-cyan-400 border border-cyan-500/40 cursor-pointer transition-all active-pill" data-category="all">Tümü</button>
+                        <button class="city-filter-pill px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer transition-all" data-category="metropol">Büyükşehirler</button>
+                        <button class="city-filter-pill px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer transition-all" data-category="student">Öğrenci Dostu</button>
+                        <button class="city-filter-pill px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer transition-all" data-category="coast">Sahil & Tatil</button>
+                        <button class="city-filter-pill px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer transition-all" data-category="anadolu">Anadolu</button>
+                    </div>
+                </div>
+
+                <!-- City Cards Grid Container -->
+                <div id="cities-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Rendered dynamically via initCitiesPage -->
+                </div>
+            </div>
+        </main>
+    `,
+
+    ranking: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Effects -->
+            <div class="pointer-events-none absolute -top-32 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute top-96 -left-32 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Header -->
+                <div class="text-center mb-12">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-amber-300 mb-4 backdrop-blur-md">
+                        <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-400"></i>
+                        <span>2026 Öğrenci Memnuniyeti & Üniversite Liderleri</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
+                        Üniversite Sıralaması
+                    </h1>
+                    <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                        Doğrulanmış 15.000+ öğrenci değerlendirmesi; akademik kalite, yurt/yemekhane, kampüs yaşamı ve ulaşım kriterleri baz alınarak oluşturulan güncel sıralama.
+                    </p>
+                </div>
+
+                <!-- Top 3 Podium Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12" id="top-podium-cards">
+                    <!-- Rendered dynamically via initRankingPage -->
+                </div>
+
+                <!-- Filter Tabs & Search -->
+                <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 mb-8 flex flex-col md:flex-row items-center justify-between gap-4 backdrop-blur-md">
+                    <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0" id="ranking-filter-tabs">
+                        <button class="rank-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-cyan-400 text-zinc-950 cursor-pointer transition-all active-tab" data-sort="overall">Genel Sıralama</button>
+                        <button class="rank-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 hover:text-white cursor-pointer transition-all" data-sort="academic">Akademik Kalite</button>
+                        <button class="rank-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 hover:text-white cursor-pointer transition-all" data-sort="campus">Kampüs & Sosyal Yaşam</button>
+                        <button class="rank-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 hover:text-white cursor-pointer transition-all" data-sort="dorm">Yurt & Yemekhane</button>
+                        <button class="rank-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 hover:text-white cursor-pointer transition-all" data-sort="transport">Ulaşım & Lokasyon</button>
+                    </div>
+
+                    <div class="relative w-full md:w-64">
+                        <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="ranking-search-input" placeholder="Okul ara..." class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs rounded-xl pl-9 pr-3 py-2.5 focus:border-cyan-400 outline-none">
+                    </div>
+                </div>
+
+                <!-- Ranking List Table / Cards -->
+                <div id="ranking-list" class="space-y-3">
+                    <!-- Populated dynamically via initRankingPage -->
+                </div>
+            </div>
+        </main>
+    `,
+
+    departments: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Effects -->
+            <div class="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Header -->
+                <div class="text-center mb-12">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-4 backdrop-blur-md">
+                        <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>Lisans & Önlisans Bölüm Rehberi</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
+                        Üniversite Bölümleri
+                    </h1>
+                    <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                        Hangi bölüm sana uygun? Sektördeki iş imkanları, öğrenci zorluk derecesi, staj olanakları ve o alanda Türkiye'nin en iyi üniversitelerini keşfet.
+                    </p>
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="mb-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="relative w-full sm:w-80">
+                        <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="dept-search-input" placeholder="Bölüm ara (örn: Bilgisayar, Tıp, Hukuk)..." class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-sm rounded-xl pl-10 pr-4 py-3 focus:border-cyan-400 outline-none">
+                    </div>
+
+                    <div id="dept-filter-pills" class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0">
+                        <button class="dept-filter-pill px-4 py-2 rounded-xl text-xs font-semibold bg-cyan-950/40 text-cyan-400 border border-cyan-500/40 cursor-pointer active-pill" data-category="all">Tümü</button>
+                        <button class="dept-filter-pill px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer" data-category="eng">Mühendislik & Bilişim</button>
+                        <button class="dept-filter-pill px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer" data-category="health">Sağlık & Tıp</button>
+                        <button class="dept-filter-pill px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer" data-category="econ">İktisadi & İdari</button>
+                        <button class="dept-filter-pill px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer" data-category="law">Sosyal & Hukuk</button>
+                        <button class="dept-filter-pill px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer" data-category="design">Mimarlık & Sanat</button>
+                    </div>
+                </div>
+
+                <!-- Departments Grid -->
+                <div id="departments-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Rendered dynamically via initDepartmentsPage -->
+                </div>
+            </div>
+        </main>
     `
 };

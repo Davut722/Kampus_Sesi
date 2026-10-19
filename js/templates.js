@@ -276,7 +276,43 @@ export const TEMPLATES = {
 
                 <section class="profile-section reveal-up" style="animation-delay: 0.1s;">
                     <h2 class="section-title">Canlı <span>Ulaşım Modülü</span></h2>
-                    <p class="section-desc">Çevre illerden bu üniversiteye ulaşım imkanlarını keşfedin.</p>
+                    <p class="section-desc">Çevre illerden bu üniversiteye ulaşım imkanlarını ve kampüsün interaktif konumunu keşfedin.</p>
+
+                    <!-- Canlı Kampüs & Ulaşım Haritası Kapsayıcısı (Leaflet.js) -->
+                    <div class="campus-map-wrapper" id="campus-map-wrapper">
+                        <div class="campus-map-header">
+                            <div class="campus-map-header__info">
+                                <span class="campus-map-header__dot"></span>
+                                <span class="campus-map-header__title" id="campus-map-label">Bandırma Onyedi Eylül Üniversitesi — Merkez Yerleşke</span>
+                            </div>
+                            <div class="campus-map-header__actions">
+                                <button type="button" class="campus-map-reset-btn" id="campus-map-reset-btn" title="Kampüs konumuna odakla">
+                                    <i data-lucide="locate-fixed" class="icon-xs"></i> Kampüse Odakla
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="campus-map-body">
+                            <div id="campus-transport-map" class="campus-transport-map" aria-label="Üniversite Kampüs Konum Haritası"></div>
+
+                            <!-- Haritanın Sağ Alt Köşesinde Konumlanan Google Haritalar Butonu & Hover Açıklama Kartı -->
+                            <div class="campus-map-edge-card" id="campus-map-edge-card">
+                                <div class="campus-map-edge-card__popover">
+                                    <span class="map-popup__badge">Canlı Kampüs Konumu</span>
+                                    <h4 class="campus-map-edge-card__title" id="campus-map-edge-title">Bandırma Onyedi Eylül Üniversitesi</h4>
+                                    <p class="campus-map-edge-card__desc" id="campus-map-edge-desc">Marmara Denizi kıyısında, Bandırma İDO Feribot İskelesi ve şehir merkezine 10 dakika mesafede konumlanan ana yerleşke.</p>
+                                </div>
+                                <a href="https://www.google.com/maps?q=40.3414,27.9344" target="_blank" rel="noopener noreferrer" class="map-popup__btn" id="campus-map-gmaps-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                                        <circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                    <span>Google Haritalar'da Aç</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="transport-grid" id="transport-grid"></div>
                 </section>
 

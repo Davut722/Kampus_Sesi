@@ -2371,11 +2371,394 @@ svg.icon-lg {
   transform: rotate(180deg);
 }
 
-/* 3. Transportation Grid Module */
+/* 3. Transportation Grid & Interactive Leaflet Map Module */
 .section-desc {
   color: var(--color-text-muted);
   margin-bottom: var(--space-lg);
   font-size: 1.05rem;
+}
+
+/* Harita Ana Kapsayıcısı (Dark Mode, Yuvarlatılmış Köşeler & İzole Z-Index) */
+.campus-map-wrapper {
+  position: relative;
+  z-index: 1;
+  isolation: isolate; /* Leaflet'in iç z-index katmanlarının (400-1000) üst menü/drawer üstüne çıkmasını engeller */
+  overflow: hidden;
+  border-radius: 12px;
+  background: #09090b;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  margin-bottom: var(--space-lg);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.campus-map-wrapper:hover {
+  border-color: rgba(34, 211, 238, 0.35);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.65), 0 0 20px rgba(34, 211, 238, 0.08);
+}
+
+/* Harita Üst Bilgi Barı */
+.campus-map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(24, 24, 27, 0.92);
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.campus-map-header__info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.campus-map-header__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+  flex-shrink: 0;
+}
+
+.campus-map-header__title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.campus-map-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #22d3ee;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.campus-map-reset-btn:hover {
+  background: rgba(34, 211, 238, 0.18);
+  border-color: rgba(34, 211, 238, 0.45);
+  transform: translateY(-1px);
+}
+
+.campus-map-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Harita Gövdesi ve Kenar Kartı (Edge Card) Konumlandırması */
+.campus-map-body {
+  position: relative;
+  width: 100%;
+}
+
+/* Leaflet Harita Canvas Alanı */
+.campus-transport-map {
+  width: 100%;
+  height: 400px;
+  background: #09090b;
+  position: relative;
+  z-index: 1;
+  touch-action: none; /* Touchpad iki parmak yakınlaştırma ve dokunmatik gezinmeyi pürüzsüzleştirir */
+  cursor: grab;
+}
+
+.campus-transport-map:active {
+  cursor: grabbing;
+}
+
+/* Yumuşak ve Akıcı GPU Destekli Zoom Animasyonu */
+.campus-transport-map .leaflet-zoom-animated {
+  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  will-change: transform;
+}
+
+/* Haritanın Sağ Alt Kenarına Sabitlenen Google Maps Butonu ve Hover Bilgi Kartı */
+.campus-map-edge-card {
+  position: absolute;
+  bottom: 28px;
+  right: 14px;
+  left: auto;
+  z-index: 450;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: auto;
+}
+
+/* Mouse Butonun Üzerine Geldiğinde Ortaya Çıkan Üst Bilgi Balonu */
+.campus-map-edge-card__popover {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  width: 280px;
+  max-width: calc(100vw - 48px);
+  background: rgba(15, 15, 19, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px) scale(0.96);
+  transform-origin: bottom right;
+  pointer-events: none;
+  transition: opacity 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0.24s ease;
+}
+
+/* Hover Durumunda Açıklama Kartını Göster */
+.campus-map-edge-card:hover .campus-map-edge-card__popover,
+.campus-map-edge-card:focus-within .campus-map-edge-card__popover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.campus-map-edge-card .map-popup__btn {
+  width: auto;
+  padding: 9px 16px;
+  border-radius: 10px;
+  white-space: nowrap;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55), 0 0 14px rgba(6, 182, 212, 0.28);
+}
+
+.campus-map-edge-card__title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.campus-map-edge-card__desc {
+  font-size: 0.76rem;
+  color: #a1a1aa;
+  margin: 0;
+  line-height: 1.45;
+}
+
+[data-theme="light"] .campus-map-edge-card__popover {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+[data-theme="light"] .campus-map-edge-card__title {
+  color: #18181b;
+}
+
+[data-theme="light"] .campus-map-edge-card__desc {
+  color: #52525b;
+}
+
+/* Açık kaynaklı standart OpenStreetMap katmanını sitenin Dark Mode temasına uyarlayan filtre */
+.campus-transport-map .leaflet-tile-pane {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+/* Açık temada (Light Mode) standart OpenStreetMap renklerini koru */
+[data-theme="light"] .campus-transport-map .leaflet-tile-pane {
+  filter: none;
+}
+
+@media (max-width: 640px) {
+  .campus-transport-map {
+    height: 320px;
+  }
+  .campus-map-edge-card {
+    bottom: 24px;
+    right: 10px;
+  }
+  .campus-map-edge-card__popover {
+    width: 240px;
+  }
+}
+
+/* Özel Kampüs Pin (Marker) Tasarımı */
+.campus-custom-pin {
+  background: transparent;
+  border: none;
+}
+
+.campus-pin-inner {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.campus-pin-pulse {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(34, 211, 238, 0.25);
+  animation: campusPinPulse 2.2s infinite ease-out;
+}
+
+.campus-pin-core {
+  position: relative;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #09090b;
+  border: 2px solid #22d3ee;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7), 0 0 12px rgba(34, 211, 238, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #22d3ee;
+  transition: transform 0.2s ease;
+}
+
+.campus-pin-inner:hover .campus-pin-core {
+  transform: scale(1.12);
+}
+
+@keyframes campusPinPulse {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+
+/* Leaflet Dark Mode Popup & Kontroller Özelleştirmesi */
+.campus-transport-map .leaflet-popup-content-wrapper {
+  background: #121216;
+  color: #f4f4f5;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75);
+  padding: 2px;
+}
+
+.campus-transport-map .leaflet-popup-tip {
+  background: #121216;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.campus-transport-map .leaflet-popup-content {
+  margin: 14px 16px;
+  line-height: 1.5;
+  min-width: 230px;
+}
+
+.campus-transport-map .leaflet-container a.leaflet-popup-close-button {
+  color: #a1a1aa;
+  font-size: 18px;
+  padding: 6px 8px 0 0;
+}
+
+.campus-transport-map .leaflet-container a.leaflet-popup-close-button:hover {
+  color: #ffffff;
+}
+
+.map-popup__badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #22d3ee;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.map-popup__title {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  line-height: 1.35;
+}
+
+.map-popup__desc {
+  font-size: 0.8rem;
+  color: #a1a1aa;
+  margin: 0 0 12px 0;
+  line-height: 1.45;
+}
+
+.map-popup__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #06b6d4, #2563eb);
+  color: #ffffff !important;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.map-popup__btn:hover {
+  opacity: 0.94;
+  transform: translateY(-1px);
+}
+
+/* Leaflet Zoom & Attribution Dark Uyumluluğu */
+.campus-transport-map .leaflet-bar {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.campus-transport-map .leaflet-bar a {
+  background-color: #18181b;
+  color: #e4e4e7;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.campus-transport-map .leaflet-bar a:hover {
+  background-color: #27272a;
+  color: #22d3ee;
+}
+
+.campus-transport-map .leaflet-control-attribution {
+  background: rgba(9, 9, 11, 0.78) !important;
+  color: #71717a !important;
+  font-size: 0.68rem;
+  backdrop-filter: blur(4px);
+}
+
+.campus-transport-map .leaflet-control-attribution a {
+  color: #a1a1aa !important;
 }
 
 .transport-grid {

@@ -690,136 +690,51 @@ const GENERIC_UNI_DATA = {
 };
 
 // ─── Canlı Ulaşım Modülü: Leaflet.js Harita Veri Seti & Başlatıcı ───────────
-// Python / SQL Backend'den dönen kampüs koordinat verisini simüle eden JSON objesi.
-// Öncelikli olarak Bandırma Onyedi Eylül Üniversitesi ve Zonguldak Bülent Ecevit Üniversitesi yapılandırılmıştır.
+// MySQL `university_addresses` tablosu ve Google Haritalar ile birebir senkronize çalışan harita veri kaynağı.
 const CAMPUS_MAP_DATA = {
     'Bandırma Onyedi Eylül Üniversitesi': {
         name: 'Bandırma Onyedi Eylül Üniversitesi',
         campus: 'Merkez Yerleşke (Yeni Mahalle / Bandırma)',
-        lat: 40.33714819660769,
-        lng: 27.935949260838914,
-        zoom: 15,
-        info: 'Marmara Denizi kıyısında, Bandırma İDO Feribot İskelesi ve şehir merkezine 10 dakika mesafede konumlanan ana yerleşke.',
-        googleMapsUrl: 'https://maps.app.goo.gl/vQDQj7jwV2oU1jvEA'
+        city: 'Balıkesir',
+        district: 'Bandırma',
+        lat: 40.3374521,
+        lng: 27.9360007,
+        zoom: 16,
+        info: 'Marmara Denizi kıyısında, Bandırma İDO Feribot İskelesi ve şehir merkezine 10 dakika mesafede konumlanan ana yerleşke. Açık Adres: Yeni, Şehit Astsubay Mustafa Soner Varlık Caddesi No:77, 10250 Bandırma/Balıkesir',
+        googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=40.3374521,27.9360007&query_place_id=ChIJBfiUD6jUtRQRgxxbvGQQkAk'
     },
-    'Zonguldak Bülent Ecevit Üniversitesi': {
-        name: 'Zonguldak Bülent Ecevit Üniversitesi',
-        campus: 'Farabi Merkez Kampüsü (İncivez / Zonguldak)',
-        lat: 41.4514,
-        lng: 31.7611,
-        zoom: 15,
-        info: 'Karadeniz manzaralı Farabi Merkez Yerleşkesi; şehir merkezine, sahil hattına ve öğrenci mahallesi İncivez\'e yürüme mesafesinde.',
-        googleMapsUrl: 'https://www.google.com/maps?q=41.4514,31.7611'
-    },
-    'Boğaziçi Üniversitesi': {
-        name: 'Boğaziçi Üniversitesi',
-        campus: 'Güney Kampüs (Bebek / İstanbul)',
-        lat: 41.0846,
-        lng: 29.0510,
-        zoom: 15,
-        info: 'İstanbul Boğazı\'na hakim tarihi Güney Kampüs; M6 Boğaziçi Üniversitesi Metro İstasyonu çıkışında yer alır.',
-        googleMapsUrl: 'https://www.google.com/maps?q=41.0846,29.0510'
-    },
-    'Orta Doğu Teknik Üniversitesi (ODTÜ)': {
-        name: 'Orta Doğu Teknik Üniversitesi (ODTÜ)',
-        campus: 'Üniversiteler Mah. Merkez Kampüs (Çankaya / Ankara)',
-        lat: 39.8914,
-        lng: 32.7847,
-        zoom: 14,
-        info: 'Eskişehir Yolu üzerinde, M2 ODTÜ Metro İstasyonu ve kampüs içi ring hatlarıyla doğrudan erişilebilir ana yerleşke.',
-        googleMapsUrl: 'https://www.google.com/maps?q=39.8914,32.7847'
-    },
-    'İstanbul Teknik Üniversitesi': {
-        name: 'İstanbul Teknik Üniversitesi',
-        campus: 'Ayazağa Kampüsü (Maslak / İstanbul)',
-        lat: 41.1055,
-        lng: 29.0235,
-        zoom: 15,
-        info: 'M2 İTÜ-Ayazağa Metro İstasyonu çıkışında, Maslak iş merkezi ve İTÜ ARI Teknokent ile bütünleşik ana yerleşke.',
-        googleMapsUrl: 'https://www.google.com/maps?q=41.1055,29.0235'
-    },
-    'Hacettepe Üniversitesi': {
-        name: 'Hacettepe Üniversitesi',
-        campus: 'Beytepe Kampüsü (Çankaya / Ankara)',
-        lat: 39.8674,
-        lng: 32.7344,
-        zoom: 14,
-        info: 'Beytepe Metro İstasyonu\'ndan kalkan ring otobüsleriyle kolayca ulaşılan, geniş ormanlık alana kurulu kampüs.',
-        googleMapsUrl: 'https://www.google.com/maps?q=39.8674,32.7344'
-    },
-    'Ankara Üniversitesi': {
-        name: 'Ankara Üniversitesi',
-        campus: 'Tandoğan Yerleşkesi (Anıttepe / Ankara)',
-        lat: 39.9358,
-        lng: 32.8239,
-        zoom: 15,
-        info: 'Ankaray Anadolu/Tandoğan durağı ve Başkentray hattına yürüme mesafesinde merkezi şehir yerleşkesi.',
-        googleMapsUrl: 'https://www.google.com/maps?q=39.9358,32.8239'
-    },
-    'Ege Üniversitesi': {
-        name: 'Ege Üniversitesi',
-        campus: 'Bornova Merkez Yerleşkesi (Bornova / İzmir)',
-        lat: 38.4582,
-        lng: 27.2275,
-        zoom: 15,
-        info: 'İzmir Metrosu Evka-3 / Ege Üniversitesi durağı kampüsün tam içinden geçmektedir.',
-        googleMapsUrl: 'https://www.google.com/maps?q=38.4582,27.2275'
-    },
-    'Dokuz Eylül Üniversitesi': {
-        name: 'Dokuz Eylül Üniversitesi',
-        campus: 'Tınaztepe Yerleşkesi (Buca / İzmir)',
-        lat: 38.3688,
-        lng: 27.2078,
-        zoom: 15,
-        info: 'İzmir Çevre Yolu bağlantısı ve İZBAN aktarmalı ESHOT otobüs hatlarıyla ulaşılabilen ana yerleşke.',
-        googleMapsUrl: 'https://www.google.com/maps?q=38.3688,27.2078'
-    },
-    'Yıldız Teknik Üniversitesi (YTÜ)': {
-        name: 'Yıldız Teknik Üniversitesi (YTÜ)',
-        campus: 'Davutpaşa Kampüsü (Esenler / İstanbul)',
-        lat: 41.0258,
-        lng: 28.8897,
-        zoom: 15,
-        info: 'M1A Davutpaşa-YTÜ Metro İstasyonu ile kampüs girişine doğrudan raylı sistem ulaşımı sağlanır.',
-        googleMapsUrl: 'https://www.google.com/maps?q=41.0258,28.8897'
-    },
-    'Marmara Üniversitesi': {
-        name: 'Marmara Üniversitesi',
-        campus: 'Göztepe Yerleşkesi (Kadıköy / İstanbul)',
-        lat: 40.9869,
-        lng: 29.0537,
-        zoom: 15,
-        info: 'Marmaray Göztepe İstasyonu ve Kadıköy-Kartal aksındaki toplu taşıma hatlarına yürüme mesafesinde.',
-        googleMapsUrl: 'https://www.google.com/maps?q=40.9869,29.0537'
-    },
-    'Bilkent Üniversitesi': {
-        name: 'Bilkent Üniversitesi',
-        campus: 'Merkez Kampüs (Bilkent / Ankara)',
-        lat: 39.8681,
-        lng: 32.7488,
-        zoom: 15,
-        info: 'Tunus Caddesi, Sıhhiye ve Bilkent Metro durağından düzenli ücretsiz öğrenci servisleriyle ulaşım imkanı.',
-        googleMapsUrl: 'https://www.google.com/maps?q=39.8681,32.7488'
-    },
-    'Koç Üniversitesi': {
-        name: 'Koç Üniversitesi',
-        campus: 'Rumelifeneri Kampüsü (Sarıyer / İstanbul)',
-        lat: 41.2051,
-        lng: 29.0741,
-        zoom: 15,
-        info: 'M2 Hacıosman Metro İstasyonu\'ndan hareket eden İETT ve kampüs shuttle hatlarıyla doğrudan ulaşım.',
-        googleMapsUrl: 'https://www.google.com/maps?q=41.2051,29.0741'
-    }
+    ...(typeof window !== 'undefined' && window.UNIVERSITY_ADDRESSES_DB ? window.UNIVERSITY_ADDRESSES_DB : {})
 };
+
+function findCampusMapEntry(uniName) {
+    if (!uniName) return null;
+    const clean = uniName.trim();
+    const dbMap = (typeof window !== 'undefined' && window.UNIVERSITY_ADDRESSES_DB) ? window.UNIVERSITY_ADDRESSES_DB : {};
+
+    if (dbMap[clean]) return dbMap[clean];
+    if (CAMPUS_MAP_DATA[clean]) return CAMPUS_MAP_DATA[clean];
+
+    const baseName = clean.replace(/\s*\([^)]*\)/g, '').trim().toLowerCase();
+    const lowerClean = clean.toLowerCase();
+
+    for (const [k, v] of Object.entries(dbMap)) {
+        const kLow = k.toLowerCase();
+        const kBase = k.replace(/\s*\([^)]*\)/g, '').trim().toLowerCase();
+        if (kLow === lowerClean || kBase === baseName || kLow.includes(baseName) || baseName.includes(kBase)) {
+            return v;
+        }
+    }
+    return null;
+}
 
 let campusMapInstance = null;
 let campusMapMarker = null;
 
 /**
  * Seçili üniversite için Leaflet.js haritasını başlatır veya mevcut haritayı günceller.
- * Öncelikli olarak Bandırma Onyedi Eylül Üniversitesi ve CAMPUS_MAP_DATA içindeki koordinatları kullanır.
+ * Veritabanındaki `university_addresses` tablosundan gelen koordinat ve adres verilerini birebir kullanır.
  */
-function initOrUpdateCampusMap(uniName) {
+function initOrUpdateCampusMap(uniName, dbAddress = null) {
     const mapContainer = document.getElementById('campus-transport-map');
     const mapLabel = document.getElementById('campus-map-label');
     const resetBtn = document.getElementById('campus-map-reset-btn');
@@ -829,22 +744,36 @@ function initOrUpdateCampusMap(uniName) {
 
     if (!mapContainer || typeof L === 'undefined') return;
 
-    // Seçili üniversitenin koordinat verisini al (Yoksa Bandırma Onyedi Eylül Üniversitesi varsayılan)
-    const mapData = CAMPUS_MAP_DATA[uniName] || {
+    // 1. Öncelikle veritabanındaki university_addresses tablosundan gelen veriyi (dbAddress) veya
+    // senkronize UNIVERSITY_ADDRESSES_DB / CAMPUS_MAP_DATA kaydını kullan
+    const matchedEntry = findCampusMapEntry(uniName);
+    const fallbackData = matchedEntry || {
         name: uniName || 'Bandırma Onyedi Eylül Üniversitesi',
         campus: 'Merkez Kampüs Yerleşkesi',
-        lat: 40.3414,
-        lng: 27.9344,
-        zoom: 14,
+        lat: 40.3374521,
+        lng: 27.9360007,
+        zoom: 16,
         info: `${uniName || 'Bandırma Onyedi Eylül Üniversitesi'} ana yerleşkesi ve şehir içi toplu taşıma bağlantı noktası.`,
         googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(uniName || 'Bandırma Onyedi Eylül Üniversitesi')}`
     };
+
+    const mapData = dbAddress ? {
+        name: dbAddress.university_name || uniName || fallbackData.name,
+        campus: dbAddress.campus_name || dbAddress.campus || fallbackData.campus,
+        city: dbAddress.city || fallbackData.city || '',
+        district: dbAddress.district || fallbackData.district || '',
+        lat: Number(dbAddress.latitude ?? dbAddress.lat ?? fallbackData.lat),
+        lng: Number(dbAddress.longitude ?? dbAddress.lng ?? fallbackData.lng),
+        zoom: Number(dbAddress.zoom_level ?? dbAddress.zoom ?? fallbackData.zoom ?? 15),
+        info: dbAddress.transport_info || dbAddress.full_address || dbAddress.info || fallbackData.info,
+        googleMapsUrl: dbAddress.google_maps_url || dbAddress.googleMapsUrl || fallbackData.googleMapsUrl
+    } : fallbackData;
 
     if (mapLabel) {
         mapLabel.textContent = `${mapData.name} — ${mapData.campus}`;
     }
 
-    // Haritanın sol alt kenarındaki sabit bilgi & Google Haritalar kartını güncelle
+    // Haritanın sağ alt kenarındaki bilgi & Google Haritalar kartını güncelle
     if (edgeTitle) edgeTitle.textContent = mapData.name;
     if (edgeDesc) edgeDesc.textContent = mapData.info;
     if (gmapsBtn) gmapsBtn.href = mapData.googleMapsUrl;
@@ -885,11 +814,11 @@ function initOrUpdateCampusMap(uniName) {
     });
 
     if (!campusMapInstance) {
-        // 1. Haritayı oluştur (Touchpad ve mouse için yumuşak, düşük hassasiyetli ve akıcı GPU zoom ayarları)
+        // 1. Haritayı oluştur (Normal scroll sayfa kaydırmasını bozmaz, yalnızca Ctrl + Scroll ile yakınlaştırır)
         campusMapInstance = L.map(mapContainer, {
             center: [mapData.lat, mapData.lng],
             zoom: mapData.zoom,
-            scrollWheelZoom: true,      // Mouse tekerleği ve touchpad yakınlaştırma aktif
+            scrollWheelZoom: false,     // Normal scroll kapatıldı (yalnızca Ctrl + Scroll ile zoom aktif)
             touchZoom: true,            // İki parmakla büyütme/küçültme aktif
             doubleClickZoom: true,      // Çift tıklama ile yakınlaştırma aktif
             dragging: true,             // Rahat sürükleme aktif
@@ -899,10 +828,57 @@ function initOrUpdateCampusMap(uniName) {
             zoomAnimation: true,        // GPU hızlandırmalı yumuşak zoom animasyonu
             markerZoomAnimation: true,
             zoomSnap: 0.5,              // Yarım kademeli net ve takılmayan zoom adımları
-            zoomDelta: 0.5,             // + / - butonları için yumuşak adım
-            wheelPxPerZoomLevel: 220,   // Minik touchpad hareketlerinde aşırı zoom atlamasını önler (daha yumuşak tepki)
-            wheelDebounceTime: 65       // Touchpad eventlerini birleştirerek takılmayı (stutter) engeller
+            zoomDelta: 0.5              // + / - butonları için yumuşak adım
         });
+
+        campusMapInstance._lastTargetLat = mapData.lat;
+        campusMapInstance._lastTargetLng = mapData.lng;
+
+        // Sadece Ctrl + Scroll (veya Mac'te Cmd + Scroll / Touchpad iki parmak pinch) ile yumuşak zoom
+        let wheelAccum = 0;
+        let wheelTimer = null;
+        mapContainer.addEventListener('wheel', (e) => {
+            const zoomHintBadge = document.getElementById('campus-map-zoom-hint');
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (zoomHintBadge) zoomHintBadge.classList.remove('is-warning');
+
+                const dy = e.deltaMode === 1 ? e.deltaY * 32 : e.deltaY;
+                wheelAccum += dy;
+                const lastClientX = e.clientX;
+                const lastClientY = e.clientY;
+
+                if (!wheelTimer) {
+                    wheelTimer = setTimeout(() => {
+                        wheelTimer = null;
+                        if (!campusMapInstance || Math.abs(wheelAccum) < 4) {
+                            wheelAccum = 0;
+                            return;
+                        }
+                        const currentZoom = campusMapInstance.getZoom();
+                        const step = Math.min(1.0, Math.max(0.5, Math.round((Math.abs(wheelAccum) / 140) * 2) / 2));
+                        const targetZoom = wheelAccum < 0
+                            ? Math.min(campusMapInstance.getMaxZoom(), currentZoom + step)
+                            : Math.max(campusMapInstance.getMinZoom(), currentZoom - step);
+                        wheelAccum = 0;
+
+                        const rect = mapContainer.getBoundingClientRect();
+                        const containerPoint = L.point(lastClientX - rect.left, lastClientY - rect.top);
+                        campusMapInstance.setZoomAround(containerPoint, targetZoom, { animate: true });
+                    }, 55);
+                }
+            } else {
+                // Ctrl basılmadan scroll yapıldığında sayfa normal kaymaya devam eder, köşedeki rozet parlayarak bilgi verir
+                if (zoomHintBadge) {
+                    zoomHintBadge.classList.add('is-warning');
+                    clearTimeout(zoomHintBadge._warnTimeout);
+                    zoomHintBadge._warnTimeout = setTimeout(() => {
+                        zoomHintBadge.classList.remove('is-warning');
+                    }, 1300);
+                }
+            }
+        }, { passive: false });
 
         // Zoom (+ / -) butonlarını sol üst köşeye yerleştir (Sağ alt köşedeki Google Maps butonuyla çakışmaz)
         L.control.zoom({
@@ -929,11 +905,19 @@ function initOrUpdateCampusMap(uniName) {
             }
         }, 200);
     } else {
-        // Harita zaten açıksa yeni üniversite koordinatına yumuşak geçiş yap
-        campusMapInstance.closePopup();
-        campusMapInstance.flyTo([mapData.lat, mapData.lng], mapData.zoom, {
-            duration: 1.1
-        });
+        const prevLat = Number(campusMapInstance._lastTargetLat ?? 0);
+        const prevLng = Number(campusMapInstance._lastTargetLng ?? 0);
+        const isSameTarget = Math.abs(prevLat - mapData.lat) < 0.00005 && Math.abs(prevLng - mapData.lng) < 0.00005;
+
+        campusMapInstance._lastTargetLat = mapData.lat;
+        campusMapInstance._lastTargetLng = mapData.lng;
+
+        if (!isSameTarget) {
+            campusMapInstance.closePopup();
+            campusMapInstance.flyTo([mapData.lat, mapData.lng], mapData.zoom, {
+                duration: 1.0
+            });
+        }
         if (campusMapMarker) {
             campusMapMarker.setLatLng([mapData.lat, mapData.lng]);
             campusMapMarker.setPopupContent(popupHTML);
@@ -1145,6 +1129,13 @@ function initUniversityPage(initialUni) {
     function updateHero() {
         // Fetch specific or fallback data
         let details = UNI_DETAILS[selectedUni] ? { ...UNI_DETAILS[selectedUni] } : { ...GENERIC_UNI_DATA };
+        const initialMapEntry = findCampusMapEntry(selectedUni);
+        if (!UNI_DETAILS[selectedUni] && initialMapEntry && initialMapEntry.city) {
+            const distPart = (initialMapEntry.district && initialMapEntry.district.toLowerCase() !== initialMapEntry.city.toLowerCase() && initialMapEntry.district !== 'Merkez')
+                ? ` (${initialMapEntry.district})`
+                : '';
+            details.subtitle = `${initialMapEntry.city}${distPart}, Türkiye`;
+        }
 
         // 1. Update Title and Location
         const heroTitleEl = document.getElementById('uni-hero-title');
@@ -1270,6 +1261,24 @@ function initUniversityPage(initialUni) {
                         }
                     }
 
+                    // Veritabanından gelen ilişkili adres & koordinat bilgisini (university_addresses) haritaya aktar
+                    if (uniDb.address) {
+                        initOrUpdateCampusMap(selectedUni, uniDb.address);
+                        if (!UNI_DETAILS[selectedUni] && heroSubtitleEl && uniDb.address.city) {
+                            const distPart = (uniDb.address.district && uniDb.address.district.toLowerCase() !== uniDb.address.city.toLowerCase() && uniDb.address.district !== 'Merkez')
+                                ? ` (${uniDb.address.district})`
+                                : '';
+                            heroSubtitleEl.innerHTML = `<i data-lucide="map-pin" class="icon-sm"></i> ${escapeHtml(uniDb.address.city)}${escapeHtml(distPart)}, Türkiye`;
+                            if (typeof lucide !== 'undefined') lucide.createIcons();
+                        }
+                    } else if (typeof api.getUniversityAddress === 'function') {
+                        api.getUniversityAddress(uniDb.id || selectedUni).then(addr => {
+                            if (addr && currentTitle && currentTitle.textContent.trim() === selectedUni.trim()) {
+                                initOrUpdateCampusMap(selectedUni, addr);
+                            }
+                        }).catch(() => {});
+                    }
+
                     // KYK Render (Ayrı API çağrısı ile ID üzerinden)
                     api.getDorms(uniDb.id).then(dorms => {
                         renderKykSection(dorms);
@@ -1281,6 +1290,14 @@ function initUniversityPage(initialUni) {
             }
         }).catch(err => {
             console.warn("DB'den universite bilgisi cekilirken hata:", err);
+            if (typeof api.getUniversityAddress === 'function') {
+                api.getUniversityAddress(selectedUni).then(addr => {
+                    const currentTitle = document.getElementById('uni-hero-title');
+                    if (addr && currentTitle && currentTitle.textContent.trim() === selectedUni.trim()) {
+                        initOrUpdateCampusMap(selectedUni, addr);
+                    }
+                }).catch(() => {});
+            }
             // Fallback wikipedia
             fetchWikipediaImage(selectedUni).then(url => {
                 const currentTitle = document.getElementById('uni-hero-title');

@@ -32,23 +32,23 @@ export const TEMPLATES = {
                     </p>
 
                     <!-- Cam Efektli Geniş Arama Çubuğu (Glassmorphism Search Bar) -->
-                    <div class="hero-centered__search-wrapper relative w-full max-w-2xl mx-auto mb-6">
-                        <div class="relative flex items-center p-2 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl shadow-2xl shadow-cyan-950/20 hover:border-cyan-500/40 transition-all duration-300 group">
-                            <i data-lucide="search" class="w-5 h-5 text-zinc-400 ml-3 shrink-0 group-hover:text-cyan-400 transition-colors"></i>
+                    <div class="hero-centered__search-wrapper relative w-full max-w-4xl mx-auto mb-8">
+                        <div class="relative w-full flex items-center p-2.5 sm:p-3 rounded-2xl bg-white/[0.04] border border-white/15 backdrop-blur-xl shadow-2xl shadow-cyan-950/30 hover:border-cyan-500/45 focus-within:border-cyan-400/70 transition-all duration-300 group">
+                            <i data-lucide="search" class="w-5 h-5 sm:w-6 sm:h-6 text-zinc-400 ml-3 sm:ml-4 shrink-0 group-hover:text-cyan-400 transition-colors"></i>
                             <input 
                                 type="text" 
                                 id="hero-search-input"
-                                class="hero-centered__search-input flex-1 bg-transparent px-4 py-3 text-sm sm:text-base text-white placeholder-zinc-500 focus:outline-none w-full" 
+                                class="hero-centered__search-input flex-1 bg-transparent px-4 sm:px-5 py-3.5 sm:py-4 text-base sm:text-lg text-white placeholder-zinc-400 focus:outline-none w-full" 
                                 placeholder="Üniversite, şehir veya bölüm ara (örn. İTÜ Bilgisayar)..."
                                 autocomplete="off"
                             >
                             <button 
                                 type="button" 
                                 id="hero-search-btn"
-                                class="px-5 sm:px-7 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-zinc-950 font-bold text-sm shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all flex items-center gap-2 cursor-pointer shrink-0 hover:scale-[1.02] active:scale-[0.98]"
+                                class="px-6 sm:px-9 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-zinc-950 font-bold text-sm sm:text-base shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all flex items-center gap-2.5 cursor-pointer shrink-0 hover:scale-[1.02] active:scale-[0.98]"
                             >
                                 <span>Keşfet</span>
-                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                <i data-lucide="arrow-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                             </button>
                         </div>
                     </div>
@@ -294,6 +294,15 @@ export const TEMPLATES = {
 
                         <div class="campus-map-body">
                             <div id="campus-transport-map" class="campus-transport-map" aria-label="Üniversite Kampüs Konum Haritası"></div>
+
+                            <!-- Haritanın Sol Alt Köşesinde Zoom Kısayol Bilgilendirme Rozeti -->
+                            <div class="campus-map-zoom-hint" id="campus-map-zoom-hint" aria-live="polite">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="5" y="2" width="14" height="20" rx="7"/>
+                                    <path d="M12 6v4"/>
+                                </svg>
+                                <span>Zoom için <kbd>Ctrl</kbd> + <kbd>Scroll</kbd></span>
+                            </div>
 
                             <!-- Haritanın Sağ Alt Köşesinde Konumlanan Google Haritalar Butonu & Hover Açıklama Kartı -->
                             <div class="campus-map-edge-card" id="campus-map-edge-card">

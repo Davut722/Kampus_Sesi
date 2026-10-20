@@ -2,7 +2,7 @@ import os
 import json
 import time
 from datetime import datetime
-from sqlalchemy import create_engine, Column, Integer, BigInteger, String, Text, DateTime, ForeignKey, UniqueConstraint, JSON, Boolean, inspect, text
+from sqlalchemy import create_engine, Column, Integer, BigInteger, Float, String, Text, DateTime, ForeignKey, UniqueConstraint, JSON, Boolean, inspect, text
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
 # ---------------------------------------------------------------------------
@@ -155,6 +155,7 @@ class University(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     dorms = relationship("KykDorm", back_populates="university", cascade="all, delete-orphan")
+    address = relationship("UniversityAddress", back_populates="university", uselist=False, cascade="all, delete-orphan")
 
     def to_dict(self):
         return {
@@ -162,6 +163,48 @@ class University(Base):
             "name": self.name,
             "image_url": self.image_url,
             "website_url": self.website_url,
+            "address": self.address.to_dict() if self.address else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None
+        }
+
+class UniversityAddress(Base):
+    __tablename__ = "university_addresses"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    university_id = Column(Integer, ForeignKey("universities.id", ondelete="CASCADE"), unique=True, index=True, nullable=False)
+    campus_name = Column(String(200), nullable=False, default="Merkez Yerleşke")
+    city = Column(String(100), nullable=False, default="")
+    district = Column(String(100), default="")
+    full_address = Column(Text, default="")
+    transport_info = Column(Text, default="")
+    latitude = Column(Float(precision=53), nullable=False)
+    longitude = Column(Float(precision=53), nullable=False)
+    zoom_level = Column(Integer, default=16)
+    google_maps_url = Column(String(500), default="")
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    university = relationship("University", back_populates="address")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "university_id": self.university_id,
+            "university_name": self.university.name if self.university else None,
+            "campus": self.campus_name,
+            "campus_name": self.campus_name,
+            "city": self.city,
+            "district": self.district,
+            "full_address": self.full_address,
+            "info": self.transport_info or self.full_address,
+            "transport_info": self.transport_info,
+            "lat": self.latitude,
+            "lng": self.longitude,
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "zoom": self.zoom_level,
+            "zoom_level": self.zoom_level,
+            "googleMapsUrl": self.google_maps_url,
+            "google_maps_url": self.google_maps_url,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None
         }
 
@@ -384,8 +427,227 @@ def init_db():
             ]
             db.add_all(sample_reviews)
             db.commit()
+
+        # İlk hazırlanan üniversite adres ve koordinat verilerini university_addresses tablosuna aktar
+        seed_initial_university_addresses(db)
     finally:
         db.close()
+
+
+INITIAL_UNIVERSITY_ADDRESSES = [
+    {
+        "uni_name": "Bandırma Onyedi Eylül Üniversitesi",
+        "campus_name": "Merkez Yerleşke (Yeni Mahalle / Bandırma)",
+        "city": "Balıkesir",
+        "district": "Bandırma",
+        "full_address": "Yeni Mahalle Şehit Astsubay Mustafa Soner Varlık Caddesi No:77, 10200 Bandırma/Balıkesir",
+        "transport_info": "Marmara Denizi kıyısında, Bandırma İDO Feribot İskelesi ve şehir merkezine 10 dakika mesafede konumlanan ana yerleşke.",
+        "latitude": 40.3414,
+        "longitude": 27.9344,
+        "zoom_level": 14,
+        "google_maps_url": "https://www.google.com/maps?q=40.3414,27.9344",
+    },
+    {
+        "uni_name": "Zonguldak Bülent Ecevit Üniversitesi",
+        "campus_name": "Farabi Merkez Kampüsü (İncivez / Zonguldak)",
+        "city": "Zonguldak",
+        "district": "Merkez",
+        "full_address": "İncivez Mah. Üniversite Cad. 67100 Merkez/Zonguldak",
+        "transport_info": "Karadeniz manzaralı Farabi Merkez Yerleşkesi; şehir merkezine, sahil hattına ve öğrenci mahallesi İncivez'e yürüme mesafesinde.",
+        "latitude": 41.4514,
+        "longitude": 31.7611,
+        "zoom_level": 15,
+        "google_maps_url": "https://www.google.com/maps?q=41.4514,31.7611",
+    },
+    {
+        "uni_name": "Boğaziçi Üniversitesi",
+        "campus_name": "Güney Kampüs (Bebek / İstanbul)",
+        "city": "İstanbul",
+        "district": "Beşiktaş",
+        "full_address": "Bebek Mah. 34342 Beşiktaş/İstanbul",
+        "transport_info": "İstanbul Boğazı'na hakim tarihi Güney Kampüs; M6 Boğaziçi Üniversitesi Metro İstasyonu çıkışında yer alır.",
+        "latitude": 41.0846,
+        "longitude": 29.0510,
+        "zoom_level": 15,
+        "google_maps_url": "https://www.google.com/maps?q=41.0846,29.0510",
+    },
+    {
+        "uni_name": "Orta Doğu Teknik Üniversitesi (ODTÜ)",
+        "campus_name": "Üniversiteler Mah. Merkez Kampüs (Çankaya / Ankara)",
+        "city": "Ankara",
+        "district": "Çankaya",
+        "full_address": "Üniversiteler Mah. Dumlupınar Bulvarı No:1, 06800 Çankaya/Ankara",
+        "transport_info": "Eskişehir Yolu üzerinde, M2 ODTÜ Metro İstasyonu ve kampüs içi ring hatlarıyla doğrudan erişilebilir ana yerleşke.",
+        "latitude": 39.8914,
+        "longitude": 32.7847,
+        "zoom_level": 14,
+        "google_maps_url": "https://www.google.com/maps?q=39.8914,32.7847",
+    },
+    {
+        "uni_name": "İstanbul Teknik Üniversitesi",
+        "campus_name": "Ayazağa Kampüsü (Maslak / İstanbul)",
+        "city": "İstanbul",
+        "district": "Sarıyer",
+        "full_address": "Reşitpaşa Mah. Katar Cad. No:2, 34467 Sarıyer/İstanbul",
+        "transport_info": "M2 İTÜ-Ayazağa Metro İstasyonu çıkışında, Maslak iş merkezi ve İTÜ ARI Teknokent ile bütünleşik ana yerleşke.",
+        "latitude": 41.1055,
+        "longitude": 29.0235,
+        "zoom_level": 15,
+        "google_maps_url": "https://www.google.com/maps?q=41.1055,29.0235",
+    },
+    {
+        "uni_name": "Hacettepe Üniversitesi",
+        "campus_name": "Beytepe Kampüsü (Çankaya / Ankara)",
+        "city": "Ankara",
+        "district": "Çankaya",
+        "full_address": "Üniversiteler Mah. Hacettepe Beytepe Kampüsü, 06800 Çankaya/Ankara",
+        "transport_info": "Beytepe Metro İstasyonu'ndan kalkan ring otobüsleriyle kolayca ulaşılan, geniş ormanlık alana kurulu kampüs.",
+        "latitude": 39.8674,
+        "longitude": 32.7344,
+        "zoom_level": 14,
+        "google_maps_url": "https://www.google.com/maps?q=39.8674,32.7344",
+    },
+    {
+        "uni_name": "Ankara Üniversitesi",
+        "campus_name": "Tandoğan Yerleşkesi (Anıttepe / Ankara)",
+        "city": "Ankara",
+        "district": "Çankaya",
+        "full_address": "Emniyet Mah. Dögol Cad. No:6A, 06560 Yenimahalle/Çankaya/Ankara",
+        "transport_info": "Ankaray Anadolu/Tandoğan durağı ve Başkentray hattına yürüme mesafesinde merkezi şehir yerleşkesi.",
+        "latitude": 39.9358,
+        "longitude": 32.8239,
+        "zoom_level": 15,
+        "google_maps_url": "https://www.google.com/maps?q=39.9358,32.8239",
+    },
+    {
+        "uni_name": "Ege Üniversitesi",
+        "campus_name": "Bornova Merkez Yerleşkesi (Bornova / İzmir)",
+        "city": "İzmir",
+        "district": "Bornova",
+        "full_address": "Erzene Mah. Ege Üniversitesi Merkez Yerleşkesi, 35040 Bornova/İzmir",
+        "transport_info": "İzmir Metrosu Evka-3 / Ege Üniversitesi durağı kampüsün tam içinden geçmektedir.",
+        "latitude": 38.4582,
+        "longitude": 27.2275,
+        "zoom_level": 15,
+        "google_maps_url": "https://www.google.com/maps?q=38.4582,27.2275",
+    },
+    {
+        "uni_name": "Dokuz Eylül Üniversitesi",
+        "campus_name": "Tınaztepe Yerleşkesi (Buca / İzmir)",
+        "city": "İzmir",
+        "district": "Buca",
+        "full_address": "Adatepe Mah. Doğuş Cad. No:207, 35390 Buca/İzmir",
+        "transport_info": "İzmir Çevre Yolu bağlantısı ve İZBAN aktarmalı ESHOT otobüs hatlarıyla ulaşılabilen ana yerleşke.",
+        "latitude": 38.3688,
+        "longitude": 27.2078,
+        "zoom_level": 15,
+        "google_maps_url": "https://www.google.com/maps?q=38.3688,27.2078",
+    },
+    {
+        "uni_name": "Yıldız Teknik Üniversitesi (YTÜ)",
+        "campus_name": "Davutpaşa Kampüsü (Esenler / İstanbul)",
+        "city": "İstanbul",
+        "district": "Esenler",
+        "full_address": "Çifte Havuzlar Mah. Eski Londra Asfaltı Cad. 34220 Esenler/İstanbul",
+        "transport_info": "M1A Davutpaşa-YTÜ Metro İstasyonu ile kampüs girişine doğrudan raylı sistem ulaşımı sağlanır.",
+        "latitude": 41.0258,
+        "longitude": 28.8897,
+        "zoom_level": 15,
+        "google_maps_url": "https://www.google.com/maps?q=41.0258,28.8897",
+    },
+    {
+        "uni_name": "Marmara Üniversitesi",
+        "campus_name": "Göztepe Yerleşkesi (Kadıköy / İstanbul)",
+        "city": "İstanbul",
+        "district": "Kadıköy",
+        "full_address": "Eğitim Mah. Fahrettin Kerim Gökay Cad. 34722 Kadıköy/İstanbul",
+        "transport_info": "Marmaray Göztepe İstasyonu ve Kadıköy-Kartal aksındaki toplu taşıma hatlarına yürüme mesafesinde.",
+        "latitude": 40.9869,
+        "longitude": 29.0537,
+        "zoom_level": 15,
+        "google_maps_url": "https://www.google.com/maps?q=40.9869,29.0537",
+    },
+    {
+        "uni_name": "Bilkent Üniversitesi",
+        "campus_name": "Merkez Kampüs (Bilkent / Ankara)",
+        "city": "Ankara",
+        "district": "Çankaya",
+        "full_address": "Üniversiteler Mah. 1598. Cad. 06800 Çankaya/Ankara",
+        "transport_info": "Tunus Caddesi, Sıhhiye ve Bilkent Metro durağından düzenli ücretsiz öğrenci servisleriyle ulaşım imkanı.",
+        "latitude": 39.8681,
+        "longitude": 32.7488,
+        "zoom_level": 15,
+        "google_maps_url": "https://www.google.com/maps?q=39.8681,32.7488",
+    },
+    {
+        "uni_name": "Koç Üniversitesi",
+        "campus_name": "Rumelifeneri Kampüsü (Sarıyer / İstanbul)",
+        "city": "İstanbul",
+        "district": "Sarıyer",
+        "full_address": "Rumelifeneri Yolu, 34450 Sarıyer/İstanbul",
+        "transport_info": "M2 Hacıosman Metro İstasyonu'ndan hareket eden İETT ve kampüs shuttle hatlarıyla doğrudan ulaşım.",
+        "latitude": 41.2051,
+        "longitude": 29.0741,
+        "zoom_level": 15,
+        "google_maps_url": "https://www.google.com/maps?q=41.2051,29.0741",
+    },
+]
+
+
+def seed_initial_university_addresses(db):
+    """Tüm üniversitelerin doğrulanmış adres ve koordinat verilerini universities.id Foreign Key ile bağlayarak kaydeder."""
+    try:
+        items_to_seed = list(INITIAL_UNIVERSITY_ADDRESSES)
+        cache_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts", "uni_addresses_cache.json")
+        if os.path.exists(cache_path):
+            try:
+                with open(cache_path, "r", encoding="utf-8") as f:
+                    cache_data = json.load(f)
+                if isinstance(cache_data, dict) and len(cache_data) > 0:
+                    items_to_seed = list(cache_data.values())
+            except Exception:
+                pass
+
+        for item in items_to_seed:
+            uni_name = item["uni_name"]
+            base_name = uni_name.split("(")[0].strip()
+
+            # 1. universities tablosunda ilgili üniversiteyi bul (yoksa oluştur)
+            uni = None
+            if "university_id" in item and item["university_id"]:
+                uni = db.query(University).filter(University.id == int(item["university_id"])).first()
+            if not uni:
+                uni = db.query(University).filter(University.name == uni_name).first()
+            if not uni:
+                uni = db.query(University).filter(University.name == base_name).first()
+            if not uni:
+                uni = db.query(University).filter(University.name.ilike(f"%{base_name}%")).first()
+            if not uni:
+                uni = University(name=uni_name)
+                db.add(uni)
+                db.flush()
+
+            # 2. university_addresses tablosunda bu university_id için kayıt var mı kontrol et
+            addr = db.query(UniversityAddress).filter(UniversityAddress.university_id == uni.id).first()
+            if not addr:
+                addr = UniversityAddress(
+                    university_id=uni.id,
+                    campus_name=item["campus_name"],
+                    city=item["city"],
+                    district=item["district"],
+                    full_address=item["full_address"],
+                    transport_info=item["transport_info"],
+                    latitude=item["latitude"],
+                    longitude=item["longitude"],
+                    zoom_level=item["zoom_level"],
+                    google_maps_url=item["google_maps_url"],
+                )
+                db.add(addr)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        print(f"[WARN] UniversityAddress seed hatası: {e}")
+
 
 def get_db():
     db = SessionLocal()
@@ -393,3 +655,4 @@ def get_db():
         yield db
     finally:
         db.close()
+

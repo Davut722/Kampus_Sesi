@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 
 from database import (
     init_db, get_db, User, Review, Reply, Interaction,
-    University, KykDorm, SchoolSuggestion, ContactMessage, BlogSubmission, UserFavorite
+    University, UniversityAddress, KykDorm, SchoolSuggestion, ContactMessage, BlogSubmission, UserFavorite
 )
 from auth_utils import hash_password, verify_password, create_access_token, decode_access_token
 
@@ -583,13 +583,45 @@ def get_all_interactions(db: Session = Depends(get_db)):
 
 # ─── Universities Endpoints ──────────────────────────────
 
-from database import University, KykDorm
+from database import University, UniversityAddress, KykDorm
 
 @app.get("/api/universities")
 def get_universities(db: Session = Depends(get_db)):
     """Tüm üniversiteleri listeler."""
     records = db.query(University).order_by(University.name).all()
     return [r.to_dict() for r in records]
+
+@app.get("/api/university-addresses")
+def get_all_university_addresses(db: Session = Depends(get_db)):
+    """university_addresses tablosundaki tüm üniversite adres ve koordinatlarını listeler."""
+    records = db.query(UniversityAddress).order_by(UniversityAddress.id.asc()).all()
+    return [r.to_dict() for r in records]
+
+@app.get("/api/universities/{uni_identifier}/address")
+def get_university_address(uni_identifier: str, db: Session = Depends(get_db)):
+    """ID'si veya adı verilen üniversitenin university_addresses tablosundaki adres ve koordinatlarını getirir."""
+    if uni_identifier.isdigit():
+        uid = int(uni_identifier)
+        addr = db.query(UniversityAddress).filter(UniversityAddress.university_id == uid).first()
+        if addr:
+            return addr.to_dict()
+        record = db.query(University).filter(University.id == uid).first()
+    else:
+        clean = uni_identifier.strip()
+        record = db.query(University).filter(University.name == clean).first()
+        if not record:
+            base_name = clean.split("(")[0].strip()
+            record = db.query(University).filter(
+                (University.name.ilike(f"%{base_name}%")) |
+                (University.name.ilike(f"%{clean}%"))
+            ).first()
+
+    if record:
+        addr = db.query(UniversityAddress).filter(UniversityAddress.university_id == record.id).first()
+        if addr:
+            return addr.to_dict()
+
+    raise HTTPException(status_code=404, detail="Bu üniversite için kayıtlı adres bulunamadı.")
 
 @app.get("/api/universities/{uni_identifier}/dorms")
 def get_university_dorms(uni_identifier: str, db: Session = Depends(get_db)):
@@ -623,7 +655,7 @@ def get_university_dorms(uni_identifier: str, db: Session = Depends(get_db)):
 
 @app.get("/api/universities/{uni_name}")
 def get_university(uni_name: str, db: Session = Depends(get_db)):
-    """Spesifik bir üniversitenin detaylarını getirir."""
+    """Spesifik bir üniversitenin detaylarını (ve bağlı adresini) getirir."""
     clean = uni_name.strip()
     record = db.query(University).filter(University.name == clean).first()
     if not record:

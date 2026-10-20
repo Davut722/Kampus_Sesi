@@ -2474,7 +2474,7 @@ svg.icon-lg {
   background: #09090b;
   position: relative;
   z-index: 1;
-  touch-action: none; /* Touchpad iki parmak yakınlaştırma ve dokunmatik gezinmeyi pürüzsüzleştirir */
+  touch-action: pan-x pan-y; /* Normal sayfa kaydırmasını korur, Ctrl + Scroll ile yakınlaştırma yapılır */
   cursor: grab;
 }
 
@@ -2486,6 +2486,70 @@ svg.icon-lg {
 .campus-transport-map .leaflet-zoom-animated {
   transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1) !important;
   will-change: transform;
+}
+
+/* Haritanın Sol Alt Köşesinde "Zoom için Ctrl + Scroll" Bilgilendirme Rozeti */
+.campus-map-zoom-hint {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  z-index: 450;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 11px;
+  border-radius: 9px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #d4d4d8;
+  background: rgba(15, 15, 19, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  user-select: none;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.campus-map-zoom-hint svg {
+  color: #22d3ee;
+  flex-shrink: 0;
+}
+
+.campus-map-zoom-hint kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #22d3ee;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.32);
+  border-radius: 5px;
+  line-height: 1.3;
+}
+
+/* Ctrl basılmadan scroll yapıldığında rozeti vurgula */
+.campus-map-zoom-hint.is-warning {
+  color: #ffffff;
+  background: rgba(15, 23, 42, 0.96);
+  border-color: #22d3ee;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), 0 0 16px rgba(34, 211, 238, 0.45);
+  transform: translateY(-2px) scale(1.04);
+}
+
+[data-theme="light"] .campus-map-zoom-hint {
+  color: #27272a;
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(6, 182, 212, 0.3);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+}
+
+[data-theme="light"] .campus-map-zoom-hint kbd {
+  color: #0891b2;
+  background: rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.35);
 }
 
 /* Haritanın Sağ Alt Kenarına Sabitlenen Google Maps Butonu ve Hover Bilgi Kartı */
@@ -3200,7 +3264,7 @@ svg.icon-lg {
 }
 
 .hero-centered__content {
-    max-width: 800px;
+    max-width: 1024px;
     width: 100%;
 }
 
@@ -3219,17 +3283,17 @@ svg.icon-lg {
     color: var(--color-text-muted);
     margin-bottom: var(--space-xl);
     line-height: 1.6;
-    max-width: 600px;
+    max-width: 680px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .hero-centered__search-wrapper {
     position: relative;
-    max-width: 600px;
+    width: 100%;
+    max-width: 896px;
     margin: 0 auto var(--space-xl) auto;
-    display: flex;
-    align-items: center;
+    display: block;
 }
 
 .hero-centered__search-wrapper .search-icon {
@@ -3242,20 +3306,20 @@ svg.icon-lg {
 
 .hero-centered__search-input {
     width: 100%;
-    padding: 20px 20px 20px 60px;
-    font-size: 1.1rem;
-    border: 2px solid var(--color-border);
-    border-radius: 50px;
-    background: var(--color-surface);
+    padding: 14px 16px;
+    font-size: 1.08rem;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
     color: var(--color-text);
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: all 0.25s ease;
+    box-shadow: none;
 }
 
 .hero-centered__search-input:focus {
     outline: none;
-    border-color: var(--color-accent);
-    box-shadow: 0 4px 25px rgba(99, 102, 241, 0.2);
+    border: none;
+    box-shadow: none;
 }
 
 .hero-centered__actions {
@@ -3286,8 +3350,8 @@ svg.icon-lg {
         font-size: 2.5rem;
     }
     .hero-centered__search-input {
-        padding: 15px 15px 15px 50px;
-        font-size: 1rem;
+        padding: 12px 10px;
+        font-size: 0.98rem;
     }
     .hero-centered__search-wrapper .search-icon {
         left: 15px;

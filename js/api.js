@@ -159,7 +159,11 @@ export const api = {
     },
     
     async getDorms(uniId) {
-        return await request(`/universities/${uniId}/dorms`);
+        return await request(`/universities/${encodeURIComponent(uniId)}/dorms`);
+    },
+
+    async getUniversityAddress(uniIdOrName) {
+        return await request(`/universities/${encodeURIComponent(uniIdOrName)}/address`);
     },
 
     // Suggestions

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kampüs Sesi — Üniversite Değerlendirme Platformu</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-    <link rel="stylesheet" href="css/style.css?v=63">
+    <link rel="stylesheet" href="css/style.css?v=66">
     <script>
         (function() {
             try {
@@ -131,19 +131,51 @@
                 </div>
                 
                 <div class="footer-links-group">
-                    <h4>PLATFORM</h4>
+                    <h4>YASAL & PLATFORM</h4>
                     <ul>
                         <li><a href="#/hakkimizda">Hakkımızda</a></li>
                         <li><a href="#/iletisim">İletişim</a></li>
-                        <li><a href="#/gizlilik">Gizlilik</a></li>
-                        <li><a href="#/kullanim-sartlari">Kullanım şartları</a></li>
+                        <li><a href="#/gizlilik">KVKK ve Gizlilik Politikası</a></li>
+                        <li><a href="#/cerez-politikasi">Çerez (Cookie) Politikası</a></li>
+                        <li><a href="#/kullanim-sartlari">Kullanıcı Sözleşmesi</a></li>
                     </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom-bar">
+            <div class="footer-bottom-inner">
+                <p class="footer-copyright">
+                    © 2026 <strong>Kampüs Sesi</strong> · 5651 Sayılı Kanun Kapsamında Yer Sağlayıcıdır · İletişim & Uyar-Kaldır: <a href="mailto:destek@kampussesi.com">destek@kampussesi.com</a>
+                </p>
+                <div class="footer-legal-pills">
+                    <a href="#/gizlilik">KVKK Aydınlatma ve Gizlilik</a>
+                    <span class="footer-dot">•</span>
+                    <a href="#/cerez-politikasi">Çerez Politikası</a>
+                    <span class="footer-dot">•</span>
+                    <a href="#/kullanim-sartlari">Kullanıcı Sözleşmesi</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    
+    <!-- Çerez Onay Bandı (Cookie Consent Banner) -->
+    <div id="cookie-consent-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Çerez Bilgilendirme Bandı" hidden>
+        <div class="cookie-banner__inner">
+            <div class="cookie-banner__content">
+                <div class="cookie-banner__icon" aria-hidden="true">🍪</div>
+                <div class="cookie-banner__text">
+                    <strong>Çerez ve Gizlilik Bilgilendirmesi:</strong> Kampüs Sesi'nde reklam veya takip çerezi kullanılmaz. Yalnızca güvenli oturum yönetimi ve interaktif kampüs haritası (OpenStreetMap) entegrasyonu için zorunlu çerezler kullanılmaktadır. Detaylar için <a href="#/cerez-politikasi">Çerez Politikası</a> ve <a href="#/gizlilik">KVKK Aydınlatma Metni</a> sayfalarımızı inceleyebilirsiniz.
+                </div>
+            </div>
+            <div class="cookie-banner__actions">
+                <a href="#/cerez-politikasi" class="cookie-banner__link-btn">Detaylar</a>
+                <button type="button" id="cookie-accept-btn" class="cookie-banner__accept-btn">Kabul Et</button>
+            </div>
+        </div>
+    </div>
+
+
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -152,8 +184,8 @@
     <!-- Leaflet.js (Canlı Ulaşım Harita Modülü) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
-    <script src="js/universities.js?v=75"></script>
-    <script type="module" src="js/app.js?v=75"></script>
+    <script src="js/universities.js?v=80"></script>
+    <script type="module" src="js/app.js?v=80"></script>
 </body>
 
 </html>

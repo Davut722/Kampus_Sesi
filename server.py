@@ -983,11 +983,17 @@ if os.path.exists(os.path.join(BASE_DIR, "img")):
 
 @app.get("/")
 def serve_index():
-    return FileResponse(os.path.join(BASE_DIR, "index.html"))
+    return FileResponse(
+        os.path.join(BASE_DIR, "index.html"),
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate"}
+    )
 
 @app.get("/index.html")
 def serve_index_html():
-    return FileResponse(os.path.join(BASE_DIR, "index.html"))
+    return FileResponse(
+        os.path.join(BASE_DIR, "index.html"),
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate"}
+    )
 
 if __name__ == "__main__":
     import uvicorn

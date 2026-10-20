@@ -4471,3 +4471,461 @@ svg.icon-lg {
     border-color: rgba(56, 189, 248, 0.4);
     transform: translateY(-1px);
 }
+
+/* =====================================================
+   Kampüs Sesi — Yasal Entegrasyon (KVKK, Çerez, Footer & Kayıt Onayı)
+   ===================================================== */
+
+/* 1. Çerez Onay Bandı (Cookie Consent Banner) */
+.cookie-banner {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    z-index: 99990;
+    max-width: 1120px;
+    margin: 0 auto;
+    background: rgba(18, 18, 22, 0.94);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 25px rgba(34, 211, 238, 0.08);
+    padding: 16px 22px;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cookie-banner--visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cookie-banner__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.cookie-banner__content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+}
+
+.cookie-banner__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+}
+
+.cookie-banner__text {
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: #d4d4d8;
+}
+
+.cookie-banner__text strong {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.cookie-banner__text a {
+    color: #22d3ee;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.cookie-banner__text a:hover {
+    color: #67e8f9;
+}
+
+.cookie-banner__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.cookie-banner__link-btn {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #a1a1aa;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.cookie-banner__link-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cookie-banner__accept-btn {
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #09090b;
+    background: linear-gradient(135deg, #22d3ee 0%, #38bdf8 100%);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(34, 211, 238, 0.3);
+    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cookie-banner__accept-btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(34, 211, 238, 0.45);
+}
+
+@media (max-width: 768px) {
+    .cookie-banner__inner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+    .cookie-banner__actions {
+        justify-content: flex-end;
+    }
+}
+
+/* 2. Footer Yasal Bar (Alt Bilgi & Linkler) */
+.footer-bottom-bar {
+    max-width: 1280px;
+    margin: 32px auto 0 auto;
+    padding: 22px 24px 8px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-bottom-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.footer-copyright {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+.footer-copyright a {
+    color: #22d3ee;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footer-copyright a:hover {
+    text-decoration: underline;
+}
+
+.footer-legal-pills {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+}
+
+.footer-legal-pills a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-legal-pills a:hover {
+    color: #22d3ee;
+}
+
+.footer-dot {
+    color: rgba(255, 255, 255, 0.2);
+    user-select: none;
+}
+
+/* 3. Kayıt Formu Yasal Onay Kutusu (Checkbox) */
+.auth-checkbox-group {
+    margin-bottom: 22px;
+}
+
+.auth-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+}
+
+.auth-checkbox-input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.auth-checkbox-custom {
+    width: 19px;
+    height: 19px;
+    min-width: 19px;
+    margin-top: 2px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.auth-checkbox-input:checked + .auth-checkbox-custom {
+    background: #22d3ee;
+    border-color: #22d3ee;
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.35);
+}
+
+.auth-checkbox-input:checked + .auth-checkbox-custom::after {
+    content: "";
+    width: 5px;
+    height: 9px;
+    border: solid #09090b;
+    border-width: 0 2.2px 2.2px 0;
+    transform: rotate(45deg);
+    margin-top: -1px;
+}
+
+.auth-checkbox-input:focus-visible + .auth-checkbox-custom {
+    outline: 2px solid #22d3ee;
+    outline-offset: 2px;
+}
+
+.auth-legal-link {
+    color: #22d3ee;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+}
+
+.auth-legal-link:hover {
+    color: #67e8f9;
+}
+
+.cookie-banner[hidden] {
+    display: none !important;
+}
+
+/* 4. Kayıt Ol — Yasal Metinler Şık Pop-up (Modal) Penceresi */
+.auth-legal-modal[hidden] {
+    display: none !important;
+}
+
+.auth-legal-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.auth-legal-modal--open {
+    opacity: 1;
+}
+
+.auth-legal-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.auth-legal-modal__box {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 640px;
+    max-height: 82vh;
+    background: #121216;
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    border-radius: 18px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(34, 211, 238, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.96) translateY(8px);
+    transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.auth-legal-modal--open .auth-legal-modal__box {
+    transform: scale(1) translateY(0);
+}
+
+.auth-legal-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.auth-legal-modal__tabs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.auth-legal-modal__tab {
+    padding: 7px 14px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #a1a1aa;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-legal-modal__tab:hover {
+    color: #ffffff;
+    border-color: rgba(34, 211, 238, 0.3);
+}
+
+.auth-legal-modal__tab.active {
+    background: rgba(34, 211, 238, 0.15);
+    color: #22d3ee;
+    border-color: rgba(34, 211, 238, 0.45);
+    font-weight: 700;
+}
+
+.auth-legal-modal__close {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #a1a1aa;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-legal-modal__close:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.auth-legal-modal__body {
+    padding: 20px 22px;
+    overflow-y: auto;
+    font-size: 0.87rem;
+    line-height: 1.65;
+    color: #d4d4d8;
+}
+
+.auth-legal-modal__pane[hidden] {
+    display: none !important;
+}
+
+.auth-legal-modal__pane h2 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 10px 0;
+}
+
+.auth-legal-modal__pane h3 {
+    font-size: 0.93rem;
+    font-weight: 700;
+    color: #22d3ee;
+    margin: 16px 0 6px 0;
+}
+
+.auth-legal-modal__pane p {
+    margin: 0 0 10px 0;
+    color: #d4d4d8;
+}
+
+.auth-legal-modal__pane a {
+    color: #22d3ee;
+    text-decoration: underline;
+}
+
+.auth-legal-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.auth-legal-modal__btn-secondary {
+    padding: 9px 16px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #a1a1aa;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-legal-modal__btn-secondary:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.auth-legal-modal__btn-primary {
+    padding: 9px 18px;
+    border-radius: 10px;
+    font-size: 0.83rem;
+    font-weight: 700;
+    color: #09090b;
+    background: linear-gradient(135deg, #22d3ee 0%, #38bdf8 100%);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(34, 211, 238, 0.3);
+    transition: all 0.2s ease;
+}
+
+.auth-legal-modal__btn-primary:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}

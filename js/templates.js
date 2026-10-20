@@ -876,13 +876,71 @@ export const TEMPLATES = {
                         <label for="reg-email">E-posta Adresi</label>
                         <input type="email" id="reg-email" class="auth-input" placeholder="ogrenci@uni.edu.tr" required>
                     </div>
-                    <div class="auth-input-group" style="margin-bottom: 25px;">
+                    <div class="auth-input-group" style="margin-bottom: 18px;">
                         <label for="reg-password">Şifre (En az 6 karakter)</label>
                         <input type="password" id="reg-password" class="auth-input" placeholder="••••••••" required minlength="6">
                     </div>
+
+                    <div class="auth-checkbox-group">
+                        <label class="auth-checkbox-label" for="reg-legal-consent">
+                            <input type="checkbox" id="reg-legal-consent" class="auth-checkbox-input" required>
+                            <span class="auth-checkbox-custom"></span>
+                            <span class="auth-checkbox-text">
+                                <a href="#/kullanim-sartlari" data-legal-modal="terms" class="auth-legal-link">Kullanıcı Sözleşmesi</a>'ni ve <a href="#/gizlilik" data-legal-modal="kvkk" class="auth-legal-link">KVKK Aydınlatma Metni</a>'ni okudum ve kabul ediyorum.
+                            </span>
+                        </label>
+                    </div>
+
                     <button type="submit" class="auth-submit-btn">Hesap Oluştur 🚀</button>
                     <div id="reg-error" style="color: var(--color-danger); margin-top: 15px; text-align: center; font-size: 0.9rem; font-weight: 500;"></div>
                 </form>
+            </div>
+
+            <!-- Yasal Metinler Şık Pop-up (Modal) Penceresi -->
+            <div id="auth-legal-modal" class="auth-legal-modal" role="dialog" aria-modal="true" aria-labelledby="auth-legal-modal-title" hidden>
+                <div class="auth-legal-modal__backdrop" id="auth-legal-modal-backdrop"></div>
+                <div class="auth-legal-modal__box">
+                    <div class="auth-legal-modal__header">
+                        <div class="auth-legal-modal__tabs">
+                            <button type="button" class="auth-legal-modal__tab active" data-modal-tab="terms">Kullanıcı Sözleşmesi</button>
+                            <button type="button" class="auth-legal-modal__tab" data-modal-tab="kvkk">KVKK Aydınlatma Metni</button>
+                        </div>
+                        <button type="button" id="auth-legal-modal-close" class="auth-legal-modal__close" aria-label="Kapat">✕</button>
+                    </div>
+
+                    <div class="auth-legal-modal__body" id="auth-legal-modal-body">
+                        <!-- Kullanıcı Sözleşmesi İçeriği -->
+                        <div id="modal-content-terms" class="auth-legal-modal__pane">
+                            <h2 id="auth-legal-modal-title">Kullanıcı Sözleşmesi ve Yer Sağlayıcı Bildirimi</h2>
+                            <p>Kampüs Sesi platformuna üye olan ve içerik paylaşan her kullanıcı aşağıdaki yasal koşulları kabul etmiş sayılır:</p>
+                            <h3>1. 5651 Sayılı Kanun Kapsamında "Yer Sağlayıcı" Statüsü</h3>
+                            <p>Kampüs Sesi, <strong>5651 sayılı Kanun'un 2. ve 5. maddeleri</strong> uyarınca hukuken <strong>"Yer Sağlayıcı"</strong> sıfatını haizdir. 5651 sayılı Kanun m. 5/1 gereğince Yer Sağlayıcı, yer sağladığı içeriği önceden kontrol etmek veya hukuka aykırı bir faaliyetin söz konusu olup olmadığını araştırmakla yükümlü değildir.</p>
+                            <h3>2. Yurt ve Üniversite Yorumlarının Hukuki Sorumluluğu</h3>
+                            <p>Platformda üniversiteler, akademisyenler, kampüsler, KYK yurtları veya özel yurtlar hakkında yayınlanan her türlü yorum, eleştiri ve puanlamanın <strong>tüm hukuki, cezai ve mali sorumluluğu münhasıran o içeriği yazan kullanıcıya aittir.</strong> Kullanıcı; TCK m. 125 (Hakaret), TCK m. 267 (İftira), kişilik hakları ihlali veya gerçeğe aykırı ticari karalama niteliği taşıyan ifadelerden doğabilecek her türlü dava ve tazminat talebinden bizzat sorumludur; Kampüs Sesi hiçbir hukuki/cezai sorumluluk kabul etmez.</p>
+                            <h3>3. Kurumlar İçin "Uyar-Kaldır" Sistemi</h3>
+                            <p>Kişilik haklarının veya kurumsal itibarının ihlal edildiğini düşünen kişi ve kurumlar <a href="mailto:destek@kampussesi.com">destek@kampussesi.com</a> adresine ilgili URL ve açıklama ile başvurabilir. Usulüne uygun bildirimler <strong>24–48 saat</strong> içinde incelenerek hukuka aykırı içerikler yayından kaldırılır.</p>
+                            <h3>4. Moderasyon ve Yürürlük</h3>
+                            <p>Kampüs Sesi, topluluk kurallarına aykırı veya spam içerikleri kaldırma ve ilgili hesabı askıya alma hakkını saklı tutar.</p>
+                        </div>
+
+                        <!-- KVKK Aydınlatma Metni İçeriği -->
+                        <div id="modal-content-kvkk" class="auth-legal-modal__pane" hidden>
+                            <h2>KVKK Aydınlatma ve Gizlilik Politikası</h2>
+                            <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca <strong>Kampüs Sesi</strong> veri sorumlusu sıfatıyla hareket etmektedir.</p>
+                            <h3>1. İşlenen Kişisel Veriler ve Amaçları</h3>
+                            <p>Kayıt sırasında paylaştığınız ad-soyad/rumuz, e-posta adresi, şifrelenmiş (hash) parola ve 5651 sayılı Kanun gereği tutulan trafik/IP kayıtları; yalnızca üyelik sözleşmesinin ifası, oturum güvenliğinin sağlanması ve yasal yükümlülüklerin yerine getirilmesi amacıyla (KVKK m. 5/2) işlenmektedir.</p>
+                            <h3>2. Öğrenci Mahremiyeti ve Veri Aktarımı</h3>
+                            <p>Değerlendirme yapan öğrencilerin e-posta ve kimlik bilgileri <strong>asla üniversite yönetimleriyle, yurt idareleriyle veya reklam şirketleriyle paylaşılmaz.</strong> Veriler yalnızca bağlayıcı resmi mahkeme/savcılık talebi halinde yetkili makamlarla paylaşılabilir.</p>
+                            <h3>3. KVKK Madde 11 Kapsamındaki Haklarınız</h3>
+                            <p>Dilediğiniz zaman profilinizden yorumlarınızı silebilir veya kişisel verilerinizin silinmesi/düzeltilmesi taleplerinizi <a href="mailto:destek@kampussesi.com">destek@kampussesi.com</a> adresine iletebilirsiniz.</p>
+                        </div>
+                    </div>
+
+                    <div class="auth-legal-modal__footer">
+                        <button type="button" id="auth-legal-modal-cancel" class="auth-legal-modal__btn-secondary">Kapat</button>
+                        <button type="button" id="auth-legal-modal-accept" class="auth-legal-modal__btn-primary">Okudum, Kabul Ediyorum ✓</button>
+                    </div>
+                </div>
             </div>
         </div>
     `
@@ -1893,80 +1951,222 @@ export const TEMPLATES = {
             <div class="pointer-events-none absolute -top-32 -left-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
 
             <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Yasal Sayfalar Arasi Hizli Sekme (Tab) Gecisi -->
+                <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10">
+                    <a href="#/gizlilik" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-cyan-400 text-zinc-950 shadow-lg shadow-cyan-500/20 flex items-center gap-2 transition-all">
+                        <i data-lucide="shield-check" class="w-4 h-4"></i> KVKK ve Gizlilik Politikası
+                    </a>
+                    <a href="#/cerez-politikasi" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-zinc-900/80 text-zinc-300 border border-zinc-800 hover:border-cyan-500/40 hover:text-white flex items-center gap-2 transition-all">
+                        <i data-lucide="cookie" class="w-4 h-4 text-cyan-400"></i> Çerez (Cookie) Politikası
+                    </a>
+                    <a href="#/kullanim-sartlari" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-zinc-900/80 text-zinc-300 border border-zinc-800 hover:border-cyan-500/40 hover:text-white flex items-center gap-2 transition-all">
+                        <i data-lucide="scale" class="w-4 h-4 text-cyan-400"></i> Kullanıcı Sözleşmesi
+                    </a>
+                </div>
+
                 <!-- Baslik & Hero -->
-                <div class="text-center mb-16">
+                <div class="text-center mb-14">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
                         <i data-lucide="shield-check" class="w-3.5 h-3.5 text-cyan-400"></i>
-                        <span>KVKK & Veri Güvenliği</span>
+                        <span>6698 Sayılı KVKK & Veri Güvenliği</span>
                     </div>
                     <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
-                        Gizlilik Politikası
+                        KVKK Aydınlatma ve Gizlilik Politikası
                     </h1>
                     <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                        Kampüs Sesi olarak kullanıcılarımızın ve değerlendirme yapan öğrencilerimizin mahremiyetine en yüksek derecede önem veriyoruz.
+                        Kampüs Sesi olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca kişisel verilerinizin güvenliğine, şeffaflığa ve öğrenci mahremiyetine en üst düzeyde önem veriyoruz.
                     </p>
                 </div>
 
-                <!-- Icerik Kartlari -->
-                <div class="space-y-6">
-                    <!-- 1. KVKK Uyum Metni -->
-                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                <!-- Yasal Metin Kartlari (h1, h2, p formatinda) -->
+                <div class="space-y-6 legal-document-content">
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center">
-                                <i data-lucide="file-text" class="w-5 h-5"></i>
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="building-2" class="w-5 h-5"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-white">KVKK Uyum Metni</h3>
+                            <h2 class="text-xl font-bold text-white">1. Veri Sorumlusu ve Kapsam</h2>
                         </div>
                         <p class="text-zinc-300 text-sm leading-relaxed mb-3">
-                            6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, Kampüs Sesi veri sorumlusu sıfatıyla hareket etmektedir. Platformumuza kayıt olurken veya içerik üretirken sağladığınız e-posta ve kullanıcı verileri yalnızca üyelik oturumunun sürdürülmesi ve topluluk güvenliğinin sağlanması amacıyla işlenir.
+                            6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, <strong>Kampüs Sesi</strong> platformu ("Platform"), kullanıcıların ve ziyaretçilerin kişisel verilerinin işlenmesi süreçlerinde "Veri Sorumlusu" sıfatıyla hareket etmektedir. İşbu Aydınlatma ve Gizlilik Politikası, üniversite ve yurt değerlendirmeleri yapılan platformumuzda hangi verilerin hangi amaçlarla işlendiğini ve nasıl korunduğunu açıklamak amacıyla hazırlanmıştır.
                         </p>
-                        <p class="text-zinc-400 text-xs leading-relaxed">
-                            Kişisel verileriniz, yasal zorunluluklar hariç olmak kaydıyla hiçbir ticari şirketle, reklam ajansıyla veya üniversite yönetimiyle paylaşılmaz.
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Veri sorumlusu sıfatıyla bize her türlü soru, talep ve başvurunuz için resmi iletişim adresimiz olan <a href="mailto:destek@kampussesi.com" class="text-cyan-400 hover:underline font-medium">destek@kampussesi.com</a> üzerinden ulaşabilirsiniz.
                         </p>
                     </div>
 
-                    <!-- 2. Anonimlik İlkesi -->
-                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center">
-                                <i data-lucide="user-x" class="w-5 h-5"></i>
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="database" class="w-5 h-5"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-white">Anonimlik İlkesi</h3>
+                            <h2 class="text-xl font-bold text-white">2. İşlenen Kişisel Veriler ve Toplama Yöntemleri</h2>
                         </div>
                         <p class="text-zinc-300 text-sm leading-relaxed mb-3">
-                            Değerlendirme yapan öğrencilerin kimlik ve e-posta bilgileri <strong>asla üçüncü taraflarla veya üniversite yönetimleriyle paylaşılmaz</strong>.
+                            Platformumuza üye olurken, üniversite veya yurt değerlendirmesi paylaşırken ya da iletişim formunu kullanırken elektronik ortamda otomatik veya kısmen otomatik yöntemlerle şu verileriniz işlenmektedir:
                         </p>
-                        <p class="text-zinc-400 text-xs leading-relaxed">
-                            Öğrenciler diledikleri takdirde değerlendirmelerini rumuz kullanarak veya tamamen anonim profille yayınlayabilir. Amacımız öğrencilerin korkusuzca, hür iradeleriyle doğru bilgiyi paylaşabilmesidir.
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-2">
+                            <strong>Kimlik ve İletişim Verileri:</strong> Kayıt sırasında beyan ettiğiniz ad-soyad (veya tercih ettiğiniz kullanıcı rumuzu) ve e-posta adresiniz.
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-2">
+                            <strong>İşlem Güvenliği ve Trafik Verileri:</strong> 5651 sayılı Kanun gereği yasal zorunluluk kapsamında tutulan IP adresi, oturum açma/kapama zaman damgaları ve kriptografik olarak özetlenmiş (hashlenmiş) parola verisi.
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed">
+                            <strong>Kullanıcı İçerik Verileri:</strong> Üniversiteler, kampüsler ve yurtlar hakkında paylaştığınız yorumlar, puanlamalar, blog yazıları ve favori okul tercihleri.
                         </p>
                     </div>
 
-                    <!-- 3. Çerez Politikası (Cookie Policy) -->
-                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center">
-                                <i data-lucide="cookie" class="w-5 h-5"></i>
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="target" class="w-5 h-5"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-white">Çerez Politikası</h3>
+                            <h2 class="text-xl font-bold text-white">3. Kişisel Verilerin İşlenme Amaçları ve Hukuki Sebepleri</h2>
                         </div>
                         <p class="text-zinc-300 text-sm leading-relaxed mb-3">
-                            Sitede sadece oturum ve temel analitik çerezleri kullanılır; kullanıcıları takip eden üçüncü taraf reklam ve pazarlama çerezleri kesinlikle kullanılmaz.
+                            Toplanan kişisel verileriniz, KVKK'nın 5. maddesinde belirtilen <em>"bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması"</em>, <em>"veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi için zorunlu olması"</em> ve <em>"ilgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla meşru menfaat"</em> hukuki sebeplerine dayanılarak işlenmektedir.
                         </p>
-                        <p class="text-zinc-400 text-xs leading-relaxed">
-                            Yalnızca oturum devamlılığını sağlayan kimlik doğrulama token'ı ve karanlık/aydınlık tema tercihini hatırlayan yerel tarayıcı depolaması (localStorage) aktiftir.
+                        <p class="text-zinc-300 text-sm leading-relaxed">
+                            Verileriniz; kullanıcı hesabınızın oluşturulması ve güvenliğinin sağlanması, sahte/bot yorumların ve spam içeriklerin önlenmesi, 5651 sayılı Kanun kapsamındaki yer sağlayıcı trafik kayıt (log) yükümlülüklerinin yerine getirilmesi ve öğrenci topluluğuna şeffaf bir rehberlik hizmeti sunulması amaçlarıyla sınırlı olarak işlenir.
                         </p>
                     </div>
 
-                    <!-- 4. Veri Güvenliği ve Silme Hakkı -->
-                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center">
-                                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="user-check" class="w-5 h-5"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-white">Veri Güvenliği ve Silme Hakkı</h3>
+                            <h2 class="text-xl font-bold text-white">4. Öğrenci Mahremiyeti, Anonimlik ve Verilerin Aktarımı</h2>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            Değerlendirme yapan öğrencilerimizin e-posta adresleri ve kimlik bilgileri <strong>hiçbir koşulda üniversite yönetimleriyle, özel veya devlet yurt idareleriyle, reklam şirketleriyle ya da ticari üçüncü kişilerle paylaşılmaz ve satılmaz.</strong>
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed">
+                            Kişisel verileriniz yalnızca Türkiye Cumhuriyeti mahkemeleri, Cumhuriyet Başsavcılıkları veya Bilgi Teknolojileri ve İletişim Kurumu (BTK) tarafından yürütülen resmi bir soruşturma kapsamında ve usulüne uygun bağlayıcı bir yasal talep bulunması halinde yetkili kamu kurum ve kuruluşlarıyla paylaşılabilir.
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="lock" class="w-5 h-5"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-white">5. Veri Güvenliği ve Kişisel Verilerin Korunması</h2>
                         </div>
                         <p class="text-zinc-300 text-sm leading-relaxed">
-                            Kullanıcılar diledikleri zaman profil sayfalarından daha önce yaptıkları yorumları silebilir veya hesaplarının silinmesini talep edebilir. Silinen veriler sistemden geri döndürülemez biçimde kalıcı olarak kaldırılır.
+                            Kampüs Sesi, KVKK'nın 12. maddesi uyarınca kişisel verilerin hukuka aykırı olarak işlenmesini ve erişilmesini önlemek amacıyla güncel teknik ve idari tedbirleri uygular. Kullanıcı şifreleri veritabanımızda düz metin (plain-text) olarak tutulmaz; endüstri standardı tek yönlü şifreleme (bcrypt/hash) algoritmalarıyla korunur. Kullanıcılar diledikleri zaman yorumlarını veya hesaplarını kalıcı olarak silebilirler.
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="mail-check" class="w-5 h-5"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-white">6. İlgili Kişinin Hakları (KVKK Madde 11) ve Başvuru</h2>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            KVKK'nın 11. maddesi uyarınca her kullanıcı; kişisel verilerinin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, işlenme amacına uygun kullanılıp kullanılmadığını öğrenme, eksik veya yanlış işlenmişse düzeltilmesini isteme ve KVKK'nın 7. maddesi çerçevesinde kişisel verilerinin silinmesini veya yok edilmesini talep etme hakkına sahiptir.
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed">
+                            Bu haklarınıza ilişkin taleplerinizi kayıtlı e-posta adresiniz üzerinden <a href="mailto:destek@kampussesi.com" class="text-cyan-400 hover:underline font-medium">destek@kampussesi.com</a> adresine iletebilirsiniz. Başvurularınız talebin niteliğine göre en kısa sürede ve en geç otuz (30) gün içinde ücretsiz olarak sonuçlandırılır.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    `,
+
+    cerezPolitikasi: `
+        <main class="page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen py-16 sm:py-24">
+            <!-- Ambient Glow Aydinlatmalari -->
+            <div class="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute top-64 -right-32 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Yasal Sayfalar Arasi Hizli Sekme (Tab) Gecisi -->
+                <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10">
+                    <a href="#/gizlilik" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-zinc-900/80 text-zinc-300 border border-zinc-800 hover:border-cyan-500/40 hover:text-white flex items-center gap-2 transition-all">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i> KVKK ve Gizlilik Politikası
+                    </a>
+                    <a href="#/cerez-politikasi" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-cyan-400 text-zinc-950 shadow-lg shadow-cyan-500/20 flex items-center gap-2 transition-all">
+                        <i data-lucide="cookie" class="w-4 h-4"></i> Çerez (Cookie) Politikası
+                    </a>
+                    <a href="#/kullanim-sartlari" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-zinc-900/80 text-zinc-300 border border-zinc-800 hover:border-cyan-500/40 hover:text-white flex items-center gap-2 transition-all">
+                        <i data-lucide="scale" class="w-4 h-4 text-cyan-400"></i> Kullanıcı Sözleşmesi
+                    </a>
+                </div>
+
+                <!-- Baslik & Hero -->
+                <div class="text-center mb-14">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
+                        <i data-lucide="cookie" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>6698 Sayılı KVKK · Şeffaf Çerez & Yerel Depolama Yönetimi</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
+                        Çerez (Cookie) Politikası
+                    </h1>
+                    <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                        Kampüs Sesi'nde reklam, yeniden pazarlama veya davranışsal takip çerezleri kullanılmaz; yalnızca güvenli kullanıcı oturumu ve interaktif kampüs haritalarımız (OpenStreetMap) için zorunlu teknik veriler kullanılır.
+                    </p>
+                </div>
+
+                <!-- Yasal Metin Kartlari (h1, h2, p formatinda) -->
+                <div class="space-y-6 legal-document-content">
+                    <!-- 1. Çerez ve Yerel Depolama Nedir? -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="info" class="w-5 h-5"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-white">1. Çerez (Cookie) ve Yerel Depolama Nedir?</h2>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            Çerezler (cookies) ve modern internet tarayıcılarının yerel depolama birimleri (<code>localStorage</code> ve <code>sessionStorage</code>), ziyaret ettiğiniz internet sitesinin düzgün çalışabilmesi için bilgisayarınıza veya mobil cihazınıza kaydedilen küçük boyutlu teknik metin kayıtlarıdır.
+                        </p>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            İşbu Çerez Politikası, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") ve Kişisel Verileri Koruma Kurumu'nun "Çerez Uygulamaları Hakkında Rehber" ilkeleri doğrultusunda, <strong>Kampüs Sesi</strong> platformunda kullanılan zorunlu teknik depolama unsurlarını şeffaf biçimde açıklamak amacıyla hazırlanmıştır.
+                        </p>
+                    </div>
+
+                    <!-- 2. Oturum ve Güvenlik İçin Kullanılan Zorunlu Çerezler -->
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="key-round" class="w-5 h-5"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-white">2. Oturum Yönetimi ve Tercihler İçin Kullanılan Zorunlu Veriler</h2>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            KVKK'nın 5. maddesinin 2. fıkrasının (c) ve (f) bentleri uyarınca, bilgi toplumu hizmetlerinin (üyelik girişi, yorum yazma, favori üniversite kaydetme) bizzat kullanıcı tarafından talep edildiği hallerde <strong>"Kesinlikle Zorunlu (Teknik) Çerezler"</strong> açık rıza şartına bağlı olmaksızın çalıştırılmaktadır:
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-2">
+                            <strong>Kimlik Doğrulama ve Oturum Anahtarı (JWT Auth Token):</strong> Üye girişi yaptığınızda sayfa yenilense veya sekmeler arasında geçiş yapılsa dahi oturumunuzun güvenli şekilde açık kalmasını sağlayan kriptografik belirteçtir. Oturumu kapattığınızda (Çıkış Yap) cihazınızdan derhal silinir.
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-2">
+                            <strong>Görünüm ve Tema Tercihi (<code>kampus_sesi_theme</code>):</strong> Platformu karanlık (dark mode) veya aydınlık temada kullanma seçiminizi hatırlayarak her ziyarette göz konforunuzu koruyan teknik kayıttır.
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed">
+                            <strong>Çerez Bilgilendirme Onayı (<code>kampus_sesi_cookie_consent</code>):</strong> Ekranın altında yer alan çerez bilgilendirme bandında "Kabul Et" butonuna tıkladığınızı kaydederek aynı bildirimin her sayfa geçişinde tekrar karşınıza çıkmasını önleyen kayıttır.
+                        </p>
+                    </div>
+
+                    <!-- 3. Harita Entegrasyonu (OpenStreetMap & Leaflet) Zorunlu Çerezleri -->
+                    <div class="rounded-2xl border border-cyan-500/30 bg-cyan-950/20 p-7 sm:p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-400/40 text-cyan-300 flex items-center justify-center shrink-0">
+                                <i data-lucide="map-pin" class="w-5 h-5"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-cyan-300">3. Harita Entegrasyonu (OpenStreetMap & Leaflet) Zorunlu Çerezleri</h2>
+                        </div>
+                        <p class="text-zinc-200 text-sm leading-relaxed mb-3">
+                            Üniversite yerleşkelerinin ve KYK/özel öğrenci yurtlarının gerçek coğrafi koordinatlarını, kampüs içi binalarını ve ulaşım bağlantılarını interaktif harita üzerinde gösterebilmek amacıyla açık kaynaklı <strong>Leaflet.js</strong> kütüphanesi ve <strong>OpenStreetMap (OSM)</strong> harita katmanı servisleri kullanılmaktadır.
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            Bir üniversitenin detay sayfasındaki kampüs haritasını görüntülediğinizde, harita karolarının (map tiles) cihazınıza doğru yakınlaştırma (zoom) seviyesinde indirilebilmesi ve akıcı bir harita deneyimi için tarayıcı önbelleğine (cache) alınabilmesi amacıyla tarayıcınız doğrudan OpenStreetMap (<code>tile.openstreetmap.org</code>) sunucularına teknik istek gönderir.
+                        </p>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Bu teknik iletişim sırasında cihazınızın IP adresi, tarayıcı üstbilgisi (User-Agent) ve harita önbellek çerezleri yalnızca harita görüntüsünün oluşturulması ve sunucu yükünün dengelenmesi amacıyla kullanılır; <strong>kesinlikle konum takibi (GPS izleme) veya reklam profillemesi yapılmaz.</strong>
                         </p>
                     </div>
                 </div>
@@ -1980,56 +2180,122 @@ export const TEMPLATES = {
             <div class="pointer-events-none absolute -top-32 right-1/2 translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
 
             <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Yasal Sayfalar Arasi Hizli Sekme (Tab) Gecisi -->
+                <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10">
+                    <a href="#/gizlilik" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-zinc-900/80 text-zinc-300 border border-zinc-800 hover:border-cyan-500/40 hover:text-white flex items-center gap-2 transition-all">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i> KVKK ve Gizlilik Politikası
+                    </a>
+                    <a href="#/cerez-politikasi" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-zinc-900/80 text-zinc-300 border border-zinc-800 hover:border-cyan-500/40 hover:text-white flex items-center gap-2 transition-all">
+                        <i data-lucide="cookie" class="w-4 h-4 text-cyan-400"></i> Çerez (Cookie) Politikası
+                    </a>
+                    <a href="#/kullanim-sartlari" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-cyan-400 text-zinc-950 shadow-lg shadow-cyan-500/20 flex items-center gap-2 transition-all">
+                        <i data-lucide="scale" class="w-4 h-4"></i> Kullanıcı Sözleşmesi
+                    </a>
+                </div>
+
                 <!-- Baslik & Hero -->
-                <div class="text-center mb-16">
+                <div class="text-center mb-14">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
-                        <i data-lucide="file-check" class="w-3.5 h-3.5 text-cyan-400"></i>
-                        <span>Yasal Koşullar</span>
+                        <i data-lucide="scale" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>5651 Sayılı Kanun · Yer Sağlayıcı & Uyar-Kaldır</span>
                     </div>
                     <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4" style="font-family: var(--font-heading);">
-                        Kullanım Şartları
+                        Kullanıcı Sözleşmesi ve Yer Sağlayıcı Bildirimi
                     </h1>
                     <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                        Kampüs Sesi web sitesini ziyaret ederek veya üye olarak aşağıdaki hizmet ve kullanım şartlarını kabul etmiş sayılırsınız.
+                        Kampüs Sesi platformuna erişim sağlayan, üye olan veya yorum paylaşan her kullanıcı ile kurum temsilcileri aşağıdaki yasal koşulları kabul etmiş sayılır.
                     </p>
                 </div>
 
-                <div class="space-y-6">
-                    <!-- 1. Hizmet Kapsamı -->
-                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
-                        <h3 class="text-xl font-bold text-white mb-3">1. Platformun Hizmet Kapsamı</h3>
+                <!-- Yasal Metin Kartlari (h1, h2, p formatinda) -->
+                <div class="space-y-6 legal-document-content">
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="file-text" class="w-5 h-5"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-white">1. Taraflar, Konu ve Hizmetin Kapsamı</h2>
+                        </div>
                         <p class="text-zinc-300 text-sm leading-relaxed">
-                            Kampüs Sesi; üniversite öğrencileri ve adayları için bilgilendirici, tarafsız bir değerlendirme, yurt ve kampüs rehberi platformudur. Platformda sunulan puanlar, sıralamalar ve değerlendirmeler rehberlik niteliğinde olup bağlayıcı resmi bir kayıt teşkil etmez.
+                            İşbu Kullanıcı Sözleşmesi ("Sözleşme"), <strong>Kampüs Sesi</strong> ("Platform") ile siteyi ziyaret eden, üye olan veya içerik (üniversite değerlendirmesi, yurt yorumu, puanlama, blog yazısı) üreten tüm gerçek kişiler ("Kullanıcı") arasında akdedilmiştir. Kampüs Sesi, öğrencilerin yükseköğretim kurumları ve barınma imkanları hakkındaki öznel deneyimlerini paylaştığı bağımsız bir sosyal rehberlik platformudur.
                         </p>
                     </div>
 
-                    <!-- 2. Kullanıcı Sorumlulukları -->
-                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
-                        <h3 class="text-xl font-bold text-white mb-3">2. Kullanıcı Sorumlulukları</h3>
-                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
-                            Sitede yayınlanan yorumların ve içeriklerin hukuki sorumluluğu yazarına aittir.
+                    <div class="rounded-2xl border border-cyan-500/30 bg-cyan-950/20 p-7 sm:p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-400/40 text-cyan-300 flex items-center justify-center shrink-0">
+                                <i data-lucide="server" class="w-5 h-5"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-cyan-300">2. 5651 Sayılı Kanun Kapsamında "Yer Sağlayıcı" Statüsü</h2>
+                        </div>
+                        <p class="text-zinc-200 text-sm leading-relaxed mb-3">
+                            Kampüs Sesi, <strong>5651 sayılı İnternet Ortamında Yapılan Yayınların Düzenlenmesi ve Bu Yayınlar Yoluyla İşlenen Suçlarla Mücadele Edilmesi Hakkında Kanun'un 2. ve 5. maddeleri</strong> uyarınca hukuken <strong>"Yer Sağlayıcı" (Hosting/Platform Provider)</strong> sıfatını haizdir.
                         </p>
-                        <p class="text-zinc-400 text-xs leading-relaxed">
-                            Kullanıcılar; iftira, hakaret, yanlış beyan, telif ihlali veya kişi haklarını zedeleyici ifadelerden bizzat sorumludur.
-                        </p>
-                    </div>
-
-                    <!-- 3. Fikri Mülkiyet Hakları ve İçerik Moderasyon Yetkisi -->
-                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
-                        <h3 class="text-xl font-bold text-white mb-3">3. Fikri Mülkiyet Hakları ve İçerik Moderasyon Yetkisi</h3>
-                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
-                            Platform yönetimi, topluluk kurallarına ve yayın ilkelerine uymayan içerikleri silme, düzenleme veya kullanıcının hesabını askıya alma hakkını saklı tutar.
-                        </p>
-                        <p class="text-zinc-400 text-xs leading-relaxed">
-                            Sitenin tasarımı, kaynak kodları ve tescilli markası Kampüs Sesi'ne aittir; izinsiz kopyalanamaz veya ticari amaçla kullanılamaz.
-                        </p>
-                    </div>
-
-                    <!-- 4. Değişiklik Hakkı -->
-                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
-                        <h3 class="text-xl font-bold text-white mb-3">4. Değişiklik ve Güncelleme Hakkı</h3>
                         <p class="text-zinc-300 text-sm leading-relaxed">
-                            Kampüs Sesi, bu kullanım şartlarını güncel mevzuat ve topluluk gereksinimlerine göre dilediği zaman güncelleme hakkını saklı tutar. Güncellemeler sitede yayımlandığı andan itibaren geçerlilik kazanır.
+                            5651 sayılı Kanun'un 5. maddesinin 1. fıkrası açık hükmü gereğince; <strong>Yer Sağlayıcı, yer sağladığı içeriği kontrol etmek veya hukuka aykırı bir faaliyetin söz konusu olup olmadığını araştırmakla yükümlü değildir.</strong> Platformda yer alan üniversite, fakülte, kampüs, KYK yurdu veya özel yurt yorumları Kampüs Sesi'nin kurumsal görüşünü yansıtmaz.
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="user-check" class="w-5 h-5"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-white">3. Yurt ve Üniversite Yorumlarının Hukuki ve Cezai Sorumluluğu</h2>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            Platformda yayınlanan her türlü yorum, eleştiri, puanlama ve metnin <strong>hukuki, cezai ve mali sorumluluğu münhasıran o içeriği oluşturan ve yayınlayan Kullanıcı'ya (İçerik Sağlayıcı'ya) aittir.</strong>
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            Kullanıcı; üniversiteler, akademisyenler, devlet yurtları (KYK) veya özel öğrenci yurtları hakkında değerlendirme yaparken Türkiye Cumhuriyeti Anayasası ve Avrupa İnsan Hakları Sözleşmesi ile güvence altına alınan ifade ve eleştiri özgürlüğü sınırları içinde kalmayı; 5237 sayılı Türk Ceza Kanunu anlamında <strong>hakaret (TCK m. 125), iftira (TCK m. 267), tehdit, nefret söylemi, kişilik haklarına saldırı veya gerçeğe aykırı ticari karalama</strong> niteliği taşıyan ifadeler kullanmamayı peşinen kabul ve taahhüt eder.
+                        </p>
+                        <p class="text-zinc-400 text-sm leading-relaxed">
+                            Kullanıcılar ayrıca üçüncü kişilere (akademisyen, yurt personeli veya diğer öğrenciler) ait kişisel verileri (telefon numarası, açık ev adresi, özel hayat görüntüleri vb.) yorumlarda paylaşamaz.
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-7 sm:p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-amber-950/80 border border-amber-400/40 text-amber-300 flex items-center justify-center shrink-0">
+                                <i data-lucide="bell-ring" class="w-5 h-5"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-amber-300">4. Kurumlar ve İlgili Kişiler İçin "Uyar-Kaldır" (Notice and Take-Down) Sistemi</h2>
+                        </div>
+                        <p class="text-zinc-200 text-sm leading-relaxed mb-3">
+                            Kampüs Sesi, 5651 sayılı Kanun'un 5. maddesinin 2. fıkrası çerçevesinde hukuka saygılı bir platform olarak etkin bir <strong>"Uyar-Kaldır" (Notice and Take-Down)</strong> prosedürü işletmektedir.
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            Herhangi bir üniversite yönetimi, özel/devlet yurt işletmesi, akademisyen veya gerçek/tüzel kişi; platformda yer alan bir yorumun kişilik haklarını, ticari itibarını veya yürürlükteki mevzuatı ihlal ettiğini düşünüyorsa, doğrudan yargı yoluna başvurmadan önce resmi iletişim adresimiz olan <a href="mailto:destek@kampussesi.com" class="text-cyan-400 hover:underline font-bold">destek@kampussesi.com</a> üzerinden "Uyar-Kaldır" talebinde bulunabilir.
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed">
+                            <strong>Başvuru Usulü:</strong> <a href="mailto:destek@kampussesi.com" class="text-cyan-400 hover:underline">destek@kampussesi.com</a> adresine gönderilecek bildirimde; (1) İhlale konu yorumun bulunduğu sayfa bağlantısı (URL) veya ekran görüntüsü, (2) İçeriğin hangi açıdan hukuka veya kişilik haklarına aykırı olduğunun somut açıklaması ve (3) Başvuran kişinin yetki belgesi veya kimlik teyidi yer almalıdır. Usulüne uygun olarak iletilen bildirimler hukuk ve moderasyon ekibimizce <strong>en geç 24 ila 48 saat içerisinde</strong> incelenir; hukuka aykırılığı tespit edilen içerikler derhal yayından kaldırılır ve başvuru sahibine yazılı bilgi verilir.
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="shield" class="w-5 h-5"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-white">5. Moderasyon Yetkisi ve Fikri Mülkiyet Hakları</h2>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                            Kampüs Sesi, topluluk kurallarına aykırı olan, gizli reklam (spam) içeren veya kişilik haklarını ihlal ettiği değerlendirilen yorumları önceden haber vermeksizin yayından kaldırma, düzenleme veya ilgili kullanıcının üyeliğini askıya alma hakkını saklı tutar.
+                        </p>
+                        <p class="text-zinc-300 text-sm leading-relaxed">
+                            Platformun arayüz tasarımı, logosu, veritabanı mimarisi ve özgün yazılım kodları Kampüs Sesi'ne aittir; yazılı izin olmaksızın kopyalanamaz, çoğaltılamaz veya otomatik botlarla (scraping) çekilemez.
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="gavel" class="w-5 h-5"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-white">6. Yürürlük ve Uyuşmazlıkların Çözümü</h2>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed">
+                            Kullanıcı, üyelik kayıt formundaki onay kutusunu işaretleyerek veya platformu kullanarak işbu Sözleşme hükümlerini okuduğunu ve kabul ettiğini beyan eder. İşbu Sözleşme'den doğabilecek her türlü hukuki uyuşmazlıkta Türkiye Cumhuriyeti kanunları uygulanır. Her türlü bildirim ve yasal iletişim için resmi adresimiz <a href="mailto:destek@kampussesi.com" class="text-cyan-400 hover:underline font-medium">destek@kampussesi.com</a>'dur.
                         </p>
                     </div>
                 </div>

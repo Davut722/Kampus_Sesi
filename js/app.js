@@ -2,8 +2,8 @@
    Kampüs Sesi — Shared JavaScript (SPA Architecture + FastAPI Backend)
    ======================================== */
 
-import { api } from './api.js';
-import { TEMPLATES } from './templates.js';
+import { api } from './api.js?v=80';
+import { TEMPLATES } from './templates.js?v=80';
 
 function getInitials(name) {
     if (!name) return 'MS';
@@ -2352,15 +2352,95 @@ function initLoginPage() {
         }
     });
 
+    // Legal Modal (Pop-up) Handler for Registration Checkbox Links
+    const regConsentCheckbox = document.getElementById('reg-legal-consent');
+    const legalModal = document.getElementById('auth-legal-modal');
+    const legalModalBackdrop = document.getElementById('auth-legal-modal-backdrop');
+    const legalModalClose = document.getElementById('auth-legal-modal-close');
+    const legalModalCancel = document.getElementById('auth-legal-modal-cancel');
+    const legalModalAccept = document.getElementById('auth-legal-modal-accept');
+    const modalTabs = document.querySelectorAll('[data-modal-tab]');
+    const paneTerms = document.getElementById('modal-content-terms');
+    const paneKvkk = document.getElementById('modal-content-kvkk');
+
+    function switchLegalModalTab(tabName) {
+        modalTabs.forEach(t => {
+            t.classList.toggle('active', t.dataset.modalTab === tabName);
+        });
+        if (paneTerms && paneKvkk) {
+            if (tabName === 'kvkk') {
+                paneTerms.hidden = true;
+                paneKvkk.hidden = false;
+            } else {
+                paneTerms.hidden = false;
+                paneKvkk.hidden = true;
+            }
+        }
+        const bodyEl = document.getElementById('auth-legal-modal-body');
+        if (bodyEl) bodyEl.scrollTop = 0;
+    }
+
+    function openLegalModal(tabName) {
+        if (!legalModal) return;
+        switchLegalModalTab(tabName || 'terms');
+        legalModal.hidden = false;
+        legalModal.removeAttribute('hidden');
+        requestAnimationFrame(() => {
+            legalModal.classList.add('auth-legal-modal--open');
+        });
+    }
+
+    function closeLegalModal() {
+        if (!legalModal) return;
+        legalModal.classList.remove('auth-legal-modal--open');
+        setTimeout(() => {
+            legalModal.hidden = true;
+        }, 200);
+    }
+
+    document.querySelectorAll('[data-legal-modal]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openLegalModal(link.dataset.legalModal);
+        });
+    });
+
+    modalTabs.forEach(tabBtn => {
+        tabBtn.addEventListener('click', () => {
+            switchLegalModalTab(tabBtn.dataset.modalTab);
+        });
+    });
+
+    if (legalModalClose) legalModalClose.addEventListener('click', closeLegalModal);
+    if (legalModalCancel) legalModalCancel.addEventListener('click', closeLegalModal);
+    if (legalModalBackdrop) legalModalBackdrop.addEventListener('click', closeLegalModal);
+
+    if (legalModalAccept) {
+        legalModalAccept.addEventListener('click', () => {
+            if (regConsentCheckbox) {
+                regConsentCheckbox.checked = true;
+            }
+            closeLegalModal();
+        });
+    }
+
     // Register Handle
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('reg-name').value.trim();
         const email = document.getElementById('reg-email').value.trim();
         const pass = document.getElementById('reg-password').value;
+        const consentCheckbox = document.getElementById('reg-legal-consent');
         const errDiv = document.getElementById('reg-error');
-        const btn = registerForm.querySelector('button');
+        const btn = registerForm.querySelector('button[type="submit"]') || registerForm.querySelector('button');
 
+        if (consentCheckbox && !consentCheckbox.checked) {
+            errDiv.textContent = "Kayıt olabilmek için Kullanıcı Sözleşmesi'ni ve KVKK Aydınlatma Metni'ni onaylamalısınız.";
+            return;
+        }
+
+        errDiv.textContent = '';
         btn.textContent = 'Hesap Oluşturuluyor...';
         btn.disabled = true;
 
@@ -2527,6 +2607,9 @@ export function renderCurrentRoute() {
         'contact': TEMPLATES.iletisim,
         'gizlilik': TEMPLATES.gizlilik,
         'privacy': TEMPLATES.gizlilik,
+        'kvkk': TEMPLATES.gizlilik,
+        'cerez-politikasi': TEMPLATES.cerezPolitikasi,
+        'cookies': TEMPLATES.cerezPolitikasi,
         'kullanim-sartlari': TEMPLATES.kullanimSartlari,
         'terms': TEMPLATES.kullanimSartlari,
         'favorites': TEMPLATES.favorites,
@@ -2581,10 +2664,13 @@ export function renderCurrentRoute() {
         'about': 'Hakkımızda — Kampüs Sesi',
         'iletisim': 'İletişim & Destek — Kampüs Sesi',
         'contact': 'İletişim & Destek — Kampüs Sesi',
-        'gizlilik': 'Gizlilik Politikası — Kampüs Sesi',
-        'privacy': 'Gizlilik Politikası — Kampüs Sesi',
-        'kullanim-sartlari': 'Kullanım Şartları — Kampüs Sesi',
-        'terms': 'Kullanım Şartları — Kampüs Sesi',
+        'gizlilik': 'KVKK Aydınlatma ve Gizlilik Politikası — Kampüs Sesi',
+        'privacy': 'KVKK Aydınlatma ve Gizlilik Politikası — Kampüs Sesi',
+        'kvkk': 'KVKK Aydınlatma ve Gizlilik Politikası — Kampüs Sesi',
+        'cerez-politikasi': 'Çerez (Cookie) Politikası — Kampüs Sesi',
+        'cookies': 'Çerez (Cookie) Politikası — Kampüs Sesi',
+        'kullanim-sartlari': 'Kullanıcı Sözleşmesi — Kampüs Sesi',
+        'terms': 'Kullanıcı Sözleşmesi — Kampüs Sesi',
         'favorites': 'Favorilerim — Kampüs Sesi',
         'cities': 'Şehirler — Kampüs Sesi',
         'ranking': 'Sıralama — Kampüs Sesi',
@@ -5039,8 +5125,8 @@ document.addEventListener('click', (e) => {
     const href = link.getAttribute('href');
     if (!href) return;
 
-    // Ignore external or new tab
-    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:') || link.target === '_blank') {
+    // Ignore external, new tab, or modal trigger links
+    if (link.hasAttribute('data-legal-modal') || href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:') || link.target === '_blank') {
         return;
     }
 
@@ -5082,11 +5168,73 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// ─── Cookie Consent Banner Controller ─────
+
+function initCookieConsentBanner() {
+    const STORAGE_KEY = 'kampus_sesi_cookie_consent_v2';
+
+    try {
+        if (localStorage.getItem(STORAGE_KEY) === 'accepted') {
+            const existing = document.getElementById('cookie-consent-banner');
+            if (existing) existing.remove();
+            return;
+        }
+    } catch (e) {}
+
+    let banner = document.getElementById('cookie-consent-banner');
+    if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'cookie-consent-banner';
+        banner.className = 'cookie-banner';
+        banner.setAttribute('role', 'dialog');
+        banner.setAttribute('aria-live', 'polite');
+        banner.setAttribute('aria-label', 'Çerez Bilgilendirme Bandı');
+        banner.innerHTML = `
+            <div class="cookie-banner__inner">
+                <div class="cookie-banner__content">
+                    <div class="cookie-banner__icon" aria-hidden="true">🍪</div>
+                    <div class="cookie-banner__text">
+                        <strong>Çerez ve Gizlilik Bilgilendirmesi:</strong> Kampüs Sesi'nde reklam veya takip çerezi kullanılmaz. Yalnızca güvenli oturum yönetimi ve interaktif kampüs haritası (OpenStreetMap) entegrasyonu için zorunlu çerezler kullanılmaktadır. Detaylar için <a href="#/cerez-politikasi">Çerez Politikası</a> ve <a href="#/gizlilik">KVKK Aydınlatma Metni</a> sayfalarımızı inceleyebilirsiniz.
+                    </div>
+                </div>
+                <div class="cookie-banner__actions">
+                    <a href="#/cerez-politikasi" class="cookie-banner__link-btn">Çerez Politikası</a>
+                    <button type="button" id="cookie-accept-btn" class="cookie-banner__accept-btn">Kabul Et ✓</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(banner);
+    }
+
+    banner.hidden = false;
+    banner.removeAttribute('hidden');
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            banner.classList.add('cookie-banner--visible');
+        }, 80);
+    });
+
+    const acceptBtn = banner.querySelector('#cookie-accept-btn');
+    if (acceptBtn) {
+        acceptBtn.addEventListener('click', () => {
+            try {
+                localStorage.setItem(STORAGE_KEY, 'accepted');
+                localStorage.setItem('kampus_sesi_cookie_consent', 'accepted');
+            } catch (e) {}
+            banner.classList.remove('cookie-banner--visible');
+            setTimeout(() => {
+                banner.hidden = true;
+            }, 300);
+        });
+    }
+}
+
 // ─── App Lifecycle ────────────────────────
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Setup Hamburger
+    // 1. Setup Hamburger & Cookie Consent Banner
     setupNavEvents();
+    initCookieConsentBanner();
 
     // 2. Restore User Session if Token Exists
     try {

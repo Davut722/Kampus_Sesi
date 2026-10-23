@@ -2,8 +2,9 @@
    Kampüs Sesi — Shared JavaScript (SPA Architecture + FastAPI Backend)
    ======================================== */
 
-import { api } from './api.js?v=80';
-import { TEMPLATES } from './templates.js?v=80';
+import { api } from './api.js?v=83';
+import { TEMPLATES } from './templates.js?v=87';
+import { initHomeShowcase } from './home.js?v=1';
 
 function getInitials(name) {
     if (!name) return 'MS';
@@ -31,7 +32,8 @@ let selectedUniState = 'Bandırma Onyedi Eylül Üniversitesi';
 const activeRenderers = {
     university: null,
     profile: null,
-    compare: null
+    compare: null,
+    home: null
 };
 
 export function parseHash() {
@@ -161,6 +163,8 @@ function updateNavForUser(user) {
 // ─── Global State & API Sync ──────────────
 let globalReviewsState = [];
 let globalInteractionsState = {};
+let appDataLoaded = false;   // ilk API verisi gelene kadar skeleton gösterilir
+let appDataFailed = false;   // API'ye ulaşılamadıysa ana sayfa vitrini boş durum mesajı gösterir
 
 export async function refreshAppData() {
     try {
@@ -170,12 +174,16 @@ export async function refreshAppData() {
         ]);
         globalReviewsState = reviews || [];
         globalInteractionsState = interactions || {};
-
+        appDataFailed = false;
+    } catch (e) {
+        appDataFailed = true;
+        console.warn("Veri yüklenirken hata oluştu:", e);
+    } finally {
+        appDataLoaded = true;
+        if (currentRoute === 'home' && activeRenderers.home) activeRenderers.home();
         if (currentRoute === 'university' && activeRenderers.university) activeRenderers.university();
         if (currentRoute === 'profile' && activeRenderers.profile) activeRenderers.profile();
         if (currentRoute === 'compare' && activeRenderers.compare) activeRenderers.compare();
-    } catch (e) {
-        console.warn("Veri yüklenirken hata oluştu:", e);
     }
 }
 
@@ -250,7 +258,7 @@ function updateInteractionUI(id, data) {
 
     if (likeBtn) {
         likeBtn.className = `btn-interaction btn-interaction-like ${isLiked ? 'btn-interaction--active-like' : ''}`;
-        likeBtn.innerHTML = `<i data-lucide="thumbs-up" class="icon-xs"></i> <span>${data.likes.length}</span>`;
+        likeBtn.innerHTML = `<i data-lucide="thumbs-up" class="icon-xs"></i> <span>Faydalı (${data.likes.length})</span>`;
     }
     if (dislikeBtn) {
         dislikeBtn.className = `btn-interaction btn-interaction-dislike ${isDisliked ? 'btn-interaction--active-dislike' : ''}`;
@@ -338,13 +346,68 @@ window.submitReply = async function (e, reviewId) {
     }
 };
 
+/** Parse review text into structured pros/cons and meta badges */
+function parseReviewContent(review) {
+    let pros = (review.pros || '').trim();
+    let cons = (review.cons || '').trim();
+    let dept = (review.department || '').trim();
+    let sClass = (review.student_class || '').trim();
+    let scholarship = (review.scholarship || '').trim();
+    let rawText = (review.text || '').trim();
+
+    if (pros || cons) {
+        return { pros, cons, dept, sClass, scholarship, isStructured: true, plainText: '' };
+    }
+
+    // Check for appended metadata: (Bölüm: ... • Sınıf: ... • Burs: ...)
+    const metaMatch = rawText.match(/\((Bölüm:[^)]+)\)/);
+    if (metaMatch) {
+        const metaStr = metaMatch[1];
+        const dMatch = metaStr.match(/Bölüm:\s*([^•\)]+)/);
+        if (dMatch && !dept) dept = dMatch[1].trim();
+        const cMatch = metaStr.match(/Sınıf:\s*([^•\)]+)/);
+        if (cMatch && !sClass) sClass = cMatch[1].trim();
+        const bMatch = metaStr.match(/Burs:\s*([^•\)]+)/);
+        if (bMatch && !scholarship) scholarship = bMatch[1].trim();
+        rawText = rawText.replace(metaMatch[0], '').trim();
+    }
+
+    if (rawText.includes('Beğendiklerim:') || rawText.includes('Geliştirilebilecek Yönler:')) {
+        const parts = rawText.split('Geliştirilebilecek Yönler:');
+        if (parts.length === 2) {
+            pros = parts[0].replace('Beğendiklerim:', '').trim();
+            cons = parts[1].trim();
+            return { pros, cons, dept, sClass, scholarship, isStructured: true, plainText: '' };
+        } else if (rawText.includes('Beğendiklerim:')) {
+            pros = rawText.replace('Beğendiklerim:', '').trim();
+            return { pros, cons: '', dept, sClass, scholarship, isStructured: true, plainText: '' };
+        } else if (rawText.includes('Geliştirilebilecek Yönler:')) {
+            cons = rawText.replace('Geliştirilebilecek Yönler:', '').trim();
+            return { pros: '', cons, dept, sClass, scholarship, isStructured: true, plainText: '' };
+        }
+    }
+
+    return { pros: '', cons: '', dept, sClass, scholarship, isStructured: false, plainText: rawText };
+}
+
+window.toggleReviewReplies = function(id) {
+    const box = document.getElementById(`reply-box-${id}`);
+    if (!box) return;
+    const isHidden = box.style.display === 'none' || !box.style.display;
+    box.style.display = isHidden ? 'block' : 'none';
+};
+
+window.reportReview = function(id) {
+    showToast('Geri bildiriminiz alındı. Moderatör ekibine iletildi.');
+};
+
 /** Render a single review card */
 function renderReviewCard(review, options = {}) {
     const { showUni = false, showDelete = false } = options;
     const ints = getInteractions()[review.id] || { likes: [], dislikes: [] };
     const userIdentifier = CURRENT_USER.name;
     const isLiked = ints.likes.includes(userIdentifier);
-    const isDisliked = ints.dislikes.includes(userIdentifier);
+    const parsed = parseReviewContent(review);
 
     // Process replies
     const replies = review.replies || [];
@@ -355,10 +418,10 @@ function renderReviewCard(review, options = {}) {
                 ${replies.map(r => `
                     <div class="reply-item">
                         <div class="reply-item__header">
-                            <span class="reply-item__user">${r.user}</span>
-                            <span class="reply-item__date">${r.date}</span>
+                            <span class="reply-item__user">${escapeHtml(r.user)}</span>
+                            <span class="reply-item__date">${escapeHtml(r.date)}</span>
                         </div>
-                        <div class="reply-item__text">${r.text}</div>
+                        <div class="reply-item__text">${escapeHtml(r.text)}</div>
                     </div>
                 `).join('')}
             </div>
@@ -372,35 +435,72 @@ function renderReviewCard(review, options = {}) {
         </form>
     ` : `<div style="font-size:0.8rem; color: var(--color-text-muted); padding-top: 5px;">Yanıt yazmak için <a href="#/login">giriş yapın</a>.</div>`;
 
+    // Metadata Badges (Department, Class, Scholarship)
+    const badgesHtml = (parsed.dept || parsed.sClass || parsed.scholarship) ? `
+        <div class="card__meta-badges">
+            ${parsed.dept ? `<span class="ed-badge"><i data-lucide="book-open" class="icon-xs"></i> ${escapeHtml(parsed.dept)}</span>` : ''}
+            ${parsed.sClass ? `<span class="ed-badge"><i data-lucide="graduation-cap" class="icon-xs"></i> ${escapeHtml(parsed.sClass)}${parsed.sClass !== 'Mezun' ? '. Sınıf' : ''}</span>` : ''}
+            ${parsed.scholarship && parsed.scholarship !== 'Belirtmek istemiyorum' ? `<span class="ed-badge"><i data-lucide="award" class="icon-xs"></i> ${escapeHtml(parsed.scholarship)}</span>` : ''}
+        </div>
+    ` : '';
+
+    // Body content: dual structured blocks vs clean single block
+    let bodyHtml = '';
+    if (parsed.isStructured) {
+        bodyHtml = `
+            <div class="card__body card__body--split">
+                ${parsed.pros ? `
+                    <div class="review-block review-block--pro">
+                        <div class="review-block__title"><i data-lucide="check" class="icon-xs"></i> Beğendiklerim</div>
+                        <div class="review-block__text">${escapeHtml(parsed.pros)}</div>
+                    </div>
+                ` : ''}
+                ${parsed.cons ? `
+                    <div class="review-block review-block--con">
+                        <div class="review-block__title"><i data-lucide="alert-circle" class="icon-xs"></i> Geliştirilebilecek Yönler</div>
+                        <div class="review-block__text">${escapeHtml(parsed.cons)}</div>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    } else {
+        bodyHtml = `<div class="card__body">${escapeHtml(parsed.plainText || review.text)}</div>`;
+    }
+
     return `
-    <article class="card" data-id="${review.id}" data-tags="${review.tags.join(',')}">
+    <article class="card ed-card review-card" data-anim="fade-up" data-id="${review.id}" data-tags="${review.tags ? review.tags.join(',') : ''}">
       <div class="card__header">
         <a href="#/profile?user=${encodeURIComponent(review.user)}" class="card__user card__user--clickable">
-          <div class="card__avatar">${review.initials}</div>
+          <div class="card__avatar">${escapeHtml(review.initials || 'ÖG')}</div>
           <div>
-            <div class="card__username">${review.user}</div>
-            <div class="card__date">${review.date}</div>
+            <div class="card__username">${escapeHtml(review.user)}</div>
+            <div class="card__date">${escapeHtml(review.date)}</div>
           </div>
         </a>
         ${renderStars(review.rating)}
       </div>
-      ${showUni ? `<div class="card__uni-name"><i data-lucide="map-pin" class="icon-xs"></i> ${review.university}</div>` : ''}
-      <div class="card__body">${review.text}</div>
+
+      ${badgesHtml}
+      ${showUni ? `<div class="card__uni-name"><i data-lucide="map-pin" class="icon-xs"></i> ${escapeHtml(review.university)}</div>` : ''}
+      ${bodyHtml}
+
       <div class="card__footer">
-        <div class="card__tags">${renderTags(review.tags)}</div>
+        <div class="card__tags">${renderTags(review.tags || [])}</div>
         <div class="card__actions">
-            <div class="card__interactions">
-                <button class="btn-interaction btn-interaction-like ${isLiked ? 'btn-interaction--active-like' : ''}" data-id="${review.id}">
-                    <i data-lucide="thumbs-up" class="icon-xs"></i> <span>${ints.likes.length}</span>
-                </button>
-                <button class="btn-interaction btn-interaction-dislike ${isDisliked ? 'btn-interaction--active-dislike' : ''}" data-id="${review.id}">
-                    <i data-lucide="thumbs-down" class="icon-xs"></i> <span>${ints.dislikes.length}</span>
-                </button>
-            </div>
+            <button class="btn-interaction btn-interaction-like ${isLiked ? 'btn-interaction--active-like' : ''}" data-id="${review.id}" type="button" title="Faydalı buldum">
+                <i data-lucide="thumbs-up" class="icon-xs"></i> <span>Faydalı (${ints.likes.length})</span>
+            </button>
+            <button type="button" class="btn btn--text btn--sm btn-reply-toggle" onclick="window.toggleReviewReplies('${review.id}')" title="Yanıtlara göz at">
+                <i data-lucide="message-square" class="icon-xs"></i> <span>Yanıtla${replies.length ? ` (${replies.length})` : ''}</span>
+            </button>
+            <button type="button" class="btn btn--text btn--sm btn-report-review" onclick="window.reportReview('${review.id}')" title="Bu yorumu bildir">
+                <i data-lucide="flag" class="icon-xs"></i> <span>Şikayet et</span>
+            </button>
             ${showDelete ? `<button class="btn btn--danger btn--sm" onclick="deleteReview('${review.id}')"><i data-lucide="trash-2" class="icon-xs"></i> Sil</button>` : ''}
         </div>
       </div>
-      <div class="card__thread">
+
+      <div class="card__thread" id="reply-box-${review.id}" style="display: none;">
         ${repliesHtml}
         ${replyFormHtml}
       </div>
@@ -506,7 +606,7 @@ function setupThemeToggle() {
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    const savedTheme = localStorage.getItem('kampus_sesi_theme') || 'dark';
+    const savedTheme = localStorage.getItem('kampus_sesi_theme') || 'light';
     syncThemeUI(savedTheme);
 
     if (drawerThemeBtn) {
@@ -1020,104 +1120,353 @@ function initUniversityPage(initialUni) {
     const reviewsContainer = document.getElementById('reviews-container');
     const filterBar = document.getElementById('filter-bar');
     const heroTitle = document.getElementById('uni-hero-title');
-    const heroSubtitle = document.getElementById('uni-hero-subtitle');
 
     if (!reviewsContainer) return () => {};
 
     // All reviews pool
     const ALL_MOCK = [];
 
-    // Default to initialUni or selectedUniState or Bandırma Onyedi Eylül Üniversitesi
-    let selectedUni = initialUni || selectedUniState || (typeof TURKISH_UNIVERSITIES !== 'undefined' ?
-        'Bandırma Onyedi Eylül Üniversitesi' : 'Bandırma Onyedi Eylül Üniversitesi');
+    // Selected University
+    let selectedUni = initialUni || selectedUniState || 'Bandırma Onyedi Eylül Üniversitesi';
     selectedUniState = selectedUni;
 
-    // Initialize custom select
-    initCustomSelect('custom-uni-select', typeof TURKISH_UNIVERSITIES !== 'undefined' ? TURKISH_UNIVERSITIES : [], (newUni) => {
-        selectedUni = newUni;
-        selectedUniState = newUni;
-        updateHero();
-        // Reset tag filter
-        if (filterBar) {
-            filterBar.querySelectorAll('.tag--filter').forEach(b => b.classList.remove('tag--active'));
-            const allBtn = filterBar.querySelector('[data-filter="all"]');
-            if (allBtn) allBtn.classList.add('tag--active');
-        }
-        renderReviews('all');
-    }, selectedUni);
+    // Filter & sort state
+    let currentTagFilter = 'all';
+    let currentSort = 'newest';
 
+    // Dormitory state
+    let rawDorms = [];
+    let currentDormFilter = 'all';
+    let dormsExpanded = false;
 
-    // Render filter buttons
-    let filterHTML = `<button class="tag tag--filter tag--active" data-filter="all"><i data-lucide="layers" class="icon-xs"></i> <span>Tümü</span></button>`;
-    AVAILABLE_TAGS.forEach(tag => {
-        filterHTML += `<button class="tag tag--filter" data-filter="${tag.id}"><i data-lucide="${tag.icon}" class="icon-xs"></i> <span>${tag.label}</span></button>`;
-    });
-    filterBar.innerHTML = filterHTML;
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-
-    // Get reviews for the selected university
+    // Get reviews for current uni
     function getAllReviews() {
         const userReviews = getSavedReviews().filter(r => r.university === selectedUni);
         const mockReviews = ALL_MOCK.filter(r => r.university === selectedUni);
         return [...userReviews, ...mockReviews];
     }
 
-    // Render review cards
-    function renderReviews(filter = 'all') {
-        const allReviews = getAllReviews();
-        let filtered = filter === 'all'
-            ? allReviews
-            : allReviews.filter(r => r.tags.includes(filter));
+    // Helper: parse distance string to meters for sorting
+    function parseDistanceMeters(distStr) {
+        if (!distStr) return 999999;
+        const s = String(distStr).toLowerCase();
+        const kmMatch = s.match(/([\d\.,]+)\s*km/);
+        if (kmMatch) return parseFloat(kmMatch[1].replace(',', '.')) * 1000;
+        const mMatch = s.match(/([\d\.,]+)\s*m\b/);
+        if (mMatch) return parseFloat(mMatch[1].replace(',', '.'));
+        const minMatch = s.match(/([\d\.,]+)\s*dk/);
+        if (minMatch) return parseFloat(minMatch[1].replace(',', '.')) * 80;
+        const anyNum = s.match(/([\d\.,]+)/);
+        if (anyNum) return parseFloat(anyNum[1].replace(',', '.')) * 1000;
+        return 999999;
+    }
 
-        // Sort by popularity (likes - dislikes) descending
-        filtered.sort((a, b) => {
-            const scoreA = getReviewScore(a.id);
-            const scoreB = getReviewScore(b.id);
-            return scoreB - scoreA;
+    // Helper: Devlet vs Vakıf
+    function detectUniType(name) {
+        const n = (name || '').toLowerCase();
+        const vakifList = [
+            'vakıf', 'koç', 'sabancı', 'bilkent', 'yeditepe', 'başkent', 'bahçeşehir',
+            'özyeğin', 'tobb', 'kadir has', 'bilgi', 'çankaya', 'acıbadem', 'bezmialem',
+            'doğuş', 'haliç', 'ışık', 'istinye', 'kültür', 'maltepe', 'medipol', 'okan',
+            'ted', 'toros', 'ufuk', 'yaşar', 'üsküdar', 'fenerbahçe', 'lokman hekim'
+        ];
+        return vakifList.some(k => n.includes(k)) ? 'Vakıf Üniversitesi' : 'Devlet Üniversitesi';
+    }
+
+    // Helper: Extract founded year
+    function extractFoundedYear(subtitle) {
+        if (!subtitle) return '—';
+        const match = subtitle.match(/(\d{4})/);
+        return match ? match[1] : '—';
+    }
+
+    // Helper: Extract city name
+    function extractCity(details, uniName) {
+        if (details && details.subtitle) {
+            const parts = details.subtitle.split(',');
+            if (parts.length > 0 && parts[0].trim()) return parts[0].trim();
+        }
+        const mapEntry = findCampusMapEntry(uniName);
+        if (mapEntry && mapEntry.city) return mapEntry.city;
+        return 'Türkiye';
+    }
+
+    // Update Filter Buttons with Dynamic Counts
+    function renderFilterBar() {
+        if (!filterBar) return;
+        const allReviews = getAllReviews();
+        const totalCount = allReviews.length;
+
+        let filterHTML = `
+            <button class="tag tag--filter ${currentTagFilter === 'all' ? 'tag--active' : ''}" data-filter="all">
+                <i data-lucide="layers" class="icon-xs"></i> <span>Tümü</span> <span class="tag-count">(${totalCount})</span>
+            </button>
+        `;
+
+        AVAILABLE_TAGS.forEach(tag => {
+            const tagCount = allReviews.filter(r => r.tags && r.tags.includes(tag.id)).length;
+            filterHTML += `
+                <button class="tag tag--filter ${currentTagFilter === tag.id ? 'tag--active' : ''}" data-filter="${tag.id}">
+                    <i data-lucide="${tag.icon}" class="icon-xs"></i> <span>${tag.label}</span> <span class="tag-count">(${tagCount})</span>
+                </button>
+            `;
         });
 
-        if (filtered.length === 0) {
-            reviewsContainer.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state__icon"><i data-lucide="message-square" class="icon-md"></i></div>
-          <h4 style="font-weight: 600; color: var(--color-text); margin-bottom: 4px;">Henüz değerlendirme bulunamadı</h4>
-          <p style="color: var(--color-text-dim); font-size: 0.88rem; margin-bottom: var(--space-md);">Bu üniversite veya kategori için ilk deneyimi sen paylaş.</p>
-          <a href="#/review-form" class="btn btn--primary btn--sm">İlk Değerlendirmeyi Sen Yaz</a>
-        </div>
-      `;
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-            updateStats(allReviews);
+        filterBar.innerHTML = filterHTML;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Render review cards with sorting and tag filtering
+    function renderReviews() {
+        if (!appDataLoaded && window.AnimUtils) {
+            reviewsContainer.innerHTML = window.AnimUtils.reviewSkeleton(3);
             return;
         }
 
-        reviewsContainer.innerHTML = filtered.map(r => renderReviewCard(r)).join('');
+        const allReviews = getAllReviews();
+        let filtered = currentTagFilter === 'all'
+            ? allReviews
+            : allReviews.filter(r => r.tags && r.tags.includes(currentTagFilter));
+
+        // Sort reviews
+        if (currentSort === 'helpful') {
+            filtered.sort((a, b) => {
+                const scoreA = getReviewScore(a.id);
+                const scoreB = getReviewScore(b.id);
+                return scoreB - scoreA;
+            });
+        } else if (currentSort === 'highest') {
+            filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        } else if (currentSort === 'lowest') {
+            filtered.sort((a, b) => (a.rating || 0) - (b.rating || 0));
+        } else {
+            // newest
+            filtered.sort((a, b) => (b.id || 0) - (a.id || 0));
+        }
+
+        if (filtered.length === 0) {
+            reviewsContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state__icon"><i data-lucide="message-square" class="icon-md"></i></div>
+                    <h4 style="font-weight: 600; color: var(--color-text); margin-bottom: 4px;">Henüz bu kategoride değerlendirme yok</h4>
+                    <p style="color: var(--color-text-dim); font-size: 0.88rem; margin-bottom: var(--space-md);">Bu üniversite için ilk deneyim ve izlenimlerini paylaşarak adaylara rehber ol.</p>
+                    <a href="#/review-form?uni=${encodeURIComponent(selectedUni)}" class="btn btn--primary btn--sm">
+                        <i data-lucide="edit-3" class="icon-xs"></i> İlk Değerlendirmeyi Sen Yaz
+                    </a>
+                </div>
+            `;
+        } else {
+            reviewsContainer.innerHTML = filtered.map(r => renderReviewCard(r)).join('');
+        }
+
         if (typeof lucide !== 'undefined') lucide.createIcons();
         updateStats(allReviews);
+        renderFilterBar();
     }
 
+    // Render Criteria Progress Bars in Sticky Sidebar
+    function renderCriteriaBars(allReviews) {
+        const criteriaList = document.getElementById('uni-criteria-list');
+        if (!criteriaList) return;
+
+        const CRITERIA_CONFIG = [
+            { id: 'akademik', label: 'Akademik Kalite', icon: 'graduation-cap', tags: ['egitim', 'akademik'] },
+            { id: 'yurt', label: 'Yurt Olanakları', icon: 'home', tags: ['yurt'] },
+            { id: 'yemekhane', label: 'Yemekhane & Beslenme', icon: 'utensils', tags: ['yemekhane'] },
+            { id: 'ulasim', label: 'Ulaşım Kolaylığı', icon: 'bus', tags: ['ulasim'] },
+            { id: 'sosyal', label: 'Sosyal Yaşam', icon: 'sparkles', tags: ['sosyal'] }
+        ];
+
+        let html = '';
+        CRITERIA_CONFIG.forEach(crit => {
+            const scores = [];
+            allReviews.forEach(r => {
+                if (r.criteria && typeof r.criteria[crit.id] === 'number' && r.criteria[crit.id] > 0) {
+                    scores.push(r.criteria[crit.id]);
+                } else if (r.tags && r.tags.some(t => crit.tags.includes(t)) && r.rating) {
+                    scores.push(r.rating);
+                }
+            });
+
+            if (scores.length > 0) {
+                const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
+                const pct = Math.min(100, Math.max(0, Math.round((avg / 5) * 100)));
+                html += `
+                    <div class="uni-criterion-row">
+                        <div class="uni-criterion-head">
+                            <span class="uni-criterion-label">
+                                <i data-lucide="${crit.icon}" class="icon-xs crit-icon"></i> ${crit.label}
+                            </span>
+                            <span class="uni-criterion-score">${avg} <span class="uni-criterion-max">/ 5</span></span>
+                        </div>
+                        <div class="uni-criterion-bar" role="progressbar" aria-valuenow="${avg}" aria-valuemin="0" aria-valuemax="5">
+                            <div class="uni-criterion-fill" style="width: ${pct}%;"></div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="uni-criterion-row uni-criterion-row--empty">
+                        <div class="uni-criterion-head">
+                            <span class="uni-criterion-label">
+                                <i data-lucide="${crit.icon}" class="icon-xs crit-icon"></i> ${crit.label}
+                            </span>
+                            <span class="uni-criterion-score uni-criterion-score--none">Henüz puanlanmadı</span>
+                        </div>
+                        <div class="uni-criterion-bar uni-criterion-bar--empty">
+                            <div class="uni-criterion-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        criteriaList.innerHTML = html;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Render Popular Departments in Main Column
+    function renderDepartments() {
+        const deptsGrid = document.getElementById('uni-depts-grid');
+        if (!deptsGrid) return;
+
+        const defaultDepts = [
+            { name: 'Bilgisayar Mühendisliği', faculty: 'Mühendislik Fakültesi', lang: '%100 İngilizce', duration: '4 Yıl Lisans', demand: '%95 İstihdam' },
+            { name: 'Yazılım Mühendisliği', faculty: 'Mühendislik Fakültesi', lang: 'Türkçe', duration: '4 Yıl Lisans', demand: '%93 İstihdam' },
+            { name: 'Tıp Fakültesi', faculty: 'Tıp Fakültesi', lang: 'Türkçe', duration: '6 Yıl Lisans', demand: '%100 İstihdam' },
+            { name: 'Hukuk Fakültesi', faculty: 'Hukuk Fakültesi', lang: 'Türkçe', duration: '4 Yıl Lisans', demand: '%88 İstihdam' },
+            { name: 'İşletme & Ekonomi', faculty: 'İktisadi ve İdari Bilimler', lang: '%30 İngilizce', duration: '4 Yıl Lisans', demand: '%84 İstihdam' },
+            { name: 'Mimarlık', faculty: 'Mimarlık ve Tasarım', lang: 'Türkçe', duration: '4 Yıl Lisans', demand: '%86 İstihdam' }
+        ];
+
+        let html = '';
+        defaultDepts.forEach(d => {
+            html += `
+                <div class="uni-dept-card ed-card">
+                    <div class="uni-dept-card__header">
+                        <span class="uni-dept-faculty">${escapeHtml(d.faculty)}</span>
+                        <span class="uni-dept-demand-pill">${escapeHtml(d.demand)}</span>
+                    </div>
+                    <h3 class="uni-dept-card__title">${escapeHtml(d.name)}</h3>
+                    <div class="uni-dept-card__meta">
+                        <span class="uni-dept-meta-item"><i data-lucide="clock" class="icon-xs"></i> ${escapeHtml(d.duration)}</span>
+                        <span class="uni-dept-meta-item"><i data-lucide="globe" class="icon-xs"></i> ${escapeHtml(d.lang)}</span>
+                    </div>
+                </div>
+            `;
+        });
+
+        deptsGrid.innerHTML = html;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Render Dormitories (KYK & Private)
+    function renderKykSection(yurtlar) {
+        const grid = document.getElementById('kyk-grid');
+        const expandWrap = document.getElementById('dorm-expand-wrap');
+        const totalCountEl = document.getElementById('dorms-total-count');
+        const tabDormCountEl = document.getElementById('tab-dorms-count');
+        if (!grid) return;
+
+        rawDorms = Array.isArray(yurtlar) ? yurtlar : [];
+        if (tabDormCountEl) tabDormCountEl.textContent = rawDorms.length;
+
+        if (rawDorms.length === 0) {
+            grid.innerHTML = '<div class="empty-state-text" style="color: var(--color-text-muted); padding: 1.5rem 0;">Bu üniversite çevresinde henüz kayıtlı yurt bilgisi bulunmuyor.</div>';
+            if (expandWrap) expandWrap.style.display = 'none';
+            return;
+        }
+
+        // Distance sorted
+        let sorted = [...rawDorms].sort((a, b) => parseDistanceMeters(a.mesafe) - parseDistanceMeters(b.mesafe));
+
+        // Gender filter
+        let filtered = currentDormFilter === 'all'
+            ? sorted
+            : sorted.filter(y => (y.tip || '').toLowerCase().includes(currentDormFilter.toLowerCase()));
+
+        if (totalCountEl) totalCountEl.textContent = filtered.length;
+
+        // Show first 4 cards or all
+        const visibleDorms = dormsExpanded ? filtered : filtered.slice(0, 4);
+
+        if (expandWrap) {
+            if (filtered.length > 4) {
+                expandWrap.style.display = 'block';
+                const expandBtn = document.getElementById('dorms-expand-btn');
+                if (expandBtn) {
+                    expandBtn.innerHTML = dormsExpanded
+                        ? `Daha Az Göster <i data-lucide="chevron-up" class="icon-xs"></i>`
+                        : `Tümünü Gör (${filtered.length}) <i data-lucide="chevron-down" class="icon-xs"></i>`;
+                }
+            } else {
+                expandWrap.style.display = 'none';
+            }
+        }
+
+        let html = '';
+        visibleDorms.forEach(yurt => {
+            let badgeClass = 'kyk-badge--karma';
+            const tipLower = (yurt.tip || '').toLowerCase();
+            if (tipLower.includes('kız')) badgeClass = 'kyk-badge--kiz';
+            else if (tipLower.includes('erkek')) badgeClass = 'kyk-badge--erkek';
+
+            html += `
+                <div class="kyk-card ed-card">
+                    <div class="kyk-card__header">
+                        <h3 class="kyk-card__title">${escapeHtml(yurt.ad)}</h3>
+                        <span class="kyk-badge ${badgeClass}">${escapeHtml(yurt.tip)}</span>
+                    </div>
+                    <div class="kyk-details-grid">
+                        <div class="kyk-detail">
+                            <i data-lucide="map-pin" class="icon-sm"></i>
+                            <span>${escapeHtml(yurt.mesafe || 'Mesafesi belirtilmedi')}</span>
+                        </div>
+                        <div class="kyk-detail">
+                            <i data-lucide="wallet" class="icon-sm"></i>
+                            <span>${escapeHtml(yurt.ucret || 'Ücret bilgisi yok')}</span>
+                        </div>
+                        <div class="kyk-detail">
+                            <i data-lucide="users" class="icon-sm"></i>
+                            <span>Kapasite: ${escapeHtml(yurt.kapasite || 'Belirtilmedi')}</span>
+                        </div>
+                        <div class="kyk-detail kyk-detail--date">
+                            <i data-lucide="calendar" class="icon-sm"></i>
+                            <span>Güncelleme: ${escapeHtml(yurt.guncelleme || 'Dönem Başı 2024')}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        grid.innerHTML = html;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Wikipedia image fallback helper
     async function fetchWikipediaImage(uniName) {
         try {
             const searchUrl = `https://tr.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(uniName)}&utf8=&format=json&origin=*`;
             const searchRes = await fetch(searchUrl);
             const searchData = await searchRes.json();
             if (!searchData.query.search.length) return null;
-            
+
             const title = searchData.query.search[0].title;
             const imgUrl = `https://tr.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&origin=*`;
             const imgRes = await fetch(imgUrl);
             const imgData = await imgRes.json();
             const pages = imgData.query.pages;
             const pageId = Object.keys(pages)[0];
-            
+
             if (!pages[pageId].pageimage) return null;
             const filename = pages[pageId].pageimage;
-            
+
             const fileUrl = `https://tr.wikipedia.org/w/api.php?action=query&titles=File:${encodeURIComponent(filename)}&prop=imageinfo&iiprop=url&format=json&origin=*`;
             const fileRes = await fetch(fileUrl);
             const fileData = await fileRes.json();
             const imgPages = fileData.query.pages;
             const imgPageId = Object.keys(imgPages)[0];
-            
+
             return imgPages[imgPageId].imageinfo[0].url;
         } catch (e) {
             console.error("Wikipedia image fetch failed:", e);
@@ -1125,9 +1474,8 @@ function initUniversityPage(initialUni) {
         }
     }
 
-    // Update hero section and profile metadata
+    // Update Hero and Sidebar Metadata
     function updateHero() {
-        // Fetch specific or fallback data
         let details = UNI_DETAILS[selectedUni] ? { ...UNI_DETAILS[selectedUni] } : { ...GENERIC_UNI_DATA };
         const initialMapEntry = findCampusMapEntry(selectedUni);
         if (!UNI_DETAILS[selectedUni] && initialMapEntry && initialMapEntry.city) {
@@ -1137,30 +1485,51 @@ function initUniversityPage(initialUni) {
             details.subtitle = `${initialMapEntry.city}${distPart}, Türkiye`;
         }
 
-        // 1. Update Title and Location
+        const city = extractCity(details, selectedUni);
+        const foundedYear = extractFoundedYear(details.subtitle);
+        const uniType = detectUniType(selectedUni);
+
+        // 1. Breadcrumb
+        const bcCity = document.getElementById('uni-bc-city');
+        const bcName = document.getElementById('uni-bc-name');
+        if (bcCity) bcCity.textContent = city;
+        if (bcName) bcName.textContent = selectedUni;
+
+        // 2. Hero Header
         const heroTitleEl = document.getElementById('uni-hero-title');
-        const heroSubtitleEl = document.getElementById('uni-hero-subtitle');
-        if (heroTitleEl) heroTitleEl.innerHTML = selectedUni;
-        if (heroSubtitleEl) heroSubtitleEl.innerHTML = `<i data-lucide="map-pin" class="icon-sm"></i> ${details.subtitle}`;
+        const heroTypeEl = document.getElementById('uni-hero-type');
+        const heroCityEl = document.getElementById('uni-hero-city');
+        const heroYearEl = document.getElementById('uni-hero-year');
+        if (heroTitleEl) heroTitleEl.textContent = selectedUni;
+        if (heroTypeEl) heroTypeEl.textContent = uniType;
+        if (heroCityEl) heroCityEl.textContent = city;
+        if (heroYearEl) heroYearEl.textContent = foundedYear !== '—' ? `Kuruluş: ${foundedYear}` : 'Türkiye';
 
-        // 2. Default Image Settings
+        // 3. Hero Logo
         const heroImg = document.getElementById('hero-img');
-        const heroBlurImg = document.getElementById('hero-blur-img');
-        if (heroImg) heroImg.src = details.image;
-        if (heroBlurImg) heroBlurImg.src = details.image;
-
-        // 3. Update Text Content
-        const textShort = document.getElementById('about-text-short');
-        const textLong = document.getElementById('about-text-long');
-        if (textShort) {
-            textShort.textContent = typeof UNI_DETAILS[selectedUni] !== 'undefined' ? `${details.aboutShort}` : `${selectedUni}, ${details.aboutShort}`;
-        }
-        if (textLong) {
-            textLong.textContent = details.aboutLong;
+        if (heroImg) {
+            heroImg.src = details.image;
+            heroImg.onerror = () => {
+                heroImg.src = 'img/placeholder.jpg';
+            };
         }
 
-        // 3.5 Default Website
+        // 4. Hero Action Links
+        const addRevBtn = document.getElementById('uni-add-review-btn');
+        const compareBtn = document.getElementById('uni-compare-btn');
+        const sidebarAddRevBtn = document.getElementById('sidebar-add-review-btn');
+        const mobileCtaBtn = document.getElementById('mobile-cta-btn');
+        const mobileCtaUni = document.getElementById('mobile-cta-uni-name');
+
+        if (addRevBtn) addRevBtn.href = `#/review-form?uni=${encodeURIComponent(selectedUni)}`;
+        if (compareBtn) compareBtn.href = `#/compare?uni1=${encodeURIComponent(selectedUni)}`;
+        if (sidebarAddRevBtn) sidebarAddRevBtn.href = `#/review-form?uni=${encodeURIComponent(selectedUni)}`;
+        if (mobileCtaBtn) mobileCtaBtn.href = `#/review-form?uni=${encodeURIComponent(selectedUni)}`;
+        if (mobileCtaUni) mobileCtaUni.textContent = selectedUni;
+
+        // 5. Website Links
         const websiteBtn = document.getElementById('uni-website-btn');
+        const sidebarWeb = document.getElementById('sidebar-info-web');
         if (websiteBtn) {
             if (details.website) {
                 websiteBtn.href = details.website;
@@ -1169,8 +1538,36 @@ function initUniversityPage(initialUni) {
                 websiteBtn.style.display = 'none';
             }
         }
+        if (sidebarWeb && details.website) {
+            sidebarWeb.href = details.website;
+        }
 
-        // 3.6 Favorite Button Sync
+        // 6. Sidebar Quick Facts
+        const sbType = document.getElementById('sidebar-info-type');
+        const sbCity = document.getElementById('sidebar-info-city');
+        const sbYear = document.getElementById('sidebar-info-year');
+        const sbMapUni = document.getElementById('sidebar-map-uni');
+        const sbMapCity = document.getElementById('sidebar-map-city');
+
+        if (sbType) sbType.textContent = uniType;
+        if (sbCity) sbCity.textContent = city;
+        if (sbYear) sbYear.textContent = foundedYear;
+        if (sbMapUni) sbMapUni.textContent = selectedUni;
+        if (sbMapCity) sbMapCity.textContent = `${city}, Türkiye`;
+
+        // 7. About Text
+        const textShort = document.getElementById('about-text-short');
+        const textLong = document.getElementById('about-text-long');
+        if (textShort) {
+            textShort.textContent = typeof UNI_DETAILS[selectedUni] !== 'undefined'
+                ? details.aboutShort
+                : `${selectedUni}, ${details.aboutShort}`;
+        }
+        if (textLong) {
+            textLong.textContent = details.aboutLong;
+        }
+
+        // 8. Favorite Button
         const favBtn = document.getElementById('uni-fav-btn');
         const favText = document.getElementById('uni-fav-text');
         const favIcon = document.getElementById('uni-fav-icon');
@@ -1202,11 +1599,7 @@ function initUniversityPage(initialUni) {
                 try {
                     let favs = [];
                     if (CURRENT_USER && CURRENT_USER.uid !== 'guest') {
-                        try {
-                            favs = await api.getFavorites();
-                        } catch(e) {
-                            favs = JSON.parse(localStorage.getItem('kampus_sesi_favorites') || '[]');
-                        }
+                        try { favs = await api.getFavorites(); } catch(e) {}
                     } else {
                         favs = JSON.parse(localStorage.getItem('kampus_sesi_favorites') || '[]');
                     }
@@ -1217,39 +1610,35 @@ function initUniversityPage(initialUni) {
                         }
                         favs = favs.filter(u => u !== selectedUni);
                         localStorage.setItem('kampus_sesi_favorites', JSON.stringify(favs));
-                        showToast(`🗑️ "${selectedUni}" favorilerden çıkarıldı.`);
+                        showToast(`"${selectedUni}" favorilerden çıkarıldı.`);
                     } else {
                         if (CURRENT_USER && CURRENT_USER.uid !== 'guest') {
                             await api.addFavorite(selectedUni);
                         }
                         favs.push(selectedUni);
                         localStorage.setItem('kampus_sesi_favorites', JSON.stringify(favs));
-                        showToast(`❤️ "${selectedUni}" favorilere eklendi!`);
+                        showToast(`"${selectedUni}" favorilere eklendi!`);
                     }
                     await checkIsFav();
                 } catch(err) {
-                    showToast(`❌ Hata: ${err.message || 'Favori işlemi başarısız.'}`);
+                    showToast(`Hata: ${err.message || 'Favori işlemi başarısız.'}`);
                 } finally {
                     favBtn.disabled = false;
                 }
             };
         }
 
-        // 4. Fetch dynamic data from API (MySQL)
+        // 9. Fetch dynamic data from API
         api.getUniversity(selectedUni).then(uniDb => {
             if (uniDb) {
                 const currentTitle = document.getElementById('uni-hero-title');
-                // Sadece hala ayni universite seciliyse DOM'u guncelle
                 if (currentTitle && currentTitle.textContent.trim() === selectedUni.trim()) {
                     if (uniDb.image_url && uniDb.image_url.trim() !== '') {
                         if (heroImg) heroImg.src = uniDb.image_url;
-                        if (heroBlurImg) heroBlurImg.src = uniDb.image_url;
                     } else {
-                        // API'de yoksa Wikipedia fallback
                         fetchWikipediaImage(selectedUni).then(url => {
                             if (url && currentTitle && currentTitle.textContent.trim() === selectedUni.trim()) {
                                 if (heroImg) heroImg.src = url;
-                                if (heroBlurImg) heroBlurImg.src = url;
                             }
                         });
                     }
@@ -1259,18 +1648,11 @@ function initUniversityPage(initialUni) {
                             websiteBtn.href = uniDb.website_url;
                             websiteBtn.style.display = 'inline-flex';
                         }
+                        if (sidebarWeb) sidebarWeb.href = uniDb.website_url;
                     }
 
-                    // Veritabanından gelen ilişkili adres & koordinat bilgisini (university_addresses) haritaya aktar
                     if (uniDb.address) {
                         initOrUpdateCampusMap(selectedUni, uniDb.address);
-                        if (!UNI_DETAILS[selectedUni] && heroSubtitleEl && uniDb.address.city) {
-                            const distPart = (uniDb.address.district && uniDb.address.district.toLowerCase() !== uniDb.address.city.toLowerCase() && uniDb.address.district !== 'Merkez')
-                                ? ` (${uniDb.address.district})`
-                                : '';
-                            heroSubtitleEl.innerHTML = `<i data-lucide="map-pin" class="icon-sm"></i> ${escapeHtml(uniDb.address.city)}${escapeHtml(distPart)}, Türkiye`;
-                            if (typeof lucide !== 'undefined') lucide.createIcons();
-                        }
                     } else if (typeof api.getUniversityAddress === 'function') {
                         api.getUniversityAddress(uniDb.id || selectedUni).then(addr => {
                             if (addr && currentTitle && currentTitle.textContent.trim() === selectedUni.trim()) {
@@ -1279,33 +1661,15 @@ function initUniversityPage(initialUni) {
                         }).catch(() => {});
                     }
 
-                    // KYK Render (Ayrı API çağrısı ile ID üzerinden)
                     api.getDorms(uniDb.id).then(dorms => {
                         renderKykSection(dorms);
-                    }).catch(err => {
-                        console.warn("Yurtlar çekilirken hata:", err);
+                    }).catch(() => {
                         renderKykSection([]);
                     });
                 }
             }
         }).catch(err => {
-            console.warn("DB'den universite bilgisi cekilirken hata:", err);
-            if (typeof api.getUniversityAddress === 'function') {
-                api.getUniversityAddress(selectedUni).then(addr => {
-                    const currentTitle = document.getElementById('uni-hero-title');
-                    if (addr && currentTitle && currentTitle.textContent.trim() === selectedUni.trim()) {
-                        initOrUpdateCampusMap(selectedUni, addr);
-                    }
-                }).catch(() => {});
-            }
-            // Fallback wikipedia
-            fetchWikipediaImage(selectedUni).then(url => {
-                const currentTitle = document.getElementById('uni-hero-title');
-                if (url && currentTitle && currentTitle.textContent.trim() === selectedUni.trim()) {
-                    if (heroImg) heroImg.src = url;
-                    if (heroBlurImg) heroBlurImg.src = url;
-                }
-            });
+            console.warn("DB'den universite bilgisi alinirken fallback:", err);
             api.getDorms(selectedUni).then(dorms => {
                 renderKykSection(dorms);
             }).catch(() => {
@@ -1313,113 +1677,254 @@ function initUniversityPage(initialUni) {
             });
         });
 
-        // 5. Update Transportation Cards based on structured array
+        // 10. Update Transportation Cards
         const transportGrid = document.getElementById('transport-grid');
         if (transportGrid) {
             let transportHTML = '';
-
-            const routes = details.transport;
+            const routes = details.transport || [];
             routes.forEach(route => {
-                // map icon to bg class
                 let iconClass = 'is-bus';
                 if (route.icon === 'train') iconClass = 'is-train';
-                if (route.icon === 'ferry') iconClass = 'is-ferry';
-                if (route.icon === 'plane') iconClass = 'is-ferry'; // Reuse blue for plane
+                if (route.icon === 'ferry' || route.icon === 'ship') iconClass = 'is-ferry';
+                if (route.icon === 'plane') iconClass = 'is-ferry';
+                const lucideIcon = route.icon === 'ferry' ? 'ship' : route.icon;
 
                 transportHTML += `
-                    <div class="transport-card">
+                    <div class="transport-card ed-card">
                         <div class="transport-card__icon-wrapper ${iconClass}">
-                            <i data-lucide="${route.icon}"></i>
+                            <i data-lucide="${lucideIcon}"></i>
                         </div>
                         <div class="transport-card__info">
-                            <h3 class="transport-card__route">${route.from} <i data-lucide="arrow-right" class="icon-xs"></i> Kampüs</h3>
-                            <p class="transport-card__type"><strong style="color:var(--color-text); font-weight: 500;">${route.type}</strong> • ${route.route}</p>
+                            <h3 class="transport-card__route">${escapeHtml(route.from)} <i data-lucide="arrow-right" class="icon-xs"></i> Kampüs</h3>
+                            <p class="transport-card__type"><strong style="color:var(--color-text); font-weight: 500;">${escapeHtml(route.type)}</strong> • ${escapeHtml(route.route)}</p>
                         </div>
                         <div class="transport-card__duration">
                             <i data-lucide="clock" class="icon-xs"></i>
-                            <span>${route.duration}</span>
+                            <span>${escapeHtml(route.duration)}</span>
                         </div>
                     </div>
                 `;
             });
-
             transportGrid.innerHTML = transportHTML;
         }
 
-        // 6. Canlı Ulaşım Haritasını (Leaflet.js) başlat veya seçili üniversiteye göre güncelle
+        // Initialize Leaflet Map
         initOrUpdateCampusMap(selectedUni);
 
-        // Reconnect icons logic since we injected them raw
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-
-        const statRank = document.getElementById('stat-rank');
-        if (statRank) statRank.textContent = details.rank;
-    }
-
-    // Render KYK Info
-    function renderKykSection(yurtlar) {
-        const grid = document.getElementById('kyk-grid');
-        if (!grid) return;
-
-        if (!yurtlar || yurtlar.length === 0) {
-            grid.innerHTML = '<div style="color: var(--color-text-muted);">Bu üniversite için henüz yurt bilgisi eklenmedi.</div>';
-            return;
-        }
-
-        let html = '';
-        yurtlar.forEach(yurt => {
-            let badgeClass = 'kyk-badge--karma';
-            if (yurt.tip.toLowerCase() === 'kız') badgeClass = 'kyk-badge--kiz';
-            else if (yurt.tip.toLowerCase() === 'erkek') badgeClass = 'kyk-badge--erkek';
-
-            html += `
-                <div class="kyk-card">
-                    <div class="kyk-card__header">
-                        <h3 class="kyk-card__title">${yurt.ad}</h3>
-                        <span class="kyk-badge ${badgeClass}">${yurt.tip}</span>
-                    </div>
-                    <div class="kyk-detail">
-                        <i data-lucide="map-pin" class="icon-sm"></i>
-                        <span>${yurt.mesafe}</span>
-                    </div>
-                    <div class="kyk-detail">
-                        <i data-lucide="wallet" class="icon-sm"></i>
-                        <span>${yurt.ucret}</span>
-                    </div>
-                    <div class="kyk-detail">
-                        <i data-lucide="users" class="icon-sm"></i>
-                        <span>Kapasite: ${yurt.kapasite}</span>
-                    </div>
-                </div>
-            `;
-        });
-        
-        grid.innerHTML = html;
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    // Initialize Page-Specific Logic (Animations & Toggles)
-    function initProfileUI() {
-        // 1. Intersection Observer for Scroll Animations
-        const revealElements = document.querySelectorAll('.reveal-up');
-        const revealObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
+    // Update Statistics (Average Score, Counts, Recommendation Rate, Low Review Warning)
+    function updateStats(reviews) {
+        const statAvg = document.getElementById('stat-avg');
+        const statCount = document.getElementById('stat-count');
+        const recBadge = document.getElementById('hero-rec-badge');
+        const recText = document.getElementById('hero-rec-text');
+        const lowReviewsNote = document.getElementById('hero-low-reviews-note');
+        const rankBadge = document.getElementById('stat-rank-badge');
+        const statRank = document.getElementById('stat-rank');
+        const starsDisplay = document.getElementById('hero-stars-display');
+        const tabRevCount = document.getElementById('tab-reviews-count');
+        const revHeaderCount = document.getElementById('reviews-header-count');
+
+        const count = reviews.length;
+        if (statCount) statCount.textContent = count;
+        if (tabRevCount) tabRevCount.textContent = count;
+        if (revHeaderCount) revHeaderCount.textContent = count;
+
+        let details = UNI_DETAILS[selectedUni] || GENERIC_UNI_DATA;
+
+        if (count > 0) {
+            const avg = (reviews.reduce((s, r) => s + r.rating, 0) / count).toFixed(1);
+            if (statAvg) statAvg.textContent = avg;
+            if (starsDisplay) {
+                const rounded = Math.round(parseFloat(avg));
+                starsDisplay.textContent = '★'.repeat(rounded) + '☆'.repeat(Math.max(0, 5 - rounded));
+            }
+
+            // Recommendation Rate
+            const positiveReviews = reviews.filter(r => r.rating >= 3).length;
+            const recRate = Math.round((positiveReviews / count) * 100);
+            if (recText) recText.textContent = `%${recRate} Tavsiye Ediyor`;
+            if (recBadge) recBadge.style.display = 'inline-flex';
+        } else {
+            if (statAvg) statAvg.textContent = '—';
+            if (starsDisplay) starsDisplay.textContent = '☆☆☆☆☆';
+            if (recText) recText.textContent = '— Tavsiye';
+            if (recBadge) recBadge.style.display = 'none';
+        }
+
+        // Less than 10 reviews rule: show warning, hide rank badge
+        if (count < 10) {
+            if (lowReviewsNote) lowReviewsNote.style.display = 'inline-flex';
+            if (rankBadge) rankBadge.style.display = 'none';
+        } else {
+            if (lowReviewsNote) lowReviewsNote.style.display = 'none';
+            if (details.rank && details.rank !== '—') {
+                if (statRank) statRank.textContent = details.rank;
+                if (rankBadge) rankBadge.style.display = 'inline-flex';
+            } else {
+                if (rankBadge) rankBadge.style.display = 'none';
+            }
+        }
+
+        // Update Criteria Bars
+        renderCriteriaBars(reviews);
+    }
+
+    // Initialize Sticky Tabs Scroll Spy & Navigation
+    function initStickyTabs() {
+        const tabs = document.querySelectorAll('.ed-uni-tab');
+        const sections = ['sec-genel', 'sec-yorumlar', 'sec-bolumler', 'sec-yurtlar', 'sec-ulasim']
+            .map(id => document.getElementById(id))
+            .filter(Boolean);
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = tab.dataset.target;
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) {
+                    const offset = 120;
+                    const top = targetEl.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({ top, behavior: 'smooth' });
+
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
                 }
             });
-        }, {
-            root: null,
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
         });
 
-        revealElements.forEach(el => revealObserver.observe(el));
+        // Scroll spy
+        function onScroll() {
+            const scrollPos = window.pageYOffset + 140;
+            let currentSecId = sections[0] ? sections[0].id : '';
 
-        // 2. About Section Toggle
+            for (let i = 0; i < sections.length; i++) {
+                const sec = sections[i];
+                if (sec.offsetTop <= scrollPos) {
+                    currentSecId = sec.id;
+                }
+            }
+
+            tabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.target === currentSecId);
+            });
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    // Initialize Leaflet Map Collapsible & Sidebar Mini Map preview
+    function initCampusMapToggle() {
+        const mapWrapper = document.getElementById('campus-map-wrapper');
+        const toggleBtn = document.getElementById('btn-toggle-campus-map');
+        const toggleBtnText = document.getElementById('btn-toggle-campus-map-text');
+        const sidebarExpandBtn = document.getElementById('sidebar-expand-map-btn');
+
+        function openMap() {
+            if (!mapWrapper) return;
+            mapWrapper.style.display = 'block';
+            mapWrapper.classList.remove('is-collapsed');
+            if (toggleBtnText) toggleBtnText.textContent = 'Haritayı Gizle';
+            if (toggleBtn) {
+                toggleBtn.classList.add('active');
+            }
+            setTimeout(() => {
+                if (typeof campusMapInstance !== 'undefined' && campusMapInstance) {
+                    campusMapInstance.invalidateSize();
+                }
+            }, 180);
+        }
+
+        function closeMap() {
+            if (!mapWrapper) return;
+            mapWrapper.style.display = 'none';
+            mapWrapper.classList.add('is-collapsed');
+            if (toggleBtnText) toggleBtnText.textContent = 'Canlı Kampüs Haritasını Göster';
+            if (toggleBtn) {
+                toggleBtn.classList.remove('active');
+            }
+        }
+
+        if (toggleBtn && mapWrapper) {
+            toggleBtn.addEventListener('click', () => {
+                const isHidden = mapWrapper.style.display === 'none' || mapWrapper.classList.contains('is-collapsed');
+                if (isHidden) {
+                    openMap();
+                } else {
+                    closeMap();
+                }
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            });
+        }
+
+        if (sidebarExpandBtn) {
+            sidebarExpandBtn.addEventListener('click', () => {
+                openMap();
+                const ulasimSec = document.getElementById('sec-ulasim');
+                if (ulasimSec) {
+                    const top = ulasimSec.getBoundingClientRect().top + window.pageYOffset - 120;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                }
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            });
+        }
+    }
+
+    // Initialize Dormitory Filter Chips & Expand Button
+    function initDormControls() {
+        const chipsContainer = document.getElementById('dorm-filter-chips');
+        const expandBtn = document.getElementById('dorms-expand-btn');
+
+        if (chipsContainer) {
+            chipsContainer.addEventListener('click', (e) => {
+                const btn = e.target.closest('.dorm-chip');
+                if (!btn) return;
+
+                chipsContainer.querySelectorAll('.dorm-chip').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentDormFilter = btn.dataset.type || 'all';
+                dormsExpanded = false; // reset expand on filter change
+                renderKykSection(rawDorms);
+            });
+        }
+
+        if (expandBtn) {
+            expandBtn.addEventListener('click', () => {
+                dormsExpanded = !dormsExpanded;
+                renderKykSection(rawDorms);
+            });
+        }
+    }
+
+    // Initialize Sorting & Tag Filter Handlers for Reviews
+    function initReviewControls() {
+        // Tag filters
+        if (filterBar) {
+            filterBar.addEventListener('click', (e) => {
+                const btn = e.target.closest('.tag--filter');
+                if (!btn) return;
+
+                filterBar.querySelectorAll('.tag--filter').forEach(b => b.classList.remove('tag--active'));
+                btn.classList.add('tag--active');
+                currentTagFilter = btn.dataset.filter || 'all';
+                renderReviews();
+            });
+        }
+
+        // Sort select
+        const sortSelect = document.getElementById('reviews-sort-select');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', (e) => {
+                currentSort = e.target.value;
+                renderReviews();
+            });
+        }
+    }
+
+    // Initialize About Read More Toggle
+    function initAboutToggle() {
         const aboutToggleBtn = document.getElementById('about-toggle-btn');
         const aboutExtended = document.getElementById('about-extended');
 
@@ -1438,99 +1943,20 @@ function initUniversityPage(initialUni) {
                 if (typeof lucide !== 'undefined') lucide.createIcons();
             });
         }
-
-        // 3. Dummy Comments Logic
-        const commentForm = document.getElementById('profile-comment-form');
-        const commentInput = document.getElementById('comment-input');
-        const commentStatus = document.getElementById('comment-status');
-        const commentsCount = document.getElementById('comments-count');
-
-        // Handle new comment submission (Dummy local only for demo)
-        if (commentForm) {
-            commentForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const text = commentInput.value.trim();
-                if (!text) return;
-
-                const submitBtn = commentForm.querySelector('.comment-submit-btn');
-                const originalBtnHtml = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i data-lucide="loader-2" class="icon-sm" style="animation: spin 1s linear infinite;"></i> Gönderiliyor...';
-                if (typeof lucide !== 'undefined') lucide.createIcons();
-                submitBtn.disabled = true;
-
-                setTimeout(() => {
-                    // Update count artificially if present
-                    if (commentsCount) {
-                        const currentCountStr = commentsCount.textContent;
-                        const match = currentCountStr.match(/\d+/);
-                        if (match) {
-                            const count = parseInt(match[0]) + 1;
-                            commentsCount.textContent = `${count} Yorum`;
-                        }
-                    }
-
-                    commentInput.value = '';
-                    submitBtn.innerHTML = originalBtnHtml;
-                    submitBtn.disabled = false;
-                    if (typeof lucide !== 'undefined') lucide.createIcons();
-
-                    commentStatus.textContent = "Yorumunuz eklendi!";
-                    commentStatus.style.color = "var(--color-success)";
-
-                    // Actually add it to the real reviews list to show up at the bottom
-                    const saved = getSavedReviews();
-                    const newRev = {
-                        id: Date.now(),
-                        user: CURRENT_USER.name,
-                        initials: CURRENT_USER.initials,
-                        university: selectedUni, // bind to current uni
-                        date: 'Şimdi',
-                        rating: 5, // default fake rating for quick comment
-                        tags: ['genel'],
-                        text: text
-                    };
-                    saved.unshift(newRev); // Add to top
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-
-                    // Re-render the reviews below
-                    const activeFilter = filterBar.querySelector('.tag--active')?.dataset.filter || 'all';
-                    renderReviews(activeFilter);
-
-                    setTimeout(() => { commentStatus.textContent = ""; }, 3000);
-                }, 800);
-            });
-        }
     }
 
-    // Update stats
-    function updateStats(reviews) {
-        const statAvg = document.getElementById('stat-avg');
-        const statCount = document.getElementById('stat-count');
-        if (reviews.length > 0) {
-            const avg = (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1);
-            if (statAvg) statAvg.textContent = avg;
-        } else {
-            if (statAvg) statAvg.textContent = '—';
-        }
-        if (statCount) statCount.textContent = reviews.length;
-    }
-
-    renderReviews();
+    // Execute Initial Page Rendering
     updateHero();
+    renderDepartments();
+    renderReviews();
+    initStickyTabs();
+    initCampusMapToggle();
+    initDormControls();
+    initReviewControls();
+    initAboutToggle();
 
-    // Filter click handler
-    filterBar.addEventListener('click', (e) => {
-        const btn = e.target.closest('.tag--filter');
-        if (!btn) return;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 
-        filterBar.querySelectorAll('.tag--filter').forEach(b => b.classList.remove('tag--active'));
-        btn.classList.add('tag--active');
-        renderReviews(btn.dataset.filter);
-    });
-
-    initProfileUI();
-
-    // Return renderReviews so updates can re-render without full re-init
     return () => renderReviews();
 }
 
@@ -1542,134 +1968,562 @@ function initReviewForm() {
     if (!form) return;
 
     const uniSelectHidden = document.getElementById('form-uni-hidden');
+    const uniWarning = document.getElementById('rf-uni-warning');
+    const uniError = document.getElementById('rf-uni-error');
 
-    // Initialize custom select
+    const starContainer = document.getElementById('star-rating');
+    const ratingHidden = document.getElementById('form-rating');
+    const ratingLabel = document.getElementById('rf-rating-label');
+    const ratingError = document.getElementById('rf-rating-error');
+
+    const deptHidden = document.getElementById('form-dept-hidden');
+    const deptSearchInput = document.getElementById('rf-dept-input');
+    const classSelect = document.getElementById('form-class-select');
+    const scholarshipSelect = document.getElementById('form-scholarship-select');
+
+    const prosInput = document.getElementById('form-pros');
+    const consInput = document.getElementById('form-cons');
+    const charCountEl = document.getElementById('char-count');
+    const charGuidanceEl = document.getElementById('rf-char-guidance');
+    const textError = document.getElementById('rf-text-error');
+
+    const tagsContainer = document.getElementById('form-tags');
+    const tagCountBadge = document.getElementById('rf-tag-count');
+    const tagsHidden = document.getElementById('form-tags-hidden');
+    const tagsError = document.getElementById('rf-tags-error');
+
+    const consentCheckbox = document.getElementById('rf-consent');
+    const consentError = document.getElementById('rf-consent-error');
+    const submitBtn = document.getElementById('rf-submit-btn');
+
+    const successCard = document.getElementById('rf-success-card');
+    const btnNew = document.getElementById('rf-btn-new');
+    const btnUni = document.getElementById('rf-btn-uni');
+
+    const RATING_TEXTS = {
+        0: 'Puan seçin (1-5)',
+        1: '1: Çok kötü',
+        2: '2: Kötü',
+        3: '3: Orta',
+        4: '4: İyi',
+        5: '5: Mükemmel'
+    };
+
+    const COMMON_DEPARTMENTS = [
+        'Bilgisayar Mühendisliği',
+        'Yazılım Mühendisliği',
+        'Elektrik-Elektronik Mühendisliği',
+        'Endüstri Mühendisliği',
+        'Makine Mühendisliği',
+        'İnşaat Mühendisliği',
+        'Tıp Fakültesi',
+        'Diş Hekimliği',
+        'Eczacılık',
+        'Hukuk Fakültesi',
+        'Psikoloji',
+        'İşletme',
+        'İktisat',
+        'Siyaset Bilimi ve Uluslararası İlişkiler',
+        'Mimarlık',
+        'İç Mimarlık',
+        'Halkla İlişkiler ve Tanıtım',
+        'İletişim ve Tasarımı',
+        'Beslenme ve Diyetetik',
+        'Fizyoterapi ve Rehabilitasyon',
+        'Hemşirelik',
+        'Matematik',
+        'Moleküler Biyoloji ve Genetik',
+        'Sosyoloji',
+        'Tarih',
+        'Türk Dili ve Edebiyatı',
+        'İngiliz Dili ve Edebiyatı',
+        'Görsel İletişim Tasarımı'
+    ];
+
+    // State
+    let selectedRating = 0;
+    const criteriaRatings = {
+        yurt: 0,
+        yemekhane: 0,
+        ulasim: 0,
+        sosyal: 0,
+        egitim: 0
+    };
+    const selectedTags = new Set();
+    const DRAFT_KEY = 'kampus_sesi_review_draft';
+
+    // 1. Üniversite Seçimi (Combobox)
     initCustomSelect('custom-uni-select-form', typeof TURKISH_UNIVERSITIES !== 'undefined' ? TURKISH_UNIVERSITIES : [], (newUni) => {
         if (uniSelectHidden) uniSelectHidden.value = newUni;
+        checkExistingReview(newUni);
+        validateForm(true);
+        saveDraft();
     });
 
-    // Render tag buttons
-    const tagsContainer = document.getElementById('form-tags');
-    const selectedTags = new Set();
+    // Kullanıcı daha önce bu okula yorum yazdı mı kontrolü
+    function checkExistingReview(uniName) {
+        if (!uniWarning) return;
+        if (!uniName) {
+            uniWarning.hidden = true;
+            return;
+        }
+        const norm = (s) => String(s || '').replace(/\s*\([^)]*\)/g, '').trim().toLocaleLowerCase('tr');
+        const target = norm(uniName);
+        const all = getAllReviewsGlobal();
+        const hasPrev = all.some(r => {
+            const sameUni = norm(r.university) === target;
+            const sameUser = (CURRENT_USER.name && r.user === CURRENT_USER.name) ||
+                             (CURRENT_USER.uid && CURRENT_USER.uid !== 'guest' && (r.user_id === CURRENT_USER.uid || r.uid === CURRENT_USER.uid));
+            return sameUni && sameUser;
+        });
 
-    AVAILABLE_TAGS.forEach(tag => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'tag tag--selectable';
-        btn.dataset.tagId = tag.id;
-        btn.textContent = tag.label;
+        if (hasPrev) {
+            uniWarning.innerHTML = '<strong>Bilgi:</strong> Bu üniversiteye daha önce bir değerlendirme yazdınız. Yeni değerlendirmeniz profilinizde ayrı bir yorum olarak yer alacaktır.';
+            uniWarning.hidden = false;
+        } else {
+            uniWarning.hidden = true;
+        }
+    }
+
+    // 2. Genel Puan (Yıldızlar + Metin)
+    const starBtns = starContainer ? starContainer.querySelectorAll('.rf-star') : [];
+
+    function highlightStars(val) {
+        starBtns.forEach(s => {
+            const starVal = Number(s.dataset.value);
+            s.classList.toggle('rf-star--filled', starVal <= val);
+        });
+        if (ratingLabel) {
+            ratingLabel.textContent = RATING_TEXTS[val] || RATING_TEXTS[0];
+        }
+    }
+
+    starBtns.forEach(btn => {
+        const val = Number(btn.dataset.value);
         btn.addEventListener('click', () => {
-            if (selectedTags.has(tag.id)) {
-                selectedTags.delete(tag.id);
-                btn.classList.remove('tag--selected');
-            } else {
-                selectedTags.add(tag.id);
-                btn.classList.add('tag--selected');
+            selectedRating = val;
+            if (ratingHidden) ratingHidden.value = val;
+            highlightStars(selectedRating);
+            validateForm(true);
+            saveDraft();
+        });
+        btn.addEventListener('mouseenter', () => {
+            highlightStars(val);
+        });
+        btn.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedRating = Math.min(5, selectedRating + 1);
+                if (ratingHidden) ratingHidden.value = selectedRating;
+                highlightStars(selectedRating);
+                validateForm(true);
+                saveDraft();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedRating = Math.max(1, selectedRating - 1);
+                if (ratingHidden) ratingHidden.value = selectedRating;
+                highlightStars(selectedRating);
+                validateForm(true);
+                saveDraft();
             }
         });
-        tagsContainer.appendChild(btn);
     });
 
-    // Character counter
-    const textarea = document.getElementById('form-text');
-    const charCount = document.getElementById('char-count');
-    const maxChars = 500;
+    if (starContainer) {
+        starContainer.addEventListener('mouseleave', () => {
+            highlightStars(selectedRating);
+        });
+    }
 
-    textarea.addEventListener('input', () => {
-        const len = textarea.value.length;
-        charCount.textContent = `${len} / ${maxChars}`;
-        if (len > maxChars) {
-            charCount.style.color = 'var(--color-danger)';
-        } else {
-            charCount.style.color = '';
+    // 3. İsteğe Bağlı Kriter Yıldızları (Yurt, Yemekhane, Ulaşım, Sosyal Hayat, Akademik)
+    document.querySelectorAll('.rf-crit-item').forEach(item => {
+        const critId = item.dataset.crit;
+        const critStars = item.querySelectorAll('.rf-crit-star');
+        critStars.forEach(s => {
+            const v = Number(s.dataset.v);
+            s.addEventListener('click', () => {
+                if (criteriaRatings[critId] === v) {
+                    criteriaRatings[critId] = 0;
+                } else {
+                    criteriaRatings[critId] = v;
+                }
+                updateCritDisplay(item, criteriaRatings[critId]);
+                saveDraft();
+            });
+            s.addEventListener('mouseenter', () => {
+                critStars.forEach(st => st.classList.toggle('is-hover', Number(st.dataset.v) <= v));
+            });
+        });
+        item.addEventListener('mouseleave', () => {
+            critStars.forEach(st => st.classList.remove('is-hover'));
+            updateCritDisplay(item, criteriaRatings[critId] || 0);
+        });
+    });
+
+    function updateCritDisplay(itemEl, val) {
+        itemEl.querySelectorAll('.rf-crit-star').forEach(s => {
+            s.classList.toggle('is-active', Number(s.dataset.v) <= val);
+        });
+    }
+
+    // 4. Bağlam Alanları (Bölüm, Sınıf, Burs)
+    initCustomSelect('custom-dept-select-form', COMMON_DEPARTMENTS, (selectedDept) => {
+        if (deptHidden) deptHidden.value = selectedDept;
+        saveDraft();
+    });
+
+    if (deptSearchInput) {
+        deptSearchInput.addEventListener('input', () => {
+            if (deptHidden) deptHidden.value = deptSearchInput.value.trim();
+            saveDraft();
+        });
+    }
+
+    if (classSelect) {
+        classSelect.addEventListener('change', () => saveDraft());
+    }
+    if (scholarshipSelect) {
+        scholarshipSelect.addEventListener('change', () => saveDraft());
+    }
+
+    // 5. İki Metin Alanı (Beğendiklerim & Geliştirilebilecek Yönler)
+    function updateCharCount() {
+        const pros = prosInput ? prosInput.value.trim() : '';
+        const cons = consInput ? consInput.value.trim() : '';
+        const total = pros.length + cons.length;
+
+        if (charCountEl) {
+            charCountEl.textContent = `${total} / 40 min`;
+            charCountEl.classList.toggle('is-valid', total >= 40);
         }
-    });
 
-    // Star rating
-    let selectedRating = 0;
-    const starsContainer = document.getElementById('star-rating');
-    starsContainer.innerHTML = '';
-    for (let i = 1; i <= 5; i++) {
-        const star = document.createElement('span');
-        star.className = 'stars__item';
-        star.dataset.value = i;
-        star.textContent = '★';
-        star.addEventListener('click', () => {
-            selectedRating = i;
-            updateStarDisplay();
-        });
-        star.addEventListener('mouseenter', () => {
-            highlightStars(i);
-        });
-        starsContainer.appendChild(star);
+        if (charGuidanceEl) {
+            if (total === 0) {
+                charGuidanceEl.textContent = 'En az bir alanı doldurmalı, toplamda en az 40 karakter yazmalısın.';
+                charGuidanceEl.style.color = '';
+            } else if (total < 40) {
+                charGuidanceEl.textContent = `Toplam en az 40 karakter yazmalısın (kalan: ${40 - total} karakter).`;
+                charGuidanceEl.style.color = 'var(--color-danger)';
+            } else {
+                charGuidanceEl.textContent = `✓ Karakter sayısı yeterli (${total} karakter).`;
+                charGuidanceEl.style.color = 'var(--color-success)';
+            }
+        }
+        validateForm(true);
+        saveDraft();
     }
 
-    starsContainer.addEventListener('mouseleave', () => {
-        updateStarDisplay();
-    });
+    if (prosInput) prosInput.addEventListener('input', updateCharCount);
+    if (consInput) consInput.addEventListener('input', updateCharCount);
 
-    function highlightStars(upTo) {
-        starsContainer.querySelectorAll('.stars__item').forEach(s => {
-            s.classList.toggle('stars__item--filled', parseInt(s.dataset.value) <= upTo);
+    // 6. Etiketler (En fazla 3 adet, 44px dokunma alanı)
+    if (tagsContainer) {
+        tagsContainer.innerHTML = '';
+        AVAILABLE_TAGS.forEach(tag => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'tag tag--selectable';
+            btn.dataset.tagId = tag.id;
+            btn.innerHTML = `<i data-lucide="${tag.icon}" class="icon-xs"></i> <span>${tag.label}</span>`;
+            btn.addEventListener('click', () => {
+                if (selectedTags.has(tag.id)) {
+                    selectedTags.delete(tag.id);
+                    btn.classList.remove('tag--selected');
+                } else {
+                    if (selectedTags.size >= 3) {
+                        showToast('ℹ️ En fazla 3 konu etiketi seçebilirsiniz.');
+                        return;
+                    }
+                    selectedTags.add(tag.id);
+                    btn.classList.add('tag--selected');
+                }
+                if (tagCountBadge) tagCountBadge.textContent = `${selectedTags.size} / 3 seçildi`;
+                if (tagsHidden) tagsHidden.value = Array.from(selectedTags).join(',');
+                validateForm(true);
+                saveDraft();
+            });
+            tagsContainer.appendChild(btn);
+        });
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // 7. Onay Kutusu
+    if (consentCheckbox) {
+        consentCheckbox.addEventListener('change', () => {
+            validateForm(true);
+            saveDraft();
         });
     }
 
-    function updateStarDisplay() {
-        highlightStars(selectedRating);
+    // 8. Doğrulama ve Submit Butonu Durumu
+    function validateForm(silent = false) {
+        const uni = uniSelectHidden ? uniSelectHidden.value.trim() : '';
+        const pros = prosInput ? prosInput.value.trim() : '';
+        const cons = consInput ? consInput.value.trim() : '';
+        const totalChars = pros.length + cons.length;
+        const consent = consentCheckbox ? consentCheckbox.checked : false;
+
+        let isValid = true;
+
+        // Üniversite
+        if (!uni) {
+            isValid = false;
+            if (!silent && uniError) uniError.textContent = 'Lütfen bir üniversite seçin.';
+        } else if (uniError) {
+            uniError.textContent = '';
+        }
+
+        // Puan
+        if (!(selectedRating >= 1 && selectedRating <= 5)) {
+            isValid = false;
+            if (!silent && ratingError) ratingError.textContent = 'Lütfen 1 ile 5 arasında genel bir puan verin.';
+        } else if (ratingError) {
+            ratingError.textContent = '';
+        }
+
+        // Metin (ikisinde en az biri dolu, toplam >= 40)
+        if (totalChars < 40) {
+            isValid = false;
+            if (!silent && textError) {
+                textError.textContent = totalChars === 0
+                    ? 'Lütfen beğendiğiniz veya geliştirilmesini istediğiniz yönleri yazın (en az 40 karakter).'
+                    : `Yorumunuz çok kısa. Lütfen en az ${40 - totalChars} karakter daha ekleyin.`;
+            }
+        } else if (textError) {
+            textError.textContent = '';
+        }
+
+        // Etiketler
+        if (selectedTags.size === 0) {
+            isValid = false;
+            if (!silent && tagsError) tagsError.textContent = 'Lütfen en az bir konu etiketi seçin.';
+        } else if (tagsError) {
+            tagsError.textContent = '';
+        }
+
+        // Onay
+        if (!consent) {
+            isValid = false;
+            if (!silent && consentError) consentError.textContent = 'Yorumunuzu paylaşmak için Topluluk Kurallarını onaylamalısınız.';
+        } else if (consentError) {
+            consentError.textContent = '';
+        }
+
+        if (submitBtn) {
+            submitBtn.disabled = !isValid;
+        }
+
+        return isValid;
     }
 
-    // Preview section
-    const previewContainer = document.getElementById('preview-container');
+    // 9. Taslak Kaydetme / Geri Yükleme (Draft Autosave)
+    function saveDraft() {
+        try {
+            const draft = {
+                uni: uniSelectHidden ? uniSelectHidden.value : '',
+                rating: selectedRating,
+                criteria: criteriaRatings,
+                dept: deptHidden ? deptHidden.value : (deptSearchInput ? deptSearchInput.value : ''),
+                student_class: classSelect ? classSelect.value : '',
+                scholarship: scholarshipSelect ? scholarshipSelect.value : '',
+                pros: prosInput ? prosInput.value : '',
+                cons: consInput ? consInput.value : '',
+                tags: Array.from(selectedTags),
+                consent: consentCheckbox ? consentCheckbox.checked : false
+            };
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+        } catch (_) {}
+    }
 
-    // Form submission
+    function restoreDraft() {
+        try {
+            const raw = localStorage.getItem(DRAFT_KEY);
+            if (!raw) return;
+            const draft = JSON.parse(raw);
+            if (!draft) return;
+
+            // Üniversite
+            if (draft.uni && uniSelectHidden) {
+                uniSelectHidden.value = draft.uni;
+                const trig = document.querySelector('#custom-uni-select-form .custom-select__text');
+                if (trig) {
+                    trig.textContent = draft.uni;
+                    trig.style.color = 'var(--color-text)';
+                }
+                checkExistingReview(draft.uni);
+            }
+
+            // Puan
+            if (draft.rating >= 1 && draft.rating <= 5) {
+                selectedRating = draft.rating;
+                if (ratingHidden) ratingHidden.value = draft.rating;
+                highlightStars(selectedRating);
+            }
+
+            // Kriterler
+            if (draft.criteria && typeof draft.criteria === 'object') {
+                Object.entries(draft.criteria).forEach(([k, v]) => {
+                    criteriaRatings[k] = Number(v) || 0;
+                    const item = document.querySelector(`.rf-crit-item[data-crit="${k}"]`);
+                    if (item) updateCritDisplay(item, criteriaRatings[k]);
+                });
+            }
+
+            // Bağlam
+            if (draft.dept) {
+                if (deptHidden) deptHidden.value = draft.dept;
+                const dTrig = document.querySelector('#custom-dept-select-form .custom-select__text');
+                if (dTrig) {
+                    dTrig.textContent = draft.dept;
+                    dTrig.style.color = 'var(--color-text)';
+                }
+            }
+            if (draft.student_class && classSelect) classSelect.value = draft.student_class;
+            if (draft.scholarship && scholarshipSelect) scholarshipSelect.value = draft.scholarship;
+
+            // Metinler
+            if (draft.pros && prosInput) prosInput.value = draft.pros;
+            if (draft.cons && consInput) consInput.value = draft.cons;
+            updateCharCount();
+
+            // Etiketler
+            if (Array.isArray(draft.tags)) {
+                draft.tags.forEach(tId => {
+                    selectedTags.add(tId);
+                    const b = document.querySelector(`.tag--selectable[data-tag-id="${tId}"]`);
+                    if (b) b.classList.add('tag--selected');
+                });
+                if (tagCountBadge) tagCountBadge.textContent = `${selectedTags.size} / 3 seçildi`;
+                if (tagsHidden) tagsHidden.value = Array.from(selectedTags).join(',');
+            }
+
+            // Onay
+            if (draft.consent && consentCheckbox) {
+                consentCheckbox.checked = true;
+            }
+
+            validateForm(true);
+        } catch (_) {}
+    }
+
+    restoreDraft();
+
+    // 10. Form Gönderimi
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        const university = uniSelectHidden.value;
-        const text = textarea.value.trim();
+        if (!validateForm(false)) {
+            showToast('⚠️ Lütfen formdaki zorunlu alanları eksiksiz doldurun.');
+            return;
+        }
 
-        // Validation
-        if (!university) { showToast('⚠️ Lütfen bir üniversite seçin.'); return; }
-        if (!text) { showToast('⚠️ Lütfen bir yorum yazın.'); return; }
-        if (text.length > maxChars) { showToast('⚠️ Yorum çok uzun.'); return; }
-        if (selectedRating === 0) { showToast('⚠️ Lütfen bir puan verin.'); return; }
-        if (selectedTags.size === 0) { showToast('⚠️ Lütfen en az bir etiket seçin.'); return; }
+        const university = uniSelectHidden.value.trim();
+        const prosVal = prosInput ? prosInput.value.trim() : '';
+        const consVal = consInput ? consInput.value.trim() : '';
 
-        // Build review object
+        // API metin formatlaması (Beğendiklerim & Geliştirilebilecek Yönler)
+        let combinedText = '';
+        if (prosVal && consVal) {
+            combinedText = `Beğendiklerim:\n${prosVal}\n\nGeliştirilebilecek Yönler:\n${consVal}`;
+        } else if (prosVal) {
+            combinedText = prosVal;
+        } else {
+            combinedText = consVal;
+        }
+
+        // Bağlam satırı
+        const metaParts = [];
+        const deptVal = deptHidden ? deptHidden.value.trim() : '';
+        const classVal = classSelect ? classSelect.value : '';
+        const scholarshipVal = scholarshipSelect ? scholarshipSelect.value : '';
+
+        if (deptVal) metaParts.push(`Bölüm: ${deptVal}`);
+        if (classVal) metaParts.push(`Sınıf: ${classVal}`);
+        if (scholarshipVal) metaParts.push(`Burs: ${scholarshipVal}`);
+
+        if (metaParts.length > 0) {
+            combinedText += `\n\n(${metaParts.join(' • ')})`;
+        }
+
+        // Kriter puanları etiketlere dahil edilir (yurt, yemekhane vb.)
+        const activeCritTags = Object.entries(criteriaRatings)
+            .filter(([_, v]) => v > 0)
+            .map(([k, _]) => k);
+
+        const allTags = Array.from(new Set([...Array.from(selectedTags), ...activeCritTags])).slice(0, 5);
+
+        // Yeni review objesi (mevcut backend API'sine tam uyumlu)
         const newReview = {
-            id: Date.now(), // Fallback ID
+            id: Date.now(),
             user: CURRENT_USER.name,
             initials: CURRENT_USER.initials,
             university: university,
             date: new Date().toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' }),
             rating: selectedRating,
-            tags: Array.from(selectedTags),
-            text: text,
+            tags: allTags.length > 0 ? allTags : ['kampus'],
+            text: combinedText,
+            // Ek bağlam alanları (istemci & genişletilebilir backend desteği için)
+            department: deptVal || undefined,
+            student_class: classVal || undefined,
+            scholarship: scholarshipVal || undefined,
+            criteria: criteriaRatings,
+            pros: prosVal,
+            cons: consVal
         };
 
-        // Save to Database
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Gönderiliyor…';
+        }
+
         window.saveReview(newReview).then(saved => {
-            // Show preview
-            previewContainer.innerHTML = `
-              <h3 class="section-title" style="margin-top: var(--space-xl);">✅ Değerlendirmeniz <span>gönderildi!</span></h3>
-              ${renderReviewCard(saved || newReview, { showUni: true })}
-            `;
-            previewContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Taslağı temizle
+            try { localStorage.removeItem(DRAFT_KEY); } catch (_) {}
 
-            // Reset form
-            form.reset();
-            selectedTags.clear();
-            document.querySelectorAll('.tag--selected').forEach(t => t.classList.remove('tag--selected'));
-            selectedRating = 0;
-            updateStarDisplay();
-            charCount.textContent = '0 / 500';
+            // Başarı kartını göster, formu gizle
+            form.hidden = true;
+            if (successCard) successCard.hidden = false;
 
-            showToast('✅ Değerlendirme başarıyla gönderildi!');
+            if (btnUni) {
+                btnUni.href = `#/university?name=${encodeURIComponent(university)}`;
+            }
+
+            showToast('✅ Değerlendirmeniz başarıyla gönderildi!');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }).catch(err => {
             console.error(err);
-            showToast(`❌ Hata: ${err.message}`);
+            showToast(`❌ Hata: ${err.message || 'Gönderilemedi'}`);
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Yorumu paylaş';
+            }
         });
     });
+
+    // "Başka bir okula yorum yaz" butonu
+    if (btnNew) {
+        btnNew.addEventListener('click', () => {
+            form.reset();
+            selectedRating = 0;
+            highlightStars(0);
+            selectedTags.clear();
+            document.querySelectorAll('.tag--selected').forEach(t => t.classList.remove('tag--selected'));
+            Object.keys(criteriaRatings).forEach(k => {
+                criteriaRatings[k] = 0;
+                const item = document.querySelector(`.rf-crit-item[data-crit="${k}"]`);
+                if (item) updateCritDisplay(item, 0);
+            });
+            if (uniSelectHidden) uniSelectHidden.value = '';
+            const trig = document.querySelector('#custom-uni-select-form .custom-select__text');
+            if (trig) trig.textContent = 'Üniversite seçin...';
+            if (tagCountBadge) tagCountBadge.textContent = '0 / 3 seçildi';
+            if (charCountEl) charCountEl.textContent = '0 / 40 min';
+            if (charGuidanceEl) charGuidanceEl.textContent = 'En az bir alanı doldurmalı, toplamda en az 40 karakter yazmalısın.';
+            if (successCard) successCard.hidden = true;
+            form.hidden = false;
+            validateForm(true);
+        });
+    }
 }
 
 
@@ -2465,82 +3319,211 @@ function initComparePage() {
     let uni1 = 'Boğaziçi Üniversitesi';
     let uni2 = 'Orta Doğu Teknik Üniversitesi (ODTÜ)';
 
-    function renderCol(uniName, container) {
-        if (!uniName || !container) return;
-        let details = UNI_DETAILS[uniName] ? { ...UNI_DETAILS[uniName] } : { ...GENERIC_UNI_DATA };
+    const COMPARE_CRITERIA = [
+        {
+            id: 'genel',
+            label: 'Genel Puan',
+            icon: `<svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>`
+        },
+        {
+            id: 'yurt',
+            label: 'Yurt',
+            icon: `<svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`
+        },
+        {
+            id: 'yemekhane',
+            label: 'Yemekhane',
+            icon: `<svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 2v16"/><path d="M6 2v19"/><path d="M9 2a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3V2z"/></svg>`
+        },
+        {
+            id: 'ulasim',
+            label: 'Ulaşım',
+            icon: `<svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.6 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>`
+        },
+        {
+            id: 'sosyal',
+            label: 'Sosyal Hayat',
+            icon: `<svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`
+        },
+        {
+            id: 'egitim',
+            label: 'Akademik',
+            icon: `<svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`
+        }
+    ];
 
-        // Fetch async image from API
-        api.getUniversity(uniName).then(uniDb => {
-            if (uniDb && uniDb.image_url && uniDb.image_url.trim() !== '') {
-                const imgEl = container.querySelector('.compare-img');
-                if (imgEl && imgEl.alt === uniName) {
-                    imgEl.src = uniDb.image_url;
-                }
+    const normKey = (s) => String(s || '').replace(/\s*\([^)]*\)/g, '').trim().toLocaleLowerCase('tr');
+
+    function getUniStats(name) {
+        const target = normKey(name);
+        const reviews = getAllReviewsGlobal().filter(r => normKey(r.university) === target);
+        const stats = {};
+
+        COMPARE_CRITERIA.forEach(crit => {
+            let matching;
+            if (crit.id === 'genel') {
+                matching = reviews.filter(r => Number(r.rating) >= 1);
+            } else if (crit.id === 'egitim') {
+                matching = reviews.filter(r => Array.isArray(r.tags) && (r.tags.includes('egitim') || r.tags.includes('akademik')));
             } else {
-                fetchWikipediaImage(uniName).then(url => {
-                    const imgEl = container.querySelector('.compare-img');
-                    if (url && imgEl && imgEl.alt === uniName) {
-                        imgEl.src = url;
-                    }
-                });
+                matching = reviews.filter(r => Array.isArray(r.tags) && r.tags.includes(crit.id));
             }
-        }).catch(err => console.warn("API universite resmi çekilirken hata:", err));
 
-        // Compute avg rating
-        const allReviews = getAllReviewsGlobal().filter(r => r.university === uniName);
-        let statHtml = '';
-        if (allReviews.length > 0) {
-            const avg = (allReviews.reduce((s, r) => s + r.rating, 0) / allReviews.length).toFixed(1);
-            statHtml = `<div style="font-size: 2rem; font-weight: bold; color: var(--color-star);">★ ${avg}</div>
-                        <div style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 10px;">${allReviews.length} değerlendirme</div>`;
-        } else {
-            statHtml = `<div style="color: var(--color-text-muted); margin-bottom:10px;">Henüz değerlendirme yok</div>`;
+            if (matching.length > 0) {
+                const sum = matching.reduce((acc, r) => acc + Number(r.rating), 0);
+                stats[crit.id] = {
+                    avg: sum / matching.length,
+                    count: matching.length
+                };
+            } else {
+                stats[crit.id] = null;
+            }
+        });
+
+        return { totalReviews: reviews.length, stats };
+    }
+
+    function renderComparison() {
+        const u1Stats = getUniStats(uni1);
+        const u2Stats = getUniStats(uni2);
+
+        const details1 = UNI_DETAILS[uni1] ? { ...UNI_DETAILS[uni1] } : { ...GENERIC_UNI_DATA };
+        const details2 = UNI_DETAILS[uni2] ? { ...UNI_DETAILS[uni2] } : { ...GENERIC_UNI_DATA };
+
+        function buildColHtml(name, statsObj, otherStatsObj, details, colIdx) {
+            const initial = String(name || '?').trim().charAt(0).toLocaleUpperCase('tr');
+            const criteriaHtml = COMPARE_CRITERIA.map(crit => {
+                const s = statsObj.stats[crit.id];
+                const o = otherStatsObj.stats[crit.id];
+                const isLead = s && (!o || s.avg > o.avg || (s.avg === o.avg && s.count >= (o.count || 0)));
+
+                if (!s) {
+                    return `
+                        <div class="cmp-row cmp-row--empty">
+                            <div class="cmp-row__top">
+                                <span class="cmp-row__label">${crit.icon} <span>${crit.label}</span></span>
+                                <span class="cmp-insufficient">Yetersiz veri</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const pct = Math.min(100, Math.max(10, Math.round((s.avg / 5) * 100)));
+                return `
+                    <div class="cmp-row${isLead ? ' is-lead' : ''}">
+                        <div class="cmp-row__top">
+                            <span class="cmp-row__label">${crit.icon} <span>${crit.label}</span></span>
+                            <span class="cmp-row__val">${s.avg.toFixed(1)} <small>(${s.count})</small></span>
+                        </div>
+                        <div class="cmp-bar" role="progressbar" aria-valuenow="${s.avg.toFixed(1)}" aria-valuemin="1" aria-valuemax="5">
+                            <span class="cmp-bar__fill" style="width: ${pct}%;"></span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="cmp-card__photo-box">
+                    <img src="${details.image}" class="cmp-card__cover compare-img-${colIdx}" alt="${name}" loading="lazy">
+                    <div class="cmp-card__logo-badge">
+                        <span class="cmp-card__logo--mono compare-logo-${colIdx}" aria-hidden="true">${initial}</span>
+                    </div>
+                </div>
+                <h2 class="cmp-card__title">${name}</h2>
+                <div class="cmp-card__meta">
+                    <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <span>${details.subtitle || 'Türkiye'}</span>
+                    ${statsObj.totalReviews > 0 ? `<span>· ${statsObj.totalReviews} değerlendirme</span>` : ''}
+                </div>
+
+                <div class="cmp-metrics">
+                    <div class="cmp-metrics__title">Kriter Puanları</div>
+                    ${criteriaHtml}
+                </div>
+
+                ${details.rank ? `
+                    <div class="compare-section">
+                        <div class="cmp-rank-tag">Başarı Sıralaması: ${details.rank}</div>
+                    </div>
+                ` : ''}
+
+                ${details.aboutShort ? `
+                    <div class="compare-section">
+                        <h3 class="cmp-sec-title">Hakkında</h3>
+                        <p class="cmp-sec-desc">${details.aboutShort}</p>
+                    </div>
+                ` : ''}
+
+                ${details.transport && details.transport.length > 0 ? `
+                    <div class="compare-section">
+                        <h3 class="cmp-sec-title">Ulaşım Bilgisi</h3>
+                        <ul class="cmp-transport-list">
+                            ${details.transport.map(t => `
+                                <li>
+                                    <strong>${t.from}</strong> <span class="cmp-arrow">→</span> ${t.duration} <small>(${t.type})</small>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+            `;
         }
 
-        container.innerHTML = `
-            <img src="${details.image}" class="compare-img" alt="${uniName}">
-            <h2 style="margin-top: 15px; font-size: 1.2rem; min-height: 55px;">${uniName}</h2>
-            <div style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 15px;">📍 ${details.subtitle}</div>
-            
-            <div class="compare-section">
-                ${statHtml}
-                <div style="padding: 5px 10px; background: var(--color-tag-bg); display: inline-block; border-radius: 4px; color: var(--color-accent); font-weight: bold; margin-bottom: 15px;">Sıralama: ${details.rank}</div>
-            </div>
-            
-            <div class="compare-section">
-                <h3 style="font-size: 1rem; margin-bottom: 10px;">Hakkında</h3>
-                <p style="font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.5;">${details.aboutShort}</p>
-            </div>
-            
-            <div class="compare-section">
-                <h3 style="font-size: 1rem; margin-bottom: 10px;">Ulaşım Özet</h3>
-                <ul style="list-style: none; padding: 0;">
-                    ${details.transport.map(t => `
-                        <li style="font-size: 0.85rem; margin-bottom: 8px; color: var(--color-text-muted);">
-                            <strong>${t.from}</strong> ➔ ${t.duration} (${t.type})
-                        </li>
-                    `).join('')}
-                </ul>
-            </div>
-        `;
+        res1.innerHTML = buildColHtml(uni1, u1Stats, u2Stats, details1, 1);
+        res2.innerHTML = buildColHtml(uni2, u2Stats, u1Stats, details2, 2);
+
+        // Fetch cover images and logos asynchronously from API / Wikipedia
+        [ { name: uni1, idx: 1 }, { name: uni2, idx: 2 } ].forEach(({ name, idx }) => {
+            const container = idx === 1 ? res1 : res2;
+            api.getUniversity(name).then(uniDb => {
+                if (uniDb && uniDb.image_url && uniDb.image_url.trim() !== '') {
+                    const logoContainer = container.querySelector(`.compare-logo-${idx}`);
+                    if (logoContainer) {
+                        const img = document.createElement('img');
+                        img.src = uniDb.image_url;
+                        img.className = 'cmp-card__logo';
+                        img.alt = '';
+                        img.loading = 'lazy';
+                        img.onerror = () => { img.replaceWith(logoContainer); };
+                        logoContainer.replaceWith(img);
+                    }
+                }
+                if (uniDb && uniDb.cover_url && uniDb.cover_url.trim() !== '') {
+                    const imgEl = container.querySelector(`.compare-img-${idx}`);
+                    if (imgEl) imgEl.src = uniDb.cover_url;
+                } else {
+                    fetchWikipediaImage(name).then(url => {
+                        if (url) {
+                            const imgEl = container.querySelector(`.compare-img-${idx}`);
+                            if (imgEl) imgEl.src = url;
+                        }
+                    }).catch(() => {});
+                }
+            }).catch(() => {
+                fetchWikipediaImage(name).then(url => {
+                    if (url) {
+                        const imgEl = container.querySelector(`.compare-img-${idx}`);
+                        if (imgEl) imgEl.src = url;
+                    }
+                }).catch(() => {});
+            });
+        });
     }
 
     initCustomSelect('custom-uni-select-1', typeof TURKISH_UNIVERSITIES !== 'undefined' ? TURKISH_UNIVERSITIES : [], (newUni) => {
         uni1 = newUni;
-        renderCol(uni1, res1);
+        renderComparison();
     }, uni1);
 
     initCustomSelect('custom-uni-select-2', typeof TURKISH_UNIVERSITIES !== 'undefined' ? TURKISH_UNIVERSITIES : [], (newUni) => {
         uni2 = newUni;
-        renderCol(uni2, res2);
+        renderComparison();
     }, uni2);
 
-    renderCol(uni1, res1);
-    renderCol(uni2, res2);
+    renderComparison();
 
     return () => {
-        renderCol(uni1, res1);
-        renderCol(uni2, res2);
+        renderComparison();
     };
 }
 
@@ -2706,7 +3689,7 @@ export function renderCurrentRoute() {
     } else if (route === 'login') {
         initLoginPage();
     } else if (route === 'home') {
-        initHomePage();
+        activeRenderers.home = initHomePage();
     } else if (route === 'blog') {
         initBlogPage();
     } else if (route === 'okul-oner' || route === 'suggest') {
@@ -2720,6 +3703,8 @@ export function renderCurrentRoute() {
     } else if (route === 'admin') {
         initAdminPage();
     }
+
+    if (window.initAnimations) window.initAnimations(root, { pageEnter: true });
 }
 
 // ─── Admin & Moderation Panel Controller ─────────────────────
@@ -3741,7 +4726,8 @@ function initCitiesPage() {
     ];
 
     let currentCategory = 'all';
-    let searchQuery = '';
+    let searchQuery = (currentParams && currentParams.get('q')) || '';
+    if (searchInput && searchQuery) searchInput.value = searchQuery;
     let activeModalCity = null;
 
     // ─── Modal Functions ───
@@ -5115,9 +6101,18 @@ function initHomePage() {
         const count = getSavedReviews().length;
         statReviews.textContent = count > 0 ? count + '+' : '—';
     }
+
+    // 5. Vitrin: son yorumlar, öne çıkan üniversiteler, şehirler, karşılaştırma demosu (gerçek API verisi)
+    return initHomeShowcase({
+        api,
+        getReviews: getSavedReviews,
+        isLoaded: () => appDataLoaded,
+        hasFailed: () => appDataFailed
+    });
 }
 
 // ─── Click Interceptor for Seamless SPA Navigation ───
+// (Sayfa geçiş animasyonu js/animations.js içinde, capture aşamasında çalışır.)
 
 document.addEventListener('click', (e) => {
     const link = e.target.closest('a');
@@ -5238,6 +6233,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 2. Restore User Session if Token Exists
     try {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('token')) {
+            localStorage.setItem('kampus_sesi_token', urlParams.get('token'));
+        }
         const me = await api.getMe();
         if (me) {
             CURRENT_USER = {

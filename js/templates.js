@@ -4,210 +4,185 @@
 
 export const TEMPLATES = {
     home: `
-        <main class="home page-view relative bg-zinc-950 text-zinc-100 overflow-hidden min-h-screen">
+        <main id="hm-root" class="home page-view ed-home hm">
 
-            <!-- Ambient Glow Aydınlatmaları (Cyan & Gece Mavisi) -->
-            <div class="pointer-events-none absolute -top-32 -left-32 w-[28rem] h-[28rem] bg-cyan-500/10 rounded-full blur-3xl" aria-hidden="true"></div>
-            <div class="pointer-events-none absolute top-10 -right-32 w-[32rem] h-[32rem] bg-indigo-600/10 rounded-full blur-3xl" aria-hidden="true"></div>
-            <div class="pointer-events-none absolute top-72 left-1/2 -translate-x-1/2 w-[44rem] h-[22rem] bg-cyan-400/[0.04] rounded-full blur-3xl" aria-hidden="true"></div>
+            <!-- 1. Hero: başlık + arama solda; harita ve rakamlar sağda -->
+            <section class="ed-hero">
+                <div class="ed-hero__grid">
 
-            <!-- 1. Hero & Arama Alanı (Baştan Aşağıya Düzgün Dikey Akış) -->
-            <section class="home-hero-centered relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-                <div class="hero-centered__content w-full flex flex-col items-center text-center">
-                    
-                    <!-- Üst Rozet (Badge) -->
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-6 backdrop-blur-md shadow-sm">
-                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cyan-400"></i>
-                        <span>Türkiye'nin İlk Şeffaf Öğrenci ve Kampüs Ağı</span>
-                    </div>
+                    <div class="ed-hero__main">
+                        <p class="ed-kicker" data-anim="fade-in">Öğrenci yorumlarıyla üniversite rehberi</p>
 
-                    <!-- Ana Başlık (Typography) -->
-                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight max-w-4xl" style="font-family: var(--font-heading);">
-                        Kampüsün <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300">Gerçek Sesine</span> Kulak Ver
-                    </h1>
+                        <h1 data-anim="fade-up" class="ed-hero__title">
+                            Kampüsün <em>gerçek sesine</em> kulak ver
+                        </h1>
 
-                    <!-- Alt Açıklama -->
-                    <p class="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-                        Broşürlerdeki süslü reklamları değil; amfilerde sabahlayan, yurtlarda kalan ve yemekhaneyi deneyimleyen öğrencilerin sansürsüz yorumlarını keşfet.
-                    </p>
+                        <p data-anim="fade-up" data-anim-delay="80" class="ed-hero__lead">
+                            Üniversiteleri ve kampüs hayatını, orada okuyan öğrencilerin yorumlarıyla keşfet.
+                        </p>
 
-                    <!-- Cam Efektli Geniş Arama Çubuğu (Glassmorphism Search Bar) -->
-                    <div class="hero-centered__search-wrapper relative w-full max-w-4xl mx-auto mb-8">
-                        <div class="relative w-full flex items-center p-2.5 sm:p-3 rounded-2xl bg-white/[0.04] border border-white/15 backdrop-blur-xl shadow-2xl shadow-cyan-950/30 hover:border-cyan-500/45 focus-within:border-cyan-400/70 transition-all duration-300 group">
-                            <i data-lucide="search" class="w-5 h-5 sm:w-6 sm:h-6 text-zinc-400 ml-3 sm:ml-4 shrink-0 group-hover:text-cyan-400 transition-colors"></i>
-                            <input 
-                                type="text" 
+                        <div data-anim="fade-up" data-anim-delay="140" class="ed-search">
+                            <i data-lucide="search" class="ed-search__icon"></i>
+                            <input
+                                type="text"
                                 id="hero-search-input"
-                                class="hero-centered__search-input flex-1 bg-transparent px-4 sm:px-5 py-3.5 sm:py-4 text-base sm:text-lg text-white placeholder-zinc-400 focus:outline-none w-full" 
+                                class="ed-search__input"
                                 placeholder="Üniversite, şehir veya bölüm ara (örn. İTÜ Bilgisayar)..."
                                 autocomplete="off"
                             >
-                            <button 
-                                type="button" 
-                                id="hero-search-btn"
-                                class="px-6 sm:px-9 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-zinc-950 font-bold text-sm sm:text-base shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all flex items-center gap-2.5 cursor-pointer shrink-0 hover:scale-[1.02] active:scale-[0.98]"
-                            >
+                            <button type="button" id="hero-search-btn" class="ed-search__btn">
                                 <span>Keşfet</span>
-                                <i data-lucide="arrow-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                                <i data-lucide="arrow-right" class="ed-search__arrow"></i>
                             </button>
                         </div>
+
+                        <div data-anim="fade-up" data-anim-delay="200" class="ed-popular">
+                            <span class="ed-popular__label">Sık aranan</span>
+                            <button class="hero-tag-pill" data-uni="İstanbul Teknik Üniversitesi">İTÜ</button>
+                            <button class="hero-tag-pill" data-uni="Orta Doğu Teknik Üniversitesi (ODTÜ)">ODTÜ</button>
+                            <button class="hero-tag-pill" data-uni="Boğaziçi Üniversitesi">Boğaziçi</button>
+                            <button class="hero-tag-pill" data-uni="Hacettepe Üniversitesi">Hacettepe</button>
+                            <button class="hero-tag-pill" data-uni="Yıldız Teknik Üniversitesi (YTÜ)">YTÜ</button>
+                            <button class="hero-tag-pill" data-uni="Koç Üniversitesi">Koç</button>
+                        </div>
                     </div>
 
-                    <!-- Arama Altı Popüler Etiket Hapları (#İTÜ, #ODTÜ vb.) -->
-                    <div class="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-zinc-400">
-                        <span class="text-zinc-500 font-medium mr-1 flex items-center gap-1">
-                            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-cyan-400"></i> Popüler:
-                        </span>
-                        <button class="hero-tag-pill" data-uni="İstanbul Teknik Üniversitesi">#İTÜ</button>
-                        <button class="hero-tag-pill" data-uni="Orta Doğu Teknik Üniversitesi (ODTÜ)">#ODTÜ</button>
-                        <button class="hero-tag-pill" data-uni="Boğaziçi Üniversitesi">#Boğaziçi</button>
-                        <button class="hero-tag-pill" data-uni="Hacettepe Üniversitesi">#Hacettepe</button>
-                        <button class="hero-tag-pill" data-uni="Yıldız Teknik Üniversitesi (YTÜ)">#YTÜ</button>
-                        <button class="hero-tag-pill" data-uni="Koç Üniversitesi">#Koç</button>
-                    </div>
+                    <aside class="ed-hero__side" data-anim="fade-in" data-anim-delay="120" aria-label="Kampüs Sesi rakamlarla">
+                        <figure class="ed-map">
+                            <div class="ed-map__stage">
+                                <svg id="hm-map-svg" class="ed-map__svg" viewBox="0 22 560 268" role="group" aria-label="Üniversite yerleşkelerinin Türkiye haritasındaki konumları"></svg>
+                                <div id="hm-tip" class="hm-tip" hidden></div>
+                            </div>
+                            <figcaption class="ed-map__caption">Her nokta bir yerleşke. Koyu noktalar yorum almış okullar; üzerine gel ya da dokun.</figcaption>
+                        </figure>
+                        <dl id="hm-facts" class="ed-facts"></dl>
+                    </aside>
 
                 </div>
             </section>
 
-            <!-- 2. Özellikler Bölümü (Ferah Koyu Antrasit & Camgöbeği Temalı) -->
-            <section class="home-features w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Kart 1 -->
-                    <div class="group p-6 sm:p-8 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-cyan-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-950/20 text-center">
-                        <div class="w-12 h-12 rounded-xl bg-cyan-950/70 border border-cyan-800/60 flex items-center justify-center text-cyan-400 mx-auto mb-4 group-hover:scale-110 transition-transform">
-                            <i data-lucide="shield-check" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mb-2" style="font-family: var(--font-heading);">Doğrulanmış Deneyimler</h3>
-                        <p class="text-sm text-zinc-400 leading-relaxed">Şeffaflığı ön planda tutarak kampüs yaşamını birinci ağızdan, sansürsüz öğrenci yorumlarıyla sunuyoruz.</p>
-                    </div>
+            <!-- 2. Son yorumlar şeridi -->
+            <section class="ed-section hm-section" aria-labelledby="hm-h-reviews">
+                <header class="ed-section__head ed-section__head--split" data-anim="fade-up">
+                    <h2 id="hm-h-reviews" class="ed-section__title">Son yorumlar</h2>
+                    <span class="hm-note">En yeniden eskiye, öğrencilerden</span>
+                </header>
+                <div id="hm-reviews" class="hm-reviews" data-anim="fade-in" aria-live="polite"></div>
+            </section>
 
-                    <!-- Kart 2 -->
-                    <div class="group p-6 sm:p-8 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-sky-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-950/20 text-center">
-                        <div class="w-12 h-12 rounded-xl bg-sky-950/70 border border-sky-800/60 flex items-center justify-center text-sky-400 mx-auto mb-4 group-hover:scale-110 transition-transform">
-                            <i data-lucide="git-compare-arrows" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mb-2" style="font-family: var(--font-heading);">Akıllı Karşılaştırma</h3>
-                        <p class="text-sm text-zinc-400 leading-relaxed">Birden fazla üniversiteyi akademik kadro, yurt ve ulaşım gibi temel kriterlerde yan yana kıyaslayın.</p>
-                    </div>
+            <!-- 3. Öne çıkan üniversiteler -->
+            <section class="ed-section hm-section" aria-labelledby="hm-h-featured">
+                <header class="ed-section__head" data-anim="fade-up">
+                    <h2 id="hm-h-featured" class="ed-section__title">Öne çıkan üniversiteler</h2>
+                </header>
+                <div id="hm-tabs" class="hm-tabs" role="tablist" aria-label="Kritere göre sırala" data-anim="fade-up">
+                    <button type="button" role="tab" class="hm-tab" data-tab="genel" aria-selected="true">Genel</button>
+                    <button type="button" role="tab" class="hm-tab" data-tab="yurt" aria-selected="false">Yurt</button>
+                    <button type="button" role="tab" class="hm-tab" data-tab="yemekhane" aria-selected="false">Yemekhane</button>
+                    <button type="button" role="tab" class="hm-tab" data-tab="ulasim" aria-selected="false">Ulaşım</button>
+                </div>
+                <div id="hm-featured" class="hm-featured" aria-live="polite"></div>
+                <p class="hm-foot">Sıralama, yorum sayısı az olan okulların puanını genel ortalamaya yaklaştıran ağırlıklı ortalamayla yapılır.</p>
+            </section>
 
-                    <!-- Kart 3 -->
-                    <div class="group p-6 sm:p-8 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-indigo-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-950/20 text-center">
-                        <div class="w-12 h-12 rounded-xl bg-indigo-950/70 border border-indigo-800/60 flex items-center justify-center text-indigo-400 mx-auto mb-4 group-hover:scale-110 transition-transform">
-                            <i data-lucide="network" class="w-6 h-6"></i>
+            <!-- 4. Şehirlere göz at -->
+            <section class="ed-section hm-section" aria-labelledby="hm-h-cities">
+                <header class="ed-section__head ed-section__head--split" data-anim="fade-up">
+                    <h2 id="hm-h-cities" class="ed-section__title">Şehirlere göz at</h2>
+                    <a href="#/cities" class="ed-link">Tüm şehirler <span aria-hidden="true">&rarr;</span></a>
+                </header>
+                <div id="hm-cities"></div>
+            </section>
+
+            <!-- 5. Karşılaştırma önizlemesi -->
+            <section class="ed-section hm-section" aria-labelledby="hm-h-compare">
+                <header class="ed-section__head" data-anim="fade-up">
+                    <h2 id="hm-h-compare" class="ed-section__title">İki üniversiteyi yan yana koy</h2>
+                </header>
+                <div class="hm-compare" data-anim="fade-up">
+                    <div class="hm-cmp">
+                        <label class="hm-cmp__label">Birinci üniversite</label>
+                        <div class="custom-select" id="hm-custom-select-0">
+                            <div class="custom-select__trigger" tabindex="0">
+                                <span class="custom-select__text">1. Üniversiteyi seçin...</span>
+                                <span class="custom-select__icon">▼</span>
+                            </div>
+                            <div class="custom-select__dropdown">
+                                <input type="text" class="custom-select__search" placeholder="Üniversite ara...">
+                                <ul class="custom-select__options"></ul>
+                            </div>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2" style="font-family: var(--font-heading);">Topluluk Ağı</h3>
-                        <p class="text-sm text-zinc-400 leading-relaxed">Bölümünüzdeki veya hedeflediğiniz okuldaki kıdemli öğrencilerle iletişim kurun, sorularınızı yöneltin.</p>
+                        <div id="hm-cmp-rows-0" class="hm-cmp__rows"></div>
                     </div>
+                    <div class="hm-cmp">
+                        <label class="hm-cmp__label">İkinci üniversite</label>
+                        <div class="custom-select" id="hm-custom-select-1">
+                            <div class="custom-select__trigger" tabindex="0">
+                                <span class="custom-select__text">2. Üniversiteyi seçin...</span>
+                                <span class="custom-select__icon">▼</span>
+                            </div>
+                            <div class="custom-select__dropdown">
+                                <input type="text" class="custom-select__search" placeholder="Üniversite ara...">
+                                <ul class="custom-select__options"></ul>
+                            </div>
+                        </div>
+                        <div id="hm-cmp-rows-1" class="hm-cmp__rows"></div>
+                    </div>
+                </div>
+                <div class="hm-compare__foot">
+                    <p id="hm-cmp-note" class="hm-foot"></p>
+                    <a href="#/compare" class="btn btn--primary">Kendi karşılaştırmanı yap <i data-lucide="arrow-right" class="icon-sm"></i></a>
                 </div>
             </section>
 
-            <!-- 3. Platformu Tanıyalım (Mini Tanıtım Kartları - Koyu Antrasit Temalı) -->
-            <section class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 relative z-10">
-                <div class="flex items-center justify-between mb-8 border-b border-zinc-800/80 pb-3">
-                    <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2" style="font-family: var(--font-heading);">
-                        <i data-lucide="compass" class="w-5 h-5 text-cyan-400"></i>
-                        Platformu <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-sky-300">Tanıyalım</span>
-                    </h2>
-                    <a href="#/blog" class="text-cyan-400 hover:text-cyan-300 font-medium text-xs sm:text-sm flex items-center gap-1 transition-colors">
-                        Tüm Bloglar <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </a>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Intro Blog 1 -->
-                    <article class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-cyan-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-950/20 flex flex-col justify-between">
-                        <div>
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-950/70 text-cyan-400 border border-cyan-800/50 mb-3 uppercase tracking-wider">
-                                Hakkımızda
-                            </span>
-                            <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2" style="font-family: var(--font-heading);">
-                                Kampüs Sesi Nedir?
-                            </h3>
-                            <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed mb-4">
-                                Üniversitelerin resmi broşürlerindeki süslü lafları değil, orada okuyan öğrencilerin filtreden geçmemiş gerçek deneyimlerini paylaştığı özgür platformdur.
-                            </p>
-                        </div>
-                        <div class="pt-3 border-t border-zinc-800/80 mt-auto">
-                            <a href="#/hakkimizda" class="text-xs sm:text-sm font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1">
-                                Detaylar &rarr;
-                            </a>
-                        </div>
-                    </article>
-
-                    <!-- Intro Blog 2 -->
-                    <article class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-cyan-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-950/20 flex flex-col justify-between">
-                        <div>
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-950/70 text-sky-400 border border-sky-800/50 mb-3 uppercase tracking-wider">
-                                Kullanım Rehberi
-                            </span>
-                            <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2" style="font-family: var(--font-heading);">
-                                Karşılaştırma Aracı
-                            </h3>
-                            <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed mb-4">
-                                İki üniversite arasında mı kaldın? Şehir, yemekhane, ulaşım ve yurt olanaklarını tek ekranda yan yana koyarak en doğru seçimi yapmanı sağlar.
-                            </p>
-                        </div>
-                        <div class="pt-3 border-t border-zinc-800/80 mt-auto">
-                            <a href="#/compare" class="text-xs sm:text-sm font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1">
-                                Nasıl Kullanılır? &rarr;
-                            </a>
-                        </div>
-                    </article>
-
-                    <!-- Intro Blog 3 -->
-                    <article class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-cyan-500/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-950/20 flex flex-col justify-between">
-                        <div>
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-950/70 text-orange-400 border border-orange-800/50 mb-3 uppercase tracking-wider">
-                                Topluluk
-                            </span>
-                            <h3 class="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2" style="font-family: var(--font-heading);">
-                                Nasıl Katkı Sağlarsın?
-                            </h3>
-                            <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed mb-4">
-                                Kendi kampüsündeki iyi ve kötü yanları paylaşarak tercih dönemindeki adaylara yol gösterebilirsin. Üstelik tamamen anonim olarak yorum yapabilirsin.
-                            </p>
-                        </div>
-                        <div class="pt-3 border-t border-zinc-800/80 mt-auto">
-                            <a href="#/review-form" class="text-xs sm:text-sm font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1">
-                                Yorum Yaz &rarr;
-                            </a>
-                        </div>
-                    </article>
+            <!-- 6. Katkı çağrısı -->
+            <section class="ed-section hm-section">
+                <div class="hm-contribute" data-anim="fade-up">
+                    <p class="hm-contribute__text">Okuduğun okulu bir cümleyle anlat; seçim yapacak biri için fark yaratır.</p>
+                    <a href="#/review-form" class="btn btn--primary">Yorum yaz</a>
                 </div>
             </section>
-            
-            <!-- 4. SSS / Merak Edilenler (Ferah Koyu Antrasit & Camgöbeği İkonlu) -->
-            <section class="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 relative z-10">
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-white text-center mb-8 flex items-center justify-center gap-2" style="font-family: var(--font-heading);">
-                    Merak Edilenler <span class="text-cyan-400">🧐</span>
-                </h2>
-                <div class="flex flex-col gap-3">
+
+            <!-- 7a. Platform: tek ince şerit -->
+            <section class="ed-section hm-section">
+                <ul class="hm-strip" data-anim="fade-up">
+                    <li><strong>Doğrulanmış deneyimler</strong><span>Kampüs yaşamını birinci ağızdan, sansürsüz öğrenci yorumlarıyla sunuyoruz.</span></li>
+                    <li><strong>Akıllı karşılaştırma</strong><span>Üniversiteleri yurt, ulaşım ve yemekhane gibi kriterlerde yan yana kıyasla.</span></li>
+                    <li><strong>Topluluk ağı</strong><span>Hedeflediğin okuldaki kıdemli öğrencilere sorularını yönelt.</span></li>
+                </ul>
+            </section>
+
+            <!-- 7b. Uzun açıklamalar ve SSS: sayfanın en altında, daraltılmış -->
+            <section class="ed-section ed-section--faq">
+                <header class="ed-faq__head" data-anim="fade-up">
+                    <h2 class="ed-section__title">Platform ve sık sorulanlar</h2>
+                    <p class="ed-faq__note">Başlıklara tıklayarak ayrıntıları aç.</p>
+                </header>
+
+                <div class="ed-faq__list">
                     <details class="faq-details">
-                        <summary class="faq-summary">
-                            <span>Üye olmak şart mı?</span>
-                            <i data-lucide="plus" class="faq-icon"></i>
-                        </summary>
-                        <div class="faq-content">
-                            <p>Yorumları okumak ve üniversiteleri incelemek tamamen ücretsiz ve anonimdir. Kendi okulunuz hakkında yorum yazmak veya soru sormak istediğinizde spam'ı önlemek için üye girişi yapmanız yeterlidir.</p>
-                        </div>
+                        <summary class="faq-summary"><span>Kampüs Sesi nedir?</span><i data-lucide="plus" class="faq-icon"></i></summary>
+                        <div class="faq-content"><p>Üniversitelerin resmi broşürlerindeki süslü lafları değil, orada okuyan öğrencilerin filtreden geçmemiş gerçek deneyimlerini paylaştığı özgür platformdur.</p></div>
                     </details>
                     <details class="faq-details">
-                        <summary class="faq-summary">
-                            <span>Üniversite ve yurt bilgileri ne sıklıkla güncellenir?</span>
-                            <i data-lucide="plus" class="faq-icon"></i>
-                        </summary>
-                        <div class="faq-content">
-                            <p>Tüm resmi veriler dönem başlarında güncellenir; ayrıca bizzat o okulda okuyan öğrencilerin canlı yorumlarıyla en taze bilgilere anında ulaşırsınız.</p>
-                        </div>
+                        <summary class="faq-summary"><span>Karşılaştırma aracı nasıl çalışır?</span><i data-lucide="plus" class="faq-icon"></i></summary>
+                        <div class="faq-content"><p>İki üniversite arasında mı kaldın? Şehir, yemekhane, ulaşım ve yurt olanaklarını tek ekranda yan yana koyarak en doğru seçimi yapmanı sağlar.</p></div>
                     </details>
                     <details class="faq-details">
-                        <summary class="faq-summary">
-                            <span>Puanlamalar ve sıralamalar nasıl hesaplanıyor?</span>
-                            <i data-lucide="plus" class="faq-icon"></i>
-                        </summary>
-                        <div class="faq-content">
-                            <p>Eğitim, kampüs olanakları, yemekhane kalitesi, sosyallik ve yurt şartları gibi temel metriklerde öğrencilerin verdiği oyların şeffaf ağırlıklı ortalamasıyla listelenir.</p>
-                        </div>
+                        <summary class="faq-summary"><span>Nasıl katkı sağlarsın?</span><i data-lucide="plus" class="faq-icon"></i></summary>
+                        <div class="faq-content"><p>Kendi kampüsündeki iyi ve kötü yanları paylaşarak tercih dönemindeki adaylara yol gösterebilirsin. Üstelik tamamen anonim olarak yorum yapabilirsin.</p></div>
+                    </details>
+                    <details class="faq-details">
+                        <summary class="faq-summary"><span>Üye olmak şart mı?</span><i data-lucide="plus" class="faq-icon"></i></summary>
+                        <div class="faq-content"><p>Yorumları okumak ve üniversiteleri incelemek tamamen ücretsiz ve anonimdir. Kendi okulunuz hakkında yorum yazmak veya soru sormak istediğinizde spam'ı önlemek için üye girişi yapmanız yeterlidir.</p></div>
+                    </details>
+                    <details class="faq-details">
+                        <summary class="faq-summary"><span>Üniversite ve yurt bilgileri ne sıklıkla güncellenir?</span><i data-lucide="plus" class="faq-icon"></i></summary>
+                        <div class="faq-content"><p>Tüm resmi veriler dönem başlarında güncellenir; ayrıca bizzat o okulda okuyan öğrencilerin canlı yorumlarıyla en taze bilgilere anında ulaşırsınız.</p></div>
+                    </details>
+                    <details class="faq-details">
+                        <summary class="faq-summary"><span>Puanlamalar ve sıralamalar nasıl hesaplanıyor?</span><i data-lucide="plus" class="faq-icon"></i></summary>
+                        <div class="faq-content"><p>Eğitim, kampüs olanakları, yemekhane kalitesi, sosyallik ve yurt şartları gibi temel metriklerde öğrencilerin verdiği oyların şeffaf ağırlıklı ortalamasıyla listelenir.</p></div>
                     </details>
                 </div>
             </section>
@@ -216,178 +191,363 @@ export const TEMPLATES = {
     `,
 
     university: `
-        <main class="container page-view">
-            <div class="uni-selector" id="uni-selector">
-                <label class="uni-selector__label">📍 Üniversite Seçin</label>
-                <div class="custom-select" id="custom-uni-select">
-                    <div class="custom-select__trigger">
-                        <span class="custom-select__text">Üniversite seçin...</span>
-                        <span class="custom-select__icon">▼</span>
-                    </div>
-                    <div class="custom-select__dropdown">
-                        <input type="text" class="custom-select__search" placeholder="Üniversite ara...">
-                        <ul class="custom-select__options"></ul>
-                    </div>
-                </div>
-            </div>
+        <main class="container page-view uni-page-view">
+            <!-- 1. Breadcrumb -->
+            <nav class="ed-breadcrumb" aria-label="Sayfa Konumu">
+                <a href="#/home" class="ed-breadcrumb__link">Ana Sayfa</a>
+                <span class="ed-breadcrumb__sep">/</span>
+                <a href="#/ranking" class="ed-breadcrumb__link">Üniversiteler</a>
+                <span class="ed-breadcrumb__sep">/</span>
+                <span class="ed-breadcrumb__text" id="uni-bc-city">Balıkesir</span>
+                <span class="ed-breadcrumb__sep">/</span>
+                <span class="ed-breadcrumb__current" id="uni-bc-name">Bandırma Onyedi Eylül Üniversitesi</span>
+            </nav>
 
-            <header class="profile-hero" id="uni-hero" style="margin-top: var(--space-xl);">
-                <div class="profile-hero__bg">
-                    <img id="hero-blur-img" class="profile-hero__bg-blur"
-                        src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=2070"
-                        alt="" aria-hidden="true">
-                    <img id="hero-img" class="profile-hero__bg-img"
-                        src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=2070"
-                        alt="Üniversite Kampüsü">
-                    <div class="profile-hero__overlay"></div>
-                </div>
-                <div class="profile-hero__content container reveal-up">
-                    <h1 class="profile-hero__title" id="uni-hero-title">Bandırma Onyedi Eylül Üniversitesi</h1>
-                    <p class="profile-hero__subtitle" id="uni-hero-subtitle"><i data-lucide="map-pin" class="icon-sm"></i> Balıkesir, Türkiye</p>
-                    <div class="profile-hero__actions" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                        <a href="#" id="uni-website-btn" target="_blank" rel="noopener noreferrer"
-                            class="btn btn--outline profile-hero__btn">
-                            <i data-lucide="globe" class="icon-sm"></i> Resmi Web Sitesi
-                        </a>
-                        <button id="uni-fav-btn" class="btn btn--outline profile-hero__btn" type="button" style="display: inline-flex; align-items: center; gap: 6px;">
-                            <i data-lucide="heart" id="uni-fav-icon" class="icon-sm"></i> <span id="uni-fav-text">Favorilere Ekle</span>
-                        </button>
+            <!-- 2. Hero Card -->
+            <header class="ed-uni-hero" id="uni-hero">
+                <div class="ed-uni-hero__main">
+                    <div class="ed-uni-hero__logo-box">
+                        <img id="hero-img" class="ed-uni-hero__logo"
+                            src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=2070"
+                            alt="Üniversite Logosu">
+                    </div>
+                    <div class="ed-uni-hero__header-info">
+                        <div class="ed-uni-hero__meta-chips">
+                            <span class="ed-chip" id="uni-hero-type">Devlet Üniversitesi</span>
+                            <span class="ed-chip" id="uni-hero-city-chip"><i data-lucide="map-pin" class="icon-xs"></i> <span id="uni-hero-city">Balıkesir</span></span>
+                            <span class="ed-chip" id="uni-hero-year-chip"><i data-lucide="calendar" class="icon-xs"></i> <span id="uni-hero-year">Kuruluş: 2015</span></span>
+                        </div>
+                        <h1 class="ed-uni-hero__title" id="uni-hero-title">Bandırma Onyedi Eylül Üniversitesi</h1>
+                        <p class="ed-uni-hero__subtitle" id="uni-hero-subtitle" style="display:none;"></p>
+
+                        <!-- Puan ve Tavsiye Bloğu -->
+                        <div class="ed-uni-hero__score-row">
+                            <div class="ed-uni-hero__rating-badge">
+                                <span class="ed-uni-hero__avg" id="stat-avg">—</span>
+                                <div class="ed-uni-hero__stars-col">
+                                    <div class="ed-uni-hero__stars" id="hero-stars-display">★★★★★</div>
+                                    <span class="ed-uni-hero__rev-count" id="stat-count-label"><span id="stat-count">0</span> değerlendirme</span>
+                                </div>
+                            </div>
+                            <div class="ed-uni-hero__recommend-badge" id="hero-rec-badge">
+                                <i data-lucide="thumbs-up" class="icon-xs"></i>
+                                <span id="hero-rec-text">%-- Tavsiye Ediyor</span>
+                            </div>
+                            <div class="ed-uni-hero__low-badge" id="hero-low-reviews-note" style="display: none;">
+                                <i data-lucide="info" class="icon-xs"></i>
+                                <span>Az sayıda yoruma dayanır</span>
+                            </div>
+                            <div class="ed-uni-hero__rank-badge" id="stat-rank-badge" style="display: none;">
+                                <i data-lucide="award" class="icon-xs"></i>
+                                <span id="stat-rank">Top 3</span>
+                            </div>
+                        </div>
+
+                        <!-- Butonlar -->
+                        <div class="ed-uni-hero__actions">
+                            <a href="#/review-form" id="uni-add-review-btn" class="btn btn--primary">
+                                <i data-lucide="edit-3" class="icon-sm"></i> Yorum Yaz
+                            </a>
+                            <a href="#/compare" id="uni-compare-btn" class="btn btn--outline">
+                                <i data-lucide="git-compare" class="icon-sm"></i> Karşılaştır
+                            </a>
+                            <button id="uni-fav-btn" class="btn btn--outline" type="button">
+                                <i data-lucide="heart" id="uni-fav-icon" class="icon-sm"></i> <span id="uni-fav-text">Favorilere Ekle</span>
+                            </button>
+                            <a href="#" id="uni-website-btn" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
+                                <i data-lucide="globe" class="icon-sm"></i> Resmi Web Sitesi
+                            </a>
+                        </div>
                     </div>
                 </div>
             </header>
 
-            <div class="profile-main">
-                <section class="profile-section reveal-up">
-                    <div class="profile-card about-card">
-                        <div class="profile-card__header">
-                            <h2 class="profile-card__title">Üniversite Hakkında</h2>
+            <!-- 3. Yapışkan Sekme Menüsü (Sticky Tabs) -->
+            <nav class="ed-uni-tabs" id="uni-sticky-tabs" aria-label="Üniversite Sayfa Bölümleri">
+                <div class="ed-uni-tabs__inner">
+                    <button type="button" class="ed-uni-tab active" data-target="sec-genel">Genel</button>
+                    <button type="button" class="ed-uni-tab" data-target="sec-yorumlar">Yorumlar <span class="tab-badge" id="tab-reviews-count">0</span></button>
+                    <button type="button" class="ed-uni-tab" data-target="sec-bolumler">Bölümler</button>
+                    <button type="button" class="ed-uni-tab" data-target="sec-yurtlar">Yurtlar <span class="tab-badge" id="tab-dorms-count">0</span></button>
+                    <button type="button" class="ed-uni-tab" data-target="sec-ulasim">Ulaşım & Harita</button>
+                </div>
+            </nav>
+
+            <!-- 4. İki Sütunlu Sayfa Düzeni (2/3 Ana İçerik, 1/3 Yapışkan Yan Panel) -->
+            <div class="uni-detail-layout">
+                <!-- Sol / Ana Sütun -->
+                <div class="uni-detail-main">
+                    <!-- BÖLÜM 1: GENEL -->
+                    <section class="profile-section uni-section" id="sec-genel">
+                        <div class="ed-section__head">
+                            <p class="ed-kicker">Genel Bakış</p>
+                            <h2 class="ed-section__title">Üniversite Hakkında</h2>
                         </div>
-                        <div class="profile-card__content about-content">
-                            <p id="about-text-short">Yükleniyor...</p>
-                            <div class="about-content__extended" id="about-extended">
-                                <p id="about-text-long"></p>
+                        <div class="profile-card about-card ed-card">
+                            <div class="profile-card__content about-content">
+                                <p id="about-text-short">Yükleniyor...</p>
+                                <div class="about-content__extended" id="about-extended">
+                                    <p id="about-text-long"></p>
+                                </div>
+                            </div>
+                            <button class="btn btn--text about-toggle-btn" id="about-toggle-btn" type="button">
+                                Daha Fazla Oku <i data-lucide="chevron-down" class="icon-sm"></i>
+                            </button>
+                        </div>
+
+                        <!-- Hızlı İnceleme Kutusu (3 Maddeli Özet Bilgi) -->
+                        <div class="uni-quick-grid">
+                            <div class="uni-quick-card">
+                                <div class="uni-quick-card__icon"><i data-lucide="book-open" class="icon-sm"></i></div>
+                                <div class="uni-quick-card__content">
+                                    <h4 class="uni-quick-card__title">Akademik Vizyon</h4>
+                                    <p class="uni-quick-card__desc">Nitelikli akademisyen kadrosu ve uygulama odaklı laboratuvar altyapısı.</p>
+                                </div>
+                            </div>
+                            <div class="uni-quick-card">
+                                <div class="uni-quick-card__icon"><i data-lucide="coffee" class="icon-sm"></i></div>
+                                <div class="uni-quick-card__content">
+                                    <h4 class="uni-quick-card__title">Sosyal Yaşam</h4>
+                                    <p class="uni-quick-card__desc">Öğrenci kulüpleri, spor tesisleri ve yıl boyu süren kültürel etkinlikler.</p>
+                                </div>
+                            </div>
+                            <div class="uni-quick-card">
+                                <div class="uni-quick-card__icon"><i data-lucide="briefcase" class="icon-sm"></i></div>
+                                <div class="uni-quick-card__content">
+                                    <h4 class="uni-quick-card__title">Kariyer & Staj</h4>
+                                    <p class="uni-quick-card__desc">Sanayi ortaklıkları, teknokent imkânları ve mezun kariyer rehberliği.</p>
+                                </div>
                             </div>
                         </div>
-                        <button class="btn btn--text about-toggle-btn" id="about-toggle-btn">
-                            Daha Fazla Oku ▼
-                        </button>
-                    </div>
-                </section>
+                    </section>
 
-                <section class="profile-section reveal-up" style="animation-delay: 0.1s;">
-                    <h2 class="section-title">Canlı <span>Ulaşım Modülü</span></h2>
-                    <p class="section-desc">Çevre illerden bu üniversiteye ulaşım imkanlarını ve kampüsün interaktif konumunu keşfedin.</p>
-
-                    <!-- Canlı Kampüs & Ulaşım Haritası Kapsayıcısı (Leaflet.js) -->
-                    <div class="campus-map-wrapper" id="campus-map-wrapper">
-                        <div class="campus-map-header">
-                            <div class="campus-map-header__info">
-                                <span class="campus-map-header__dot"></span>
-                                <span class="campus-map-header__title" id="campus-map-label">Bandırma Onyedi Eylül Üniversitesi — Merkez Yerleşke</span>
+                    <!-- BÖLÜM 2: YORUMLAR -->
+                    <section class="profile-section uni-section" id="sec-yorumlar">
+                        <div class="ed-section__head uni-reviews-head">
+                            <div>
+                                <p class="ed-kicker">Öğrenci Deneyimleri</p>
+                                <h2 class="ed-section__title">Değerlendirmeler (<span id="reviews-header-count">0</span>)</h2>
                             </div>
-                            <div class="campus-map-header__actions">
-                                <button type="button" class="campus-map-reset-btn" id="campus-map-reset-btn" title="Kampüs konumuna odakla">
-                                    <i data-lucide="locate-fixed" class="icon-xs"></i> Kampüse Odakla
+                            <div class="uni-reviews-sort">
+                                <label for="reviews-sort-select" class="uni-sort-label"><i data-lucide="arrow-down-up" class="icon-xs"></i> Sırala:</label>
+                                <select id="reviews-sort-select" class="ed-select">
+                                    <option value="newest">En Yeni</option>
+                                    <option value="helpful">En Faydalı</option>
+                                    <option value="highest">En Yüksek Puan</option>
+                                    <option value="lowest">En Düşük Puan</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Filtre Etiketleri (Konu başlıkları ve yanlarında yorum sayıları) -->
+                        <div class="filter-bar ed-filter-bar" id="filter-bar"></div>
+
+                        <!-- Yorum Kartları -->
+                        <div id="reviews-container" class="ed-reviews-list" data-stagger="80"></div>
+                    </section>
+
+                    <!-- BÖLÜM 3: BÖLÜMLER -->
+                    <section class="profile-section uni-section" id="sec-bolumler">
+                        <div class="ed-section__head">
+                            <p class="ed-kicker">Akademik Birimler</p>
+                            <h2 class="ed-section__title">Öne Çıkan Bölümler</h2>
+                            <p class="section-desc">Öğrencilerin en çok ilgi gösterdiği ve değerlendirdiği lisans programları.</p>
+                        </div>
+                        <div class="uni-depts-grid" id="uni-depts-grid"></div>
+                    </section>
+
+                    <!-- BÖLÜM 4: YURTLAR -->
+                    <section class="profile-section uni-section" id="sec-yurtlar">
+                        <div class="ed-section__head uni-dorms-head">
+                            <div>
+                                <p class="ed-kicker">Barınma Olanakları</p>
+                                <h2 class="ed-section__title">Çevredeki Yurtlar (KYK & Özel)</h2>
+                                <p class="section-desc">Kampüse en yakın devlet ve özel yurt olanakları.</p>
+                            </div>
+                            <div class="dorm-filter-chips" id="dorm-filter-chips">
+                                <button type="button" class="dorm-chip active" data-type="all">Tümü</button>
+                                <button type="button" class="dorm-chip" data-type="Kız">Kız</button>
+                                <button type="button" class="dorm-chip" data-type="Erkek">Erkek</button>
+                                <button type="button" class="dorm-chip" data-type="Karma">Karma</button>
+                            </div>
+                        </div>
+
+                        <div id="kyk-grid" data-stagger="80" class="kyk-grid ed-kyk-grid"></div>
+
+                        <div class="dorm-expand-wrap" id="dorm-expand-wrap" style="display: none; margin-top: 16px; text-align: center;">
+                            <button type="button" class="btn btn--outline" id="dorms-expand-btn">
+                                Tümünü Gör (<span id="dorms-total-count">0</span>)
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- BÖLÜM 5: ULAŞIM & CANLI HARİTA -->
+                    <section class="profile-section uni-section" id="sec-ulasim">
+                        <div class="ed-section__head">
+                            <p class="ed-kicker">Lokasyon & Ulaşım</p>
+                            <h2 class="ed-section__title">Ulaşım ve Kampüs Haritası</h2>
+                            <p class="section-desc">Şehir içi ve çevre illerden ulaşım güzergâhları ile interaktif yerleşke haritası.</p>
+                        </div>
+
+                        <!-- Ulaşım Hatları Kartları -->
+                        <div class="transport-grid" id="transport-grid" data-stagger="80"></div>
+
+                        <!-- Daraltılmış / Genişletilebilir Canlı Leaflet Haritası -->
+                        <div class="campus-map-collapsible-wrapper">
+                            <div class="campus-map-toggle-bar">
+                                <button type="button" class="btn btn--outline campus-map-toggle-btn" id="btn-toggle-campus-map">
+                                    <i data-lucide="map" class="icon-sm"></i>
+                                    <span id="btn-toggle-campus-map-text">Canlı Kampüs Haritasını Göster</span>
                                 </button>
                             </div>
-                        </div>
 
-                        <div class="campus-map-body">
-                            <div id="campus-transport-map" class="campus-transport-map" aria-label="Üniversite Kampüs Konum Haritası"></div>
-
-                            <!-- Haritanın Sol Alt Köşesinde Zoom Kısayol Bilgilendirme Rozeti -->
-                            <div class="campus-map-zoom-hint" id="campus-map-zoom-hint" aria-live="polite">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="5" y="2" width="14" height="20" rx="7"/>
-                                    <path d="M12 6v4"/>
-                                </svg>
-                                <span>Zoom için <kbd>Ctrl</kbd> + <kbd>Scroll</kbd></span>
-                            </div>
-
-                            <!-- Haritanın Sağ Alt Köşesinde Konumlanan Google Haritalar Butonu & Hover Açıklama Kartı -->
-                            <div class="campus-map-edge-card" id="campus-map-edge-card">
-                                <div class="campus-map-edge-card__popover">
-                                    <span class="map-popup__badge">Canlı Kampüs Konumu</span>
-                                    <h4 class="campus-map-edge-card__title" id="campus-map-edge-title">Bandırma Onyedi Eylül Üniversitesi</h4>
-                                    <p class="campus-map-edge-card__desc" id="campus-map-edge-desc">Marmara Denizi kıyısında, Bandırma İDO Feribot İskelesi ve şehir merkezine 10 dakika mesafede konumlanan ana yerleşke.</p>
+                            <div class="campus-map-wrapper is-collapsed" id="campus-map-wrapper" style="display: none;">
+                                <div class="campus-map-header">
+                                    <div class="campus-map-header__info">
+                                        <span class="campus-map-header__dot"></span>
+                                        <span class="campus-map-header__title" id="campus-map-label">Bandırma Onyedi Eylül Üniversitesi — Merkez Yerleşke</span>
+                                    </div>
+                                    <div class="campus-map-header__actions">
+                                        <button type="button" class="campus-map-reset-btn" id="campus-map-reset-btn" title="Kampüs konumuna odakla">
+                                            <i data-lucide="locate-fixed" class="icon-xs"></i> Kampüse Odakla
+                                        </button>
+                                    </div>
                                 </div>
-                                <a href="https://www.google.com/maps?q=40.3414,27.9344" target="_blank" rel="noopener noreferrer" class="map-popup__btn" id="campus-map-gmaps-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                                        <circle cx="12" cy="10" r="3"/>
-                                    </svg>
-                                    <span>Google Haritalar'da Aç</span>
-                                </a>
+
+                                <div class="campus-map-body">
+                                    <div id="campus-transport-map" class="campus-transport-map" aria-label="Üniversite Kampüs Konum Haritası"></div>
+
+                                    <div class="campus-map-zoom-hint" id="campus-map-zoom-hint" aria-live="polite">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="5" y="2" width="14" height="20" rx="7"/>
+                                            <path d="M12 6v4"/>
+                                        </svg>
+                                        <span>Zoom için <kbd>Ctrl</kbd> + <kbd>Scroll</kbd></span>
+                                    </div>
+
+                                    <div class="campus-map-edge-card" id="campus-map-edge-card">
+                                        <div class="campus-map-edge-card__popover">
+                                            <span class="map-popup__badge">Canlı Kampüs Konumu</span>
+                                            <h4 class="campus-map-edge-card__title" id="campus-map-edge-title">Bandırma Onyedi Eylül Üniversitesi</h4>
+                                            <p class="campus-map-edge-card__desc" id="campus-map-edge-desc">Ana yerleşke ve çevre ulaşım bağlantıları.</p>
+                                        </div>
+                                        <a href="https://www.google.com/maps?q=40.3414,27.9344" target="_blank" rel="noopener noreferrer" class="map-popup__btn" id="campus-map-gmaps-btn">
+                                            <i data-lucide="map-pin" class="icon-xs"></i>
+                                            <span>Google Haritalar'da Aç</span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
+                </div>
 
-                    <div class="transport-grid" id="transport-grid"></div>
-                </section>
+                <!-- Sağ / Yapışkan Yan Panel (1/3) -->
+                <aside class="uni-detail-sidebar">
+                    <div class="uni-sticky-panel">
+                        <!-- Kriter Puanları İlerleme Çubukları -->
+                        <div class="uni-sidebar-card">
+                            <h3 class="uni-sidebar-card__title">
+                                <i data-lucide="bar-chart-2" class="icon-sm"></i> Kriter Puanları
+                            </h3>
+                            <div class="uni-criteria-list" id="uni-criteria-list">
+                                <!-- Dinamik doldurulacak -->
+                            </div>
+                        </div>
 
-                <section class="profile-section reveal-up" style="animation-delay: 0.15s;">
-                    <h2 class="section-title">🏢 Çevredeki <span>Yurtlar (KYK & Özel)</span></h2>
-                    <p class="section-desc">Bu üniversitenin çevresindeki öğrenci yurtları ve barınma imkanları.</p>
-                    <div id="kyk-grid" class="kyk-grid">
-                        <div style="color: var(--color-text-muted);">Yurt bilgileri yükleniyor...</div>
-                    </div>
-                </section>
+                        <!-- Hızlı Yorum Yaz CTA -->
+                        <div class="uni-sidebar-card uni-sidebar-card--cta">
+                            <h4 class="uni-sidebar-card__sub">Bu okulda okudun mu?</h4>
+                            <p class="uni-sidebar-card__p">Deneyimlerin yeni üniversite adaylarının en önemli rehberidir.</p>
+                            <a href="#/review-form" id="sidebar-add-review-btn" class="btn btn--primary btn--full">
+                                <i data-lucide="edit-3" class="icon-sm"></i> Yorum Yaz
+                            </a>
+                        </div>
 
-                <section class="profile-section hero__stats reveal-up"
-                    style="animation-delay: 0.2s; padding: var(--space-lg); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
-                    <div class="hero__stat">
-                        <div class="hero__stat-value" id="stat-avg">—</div>
-                        <div class="hero__stat-label">Ortalama Puan</div>
-                    </div>
-                    <div class="hero__stat">
-                        <div class="hero__stat-value" id="stat-count">—</div>
-                        <div class="hero__stat-label">Değerlendirme</div>
-                    </div>
-                    <div class="hero__stat">
-                        <div class="hero__stat-value" id="stat-rank">Top 3</div>
-                        <div class="hero__stat-label">Türkiye Sıralaması</div>
-                    </div>
-                </section>
+                        <!-- Küçük Harita Önizlemesi -->
+                        <div class="uni-sidebar-card uni-sidebar-card--map">
+                            <div class="uni-sidebar-map-preview">
+                                <div class="uni-sidebar-map-preview__pin">
+                                    <i data-lucide="map-pin" class="icon-md"></i>
+                                </div>
+                                <div class="uni-sidebar-map-preview__info">
+                                    <div class="uni-sidebar-map-preview__name" id="sidebar-map-uni">Yerleşke Konumu</div>
+                                    <div class="uni-sidebar-map-preview__city" id="sidebar-map-city">Harita ve yol tarifleri</div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn--outline btn--sm btn--full" id="sidebar-expand-map-btn">
+                                <i data-lucide="maximize-2" class="icon-xs"></i> Haritayı Büyüt
+                            </button>
+                        </div>
 
-                <section class="profile-section reveal-up" style="animation-delay: 0.3s; margin-bottom: var(--space-md);">
-                    <h2 class="section-title">📋 Öğrenci <span>Değerlendirmeleri</span></h2>
-                    <div class="filter-bar" id="filter-bar"></div>
-                </section>
+                        <!-- Hızlı Bilgiler -->
+                        <div class="uni-sidebar-card">
+                            <h3 class="uni-sidebar-card__title">
+                                <i data-lucide="info" class="icon-sm"></i> Hızlı Bilgiler
+                            </h3>
+                            <dl class="uni-quick-dl">
+                                <dt>Üniversite Türü</dt>
+                                <dd id="sidebar-info-type">Devlet Üniversitesi</dd>
+                                <dt>Şehir</dt>
+                                <dd id="sidebar-info-city">—</dd>
+                                <dt>Kuruluş Yılı</dt>
+                                <dd id="sidebar-info-year">—</dd>
+                                <dt>Resmi Web Sitesi</dt>
+                                <dd><a href="#" id="sidebar-info-web" target="_blank" rel="noopener noreferrer">Ziyaret Et ↗</a></dd>
+                            </dl>
+                        </div>
+                    </div>
+                </aside>
+            </div>
 
-                <div id="reviews-container"></div>
+            <!-- Mobilde Sabit (Sticky) Alt Bar -->
+            <div class="uni-mobile-cta" id="uni-mobile-cta">
+                <div class="uni-mobile-cta__info">
+                    <span class="uni-mobile-cta__uni" id="mobile-cta-uni-name">Üniversite</span>
+                    <span class="uni-mobile-cta__sub">Deneyimini paylaş, adaylara yol göster</span>
+                </div>
+                <a href="#/review-form" id="mobile-cta-btn" class="btn btn--primary btn--sm">
+                    <i data-lucide="edit-3" class="icon-xs"></i> Yorum Yaz
+                </a>
             </div>
         </main>
     `,
 
     compare: `
-        <main class="container page-view">
-            <h1 class="section-title">Üniversite <span>Karşılaştırma Aracı</span> ⚖️</h1>
-            <p class="section-desc" style="color: var(--color-text-muted);">İki farklı üniversiteyi seçerek aralarındaki
-                farkları, puan durumlarını ve olanakları yan yana inceleyin.</p>
+        <main class="container page-view compare-page ed-compare">
+            <header class="ed-section__head" style="margin-bottom: 2rem;">
+                <p class="ed-kicker">Üniversiteleri Kıyasla</p>
+                <h1 class="ed-section__title">Üniversite Karşılaştırma Aracı</h1>
+                <p class="section-desc" style="color: var(--color-text-muted); margin-top: 8px;">
+                    İki farklı üniversiteyi seçerek genel puan durumlarını, yurt, yemekhane, ulaşım, sosyal hayat ve akademik kriterlerini yan yana inceleyin.
+                </p>
+            </header>
 
             <div class="compare-container">
-                <div class="compare-col">
+                <div class="compare-col" id="compare-col-1" data-anim="slide-left">
+                    <label class="hm-cmp__label" style="display:block; margin-bottom: 8px; font-weight: 600;">1. Üniversite</label>
                     <div class="custom-select" id="custom-uni-select-1">
-                        <div class="custom-select__trigger">
+                        <div class="custom-select__trigger" tabindex="0">
                             <span class="custom-select__text">1. Üniversiteyi seçin...</span>
                             <span class="custom-select__icon">▼</span>
                         </div>
                         <div class="custom-select__dropdown">
-                            <input type="text" class="custom-select__search" placeholder="Ara...">
+                            <input type="text" class="custom-select__search" placeholder="Üniversite ara...">
                             <ul class="custom-select__options"></ul>
                         </div>
                     </div>
                     <div id="compare-result-1"></div>
                 </div>
 
-                <div class="compare-col">
+                <div class="compare-col" id="compare-col-2" data-anim="slide-right">
+                    <label class="hm-cmp__label" style="display:block; margin-bottom: 8px; font-weight: 600;">2. Üniversite</label>
                     <div class="custom-select" id="custom-uni-select-2">
-                        <div class="custom-select__trigger">
+                        <div class="custom-select__trigger" tabindex="0">
                             <span class="custom-select__text">2. Üniversiteyi seçin...</span>
                             <span class="custom-select__icon">▼</span>
                         </div>
                         <div class="custom-select__dropdown">
-                            <input type="text" class="custom-select__search" placeholder="Ara...">
+                            <input type="text" class="custom-select__search" placeholder="Üniversite ara...">
                             <ul class="custom-select__options"></ul>
                         </div>
                     </div>
@@ -398,59 +558,327 @@ export const TEMPLATES = {
     `,
 
     reviewForm: `
-        <main class="container page-view">
-            <div class="profile-card" style="max-width: 600px; margin: var(--space-xl) auto;">
-                <div class="profile-card__header">
-                    <h2 class="profile-card__title">Yeni Değerlendirme Ekle</h2>
+        <main class="container page-view review-page ed-review-page">
+            <header class="rf-header">
+                <p class="ed-kicker">Deneyimini Paylaş</p>
+                <h1 class="rf-title">Üniversite Değerlendirmesi Yap</h1>
+                <p class="rf-subtitle">Okuduğun okulu anlat. Yorumun adaylara yol gösterir.</p>
+            </header>
+
+            <!-- Mobil Akordeon İpucu Kutusu (Mobilde formun üstünde daraltılmış) -->
+            <details class="rf-tips-mobile" id="rf-tips-mobile">
+                <summary class="rf-tips-summary">
+                    <span class="rf-tips-summary__title">
+                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        İyi bir yorum nasıl yazılır?
+                    </span>
+                    <span class="rf-tips-chevron">▾</span>
+                </summary>
+                <div class="rf-tips-content">
+                    <ul class="rf-tips-list">
+                        <li><strong>Somut deneyimler paylaş:</strong> Sadece "iyiydi" demek yerine dersler, hocalar veya kampüs imkanlarından somut örnekler ver.</li>
+                        <li><strong>Dengeli ol:</strong> Okulun hem güçlü yönlerine hem de geliştirilmesi gereken eksiklerine değin.</li>
+                        <li><strong>Aday öğrencileri düşün:</strong> Tercih döneminde olsan bu okul hakkında neyi bilmek isterdin?</li>
+                        <li><strong>Kişiselleştirme:</strong> Kişileri adıyla hedef alma; genel işleyişe ve olanaklara odaklan.</li>
+                    </ul>
                 </div>
-                <div class="profile-card__content">
-                    <form id="add-review-form" class="form">
-                        <div class="form__group">
-                            <label class="form__label">Üniversite Seçin</label>
+            </details>
+
+            <div class="rf-layout">
+                <!-- Sol Sütun: Ana Form Kartı (Tek karta indirildi) -->
+                <div class="rf-card" id="rf-main-card">
+                    <form id="add-review-form" class="rf-form" novalidate>
+                        
+                        <!-- 1. Üniversite Seçimi (Searchable Combobox) -->
+                        <div class="rf-field">
+                            <label class="rf-label" for="form-uni-hidden">
+                                Üniversite <span class="rf-req" aria-label="zorunlu">*</span>
+                            </label>
                             <div class="custom-select" id="custom-uni-select-form">
-                                <div class="custom-select__trigger">
+                                <div class="custom-select__trigger" tabindex="0" role="combobox" aria-haspopup="listbox" aria-expanded="false">
                                     <span class="custom-select__text">Üniversite seçin...</span>
                                     <span class="custom-select__icon">▼</span>
                                 </div>
                                 <div class="custom-select__dropdown">
-                                    <input type="text" class="custom-select__search" placeholder="Ara...">
-                                    <ul class="custom-select__options"></ul>
+                                    <input type="text" class="custom-select__search" placeholder="Üniversite ara (örn. İTÜ, ODTÜ)..." aria-label="Üniversite ara">
+                                    <ul class="custom-select__options" role="listbox"></ul>
                                 </div>
                             </div>
                             <input type="hidden" id="form-uni-hidden" required>
+                            <div id="rf-uni-warning" class="rf-warning" hidden></div>
+                            <div class="rf-error" id="rf-uni-error" aria-live="polite"></div>
                         </div>
 
-                        <div class="form__group">
-                            <label class="form__label">Puanınız (1-5)</label>
-                            <div id="star-rating" class="stars stars--interactive" style="font-size: 2rem;">
-                                <span class="stars__item" data-value="1">★</span>
-                                <span class="stars__item" data-value="2">★</span>
-                                <span class="stars__item" data-value="3">★</span>
-                                <span class="stars__item" data-value="4">★</span>
-                                <span class="stars__item" data-value="5">★</span>
+                        <!-- 2. Genel Puan (Büyük belirgin yıldızlar + altında etiket) -->
+                        <div class="rf-field">
+                            <label class="rf-label">
+                                Genel Puanınız <span class="rf-req" aria-label="zorunlu">*</span>
+                            </label>
+                            <div class="rf-stars-wrap">
+                                <div id="star-rating" class="rf-stars" role="radiogroup" aria-label="Genel Puan">
+                                    <span class="rf-star" data-value="1" role="radio" aria-label="1 yıldız" tabindex="0">★</span>
+                                    <span class="rf-star" data-value="2" role="radio" aria-label="2 yıldız" tabindex="0">★</span>
+                                    <span class="rf-star" data-value="3" role="radio" aria-label="3 yıldız" tabindex="0">★</span>
+                                    <span class="rf-star" data-value="4" role="radio" aria-label="4 yıldız" tabindex="0">★</span>
+                                    <span class="rf-star" data-value="5" role="radio" aria-label="5 yıldız" tabindex="0">★</span>
+                                </div>
+                                <div id="rf-rating-label" class="rf-rating-desc" aria-live="polite">Puan seçin (1-5)</div>
                             </div>
                             <input type="hidden" id="form-rating" value="0" required>
+                            <div class="rf-error" id="rf-rating-error" aria-live="polite"></div>
                         </div>
 
-                        <div class="form__group">
-                            <label class="form__label" for="form-text">Değerlendirmeniz</label>
-                            <textarea id="form-text" class="form__input" rows="5"
-                                placeholder="Üniversiteniz hakkında düşüncelerinizi detaylıca yazın..." required></textarea>
-                            <div style="text-align: right; margin-top: 5px;">
-                                <small id="char-count" style="color: var(--color-text-muted);">0 / 500</small>
+                        <!-- 3. İsteğe Bağlı Kriter Puanları -->
+                        <div class="rf-field rf-crit-group">
+                            <div class="rf-label-wrap">
+                                <span class="rf-label">Kriter Puanları</span>
+                                <span class="rf-opt-badge">İsteğe bağlı</span>
+                            </div>
+                            <p class="rf-help">Aşağıdaki alanları deneyimlediğin kadarıyla puanlayabilirsin.</p>
+                            
+                            <div class="rf-crit-grid">
+                                <!-- Yurt -->
+                                <div class="rf-crit-item" data-crit="yurt">
+                                    <div class="rf-crit-label">
+                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                        <span>Yurt</span>
+                                    </div>
+                                    <div class="rf-crit-stars" data-crit="yurt">
+                                        <span class="rf-crit-star" data-v="1">★</span>
+                                        <span class="rf-crit-star" data-v="2">★</span>
+                                        <span class="rf-crit-star" data-v="3">★</span>
+                                        <span class="rf-crit-star" data-v="4">★</span>
+                                        <span class="rf-crit-star" data-v="5">★</span>
+                                    </div>
+                                </div>
+
+                                <!-- Yemekhane -->
+                                <div class="rf-crit-item" data-crit="yemekhane">
+                                    <div class="rf-crit-label">
+                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 2v16"/><path d="M6 2v19"/><path d="M9 2a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3V2z"/></svg>
+                                        <span>Yemekhane</span>
+                                    </div>
+                                    <div class="rf-crit-stars" data-crit="yemekhane">
+                                        <span class="rf-crit-star" data-v="1">★</span>
+                                        <span class="rf-crit-star" data-v="2">★</span>
+                                        <span class="rf-crit-star" data-v="3">★</span>
+                                        <span class="rf-crit-star" data-v="4">★</span>
+                                        <span class="rf-crit-star" data-v="5">★</span>
+                                    </div>
+                                </div>
+
+                                <!-- Ulaşım -->
+                                <div class="rf-crit-item" data-crit="ulasim">
+                                    <div class="rf-crit-label">
+                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.6 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>
+                                        <span>Ulaşım</span>
+                                    </div>
+                                    <div class="rf-crit-stars" data-crit="ulasim">
+                                        <span class="rf-crit-star" data-v="1">★</span>
+                                        <span class="rf-crit-star" data-v="2">★</span>
+                                        <span class="rf-crit-star" data-v="3">★</span>
+                                        <span class="rf-crit-star" data-v="4">★</span>
+                                        <span class="rf-crit-star" data-v="5">★</span>
+                                    </div>
+                                </div>
+
+                                <!-- Sosyal Hayat -->
+                                <div class="rf-crit-item" data-crit="sosyal">
+                                    <div class="rf-crit-label">
+                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                        <span>Sosyal Hayat</span>
+                                    </div>
+                                    <div class="rf-crit-stars" data-crit="sosyal">
+                                        <span class="rf-crit-star" data-v="1">★</span>
+                                        <span class="rf-crit-star" data-v="2">★</span>
+                                        <span class="rf-crit-star" data-v="3">★</span>
+                                        <span class="rf-crit-star" data-v="4">★</span>
+                                        <span class="rf-crit-star" data-v="5">★</span>
+                                    </div>
+                                </div>
+
+                                <!-- Akademik -->
+                                <div class="rf-crit-item" data-crit="egitim">
+                                    <div class="rf-crit-label">
+                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                                        <span>Akademik</span>
+                                    </div>
+                                    <div class="rf-crit-stars" data-crit="egitim">
+                                        <span class="rf-crit-star" data-v="1">★</span>
+                                        <span class="rf-crit-star" data-v="2">★</span>
+                                        <span class="rf-crit-star" data-v="3">★</span>
+                                        <span class="rf-crit-star" data-v="4">★</span>
+                                        <span class="rf-crit-star" data-v="5">★</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form__group">
-                            <label class="form__label">Etiketler (En fazla 3 adet)</label>
-                            <div id="form-tags" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
-                            <input type="hidden" id="form-tags-hidden" value="">
+                        <!-- 4. Bağlam Alanları: Bölüm, Sınıf, Burs Durumu -->
+                        <div class="rf-field rf-context-group">
+                            <div class="rf-label-wrap">
+                                <span class="rf-label">Öğrenim Bilgilerin</span>
+                                <span class="rf-opt-badge">İsteğe bağlı</span>
+                            </div>
+
+                            <div class="rf-context-grid">
+                                <!-- Bölüm Combobox -->
+                                <div class="rf-context-col">
+                                    <label class="rf-sublabel" for="rf-dept-input">Bölüm</label>
+                                    <div class="custom-select" id="custom-dept-select-form">
+                                        <div class="custom-select__trigger" tabindex="0">
+                                            <span class="custom-select__text">Bölüm seçin...</span>
+                                            <span class="custom-select__icon">▼</span>
+                                        </div>
+                                        <div class="custom-select__dropdown">
+                                            <input type="text" id="rf-dept-input" class="custom-select__search" placeholder="Bölüm ara..." aria-label="Bölüm ara">
+                                            <ul class="custom-select__options"></ul>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="form-dept-hidden" value="">
+                                </div>
+
+                                <!-- Sınıf -->
+                                <div class="rf-context-col">
+                                    <label class="rf-sublabel" for="form-class-select">Sınıf</label>
+                                    <select id="form-class-select" class="rf-select">
+                                        <option value="">Seçiniz...</option>
+                                        <option value="Hazırlık">Hazırlık</option>
+                                        <option value="1. Sınıf">1. Sınıf</option>
+                                        <option value="2. Sınıf">2. Sınıf</option>
+                                        <option value="3. Sınıf">3. Sınıf</option>
+                                        <option value="4. Sınıf">4. Sınıf</option>
+                                        <option value="Mezun">Mezun</option>
+                                    </select>
+                                </div>
+
+                                <!-- Burs Durumu -->
+                                <div class="rf-context-col">
+                                    <label class="rf-sublabel" for="form-scholarship-select">Burs Durumu</label>
+                                    <select id="form-scholarship-select" class="rf-select">
+                                        <option value="">Seçiniz...</option>
+                                        <option value="Burslu">Burslu</option>
+                                        <option value="Yarı Burslu (%50)">Yarı burslu</option>
+                                        <option value="Burssuz">Burssuz</option>
+                                        <option value="Belirtmek istemiyorum">Belirtmek istemiyorum</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
-                        <button type="submit" class="btn btn--primary" style="width: 100%;">Paylaş ✨</button>
-                        <div id="preview-container" style="margin-top: 20px;"></div>
+                        <!-- 5. İki Metin Alanı: Beğendiklerim & Geliştirilebilecek Yönler -->
+                        <div class="rf-field">
+                            <div class="rf-label-wrap">
+                                <label class="rf-label" for="form-pros">
+                                    Beğendiklerim <span class="rf-req" aria-label="zorunlu">*</span>
+                                </label>
+                                <span class="rf-hint-pill">Olumlu yönler</span>
+                            </div>
+                            <textarea id="form-pros" class="rf-textarea" rows="3"
+                                placeholder="Kampüsün, eğitimin, sosyal çevrenin veya olanakların en sevdiğin yanları..."></textarea>
+                        </div>
+
+                        <div class="rf-field">
+                            <div class="rf-label-wrap">
+                                <label class="rf-label" for="form-cons">
+                                    Geliştirilebilecek Yönler <span class="rf-req" aria-label="zorunlu">*</span>
+                                </label>
+                                <span class="rf-hint-pill">Gelişime açık alanlar</span>
+                            </div>
+                            <textarea id="form-cons" class="rf-textarea" rows="3"
+                                placeholder="Yetersiz bulduğun, eksik gördüğün ya da zorlandığın noktalar..."></textarea>
+                            
+                            <div class="rf-char-bar">
+                                <span id="rf-char-guidance" class="rf-char-guidance">Toplam en az 40 karakter yazmalısın.</span>
+                                <span id="char-count" class="rf-char-count">0 / 40 min</span>
+                            </div>
+                            <div class="rf-error" id="rf-text-error" aria-live="polite"></div>
+                        </div>
+
+                        <!-- 6. Etiketler (En fazla 3 adet, 44px dokunma alanı) -->
+                        <div class="rf-field">
+                            <div class="rf-label-wrap">
+                                <label class="rf-label">Konu Etiketleri</label>
+                                <span class="rf-counter-badge" id="rf-tag-count">0 / 3 seçildi</span>
+                            </div>
+                            <p class="rf-help">Yorumunun en çok hangi konulara odaklandığını belirt (en fazla 3 adet).</p>
+                            <div id="form-tags" class="rf-tags-container"></div>
+                            <input type="hidden" id="form-tags-hidden" value="">
+                            <div class="rf-error" id="rf-tags-error" aria-live="polite"></div>
+                        </div>
+
+                        <!-- 7. Güven & Moderasyon Uyarısı -->
+                        <div class="rf-trust-box">
+                            <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <p>
+                                Lütfen kişileri doğrudan adıyla hedef almayın ve kişisel iletişim bilgisi paylaşmayın.
+                                Gönderilen yorumlar topluluk güvenliği için moderasyon incelemesinden geçtikten sonra yayınlanır.
+                            </p>
+                        </div>
+
+                        <!-- 8. Zorunlu Onay Kutusu -->
+                        <div class="rf-field rf-consent-field">
+                            <label class="rf-checkbox-label" for="rf-consent">
+                                <input type="checkbox" id="rf-consent" class="rf-checkbox" required>
+                                <span class="rf-checkbox-text">
+                                    Bu yorum kendi gerçek deneyimimdir ve <a href="#/topluluk-kurallari" target="_blank" rel="noopener">Topluluk Kurallarını</a> kabul ediyorum.
+                                </span>
+                            </label>
+                            <div class="rf-error" id="rf-consent-error" aria-live="polite"></div>
+                        </div>
+
+                        <!-- 9. Submit Butonu -->
+                        <button type="submit" id="rf-submit-btn" class="btn btn--primary rf-submit-btn" disabled>
+                            Yorumu paylaş
+                        </button>
                     </form>
+
+                    <!-- Gönderim Sonrası Teşekkür Kartı (Başlangıçta gizli) -->
+                    <div id="rf-success-card" class="rf-success-card" hidden>
+                        <div class="rf-success-icon">✓</div>
+                        <h2 class="rf-success-title">Değerlendirmeniz Alındı!</h2>
+                        <p class="rf-success-desc">
+                            Okulun hakkında paylaştığın samimi deneyimler için teşekkür ederiz.
+                            Yorumun incelendikten sonra yayınlanacak ve aday öğrencilere rehberlik edecek.
+                        </p>
+                        <div class="rf-success-actions">
+                            <button type="button" id="rf-btn-new" class="btn btn--secondary">
+                                Başka bir okula yorum yaz
+                            </button>
+                            <a href="#/home" id="rf-btn-uni" class="btn btn--primary">
+                                Okul sayfasına dön
+                            </a>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Sağ Sütun: Geniş ekranda İpucu Kutusu -->
+                <aside class="rf-tips-sidebar" aria-label="İyi bir yorum yazma rehberi">
+                    <div class="rf-tips-card">
+                        <div class="rf-tips-header">
+                            <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            <h3>İyi bir yorum nasıl yazılır?</h3>
+                        </div>
+                        <ul class="rf-tips-list">
+                            <li>
+                                <strong>Somut deneyimler paylaş:</strong>
+                                <span>Sadece "iyiydi" demek yerine ders işleyişi, hocaların yaklaşımı veya yerleşke olanaklarından somut örnekler ver.</span>
+                            </li>
+                            <li>
+                                <strong>Dengeli ve tarafsız ol:</strong>
+                                <span>Okulun hem takdir ettiğin güçlü yanlarına hem de geliştirilmesi gereken eksikliklerine değin.</span>
+                            </li>
+                            <li>
+                                <strong>Aday öğrencileri düşün:</strong>
+                                <span>Tercih listesi hazırlarken bilseydim çok işime yarardı dediğin pratik detayları aktar.</span>
+                            </li>
+                            <li>
+                                <strong>Kişiselleştirme:</strong>
+                                <span>Akademisyenleri veya öğrencileri isim vererek hedef alma; genel sisteme ve olanaklara odaklan.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
             </div>
         </main>
     `,
@@ -520,7 +948,7 @@ export const TEMPLATES = {
                         </div>
 
                         <!-- 4-Column Counter Strip -->
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6 pt-6 border-t border-zinc-800/80" aria-label="Profil istatistikleri">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6 pt-6 border-t border-zinc-800/80" data-stagger="70" aria-label="Profil istatistikleri">
                             <div class="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-3.5">
                                 <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
                                     <i data-lucide="message-square" class="w-5 h-5"></i>
@@ -740,7 +1168,7 @@ export const TEMPLATES = {
                     </div>
 
                     <!-- SAĞ YAN PANEL (SIDEBAR - %30 -> 4 Sütun) -->
-                    <aside class="lg:col-span-4 space-y-6">
+                    <aside data-stagger="100" class="lg:col-span-4 space-y-6">
 
                         <!-- Widget 1: Hızlı Özet İstatistik & Profil Doluluk Kartı -->
                         <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 space-y-5">
@@ -840,7 +1268,7 @@ export const TEMPLATES = {
                 <div class="auth-shape auth-shape-2"></div>
             </div>
 
-            <div class="auth-glass-card">
+            <div class="auth-glass-card" data-anim="zoom-in">
                 <div class="auth-header">
                     <span class="auth-header__icon">🎓</span>
                     <h1 class="auth-header__title">Kampüs Sesi</h1>
@@ -1117,7 +1545,7 @@ export const TEMPLATES = {
                         <span class="text-xs text-zinc-500" id="blog-articles-count">6 rehber listeleniyor</span>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="blog-articles-grid">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="blog-articles-grid" data-stagger="80">
                         <!-- Kart 1: Burs & Barınma -->
                         <article class="ks-blog-card group flex flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-950/30" data-category="burs-barinma" data-post-id="grid-1">
                             <div class="relative aspect-video w-full overflow-hidden bg-zinc-950">
@@ -1394,7 +1822,7 @@ export const TEMPLATES = {
 
             <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Baslik & Hero -->
-                <div class="text-center mb-16">
+                <div data-anim="fade-up" class="text-center mb-16">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
                         <i data-lucide="shield-check" class="w-3.5 h-3.5 text-cyan-400"></i>
                         <span>Doğruluk, Şeffaflık & Bağımsızlık</span>
@@ -1408,7 +1836,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- 4 Temel Ilke Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <div data-stagger="110" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                     <!-- 1. Tarafsızlık ve Şeffaflık -->
                     <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 hover:border-zinc-700 transition-all duration-200">
                         <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-5">
@@ -1480,7 +1908,7 @@ export const TEMPLATES = {
 
             <div class="relative z-10 max-w-2xl mx-auto px-4 sm:px-6">
                 <!-- Baslik & Hero -->
-                <div class="text-center mb-10">
+                <div data-anim="fade-up" class="text-center mb-10">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-4 backdrop-blur-md">
                         <i data-lucide="building-2" class="w-3.5 h-3.5 text-cyan-400"></i>
                         <span>Veritabanı Katkısı</span>
@@ -1558,7 +1986,7 @@ export const TEMPLATES = {
 
             <div class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6">
                 <!-- Baslik & Hero -->
-                <div class="text-center mb-10">
+                <div data-anim="fade-up" class="text-center mb-10">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-4 backdrop-blur-md">
                         <i data-lucide="pen-tool" class="w-3.5 h-3.5 text-cyan-400"></i>
                         <span>Blog & Rehber Katkısı</span>
@@ -1658,7 +2086,7 @@ export const TEMPLATES = {
 
             <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Baslik & Hero -->
-                <div class="text-center mb-16">
+                <div data-anim="fade-up" class="text-center mb-16">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
                         <i data-lucide="users" class="w-3.5 h-3.5 text-cyan-400"></i>
                         <span>Güvenli & Saygılı Topluluk</span>
@@ -1672,7 +2100,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- 4 Temel Kural Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <div data-stagger="110" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                     <!-- 1. Sıfır Tolerans (Nefret Söylemi & Tehdit) -->
                     <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 hover:border-zinc-700 transition-all duration-200">
                         <div class="w-12 h-12 rounded-xl bg-red-950/60 border border-red-500/30 text-red-400 flex items-center justify-center mb-5">
@@ -1741,7 +2169,7 @@ export const TEMPLATES = {
 
             <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Baslik & Hero -->
-                <div class="text-center mb-16">
+                <div data-anim="fade-up" class="text-center mb-16">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
                         <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cyan-400"></i>
                         <span>Öğrenciden Öğrenciye Gerçek Kampüs Rehberi</span>
@@ -1755,7 +2183,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Misyon & Vizyon -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+                <div data-stagger="110" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
                     <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8 hover:border-zinc-700 transition-all">
                         <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-5">
                             <i data-lucide="target" class="w-6 h-6"></i>
@@ -1780,7 +2208,7 @@ export const TEMPLATES = {
                 <!-- Ilkelerimiz (3 Kolon) -->
                 <div class="mb-16">
                     <h3 class="text-xl font-bold text-white mb-6 text-center">İlkelerimiz</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                    <div data-stagger="110" class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                         <div class="rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-6 text-center">
                             <div class="w-10 h-10 mx-auto rounded-lg bg-zinc-800 text-cyan-400 flex items-center justify-center mb-3">
                                 <i data-lucide="eye" class="w-5 h-5"></i>
@@ -1808,21 +2236,21 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Sayaç Bandı -->
-                <div class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center" data-stagger="100">
                     <div>
-                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);">200+</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);" data-counter="200" data-counter-suffix="+">200+</div>
                         <div class="text-xs text-zinc-400">Üniversite</div>
                     </div>
                     <div>
-                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);">1.560+</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);" data-counter="1560" data-counter-suffix="+">1.560+</div>
                         <div class="text-xs text-zinc-400">KYK Yurdu</div>
                     </div>
                     <div>
-                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);">15.000+</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);" data-counter="15000" data-counter-suffix="+">15.000+</div>
                         <div class="text-xs text-zinc-400">Öğrenci Yorumu</div>
                     </div>
                     <div>
-                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);">81 İl</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 mb-1" style="font-family: var(--font-heading);" data-counter="81" data-counter-suffix=" İl">81 İl</div>
                         <div class="text-xs text-zinc-400">Tüm Türkiye</div>
                     </div>
                 </div>
@@ -1837,7 +2265,7 @@ export const TEMPLATES = {
 
             <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Baslik & Hero -->
-                <div class="text-center mb-14">
+                <div data-anim="fade-up" class="text-center mb-14">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-4 backdrop-blur-md">
                         <i data-lucide="mail" class="w-3.5 h-3.5 text-cyan-400"></i>
                         <span>Her Zaman Yanındayız</span>
@@ -1965,7 +2393,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Baslik & Hero -->
-                <div class="text-center mb-14">
+                <div data-anim="fade-up" class="text-center mb-14">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
                         <i data-lucide="shield-check" class="w-3.5 h-3.5 text-cyan-400"></i>
                         <span>6698 Sayılı KVKK & Veri Güvenliği</span>
@@ -1979,7 +2407,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Yasal Metin Kartlari (h1, h2, p formatinda) -->
-                <div class="space-y-6 legal-document-content">
+                <div data-stagger="70" class="space-y-6 legal-document-content">
                     <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
@@ -2098,7 +2526,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Baslik & Hero -->
-                <div class="text-center mb-14">
+                <div data-anim="fade-up" class="text-center mb-14">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
                         <i data-lucide="cookie" class="w-3.5 h-3.5 text-cyan-400"></i>
                         <span>6698 Sayılı KVKK · Şeffaf Çerez & Yerel Depolama Yönetimi</span>
@@ -2112,7 +2540,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Yasal Metin Kartlari (h1, h2, p formatinda) -->
-                <div class="space-y-6 legal-document-content">
+                <div data-stagger="70" class="space-y-6 legal-document-content">
                     <!-- 1. Çerez ve Yerel Depolama Nedir? -->
                     <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
                         <div class="flex items-center gap-3 mb-4">
@@ -2194,7 +2622,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Baslik & Hero -->
-                <div class="text-center mb-14">
+                <div data-anim="fade-up" class="text-center mb-14">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-5 backdrop-blur-md">
                         <i data-lucide="scale" class="w-3.5 h-3.5 text-cyan-400"></i>
                         <span>5651 Sayılı Kanun · Yer Sağlayıcı & Uyar-Kaldır</span>
@@ -2208,7 +2636,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Yasal Metin Kartlari (h1, h2, p formatinda) -->
-                <div class="space-y-6 legal-document-content">
+                <div data-stagger="70" class="space-y-6 legal-document-content">
                     <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 sm:p-8">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
@@ -2310,7 +2738,7 @@ export const TEMPLATES = {
 
             <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Header -->
-                <div class="text-center mb-12">
+                <div data-anim="fade-up" class="text-center mb-12">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-rose-300 mb-4 backdrop-blur-md">
                         <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-400"></i>
                         <span>Kişisel Listen</span>
@@ -2324,10 +2752,10 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Favoriler Grid Konteyneri -->
-                <div id="favorites-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="col-span-full py-16 text-center text-zinc-500">
-                        Favoriler yükleniyor...
-                    </div>
+                <div id="favorites-container" data-stagger="80" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="skeleton h-44 rounded-2xl"></div>
+                    <div class="skeleton h-44 rounded-2xl"></div>
+                    <div class="skeleton h-44 rounded-2xl"></div>
                 </div>
             </div>
         </main>
@@ -2341,7 +2769,7 @@ export const TEMPLATES = {
 
             <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Header -->
-                <div class="text-center mb-12">
+                <div data-anim="fade-up" class="text-center mb-12">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-4 backdrop-blur-md">
                         <i data-lucide="map-pin" class="w-3.5 h-3.5 text-cyan-400"></i>
                         <span>81 İl · Üniversite & Şehir Rehberi</span>
@@ -2371,7 +2799,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- City Cards Grid Container -->
-                <div id="cities-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div id="cities-grid" data-stagger="80" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Rendered dynamically via initCitiesPage -->
                 </div>
             </div>
@@ -2427,7 +2855,7 @@ export const TEMPLATES = {
 
             <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Header -->
-                <div class="text-center mb-12">
+                <div data-anim="fade-up" class="text-center mb-12">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-amber-300 mb-4 backdrop-blur-md">
                         <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-400"></i>
                         <span>2026 Öğrenci Memnuniyeti & Üniversite Liderleri</span>
@@ -2441,7 +2869,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Top 3 Podium Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12" id="top-podium-cards">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12" id="top-podium-cards" data-stagger="80">
                     <!-- Rendered dynamically via initRankingPage -->
                 </div>
 
@@ -2462,7 +2890,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Ranking List Table / Cards -->
-                <div id="ranking-list" class="space-y-3">
+                <div id="ranking-list" data-stagger="80" class="space-y-3">
                     <!-- Populated dynamically via initRankingPage -->
                 </div>
             </div>
@@ -2476,7 +2904,7 @@ export const TEMPLATES = {
 
             <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Header -->
-                <div class="text-center mb-12">
+                <div data-anim="fade-up" class="text-center mb-12">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/10 text-cyan-300 mb-4 backdrop-blur-md">
                         <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-cyan-400"></i>
                         <span>Lisans & Önlisans Bölüm Rehberi</span>
@@ -2507,7 +2935,7 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- Departments Grid -->
-                <div id="departments-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div id="departments-grid" data-stagger="80" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Rendered dynamically via initDepartmentsPage -->
                 </div>
             </div>

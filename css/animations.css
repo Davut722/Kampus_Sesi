@@ -1,0 +1,499 @@
+/* ==========================================================================
+   Kampüs Sesi — Merkezi Animasyon Altyapısı (animations.css)
+   --------------------------------------------------------------------------
+   Tetikleme: data-attribute'lar (js/animations.js bağlar)
+     data-anim="fade-up|fade-in|zoom-in|slide-left|slide-right"
+     data-anim-delay="120"      (ms)
+     data-stagger[="90"]        (ebeveyn; çocuklar sırayla belirir, ms adım)
+     data-counter="1250"        (+ data-counter-suffix / -prefix / -decimals)
+     data-tilt                  (3D tilt + kenar glow)
+     data-split="words"         (başlık kelime kelime blur-in)
+     data-bar="82"              (yüzde; soldan büyüyen bar)
+     data-typewriter="a|b|c"    (input placeholder daktilo)
+     data-spotlight             (fare takipli ışık, yalnız masaüstü)
+     data-aurora="1|2|3"        (yavaş akan arka plan blob'u)
+     data-glow-border           (dönen ışık kenarlığı)
+     data-search-glow           (focus-within glow)
+     data-btn-shine             (ok kayması + shimmer + basılma)
+   Kural: animasyon yalnızca transform + opacity ile yapılır.
+   İstisnalar (görsel gereği, küçük/izole): hero başlığı blur-in (filter) ve
+   akan gradient yazı (background-position), sayaç metni.
+   Başlangıç gizleme yalnızca <html class="js-anim"> iken uygulanır.
+   ========================================================================== */
+
+:root {
+    /* Süre / easing */
+    --anim-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --anim-ease-inout: cubic-bezier(0.45, 0, 0.55, 1);
+    --anim-dur: 700ms;
+    --anim-dur-fast: 450ms;
+    --anim-dur-slow: 800ms;
+    --anim-leave: 400ms;
+    --anim-shift: 28px;
+    --anim-word-step: 90ms;
+
+    /* Renkler: tema değişkenlerinden gelir (glow/gradient yok) */
+    --anim-accent: var(--color-accent);
+    --anim-accent-2: var(--color-accent);
+    --anim-accent-3: var(--color-accent);
+    --anim-glow: transparent;
+    --anim-spot: transparent;
+    --anim-nav-shadow: transparent;
+    --anim-shimmer: color-mix(in srgb, var(--color-text) 7%, transparent);
+    --anim-shimmer-accent: color-mix(in srgb, var(--color-accent) 9%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   1. TEMEL SCROLL-REVEAL  (data-anim)
+   -------------------------------------------------------------------------- */
+.js-anim [data-anim] {
+    opacity: 0;
+    transition:
+        opacity var(--anim-dur) var(--anim-ease) var(--anim-delay, 0ms),
+        transform var(--anim-dur) var(--anim-ease) var(--anim-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+.js-anim [data-anim="fade-up"]     { transform: translate3d(0, var(--anim-shift), 0); }
+.js-anim [data-anim="fade-in"]     { transform: none; }
+.js-anim [data-anim="zoom-in"]     { transform: scale(0.92); }
+.js-anim [data-anim="slide-left"]  { transform: translate3d(calc(var(--anim-shift) * -1.8), 0, 0); }
+.js-anim [data-anim="slide-right"] { transform: translate3d(calc(var(--anim-shift) * 1.8), 0, 0); }
+
+.js-anim [data-anim].is-in {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+/* Eski .card animasyonu (cardFadeIn, fill: both) opacity/transform'u kilitliyor */
+.js-anim .card[data-anim] { animation: none; }
+
+/* --------------------------------------------------------------------------
+   2. SAYFA GEÇİŞLERİ  (#app-root)
+   -------------------------------------------------------------------------- */
+.anim-leaving {
+    opacity: 0;
+    transform: translate3d(0, -6px, 0);
+    transition: opacity var(--anim-leave) var(--anim-ease), transform var(--anim-leave) var(--anim-ease);
+    pointer-events: none;
+}
+
+.anim-page-enter {
+    animation: animPageEnter var(--anim-dur-fast) var(--anim-ease) backwards;
+}
+
+@keyframes animPageEnter {
+    from { opacity: 0; transform: translate3d(0, 14px, 0); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Aynı anda iki giriş animasyonu olmasın */
+.js-anim .page-view { animation: none; }
+
+/* --------------------------------------------------------------------------
+   3. HERO: kelime kelime blur-in, akan gradient, dönen kenarlık, aurora
+   -------------------------------------------------------------------------- */
+.anim-word {
+    display: inline-block;
+    white-space: pre;
+    opacity: 0;
+    transform: translate3d(0, 0.35em, 0);
+    transition:
+        opacity var(--anim-dur) var(--anim-ease),
+        transform var(--anim-dur) var(--anim-ease);
+    transition-delay: calc(var(--anim-delay, 0ms) + var(--w, 0) * var(--anim-word-step));
+    will-change: opacity, transform;
+}
+
+.js-anim [data-split].is-in .anim-word {
+    opacity: 1;
+    transform: none;
+}
+
+.js-anim [data-split].anim-words-done .anim-word {
+    will-change: auto;
+    transition: none;
+}
+
+.anim-word__inner {
+    display: inline-block;
+}
+
+/* Gradient yazı: ebeveyn gradient'i kapatılır, her kelime kendi gradient'ini akıtır */
+.anim-word-group {
+    background: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+    text-shadow: none !important;
+}
+
+.anim-word--grad,
+.anim-word--grad .anim-word__inner {
+    text-shadow: none !important;
+}
+
+.js-anim .anim-word--grad .anim-word__inner {
+    background-image: linear-gradient(100deg, #38bdf8 0%, #a5f3fc 25%, #ffffff 50%, #67e8f9 75%, #38bdf8 100%);
+    background-size: 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.85));
+    animation: animGradFlow 5s linear infinite;
+    animation-delay: calc(var(--w, 0) * -0.5s);
+}
+
+@keyframes animGradFlow {
+    from { background-position: 0% 50%; }
+    to   { background-position: 250% 50%; }
+}
+
+/* Dönen ışık kenarlığı (rozet) */
+.js-anim [data-glow-border] {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.js-anim [data-glow-border]::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 220%;
+    aspect-ratio: 1;
+    margin: -110% 0 0 -110%;
+    background: conic-gradient(from 0deg, transparent 0 62%, var(--anim-accent) 80%, var(--anim-accent-3) 90%, transparent 100%);
+    animation: animSpin 4.5s linear infinite;
+    z-index: -2;
+}
+
+.js-anim [data-glow-border]::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    background: var(--color-bg, #09090b);
+    z-index: -1;
+}
+
+@keyframes animSpin { to { transform: rotate(360deg); } }
+
+/* Aurora blob'ları */
+.js-anim [data-aurora] { will-change: transform; }
+.js-anim [data-aurora="1"] { animation: animAurora1 24s var(--anim-ease-inout) infinite alternate; }
+.js-anim [data-aurora="2"] { animation: animAurora2 28s var(--anim-ease-inout) infinite alternate; }
+.js-anim [data-aurora="3"] { animation: animAurora3 32s var(--anim-ease-inout) infinite alternate; }
+
+@keyframes animAurora1 {
+    0%   { transform: translate3d(0, 0, 0) scale(1); }
+    50%  { transform: translate3d(70px, 40px, 0) scale(1.15); }
+    100% { transform: translate3d(-30px, 80px, 0) scale(0.95); }
+}
+@keyframes animAurora2 {
+    0%   { transform: translate3d(0, 0, 0) scale(1.05); }
+    50%  { transform: translate3d(-80px, 50px, 0) scale(0.92); }
+    100% { transform: translate3d(40px, -30px, 0) scale(1.12); }
+}
+/* 3. blob'da tailwind -translate-x-1/2 var; animasyon onu ezdiği için -50% korunur */
+@keyframes animAurora3 {
+    0%   { transform: translate3d(-50%, 0, 0) scale(1); }
+    50%  { transform: translate3d(calc(-50% + 60px), 30px, 0) scale(1.1); }
+    100% { transform: translate3d(calc(-50% - 50px), -20px, 0) scale(0.94); }
+}
+
+/* Fare imlecini takip eden spotlight (yalnız masaüstü) */
+.anim-spotlight {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--anim-spot), rgba(56, 189, 248, 0.04) 42%, transparent 70%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity 0.6s var(--anim-ease), transform 0.35s var(--anim-ease);
+    will-change: transform, opacity;
+}
+.anim-spotlight.is-on { opacity: 1; }
+
+/* --------------------------------------------------------------------------
+   4. ARAMA KUTUSU & BUTON
+   -------------------------------------------------------------------------- */
+.js-anim [data-search-glow] { isolation: isolate; }
+
+.js-anim [data-search-glow]::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(120deg, var(--anim-accent), var(--anim-accent-3));
+    filter: blur(18px);
+    opacity: 0;
+    transform: scale(0.97);
+    transition: opacity var(--anim-dur-fast) var(--anim-ease), transform var(--anim-dur-fast) var(--anim-ease);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.js-anim [data-search-glow]:focus-within::before {
+    opacity: 0.55;
+    transform: scale(1.01);
+}
+
+.js-anim [data-btn-shine] {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.js-anim [data-btn-shine]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+    transform: translate3d(-130%, 0, 0) skewX(-18deg);
+    pointer-events: none;
+}
+
+.js-anim [data-btn-shine]:hover::after { animation: animShine 0.9s var(--anim-ease); }
+
+@keyframes animShine {
+    from { transform: translate3d(-130%, 0, 0) skewX(-18deg); }
+    to   { transform: translate3d(130%, 0, 0) skewX(-18deg); }
+}
+
+.js-anim [data-btn-shine] svg { transition: transform var(--anim-dur-fast) var(--anim-ease); }
+.js-anim [data-btn-shine]:hover svg { transform: translate3d(5px, 0, 0); }
+.js-anim [data-btn-shine]:active { transform: scale(0.96); }
+
+/* --------------------------------------------------------------------------
+   5. NAVBAR: scroll glass + gölge, kayan aktif çizgi, scroll progress
+   -------------------------------------------------------------------------- */
+.js-anim .nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    box-shadow: 0 12px 32px var(--anim-nav-shadow);
+    opacity: 0;
+    transition: opacity var(--anim-dur-fast) var(--anim-ease);
+}
+.js-anim .nav.nav--scrolled::before { opacity: 1; }
+
+.js-anim .nav::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, var(--anim-accent), transparent);
+    opacity: 0;
+    transition: opacity var(--anim-dur-fast) var(--anim-ease);
+}
+.js-anim .nav.nav--scrolled::after { opacity: 0.35; }
+
+.nav__links { position: relative; }
+
+.nav__indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--anim-accent), var(--anim-accent-2));
+    transform-origin: 0 50%;
+    transform: translate3d(var(--ind-x, 0px), 0, 0) scaleX(var(--ind-w, 0));
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform;
+    transition: transform var(--anim-dur-fast) var(--anim-ease), opacity 0.3s ease;
+}
+.nav__indicator.is-ready { opacity: 1; }
+.nav__indicator.no-anim { transition: none; }
+
+/* Kayan çizgi devredeyken tekil link alt çizgisini gizle */
+.nav__links--indicator .nav__link--active::after { opacity: 0; }
+
+.anim-scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    z-index: 10000;
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--anim-accent), var(--anim-accent-2), var(--anim-accent-3));
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   6. KARTLAR: 3D tilt + kenar glow
+   -------------------------------------------------------------------------- */
+.js-anim [data-tilt]:not([data-anim]) {
+    transform-style: preserve-3d;
+    transition:
+        transform var(--anim-dur-fast) var(--anim-ease),
+        border-color 0.25s ease,
+        background-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.anim-tilt-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 2;
+    opacity: var(--tilt-o, 0);
+    transition: opacity 0.35s var(--anim-ease);
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), var(--anim-spot), transparent 60%);
+}
+
+.anim-tilt-glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), var(--anim-accent), rgba(129, 140, 248, 0.35) 45%, transparent 70%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+}
+
+/* --------------------------------------------------------------------------
+   7. SKELETON (shimmer) + yıldız dolumu + barlar
+   -------------------------------------------------------------------------- */
+.skeleton,
+.anim-skeleton {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-surface, #18181b);
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.06));
+    border-radius: 12px;
+    color: transparent !important;
+    user-select: none;
+    pointer-events: none;
+}
+.skeleton * { visibility: hidden; }
+
+.skeleton::after,
+.anim-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translate3d(-100%, 0, 0);
+    background: linear-gradient(90deg, transparent 0%, var(--anim-shimmer) 35%, var(--anim-shimmer-accent) 50%, var(--anim-shimmer) 65%, transparent 100%);
+    animation: animShimmer 1.6s linear infinite;
+    will-change: transform;
+}
+
+@keyframes animShimmer { to { transform: translate3d(100%, 0, 0); } }
+
+.anim-skel-card { pointer-events: none; }
+.anim-skel-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.anim-skel-avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
+.anim-skel-line { display: block; height: 12px; border-radius: 6px; margin-bottom: 10px; }
+.anim-skel-line.w25 { width: 25%; }
+.anim-skel-line.w40 { width: 40%; }
+.anim-skel-line.w70 { width: 70%; }
+.anim-skel-line.w100 { width: 100%; }
+
+/* Yıldızlar sırayla dolar (JS .stars öğelerine data-anim-stars ekler) */
+.js-anim [data-anim-stars] .stars__item--filled {
+    opacity: 0.12;
+    transform: scale(0.4) rotate(-25deg);
+    transition:
+        opacity var(--anim-dur-fast) var(--anim-ease),
+        transform var(--anim-dur-fast) var(--anim-ease);
+    transition-delay: calc(var(--anim-delay, 0ms) + var(--star-i, 0) * 90ms);
+}
+.js-anim [data-anim-stars].is-in .stars__item--filled {
+    opacity: 1;
+    transform: none;
+}
+
+/* Soldan büyüyen bar (yalnızca transform) */
+.cmp-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-border, rgba(255, 255, 255, 0.08));
+    overflow: hidden;
+    margin: 6px 0 12px;
+}
+.cmp-bar__fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--anim-accent), var(--anim-accent-2));
+}
+.js-anim [data-bar] {
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    transition: transform var(--anim-dur-slow) var(--anim-ease) var(--anim-delay, 0ms);
+    will-change: transform;
+}
+.js-anim [data-bar].is-in { transform: scaleX(var(--bar-scale, 1)); }
+
+/* --------------------------------------------------------------------------
+   8. DROPDOWN / MODAL: scale + fade
+   -------------------------------------------------------------------------- */
+.js-anim .custom-select__dropdown {
+    transform: translate3d(0, -8px, 0) scale(0.97);
+    transform-origin: 50% 0;
+    transition:
+        opacity var(--anim-dur-fast) var(--anim-ease),
+        transform var(--anim-dur-fast) var(--anim-ease),
+        visibility 0s linear var(--anim-dur-fast);
+}
+.js-anim .custom-select.open .custom-select__dropdown {
+    transform: none;
+    transition-delay: 0s;
+}
+
+/* --------------------------------------------------------------------------
+   9. RESPONSIVE + ERİŞİLEBİLİRLİK
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .anim-spotlight,
+    .anim-tilt-glow { display: none !important; }
+    :root { --anim-shift: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js-anim [data-anim],
+    .js-anim [data-anim].is-in {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    .js-anim [data-split] .anim-word__inner {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+    }
+    .js-anim .anim-word--grad .anim-word__inner,
+    .js-anim [data-aurora],
+    .js-anim [data-glow-border]::before,
+    .anim-page-enter,
+    .skeleton::after,
+    .anim-skeleton::after { animation: none !important; }
+    .js-anim [data-anim-stars] .stars__item--filled { opacity: 1; transform: none; transition: none; }
+    .js-anim [data-bar] { transform: scaleX(var(--bar-scale, 1)); transition: none; }
+    .anim-spotlight,
+    .anim-tilt-glow,
+    .anim-scroll-progress { display: none !important; }
+    .anim-leaving { transition: none; opacity: 1; transform: none; pointer-events: auto; }
+    .nav__indicator { transition: none; }
+}

@@ -2024,6 +2024,168 @@ input:focus, select:focus, textarea:focus,
    University Detail Page (Editorial Redesign)
    ========================================================================== */
 
+/* Top Bar & Breadcrumb */
+.uni-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.uni-top-bar .ed-breadcrumb {
+  margin-bottom: 0;
+  flex: 1;
+  min-width: 260px;
+}
+
+/* University Search Combobox */
+.uni-search-combobox {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+}
+@media (max-width: 768px) {
+  .uni-search-combobox {
+    max-width: 100%;
+  }
+}
+.uni-search-combobox__input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.uni-search-combobox__icon {
+  position: absolute;
+  left: 12px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+.uni-search-combobox__input {
+  width: 100%;
+  padding: 8px 32px 8px 34px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 8px);
+  color: var(--color-text);
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+.uni-search-combobox__input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+  border-color: var(--color-accent);
+  background: var(--color-surface);
+}
+.uni-search-combobox__input::placeholder {
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+.uni-search-combobox__clear {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 0.15s ease;
+}
+.uni-search-combobox__clear:hover {
+  color: var(--color-text);
+}
+
+/* Combobox Dropdown Suggestions List */
+.uni-search-combobox__dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 320px;
+  overflow-y: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 10px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  list-style: none;
+  padding: 6px;
+  margin: 0;
+}
+.uni-search-combobox__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--color-text);
+  transition: all 0.15s ease;
+}
+.uni-search-combobox__item-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.uni-search-combobox__item-icon {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+.uni-search-combobox__item-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.uni-search-combobox__item-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+.uni-search-combobox__item--active,
+.uni-search-combobox__item:hover {
+  background: rgba(217, 72, 15, 0.08);
+  color: var(--color-accent);
+}
+.uni-search-combobox__item--active .uni-search-combobox__item-icon,
+.uni-search-combobox__item:hover .uni-search-combobox__item-icon {
+  color: var(--color-accent);
+}
+.uni-search-combobox__item--active .uni-search-combobox__item-badge,
+.uni-search-combobox__item:hover .uni-search-combobox__item-badge {
+  background: rgba(217, 72, 15, 0.15);
+  border-color: rgba(217, 72, 15, 0.3);
+}
+.uni-search-combobox__mark {
+  background: transparent;
+  color: var(--color-accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(217, 72, 15, 0.4);
+}
+.uni-search-combobox__empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  font-size: 0.84rem;
+  color: var(--color-text-muted);
+  justify-content: center;
+}
+
 /* Breadcrumb */
 .ed-breadcrumb {
   display: flex;

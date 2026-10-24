@@ -192,16 +192,42 @@ export const TEMPLATES = {
 
     university: `
         <main class="container page-view uni-page-view">
-            <!-- 1. Breadcrumb -->
-            <nav class="ed-breadcrumb" aria-label="Sayfa Konumu">
-                <a href="#/home" class="ed-breadcrumb__link">Ana Sayfa</a>
-                <span class="ed-breadcrumb__sep">/</span>
-                <a href="#/ranking" class="ed-breadcrumb__link">Üniversiteler</a>
-                <span class="ed-breadcrumb__sep">/</span>
-                <span class="ed-breadcrumb__text" id="uni-bc-city">Balıkesir</span>
-                <span class="ed-breadcrumb__sep">/</span>
-                <span class="ed-breadcrumb__current" id="uni-bc-name">Bandırma Onyedi Eylül Üniversitesi</span>
-            </nav>
+            <!-- 1. Breadcrumb & University Search Combobox -->
+            <div class="uni-top-bar">
+                <nav class="ed-breadcrumb" aria-label="Sayfa Konumu">
+                    <a href="#/home" class="ed-breadcrumb__link">Ana Sayfa</a>
+                    <span class="ed-breadcrumb__sep">/</span>
+                    <a href="#/ranking" class="ed-breadcrumb__link">Üniversiteler</a>
+                    <span class="ed-breadcrumb__sep">/</span>
+                    <span class="ed-breadcrumb__text" id="uni-bc-city">Balıkesir</span>
+                    <span class="ed-breadcrumb__sep">/</span>
+                    <span class="ed-breadcrumb__current" id="uni-bc-name">Bandırma Onyedi Eylül Üniversitesi</span>
+                </nav>
+
+                <div class="uni-search-combobox" id="uni-search-combobox">
+                    <div class="uni-search-combobox__input-wrap">
+                        <i data-lucide="search" class="icon-xs uni-search-combobox__icon"></i>
+                        <input type="text"
+                               id="uni-combobox-input"
+                               class="uni-search-combobox__input"
+                               placeholder="Başka üniversite ara... (örn. ODTÜ, İTÜ, Boğaziçi)"
+                               autocomplete="off"
+                               role="combobox"
+                               aria-expanded="false"
+                               aria-autocomplete="list"
+                               aria-controls="uni-combobox-listbox"
+                               aria-label="Başka üniversite ara">
+                        <button type="button" class="uni-search-combobox__clear" id="uni-combobox-clear" aria-label="Aramayı temizle" style="display: none;">
+                            <i data-lucide="x" class="icon-xs"></i>
+                        </button>
+                    </div>
+                    <ul id="uni-combobox-listbox"
+                        class="uni-search-combobox__dropdown"
+                        role="listbox"
+                        style="display: none;">
+                    </ul>
+                </div>
+            </div>
 
             <!-- 2. Hero Card -->
             <header class="ed-uni-hero" id="uni-hero">

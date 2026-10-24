@@ -1945,6 +1945,379 @@ function initUniversityPage(initialUni) {
         }
     }
 
+    // Initialize University Search Combobox with Keyboard Navigation & Acronym Support
+    function initUniCombobox() {
+        const input = document.getElementById('uni-combobox-input');
+        const listbox = document.getElementById('uni-combobox-listbox');
+        const clearBtn = document.getElementById('uni-combobox-clear');
+        if (!input || !listbox) return;
+
+        const uniList = (typeof TURKISH_UNIVERSITIES !== 'undefined' && Array.isArray(TURKISH_UNIVERSITIES))
+            ? TURKISH_UNIVERSITIES
+            : Object.keys(UNI_DETAILS);
+
+        const ACRONYM_MAP = {
+            'odtu': 'Orta Doğu Teknik Üniversitesi (ODTÜ)',
+            'odtü': 'Orta Doğu Teknik Üniversitesi (ODTÜ)',
+            'itu': 'İstanbul Teknik Üniversitesi (İTÜ)',
+            'itü': 'İstanbul Teknik Üniversitesi (İTÜ)',
+            'ytu': 'Yıldız Teknik Üniversitesi (YTÜ)',
+            'ytü': 'Yıldız Teknik Üniversitesi (YTÜ)',
+            'boun': 'Boğaziçi Üniversitesi',
+            'bogazici': 'Boğaziçi Üniversitesi',
+            'boğaziçi': 'Boğaziçi Üniversitesi',
+            'hacettepe': 'Hacettepe Üniversitesi',
+            'deu': 'Dokuz Eylül Üniversitesi',
+            'deü': 'Dokuz Eylül Üniversitesi',
+            'ege': 'Ege Üniversitesi',
+            'iu': 'İstanbul Üniversitesi',
+            'iü': 'İstanbul Üniversitesi',
+            'iuc': 'İstanbul Üniversitesi-Cerrahpaşa',
+            'iüc': 'İstanbul Üniversitesi-Cerrahpaşa',
+            'marmara': 'Marmara Üniversitesi',
+            'gtu': 'Gebze Teknik Üniversitesi',
+            'gtü': 'Gebze Teknik Üniversitesi',
+            'iyte': 'İzmir Yüksek Teknoloji Enstitüsü (İYTE)',
+            'anadolu': 'Anadolu Üniversitesi',
+            'tobb': 'TOBB Ekonomi ve Teknoloji Üniversitesi',
+            'koc': 'Koç Üniversitesi',
+            'koç': 'Koç Üniversitesi',
+            'sabanci': 'Sabancı Üniversitesi',
+            'sabancı': 'Sabancı Üniversitesi',
+            'bilkent': 'İhsan Doğramacı Bilkent Üniversitesi',
+            'sau': 'Sakarya Üniversitesi',
+            'saü': 'Sakarya Üniversitesi',
+            'gazi': 'Gazi Üniversitesi',
+            'baun': 'Balıkesir Üniversitesi',
+            'baün': 'Balıkesir Üniversitesi',
+            'banu': 'Bandırma Onyedi Eylül Üniversitesi',
+            'banü': 'Bandırma Onyedi Eylül Üniversitesi',
+            'ktu': 'Karadeniz Teknik Üniversitesi',
+            'ktü': 'Karadeniz Teknik Üniversitesi',
+            'esogu': 'Eskişehir Osmangazi Üniversitesi',
+            'esogü': 'Eskişehir Osmangazi Üniversitesi',
+            'pau': 'Pamukkale Üniversitesi',
+            'paü': 'Pamukkale Üniversitesi',
+            'msku': 'Muğla Sıtkı Koçman Üniversitesi',
+            'mskü': 'Muğla Sıtkı Koçman Üniversitesi',
+            'adu': 'Aydın Adnan Menderes Üniversitesi',
+            'adü': 'Aydın Adnan Menderes Üniversitesi',
+            'comu': 'Çanakkale Onsekiz Mart Üniversitesi',
+            'çomü': 'Çanakkale Onsekiz Mart Üniversitesi',
+            'beun': 'Zonguldak Bülent Ecevit Üniversitesi',
+            'beün': 'Zonguldak Bülent Ecevit Üniversitesi',
+            'omu': 'Ondokuz Mayıs Üniversitesi',
+            'omü': 'Ondokuz Mayıs Üniversitesi',
+            'cbu': 'Manisa Celal Bayar Üniversitesi',
+            'cbü': 'Manisa Celal Bayar Üniversitesi',
+            'neu': 'Necmettin Erbakan Üniversitesi',
+            'neü': 'Necmettin Erbakan Üniversitesi',
+            'tau': 'Türk-Alman Üniversitesi',
+            'taü': 'Türk-Alman Üniversitesi',
+            'medipol': 'İstanbul Medipol Üniversitesi',
+            'yeditepe': 'Yeditepe Üniversitesi',
+            'bau': 'Bahçeşehir Üniversitesi',
+            'bahcesehir': 'Bahçeşehir Üniversitesi',
+            'bahçeşehir': 'Bahçeşehir Üniversitesi',
+            'ozyegin': 'Özyeğin Üniversitesi',
+            'özyeğin': 'Özyeğin Üniversitesi',
+            'khas': 'Kadir Has Üniversitesi',
+            'kadir has': 'Kadir Has Üniversitesi',
+            'cankaya': 'Çankaya Üniversitesi',
+            'çankaya': 'Çankaya Üniversitesi',
+            'baskent': 'Başkent Üniversitesi',
+            'başkent': 'Başkent Üniversitesi',
+            'bezmialem': 'Bezmialem Vakıf Üniversitesi',
+            'ataturk': 'Atatürk Üniversitesi',
+            'atatürk': 'Atatürk Üniversitesi',
+            'akdeniz': 'Akdeniz Üniversitesi',
+            'cukurova': 'Çukurova Üniversitesi',
+            'çukurova': 'Çukurova Üniversitesi',
+            'erciyes': 'Erciyes Üniversitesi',
+            'firat': 'Fırat Üniversitesi',
+            'fırat': 'Fırat Üniversitesi',
+            'inonu': 'İnönü Üniversitesi',
+            'inönü': 'İnönü Üniversitesi',
+            'selcuk': 'Selçuk Üniversitesi',
+            'selçuk': 'Selçuk Üniversitesi',
+            'dicle': 'Dicle Üniversitesi',
+            'trakya': 'Trakya Üniversitesi',
+            'uludag': 'Bursa Uludağ Üniversitesi',
+            'uludağ': 'Bursa Uludağ Üniversitesi'
+        };
+
+        function normalizeTr(s) {
+            if (!s) return '';
+            return s.toLowerCase()
+                .replace(/ğ/g, 'g')
+                .replace(/ü/g, 'u')
+                .replace(/ş/g, 's')
+                .replace(/ı/g, 'i')
+                .replace(/ö/g, 'o')
+                .replace(/ç/g, 'c')
+                .replace(/[^a-z0-9]/g, '');
+        }
+
+        function extractParenAcronym(name) {
+            const m = name.match(/\(([^)]+)\)/);
+            return m ? m[1].trim() : '';
+        }
+
+        function makeInitials(name) {
+            const clean = name.replace(/\([^)]*\)/g, '').trim();
+            const words = clean.split(/\s+/).filter(w => !['ve', '&', 'ile'].includes(w.toLowerCase()));
+            return words.map(w => w[0] || '').join('');
+        }
+
+        let filteredUnis = [];
+        let activeIndex = -1;
+
+        function filterUniversities(rawQuery) {
+            const q = (rawQuery || '').trim();
+            if (!q) {
+                const popular = [
+                    'Orta Doğu Teknik Üniversitesi (ODTÜ)',
+                    'İstanbul Teknik Üniversitesi (İTÜ)',
+                    'Boğaziçi Üniversitesi',
+                    'Yıldız Teknik Üniversitesi (YTÜ)',
+                    'Hacettepe Üniversitesi',
+                    'Koç Üniversitesi',
+                    'Sabancı Üniversitesi',
+                    'İhsan Doğramacı Bilkent Üniversitesi',
+                    'Dokuz Eylül Üniversitesi',
+                    'Bandırma Onyedi Eylül Üniversitesi'
+                ];
+                return uniList.filter(u => popular.some(p => u.includes(p) || p.includes(u))).slice(0, 8);
+            }
+
+            const qLower = q.toLowerCase();
+            const qNorm = normalizeTr(q);
+            const directAcronymMatch = ACRONYM_MAP[qLower] || ACRONYM_MAP[qNorm];
+
+            const results = [];
+            const addedSet = new Set();
+
+            if (directAcronymMatch) {
+                const found = uniList.find(u => u === directAcronymMatch || u.includes(directAcronymMatch) || directAcronymMatch.includes(u));
+                if (found) {
+                    results.push({ name: found, score: 100 });
+                    addedSet.add(found);
+                }
+            }
+
+            uniList.forEach(uni => {
+                if (addedSet.has(uni)) return;
+
+                const uLower = uni.toLowerCase();
+                const uNorm = normalizeTr(uni);
+                const paren = extractParenAcronym(uni);
+                const parenNorm = normalizeTr(paren);
+                const initials = makeInitials(uni);
+                const initialsNorm = normalizeTr(initials);
+
+                if (paren && (paren.toLowerCase() === qLower || parenNorm === qNorm)) {
+                    results.push({ name: uni, score: 95 });
+                    addedSet.add(uni);
+                    return;
+                }
+
+                if (initialsNorm && (initialsNorm === qNorm || (initialsNorm.startsWith(qNorm) && qNorm.length >= 2))) {
+                    results.push({ name: uni, score: 90 });
+                    addedSet.add(uni);
+                    return;
+                }
+
+                if (uLower.startsWith(qLower) || uNorm.startsWith(qNorm)) {
+                    results.push({ name: uni, score: 80 });
+                    addedSet.add(uni);
+                    return;
+                }
+
+                if (paren && (paren.toLowerCase().startsWith(qLower) || parenNorm.startsWith(qNorm))) {
+                    results.push({ name: uni, score: 75 });
+                    addedSet.add(uni);
+                    return;
+                }
+
+                if (uLower.includes(qLower) || uNorm.includes(qNorm)) {
+                    results.push({ name: uni, score: 60 });
+                    addedSet.add(uni);
+                    return;
+                }
+            });
+
+            results.sort((a, b) => b.score - a.score);
+            return results.slice(0, 10).map(r => r.name);
+        }
+
+        function highlightMatch(text, query) {
+            if (!query) return escapeHtml(text);
+            const q = query.trim();
+            const regex = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return escapeHtml(text).replace(regex, '<mark class="uni-search-combobox__mark">$1</mark>');
+        }
+
+        function renderDropdown(items, query) {
+            filteredUnis = items;
+            activeIndex = -1;
+
+            if (items.length === 0) {
+                listbox.innerHTML = `
+                    <li class="uni-search-combobox__empty">
+                        <i data-lucide="help-circle" class="icon-xs"></i>
+                        <span>"${escapeHtml(query)}" için üniversite bulunamadı</span>
+                    </li>
+                `;
+                listbox.style.display = 'block';
+                input.setAttribute('aria-expanded', 'true');
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+                return;
+            }
+
+            let html = '';
+            items.forEach((uni, idx) => {
+                const paren = extractParenAcronym(uni);
+                html += `
+                    <li class="uni-search-combobox__item"
+                        role="option"
+                        id="uni-combobox-opt-${idx}"
+                        data-index="${idx}"
+                        data-uni="${escapeHtml(uni)}"
+                        aria-selected="false">
+                        <div class="uni-search-combobox__item-content">
+                            <i data-lucide="graduation-cap" class="icon-xs uni-search-combobox__item-icon"></i>
+                            <span class="uni-search-combobox__item-name">${highlightMatch(uni, query)}</span>
+                        </div>
+                        ${paren ? `<span class="uni-search-combobox__item-badge">${escapeHtml(paren)}</span>` : ''}
+                    </li>
+                `;
+            });
+
+            listbox.innerHTML = html;
+            listbox.style.display = 'block';
+            input.setAttribute('aria-expanded', 'true');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+
+            listbox.querySelectorAll('.uni-search-combobox__item').forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    const idx = parseInt(item.dataset.index, 10);
+                    setActiveIndex(idx);
+                });
+                item.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    selectUniversity(item.dataset.uni);
+                });
+            });
+        }
+
+        function closeDropdown() {
+            listbox.style.display = 'none';
+            input.setAttribute('aria-expanded', 'false');
+            input.removeAttribute('aria-activedescendant');
+            activeIndex = -1;
+        }
+
+        function openDropdown() {
+            const matches = filterUniversities(input.value);
+            renderDropdown(matches, input.value);
+        }
+
+        function setActiveIndex(idx) {
+            const items = listbox.querySelectorAll('.uni-search-combobox__item');
+            if (items.length === 0) return;
+
+            items.forEach(el => {
+                el.classList.remove('uni-search-combobox__item--active');
+                el.setAttribute('aria-selected', 'false');
+            });
+
+            activeIndex = idx;
+            if (activeIndex >= 0 && activeIndex < items.length) {
+                const activeEl = items[activeIndex];
+                activeEl.classList.add('uni-search-combobox__item--active');
+                activeEl.setAttribute('aria-selected', 'true');
+                input.setAttribute('aria-activedescendant', activeEl.id);
+                activeEl.scrollIntoView({ block: 'nearest' });
+            } else {
+                input.removeAttribute('aria-activedescendant');
+            }
+        }
+
+        function selectUniversity(uniName) {
+            if (!uniName) return;
+            closeDropdown();
+            input.value = '';
+            if (clearBtn) clearBtn.style.display = 'none';
+            window.location.hash = `#/university?name=${encodeURIComponent(uniName)}`;
+        }
+
+        input.addEventListener('input', () => {
+            const val = input.value;
+            if (clearBtn) clearBtn.style.display = val ? 'inline-flex' : 'none';
+            const matches = filterUniversities(val);
+            renderDropdown(matches, val);
+        });
+
+        input.addEventListener('focus', () => {
+            openDropdown();
+        });
+
+        input.addEventListener('blur', () => {
+            setTimeout(() => {
+                closeDropdown();
+            }, 200);
+        });
+
+        input.addEventListener('keydown', (e) => {
+            const isOpen = listbox.style.display === 'block';
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (!isOpen) {
+                    openDropdown();
+                    return;
+                }
+                const itemsCount = filteredUnis.length;
+                if (itemsCount > 0) {
+                    const nextIdx = (activeIndex + 1) % itemsCount;
+                    setActiveIndex(nextIdx);
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (!isOpen) {
+                    openDropdown();
+                    return;
+                }
+                const itemsCount = filteredUnis.length;
+                if (itemsCount > 0) {
+                    const prevIdx = activeIndex <= 0 ? itemsCount - 1 : activeIndex - 1;
+                    setActiveIndex(prevIdx);
+                }
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (isOpen && activeIndex >= 0 && filteredUnis[activeIndex]) {
+                    selectUniversity(filteredUnis[activeIndex]);
+                } else if (isOpen && filteredUnis.length > 0) {
+                    selectUniversity(filteredUnis[0]);
+                }
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                closeDropdown();
+                input.blur();
+            }
+        });
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                input.value = '';
+                clearBtn.style.display = 'none';
+                input.focus();
+                openDropdown();
+            });
+        }
+    }
+
     // Execute Initial Page Rendering
     updateHero();
     renderDepartments();
@@ -1954,6 +2327,7 @@ function initUniversityPage(initialUni) {
     initDormControls();
     initReviewControls();
     initAboutToggle();
+    initUniCombobox();
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
 

@@ -407,19 +407,584 @@ input:focus, select:focus, textarea:focus,
 .side-drawer { background: var(--color-surface) !important; border-left: 1px solid var(--color-border); box-shadow: none; }
 .side-drawer__link:hover { background: var(--color-surface-hover); color: var(--color-accent); }
 
+/* ==========================================================================
+   3. Global Footer (Editoryal & Erişilebilir Yeniden Tasarım)
+   ========================================================================== */
 .site-footer {
+  position: relative;
   background: var(--color-bg) !important;
   border-top: 1px solid var(--color-border) !important;
+  color: var(--color-text);
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
 }
-.site-footer h4, .footer-links-group h4 {
+
+/* 1. Tam Genişlik Kapanış Şeridi (CTA Banner) */
+.footer-cta-strip {
+  width: 100%;
+  border-bottom: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-accent) 4%, var(--color-bg));
+  padding: 2.25rem 1.5rem;
+}
+
+.footer-cta-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.footer-cta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.footer-cta-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 2.5vw, 2.1rem);
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.footer-cta-sub {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.footer-cta-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-shrink: 0;
+}
+
+.footer-cta-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0 1.5rem;
+  background: var(--color-accent);
+  color: var(--color-on-accent, #1A1816);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.footer-cta-btn-primary:hover {
+  background: var(--color-accent-hover, #D9932B);
+  color: var(--color-on-accent, #1A1816);
+  transform: translateY(-1px);
+}
+
+.footer-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  color: var(--color-text-secondary);
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.footer-cta-link:hover {
+  color: var(--color-accent);
+}
+
+.footer-cta-strip,
+.site-footer .footer-container {
+  position: relative;
+  z-index: 2;
+}
+
+/* 2. Ana Konteyner & 4 Sütunlu Grid */
+.site-footer .footer-container {
+  display: block !important;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5.5rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 1.8fr) 1fr 1fr;
+  gap: 3.5rem;
+  align-items: start;
+  width: 100%;
+}
+
+.footer-col-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 420px;
+}
+
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.footer-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin: 0;
+  max-width: 420px;
+}
+
+.footer-stats-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  padding: 0.35rem 0.85rem;
+  margin-top: 0.25rem;
+  width: fit-content;
+}
+
+.footer-brand-watermark {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 2.7vw, 2.45rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  color: var(--color-text);
+  opacity: 0.08;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+  margin-top: 1rem;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.footer-bg-watermark {
+  position: absolute;
+  left: 50%;
+  bottom: -0.22em;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(3.5rem, 11vw, 10.5rem);
+  line-height: 0.88;
+  letter-spacing: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  color: var(--color-text);
+  opacity: 0.06;
+}
+
+.footer-stats-badge strong {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+/* Sütun Başlıkları ve Linkleri */
+.footer-links-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.footer-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 0 0.85rem 0;
+  text-align: left;
   font-family: var(--font-body);
-  font-weight: 600 !important;
-  letter-spacing: 0.1em;
   font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  cursor: default;
+}
+
+.footer-accordion-icon,
+svg.footer-accordion-icon {
+  display: none;
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.footer-links-list li a {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.footer-links-list li a:hover {
+  color: var(--color-accent);
+}
+
+.footer-city-meta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-left: 0.4rem;
+  opacity: 0.85;
+}
+
+.footer-cities-all a {
+  font-weight: 600;
+  color: var(--color-accent) !important;
+  margin-top: 0.25rem;
+}
+
+/* 3. Güven Şeridi (Trust Bar) */
+.footer-trust-strip {
+  margin-top: 2.75rem;
+  padding: 1.1rem 1.5rem;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  background: color-mix(in srgb, var(--color-surface) 50%, var(--color-bg));
+  border-radius: 8px;
+}
+
+.footer-trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.footer-trust-icon {
+  width: 16px;
+  height: 16px;
+  stroke: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.footer-trust-dot {
+  color: var(--color-border);
+  user-select: none;
+}
+
+/* 4. Alt Bilgi Çubuğu (Bottom Bar) */
+.footer-bottom-bar {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.footer-bottom-legal {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: 0.82rem;
   color: var(--color-text-muted);
 }
-.site-footer a { color: var(--color-text-secondary); }
-.site-footer a:hover { color: var(--color-accent); }
+
+.footer-copy-text strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.footer-bottom-legal a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.footer-bottom-legal a:hover {
+  color: var(--color-accent);
+}
+
+.footer-bottom-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-ctrl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  padding: 0 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.footer-ctrl-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+  background: var(--color-surface-hover);
+}
+
+.footer-ctrl-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-ctrl-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* 5. Su İzi (Watermark) */
+.footer-watermark-wrap {
+  width: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  margin-top: 0.5rem;
+  padding-bottom: 0;
+  line-height: 0.8;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-watermark {
+  font-family: var(--font-heading);
+  font-size: clamp(3.2rem, 12vw, 10rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  color: var(--color-text);
+  opacity: 0.07;
+  text-align: center;
+  white-space: nowrap;
+  transform: translateY(18%);
+}
+
+/* 6. Mobil ve Akordeon Uyarlamaları */
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-cta-strip {
+    padding: 1.75rem 1rem;
+  }
+
+  .footer-cta-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .footer-cta-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .footer-cta-btn-primary {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .footer-cta-link {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .site-footer .footer-container {
+    padding: 1.5rem 1rem 3.5rem 1rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .footer-col-brand {
+    max-width: 100%;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0.25rem;
+  }
+
+  .footer-brand-watermark {
+    font-size: clamp(1.5rem, 6.8vw, 2.1rem);
+    white-space: nowrap;
+    overflow: hidden;
+    margin-top: 0.75rem;
+  }
+
+  /* Mobil Akordeon */
+  .footer-links-group {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .footer-group-header {
+    cursor: pointer;
+    min-height: 48px;
+    padding: 14px 0;
+    margin: 0;
+    color: var(--color-text);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-accordion-icon,
+  svg.footer-accordion-icon {
+    display: inline-block !important;
+    width: 20px !important;
+    height: 20px !important;
+    color: var(--color-text) !important;
+    stroke: currentColor !important;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .footer-links-group.is-open .footer-accordion-icon,
+  .footer-links-group.is-open svg.footer-accordion-icon {
+    transform: rotate(180deg);
+  }
+
+  .site-footer .footer-links-group ul.footer-links-list {
+    display: none !important;
+    padding: 0 0 1rem 0;
+    gap: 0.25rem;
+  }
+
+  .site-footer .footer-links-group.is-open ul.footer-links-list {
+    display: flex !important;
+  }
+
+  .footer-links-list li a {
+    min-height: 44px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 0.92rem;
+  }
+
+  .footer-trust-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .footer-trust-dot {
+    display: none;
+  }
+
+  .footer-bottom-bar {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+  }
+
+  .footer-bottom-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .footer-bottom-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .footer-ctrl-btn {
+    flex: 1;
+  }
+
+  .footer-watermark,
+  .footer-bg-watermark {
+    font-size: clamp(2.3rem, 11vw, 4.2rem);
+    bottom: -0.12em;
+    transform: translateX(-50%);
+  }
+}
+
+/* 7. Odak Halkası ve Prefers-Reduced-Motion */
+.site-footer a:focus-visible,
+.site-footer button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer *,
+  .footer-accordion-icon,
+  .footer-ctrl-btn,
+  .footer-cta-btn-primary {
+    transition: none !important;
+    animation: none !important;
+  }
+}
 
 /* --------------------------------------------------------------------------
    4. Animasyon katmanını sadeleştirme (glow / aurora / spotlight / gradient)

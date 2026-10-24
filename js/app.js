@@ -619,6 +619,9 @@ function setupThemeToggle() {
     const drawerThemeBtn = document.getElementById('drawer-theme-btn');
     const drawerThemeText = document.getElementById('drawer-theme-text');
     const drawerThemePill = document.getElementById('drawer-theme-pill');
+    const footerThemeBtn = document.getElementById('footer-theme-btn');
+    const footerThemeIcon = document.getElementById('footer-theme-icon');
+    const footerThemeText = document.getElementById('footer-theme-text');
 
     function syncThemeUI(theme) {
         const isLight = theme === 'light';
@@ -626,14 +629,19 @@ function setupThemeToggle() {
             document.documentElement.setAttribute('data-theme', 'light');
             if (drawerThemeText) drawerThemeText.textContent = 'Koyu Tema';
             if (drawerThemePill) drawerThemePill.textContent = 'Açık';
+            if (footerThemeText) footerThemeText.textContent = 'Koyu';
         } else {
             document.documentElement.removeAttribute('data-theme');
             if (drawerThemeText) drawerThemeText.textContent = 'Açık Tema';
             if (drawerThemePill) drawerThemePill.textContent = 'Koyu';
+            if (footerThemeText) footerThemeText.textContent = 'Açık';
         }
         const iconWrap = document.getElementById('drawer-theme-icon-wrap');
         if (iconWrap) {
             iconWrap.innerHTML = `<i data-lucide="${isLight ? 'moon' : 'sun'}" class="icon-sm"></i>`;
+        }
+        if (footerThemeIcon) {
+            footerThemeIcon.innerHTML = `<i data-lucide="${isLight ? 'moon' : 'sun'}" class="icon-sm"></i>`;
         }
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
@@ -641,14 +649,19 @@ function setupThemeToggle() {
     const savedTheme = localStorage.getItem('kampus_sesi_theme') || 'light';
     syncThemeUI(savedTheme);
 
+    function onThemeToggle(e) {
+        e.preventDefault();
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('kampus_sesi_theme', nextTheme);
+        syncThemeUI(nextTheme);
+    }
+
     if (drawerThemeBtn) {
-        drawerThemeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-            const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            localStorage.setItem('kampus_sesi_theme', nextTheme);
-            syncThemeUI(nextTheme);
-        });
+        drawerThemeBtn.addEventListener('click', onThemeToggle);
+    }
+    if (footerThemeBtn) {
+        footerThemeBtn.addEventListener('click', onThemeToggle);
     }
 }
 
@@ -5549,6 +5562,12 @@ function initCitiesPage() {
         });
     }
 
+    const { params } = parseHash();
+    if (params && params.get('q')) {
+        searchQuery = params.get('q');
+        if (searchInput) searchInput.value = searchQuery;
+    }
+
     renderCities();
 }
 
@@ -6800,12 +6819,67 @@ function initCookieConsentBanner() {
     }
 }
 
+// ─── Global Footer Mantığı ─────────────────
+
+function initFooter() {
+    const uniCountEl = document.getElementById('footer-uni-count');
+    const cityCountEl = document.getElementById('footer-city-count');
+    const scrollTopBtn = document.getElementById('footer-scroll-top');
+
+    // 1. Dinamik Üniversite ve İl Sayıları
+    const addressesDb = (typeof window !== 'undefined' && window.UNIVERSITY_ADDRESSES_DB) || {};
+    const uniList = (typeof TURKISH_UNIVERSITIES !== 'undefined' && Array.isArray(TURKISH_UNIVERSITIES))
+        ? TURKISH_UNIVERSITIES
+        : Object.keys(addressesDb);
+
+    if (uniCountEl) {
+        uniCountEl.textContent = uniList.length || 211;
+    }
+
+    if (cityCountEl) {
+        cityCountEl.textContent = '81';
+    }
+
+    // 2. Mobil Akordeon Etkileşimi
+    const accordionGroups = document.querySelectorAll('.site-footer [data-accordion="group"]');
+    accordionGroups.forEach(group => {
+        const headerBtn = group.querySelector('.footer-group-header');
+        if (headerBtn) {
+            headerBtn.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    const isOpen = group.classList.contains('is-open');
+                    group.classList.toggle('is-open', !isOpen);
+                    headerBtn.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
+                }
+            });
+        }
+    });
+
+    // 3. Başa Dön (Scroll to Top)
+    if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({
+                top: 0,
+                behavior: prefersReduced ? 'auto' : 'smooth'
+            });
+        });
+    }
+
+    // Lucide ikonlarını yeniden tara
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+}
+
 // ─── App Lifecycle ────────────────────────
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Setup Hamburger & Cookie Consent Banner
+    // 1. Setup Hamburger & Cookie Consent Banner & Global Footer
     setupNavEvents();
     initCookieConsentBanner();
+    initFooter();
 
     // 2. Restore User Session if Token Exists
     try {

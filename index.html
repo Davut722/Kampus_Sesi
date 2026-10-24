@@ -101,67 +101,104 @@
     <div id="app-root"></div>
 
     <!-- Global Footer -->
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-col-main">
-                <div class="footer-logo">
-                    <span class="nav__logo-icon"><i data-lucide="graduation-cap" class="icon-brand"></i></span> Kampüs Sesi
+    <footer class="site-footer" role="contentinfo">
+        <!-- 1. Kapanış Şeridi (CTA Banner) -->
+        <div class="footer-cta-strip">
+            <div class="footer-cta-inner">
+                <div class="footer-cta-text">
+                    <h2 class="footer-cta-heading">Okulunu en iyi sen bilirsin.</h2>
+                    <p class="footer-cta-sub">Yorumlar yayınlanmadan önce incelenir.</p>
                 </div>
-                <p class="footer-desc">Üniversite tercihini daha şeffaf, daha sakin ve daha gerçek deneyimlerle yapman için öğrenci yorumlarını bir araya getiriyoruz.</p>
-                <div class="footer-actions">
-                    <a href="#/iletisim" class="btn btn--primary"><i data-lucide="mail" class="icon-sm"></i> İletişime geç</a>
-                    <a href="#/yayin-ilkeleri" class="btn btn--outline"><i data-lucide="shield-check" class="icon-sm"></i> Yayın İlkeleri</a>
-                </div>
-            </div>
-            
-            <div class="footer-col-links">
-                <div class="footer-links-group">
-                    <h4>KEŞFET</h4>
-                    <ul>
-                        <li><a href="#/university">Üniversiteler</a></li>
-                        <li><a href="#/cities">Şehirler</a></li>
-                        <li><a href="#/ranking">Sıralama</a></li>
-                        <li><a href="#/departments">Bölümler</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-links-group">
-                    <h4>KATKI VER</h4>
-                    <ul>
-                        <li><a href="#/review-form">Yorum yaz</a></li>
-                        <li><a href="#/okul-oner">Okul öner</a></li>
-                        <li><a href="#/yazi-gonder">Deneyimini paylaş</a></li>
-                        <li><a href="#/topluluk-kurallari">Topluluk kuralları</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-links-group">
-                    <h4>YASAL & PLATFORM</h4>
-                    <ul>
-                        <li><a href="#/hakkimizda">Hakkımızda</a></li>
-                        <li><a href="#/iletisim">İletişim</a></li>
-                        <li><a href="#/gizlilik">KVKK ve Gizlilik Politikası</a></li>
-                        <li><a href="#/cerez-politikasi">Çerez (Cookie) Politikası</a></li>
-                        <li><a href="#/kullanim-sartlari">Kullanıcı Sözleşmesi</a></li>
-                    </ul>
+                <div class="footer-cta-actions">
+                    <a href="#/review-form" class="footer-cta-btn-primary">
+                        <i data-lucide="pen-line" class="icon-sm"></i>
+                        <span>Yorum yaz</span>
+                    </a>
+                    <a href="#/iletisim" class="footer-cta-link">
+                        <span>İletişime geç</span>
+                        <i data-lucide="arrow-right" class="icon-xs"></i>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <div class="footer-bottom-bar">
-            <div class="footer-bottom-inner">
-                <p class="footer-copyright">
-                    © 2026 <strong>Kampüs Sesi</strong> · 5651 Sayılı Kanun Kapsamında Yer Sağlayıcıdır · İletişim & Uyar-Kaldır: <a href="mailto:destek@kampussesi.com">destek@kampussesi.com</a>
-                </p>
-                <div class="footer-legal-pills">
-                    <a href="#/gizlilik">KVKK Aydınlatma ve Gizlilik</a>
-                    <span class="footer-dot">•</span>
-                    <a href="#/cerez-politikasi">Çerez Politikası</a>
-                    <span class="footer-dot">•</span>
-                    <a href="#/kullanim-sartlari">Kullanıcı Sözleşmesi</a>
+        <div class="footer-container">
+            <!-- 2. Sütunlar (3 Sütun: Marka · Keşfet · Katkı Ver) -->
+            <div class="footer-grid">
+                <!-- Sütun 1: Marka -->
+                <div class="footer-col footer-col-brand">
+                    <a href="#/home" class="footer-logo">
+                        <span class="nav__logo-icon"><i data-lucide="graduation-cap" class="icon-brand"></i></span>
+                        <span>Kampüs Sesi</span>
+                    </a>
+                    <p class="footer-desc">Kampüs Sesi, üniversite tercihi yapan adaylar ve öğrenciler için hazırlanmış bağımsız bir değerlendirme platformu. Okulları yurt, yemekhane, ulaşım, sosyal hayat ve akademik başlıklarında öğrenci yorumlarıyla keşfet, yan yana karşılaştır; çevredeki yurtları ve kampüse ulaşım seçeneklerini harita üzerinde incele. Reklam yok, yorumlar yayınlanmadan önce incelenir.</p>
+                    <div class="footer-stats-badge" aria-label="Platform İstatistikleri">
+                        <i data-lucide="database" class="icon-xs"></i>
+                        <span><strong id="footer-uni-count">211</strong> üniversite · <strong id="footer-city-count">81</strong> il</span>
+                    </div>
+                </div>
+
+                <!-- Sütun 2: Keşfet -->
+                <div class="footer-col footer-links-group" data-accordion="group">
+                    <button type="button" class="footer-group-header" aria-expanded="false">
+                        <span>KEŞFET</span>
+                        <i data-lucide="chevron-down" class="footer-accordion-icon"></i>
+                    </button>
+                    <ul class="footer-links-list">
+                        <li><a href="#/university">Üniversiteler</a></li>
+                        <li><a href="#/cities">Şehirler</a></li>
+                        <li><a href="#/ranking">Sıralama</a></li>
+                        <li><a href="#/departments">Bölümler</a></li>
+                        <li><a href="#/compare">Karşılaştır</a></li>
+                    </ul>
+                </div>
+
+                <!-- Sütun 3: Katkı Ver -->
+                <div class="footer-col footer-links-group" data-accordion="group">
+                    <button type="button" class="footer-group-header" aria-expanded="false">
+                        <span>KATKI VER</span>
+                        <i data-lucide="chevron-down" class="footer-accordion-icon"></i>
+                    </button>
+                    <ul class="footer-links-list">
+                        <li><a href="#/review-form">Yorum yaz</a></li>
+                        <li><a href="#/okul-oner">Okul öner</a></li>
+                        <li><a href="#/yazi-gonder">Deneyimini paylaş</a></li>
+                        <li><a href="#/topluluk-kurallari">Topluluk kuralları</a></li>
+                        <li><a href="#/yayin-ilkeleri">Yayın ilkeleri</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Alt Satır (Telif, Yasal Bağlantılar & Kontroller) -->
+            <div class="footer-bottom-bar">
+                <div class="footer-bottom-inner">
+                    <div class="footer-bottom-legal">
+                        <span class="footer-copy-text">© 2026 <strong>Kampüs Sesi</strong></span>
+                        <span class="footer-dot">•</span>
+                        <a href="#/gizlilik">KVKK</a>
+                        <span class="footer-dot">•</span>
+                        <a href="#/cerez-politikasi">Çerez Politikası</a>
+                        <span class="footer-dot">•</span>
+                        <a href="#/kullanim-sartlari">Kullanıcı Sözleşmesi</a>
+                        <span class="footer-dot">•</span>
+                        <a href="mailto:destek@kampussesi.com" class="footer-notice-take-down">Uyar-Kaldır (destek@kampussesi.com)</a>
+                    </div>
+                    <div class="footer-bottom-controls">
+                        <button type="button" id="footer-theme-btn" class="footer-ctrl-btn" aria-label="Temayı değiştir" title="Temayı değiştir">
+                            <span id="footer-theme-icon" class="footer-ctrl-icon"><i data-lucide="moon" class="icon-sm"></i></span>
+                            <span id="footer-theme-text" class="footer-ctrl-label">Tema</span>
+                        </button>
+                        <button type="button" id="footer-scroll-top" class="footer-ctrl-btn" aria-label="Yukarı çık" title="Yukarı çık">
+                            <i data-lucide="arrow-up" class="footer-ctrl-icon"></i>
+                            <span class="footer-ctrl-label">Yukarı çık</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Arka Plan Büyük Silik Su İzi (Watermark) -->
+        <div class="footer-bg-watermark" aria-hidden="true">Kampüs Sesi</div>
     </footer>
 
     <!-- Çerez Onay Bandı (Cookie Consent Banner) -->

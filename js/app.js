@@ -435,9 +435,21 @@ function renderReviewCard(review, options = {}) {
         </form>
     ` : `<div style="font-size:0.8rem; color: var(--color-text-muted); padding-top: 5px;">Yanıt yazmak için <a href="#/login">giriş yapın</a>.</div>`;
 
-    // Metadata Badges (Department, Class, Scholarship)
-    const badgesHtml = (parsed.dept || parsed.sClass || parsed.scholarship) ? `
+    // Metadata Badges (Department, Class, Scholarship, Recommendation, Education Status)
+    const recBadgeHtml = (review.is_recommended === true || review.is_recommended === 1)
+        ? `<span class="ed-badge ed-badge--rec"><i data-lucide="thumbs-up" class="icon-xs"></i> Tavsiye Ediyor</span>`
+        : ((review.is_recommended === false || review.is_recommended === 0)
+            ? `<span class="ed-badge ed-badge--nonrec"><i data-lucide="thumbs-down" class="icon-xs"></i> Tavsiye Etmiyor</span>`
+            : '');
+
+    const eduBadgeHtml = review.education_status === 'graduate'
+        ? `<span class="ed-badge"><i data-lucide="graduation-cap" class="icon-xs"></i> Mezun${review.graduation_year ? ` (${review.graduation_year})` : ''}</span>`
+        : (review.education_status === 'student' ? `<span class="ed-badge"><i data-lucide="user-check" class="icon-xs"></i> Öğrenci</span>` : '');
+
+    const badgesHtml = (parsed.dept || parsed.sClass || parsed.scholarship || recBadgeHtml || eduBadgeHtml) ? `
         <div class="card__meta-badges">
+            ${recBadgeHtml}
+            ${eduBadgeHtml}
             ${parsed.dept ? `<span class="ed-badge"><i data-lucide="book-open" class="icon-xs"></i> ${escapeHtml(parsed.dept)}</span>` : ''}
             ${parsed.sClass ? `<span class="ed-badge"><i data-lucide="graduation-cap" class="icon-xs"></i> ${escapeHtml(parsed.sClass)}${parsed.sClass !== 'Mezun' ? '. Sınıf' : ''}</span>` : ''}
             ${parsed.scholarship && parsed.scholarship !== 'Belirtmek istemiyorum' ? `<span class="ed-badge"><i data-lucide="award" class="icon-xs"></i> ${escapeHtml(parsed.scholarship)}</span>` : ''}
@@ -470,13 +482,23 @@ function renderReviewCard(review, options = {}) {
     return `
     <article class="card ed-card review-card" data-anim="fade-up" data-id="${review.id}" data-tags="${review.tags ? review.tags.join(',') : ''}">
       <div class="card__header">
-        <a href="#/profile?user=${encodeURIComponent(review.user)}" class="card__user card__user--clickable">
-          <div class="card__avatar">${escapeHtml(review.initials || 'ÖG')}</div>
-          <div>
-            <div class="card__username">${escapeHtml(review.user)}</div>
-            <div class="card__date">${escapeHtml(review.date)}</div>
+        ${review.is_anonymous ? `
+          <div class="card__user">
+            <div class="card__avatar card__avatar--anon"><i data-lucide="user" class="icon-sm"></i></div>
+            <div>
+              <div class="card__username">Anonim öğrenci</div>
+              <div class="card__date">${escapeHtml(review.date)}</div>
+            </div>
           </div>
-        </a>
+        ` : `
+          <a href="#/profile?user=${encodeURIComponent(review.user)}" class="card__user card__user--clickable">
+            <div class="card__avatar">${escapeHtml(review.initials || 'ÖG')}</div>
+            <div>
+              <div class="card__username">${escapeHtml(review.user)}</div>
+              <div class="card__date">${escapeHtml(review.date)}</div>
+            </div>
+          </a>
+        `}
         ${renderStars(review.rating)}
       </div>
 
@@ -1072,7 +1094,7 @@ function initCustomSelect(containerId, optionsList, onSelectCallback, initialVal
         }
 
         optionsContainer.innerHTML = filtered.map(opt => `
-            <li class="custom-select__option ${opt === selectedValue ? 'selected' : ''}" data-value="${opt}">
+            <li class="custom-select__option ${opt === selectedValue ? 'selected' : ''}" data-value="${opt === 'Seçiniz...' ? '' : opt}">
                 ${opt}
             </li>
         `).join('');
@@ -1081,8 +1103,14 @@ function initCustomSelect(containerId, optionsList, onSelectCallback, initialVal
         optionsContainer.querySelectorAll('.custom-select__option').forEach(li => {
             li.addEventListener('click', (e) => {
                 selectedValue = li.dataset.value;
-                triggerText.textContent = selectedValue;
-                triggerText.style.color = 'var(--color-text)';
+                if (!selectedValue) {
+                    const defaultPlaceholder = containerId.includes('dept') ? 'Bölüm ara…' : 'Üniversite seçin...';
+                    triggerText.textContent = defaultPlaceholder;
+                    triggerText.style.color = '';
+                } else {
+                    triggerText.textContent = selectedValue;
+                    triggerText.style.color = 'var(--color-text)';
+                }
                 container.classList.remove('open');
                 if (onSelectCallback) onSelectCallback(selectedValue);
             });
@@ -1322,41 +1350,6 @@ function initUniversityPage(initialUni) {
         });
 
         criteriaList.innerHTML = html;
-        if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-
-    // Render Popular Departments in Main Column
-    function renderDepartments() {
-        const deptsGrid = document.getElementById('uni-depts-grid');
-        if (!deptsGrid) return;
-
-        const defaultDepts = [
-            { name: 'Bilgisayar Mühendisliği', faculty: 'Mühendislik Fakültesi', lang: '%100 İngilizce', duration: '4 Yıl Lisans', demand: '%95 İstihdam' },
-            { name: 'Yazılım Mühendisliği', faculty: 'Mühendislik Fakültesi', lang: 'Türkçe', duration: '4 Yıl Lisans', demand: '%93 İstihdam' },
-            { name: 'Tıp Fakültesi', faculty: 'Tıp Fakültesi', lang: 'Türkçe', duration: '6 Yıl Lisans', demand: '%100 İstihdam' },
-            { name: 'Hukuk Fakültesi', faculty: 'Hukuk Fakültesi', lang: 'Türkçe', duration: '4 Yıl Lisans', demand: '%88 İstihdam' },
-            { name: 'İşletme & Ekonomi', faculty: 'İktisadi ve İdari Bilimler', lang: '%30 İngilizce', duration: '4 Yıl Lisans', demand: '%84 İstihdam' },
-            { name: 'Mimarlık', faculty: 'Mimarlık ve Tasarım', lang: 'Türkçe', duration: '4 Yıl Lisans', demand: '%86 İstihdam' }
-        ];
-
-        let html = '';
-        defaultDepts.forEach(d => {
-            html += `
-                <div class="uni-dept-card ed-card">
-                    <div class="uni-dept-card__header">
-                        <span class="uni-dept-faculty">${escapeHtml(d.faculty)}</span>
-                        <span class="uni-dept-demand-pill">${escapeHtml(d.demand)}</span>
-                    </div>
-                    <h3 class="uni-dept-card__title">${escapeHtml(d.name)}</h3>
-                    <div class="uni-dept-card__meta">
-                        <span class="uni-dept-meta-item"><i data-lucide="clock" class="icon-xs"></i> ${escapeHtml(d.duration)}</span>
-                        <span class="uni-dept-meta-item"><i data-lucide="globe" class="icon-xs"></i> ${escapeHtml(d.lang)}</span>
-                    </div>
-                </div>
-            `;
-        });
-
-        deptsGrid.innerHTML = html;
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
@@ -1742,11 +1735,16 @@ function initUniversityPage(initialUni) {
                 starsDisplay.textContent = '★'.repeat(rounded) + '☆'.repeat(Math.max(0, 5 - rounded));
             }
 
-            // Recommendation Rate
-            const positiveReviews = reviews.filter(r => r.rating >= 3).length;
-            const recRate = Math.round((positiveReviews / count) * 100);
-            if (recText) recText.textContent = `%${recRate} Tavsiye Ediyor`;
-            if (recBadge) recBadge.style.display = 'inline-flex';
+            // Recommendation Rate (Gerçek tavsiye verisinden hesaplanır; veri yoksa rozet gizlenir)
+            const recResponses = reviews.filter(r => r.is_recommended !== null && r.is_recommended !== undefined);
+            if (recResponses.length > 0) {
+                const positiveCount = recResponses.filter(r => r.is_recommended === true || r.is_recommended === 1).length;
+                const recRate = Math.round((positiveCount / recResponses.length) * 100);
+                if (recText) recText.textContent = `%${recRate} Tavsiye Ediyor`;
+                if (recBadge) recBadge.style.display = 'inline-flex';
+            } else {
+                if (recBadge) recBadge.style.display = 'none';
+            }
         } else {
             if (statAvg) statAvg.textContent = '—';
             if (starsDisplay) starsDisplay.textContent = '☆☆☆☆☆';
@@ -1775,7 +1773,7 @@ function initUniversityPage(initialUni) {
     // Initialize Sticky Tabs Scroll Spy & Navigation
     function initStickyTabs() {
         const tabs = document.querySelectorAll('.ed-uni-tab');
-        const sections = ['sec-genel', 'sec-yorumlar', 'sec-bolumler', 'sec-yurtlar', 'sec-ulasim']
+        const sections = ['sec-genel', 'sec-yorumlar', 'sec-yurtlar', 'sec-ulasim']
             .map(id => document.getElementById(id))
             .filter(Boolean);
 
@@ -2320,7 +2318,6 @@ function initUniversityPage(initialUni) {
 
     // Execute Initial Page Rendering
     updateHero();
-    renderDepartments();
     renderReviews();
     initStickyTabs();
     initCampusMapToggle();
@@ -2350,6 +2347,24 @@ function initReviewForm() {
     const ratingLabel = document.getElementById('rf-rating-label');
     const ratingError = document.getElementById('rf-rating-error');
 
+    const recYesBtn = document.getElementById('rf-rec-yes');
+    const recNoBtn = document.getElementById('rf-rec-no');
+    const recHidden = document.getElementById('form-recommend');
+    const recError = document.getElementById('rf-recommend-error');
+
+    const anonToggle = document.getElementById('rf-anonymous-toggle');
+    const anonDesc = document.getElementById('rf-anon-desc');
+
+    const eduStudentBtn = document.getElementById('rf-edu-student');
+    const eduGraduateBtn = document.getElementById('rf-edu-graduate');
+    const eduStatusHidden = document.getElementById('form-edu-status');
+    const studentClassWrap = document.getElementById('rf-student-class-wrap');
+    const gradYearWrap = document.getElementById('rf-grad-year-wrap');
+    const gradYearSelect = document.getElementById('rf-grad-year-select');
+
+    const progressText = document.getElementById('rf-progress-text');
+    const bottomStatus = document.getElementById('rf-bottom-status');
+
     const deptHidden = document.getElementById('form-dept-hidden');
     const deptSearchInput = document.getElementById('rf-dept-input');
     const classSelect = document.getElementById('form-class-select');
@@ -2360,11 +2375,6 @@ function initReviewForm() {
     const charCountEl = document.getElementById('char-count');
     const charGuidanceEl = document.getElementById('rf-char-guidance');
     const textError = document.getElementById('rf-text-error');
-
-    const tagsContainer = document.getElementById('form-tags');
-    const tagCountBadge = document.getElementById('rf-tag-count');
-    const tagsHidden = document.getElementById('form-tags-hidden');
-    const tagsError = document.getElementById('rf-tags-error');
 
     const consentCheckbox = document.getElementById('rf-consent');
     const consentError = document.getElementById('rf-consent-error');
@@ -2414,8 +2424,13 @@ function initReviewForm() {
         'Görsel İletişim Tasarımı'
     ];
 
-    // State
+    // State - Hiçbir alan önceden seçili gelmez
     let selectedRating = 0;
+    let isRecommended = null; // null | true | false
+    let isAnonymous = true;   // Varsayılan: anonim paylaş
+    let educationStatus = ''; // '' | 'student' | 'graduate' (Boş başlar)
+    let graduationYear = null;
+
     const criteriaRatings = {
         yurt: 0,
         yemekhane: 0,
@@ -2423,8 +2438,83 @@ function initReviewForm() {
         sosyal: 0,
         egitim: 0
     };
-    const selectedTags = new Set();
     const DRAFT_KEY = 'kampus_sesi_review_draft';
+
+    // 1a. Tavsiye Durumu (Evet/Hayır)
+    function setRecommendation(val) {
+        isRecommended = val;
+        if (recHidden) recHidden.value = val ? 'yes' : 'no';
+        if (recYesBtn) recYesBtn.classList.toggle('active', val === true);
+        if (recNoBtn) recNoBtn.classList.toggle('active', val === false);
+        if (recError) recError.textContent = '';
+        updatePowerMeter();
+        validateForm(true);
+        saveDraft();
+    }
+    if (recYesBtn) recYesBtn.addEventListener('click', () => setRecommendation(true));
+    if (recNoBtn) recNoBtn.addEventListener('click', () => setRecommendation(false));
+
+    // 1b. Paylaşım Tercihi / Anonimlik
+    function setAnonymous(val) {
+        isAnonymous = Boolean(val);
+        if (anonToggle) anonToggle.checked = isAnonymous;
+        if (anonDesc) {
+            anonDesc.textContent = isAnonymous
+                ? 'İsminiz gizlenir, yorumunuz "Anonim öğrenci" adıyla yayınlanır.'
+                : 'İsminiz ve profil bilgileriniz yorum kartında açık olarak görünür.';
+        }
+        saveDraft();
+    }
+    if (anonToggle) {
+        anonToggle.addEventListener('change', (e) => setAnonymous(e.target.checked));
+    }
+
+    // 1c. Öğrenim Durumu (Öğrenci / Mezun) - Koşullu Alanlar
+    function setEducationStatus(status, year = null) {
+        if (status === 'student') {
+            educationStatus = 'student';
+            if (eduStatusHidden) eduStatusHidden.value = 'student';
+            if (eduStudentBtn) eduStudentBtn.classList.add('active');
+            if (eduGraduateBtn) eduGraduateBtn.classList.remove('active');
+            if (studentClassWrap) studentClassWrap.style.display = 'block';
+            if (gradYearWrap) gradYearWrap.style.display = 'none';
+            graduationYear = null;
+            if (gradYearSelect) gradYearSelect.value = '';
+        } else if (status === 'graduate') {
+            educationStatus = 'graduate';
+            if (eduStatusHidden) eduStatusHidden.value = 'graduate';
+            if (eduGraduateBtn) eduGraduateBtn.classList.add('active');
+            if (eduStudentBtn) eduStudentBtn.classList.remove('active');
+            if (gradYearWrap) gradYearWrap.style.display = 'block';
+            if (studentClassWrap) studentClassWrap.style.display = 'none';
+            if (classSelect) classSelect.value = '';
+            if (year !== null && gradYearSelect) {
+                gradYearSelect.value = year;
+                graduationYear = parseInt(year, 10) || null;
+            }
+        } else {
+            educationStatus = '';
+            if (eduStatusHidden) eduStatusHidden.value = '';
+            if (eduStudentBtn) eduStudentBtn.classList.remove('active');
+            if (eduGraduateBtn) eduGraduateBtn.classList.remove('active');
+            if (studentClassWrap) studentClassWrap.style.display = 'none';
+            if (gradYearWrap) gradYearWrap.style.display = 'none';
+            graduationYear = null;
+            if (gradYearSelect) gradYearSelect.value = '';
+            if (classSelect) classSelect.value = '';
+        }
+        updatePowerMeter();
+        saveDraft();
+    }
+    if (eduStudentBtn) eduStudentBtn.addEventListener('click', () => setEducationStatus(educationStatus === 'student' ? '' : 'student'));
+    if (eduGraduateBtn) eduGraduateBtn.addEventListener('click', () => setEducationStatus(educationStatus === 'graduate' ? '' : 'graduate'));
+    if (gradYearSelect) {
+        gradYearSelect.addEventListener('change', (e) => {
+            const v = e.target.value.trim();
+            graduationYear = v ? parseInt(v, 10) : null;
+            saveDraft();
+        });
+    }
 
     // 1. Üniversite Seçimi (Combobox)
     initCustomSelect('custom-uni-select-form', typeof TURKISH_UNIVERSITIES !== 'undefined' ? TURKISH_UNIVERSITIES : [], (newUni) => {
@@ -2538,17 +2628,35 @@ function initReviewForm() {
         itemEl.querySelectorAll('.rf-crit-star').forEach(s => {
             s.classList.toggle('is-active', Number(s.dataset.v) <= val);
         });
+        updatePowerMeter();
     }
 
     // 4. Bağlam Alanları (Bölüm, Sınıf, Burs)
-    initCustomSelect('custom-dept-select-form', COMMON_DEPARTMENTS, (selectedDept) => {
-        if (deptHidden) deptHidden.value = selectedDept;
+    const DEPT_OPTIONS = ['Seçiniz...', ...COMMON_DEPARTMENTS];
+    initCustomSelect('custom-dept-select-form', DEPT_OPTIONS, (selectedDept) => {
+        if (!selectedDept || selectedDept === 'Seçiniz...') {
+            if (deptHidden) deptHidden.value = '';
+            const trig = document.querySelector('#custom-dept-select-form .custom-select__text');
+            if (trig) {
+                trig.textContent = 'Bölüm ara…';
+                trig.style.color = '';
+            }
+        } else {
+            if (deptHidden) deptHidden.value = selectedDept;
+        }
+        updatePowerMeter();
         saveDraft();
     });
 
     if (deptSearchInput) {
         deptSearchInput.addEventListener('input', () => {
-            if (deptHidden) deptHidden.value = deptSearchInput.value.trim();
+            const val = deptSearchInput.value.trim();
+            if (val === 'Seçiniz...') {
+                if (deptHidden) deptHidden.value = '';
+            } else {
+                if (deptHidden) deptHidden.value = val;
+            }
+            updatePowerMeter();
             saveDraft();
         });
     }
@@ -2583,6 +2691,7 @@ function initReviewForm() {
                 charGuidanceEl.style.color = 'var(--color-success)';
             }
         }
+        updatePowerMeter();
         validateForm(true);
         saveDraft();
     }
@@ -2590,38 +2699,51 @@ function initReviewForm() {
     if (prosInput) prosInput.addEventListener('input', updateCharCount);
     if (consInput) consInput.addEventListener('input', updateCharCount);
 
-    // 6. Etiketler (En fazla 3 adet, 44px dokunma alanı)
-    if (tagsContainer) {
-        tagsContainer.innerHTML = '';
-        AVAILABLE_TAGS.forEach(tag => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'tag tag--selectable';
-            btn.dataset.tagId = tag.id;
-            btn.innerHTML = `<i data-lucide="${tag.icon}" class="icon-xs"></i> <span>${tag.label}</span>`;
-            btn.addEventListener('click', () => {
-                if (selectedTags.has(tag.id)) {
-                    selectedTags.delete(tag.id);
-                    btn.classList.remove('tag--selected');
-                } else {
-                    if (selectedTags.size >= 3) {
-                        showToast('ℹ️ En fazla 3 konu etiketi seçebilirsiniz.');
-                        return;
-                    }
-                    selectedTags.add(tag.id);
-                    btn.classList.add('tag--selected');
-                }
-                if (tagCountBadge) tagCountBadge.textContent = `${selectedTags.size} / 3 seçildi`;
-                if (tagsHidden) tagsHidden.value = Array.from(selectedTags).join(',');
-                validateForm(true);
-                saveDraft();
-            });
-            tagsContainer.appendChild(btn);
-        });
-        if (typeof lucide !== 'undefined') lucide.createIcons();
+    // 7. Yorum Gücü Göstergesi (Bilgilendirme)
+    function updatePowerMeter() {
+        const pros = prosInput ? prosInput.value.trim() : '';
+        const cons = consInput ? consInput.value.trim() : '';
+        const totalChars = pros.length + cons.length;
+
+        let score = 0;
+        // Metin uzunluğu (max 50)
+        if (totalChars > 0 && totalChars < 40) score += 15;
+        else if (totalChars >= 40 && totalChars < 120) score += 35;
+        else if (totalChars >= 120) score += 50;
+
+        // Tavsiye (15)
+        if (isRecommended !== null) score += 15;
+
+        // Bölüm (15)
+        const dept = deptHidden ? deptHidden.value.trim() : '';
+        if (dept) score += 15;
+
+        // Öğrenim durumu (10)
+        if (educationStatus) score += 10;
+
+        // Kriter puanları (max 10)
+        const critCount = Object.values(criteriaRatings).filter(v => v > 0).length;
+        score += Math.min(10, critCount * 2);
+
+        const fillEl = document.getElementById('rf-power-fill');
+        const textEl = document.getElementById('rf-power-text');
+        if (!fillEl || !textEl) return;
+
+        fillEl.style.width = `${Math.max(10, Math.min(100, score))}%`;
+
+        if (score < 40) {
+            textEl.textContent = 'Kısa';
+            fillEl.className = 'rf-power-fill rf-power-fill--short';
+        } else if (score < 75) {
+            textEl.textContent = 'İyi';
+            fillEl.className = 'rf-power-fill rf-power-fill--good';
+        } else {
+            textEl.textContent = 'Çok faydalı';
+            fillEl.className = 'rf-power-fill rf-power-fill--great';
+        }
     }
 
-    // 7. Onay Kutusu
+    // 8. Onay Kutusu
     if (consentCheckbox) {
         consentCheckbox.addEventListener('change', () => {
             validateForm(true);
@@ -2629,8 +2751,19 @@ function initReviewForm() {
         });
     }
 
-    // 8. Doğrulama ve Submit Butonu Durumu
-    function validateForm(silent = false) {
+    // Hata durumunda ilgili alana yumuşak kaydırma ve vurgulama
+    function highlightAndScroll(fieldId, errEl, msg) {
+        if (errEl) errEl.textContent = msg;
+        const target = document.getElementById(fieldId);
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.classList.add('rf-highlight-error');
+            setTimeout(() => target.classList.remove('rf-highlight-error'), 2500);
+        }
+    }
+
+    // 9. Doğrulama ve Submit Butonu Durumu
+    function validateForm(silent = false, scrollToFirstError = false) {
         const uni = uniSelectHidden ? uniSelectHidden.value.trim() : '';
         const pros = prosInput ? prosInput.value.trim() : '';
         const cons = consInput ? consInput.value.trim() : '';
@@ -2638,71 +2771,105 @@ function initReviewForm() {
         const consent = consentCheckbox ? consentCheckbox.checked : false;
 
         let isValid = true;
+        let firstError = null;
 
-        // Üniversite
+        // 1. Üniversite
         if (!uni) {
             isValid = false;
             if (!silent && uniError) uniError.textContent = 'Lütfen bir üniversite seçin.';
+            if (!firstError) firstError = { id: 'rf-field-uni', el: uniError, msg: 'Lütfen bir üniversite seçin.' };
         } else if (uniError) {
             uniError.textContent = '';
         }
 
-        // Puan
+        // 2. Genel Puan
         if (!(selectedRating >= 1 && selectedRating <= 5)) {
             isValid = false;
             if (!silent && ratingError) ratingError.textContent = 'Lütfen 1 ile 5 arasında genel bir puan verin.';
+            if (!firstError) firstError = { id: 'rf-field-rating', el: ratingError, msg: 'Lütfen 1 ile 5 arasında genel bir puan verin.' };
         } else if (ratingError) {
             ratingError.textContent = '';
         }
 
-        // Metin (ikisinde en az biri dolu, toplam >= 40)
+        // 3. Tavsiye (Zorunlu)
+        if (isRecommended === null) {
+            isValid = false;
+            if (!silent && recError) recError.textContent = 'Lütfen bu üniversiteyi tavsiye edip etmediğinizi belirtin.';
+            if (!firstError) firstError = { id: 'rf-field-recommend', el: recError, msg: 'Lütfen bu üniversiteyi tavsiye edip etmediğinizi belirtin.' };
+        } else if (recError) {
+            recError.textContent = '';
+        }
+
+        // 4. Metin (en az 40 karakter)
         if (totalChars < 40) {
             isValid = false;
-            if (!silent && textError) {
-                textError.textContent = totalChars === 0
-                    ? 'Lütfen beğendiğiniz veya geliştirilmesini istediğiniz yönleri yazın (en az 40 karakter).'
-                    : `Yorumunuz çok kısa. Lütfen en az ${40 - totalChars} karakter daha ekleyin.`;
-            }
+            const textMsg = totalChars === 0
+                ? 'Lütfen beğendiğiniz veya geliştirilmesini istediğiniz yönleri yazın (en az 40 karakter).'
+                : `Yorumunuz çok kısa. Lütfen en az ${40 - totalChars} karakter daha ekleyin.`;
+            if (!silent && textError) textError.textContent = textMsg;
+            if (!firstError) firstError = { id: 'rf-field-pros', el: textError, msg: textMsg };
         } else if (textError) {
             textError.textContent = '';
         }
 
-        // Etiketler
-        if (selectedTags.size === 0) {
-            isValid = false;
-            if (!silent && tagsError) tagsError.textContent = 'Lütfen en az bir konu etiketi seçin.';
-        } else if (tagsError) {
-            tagsError.textContent = '';
-        }
-
-        // Onay
+        // 5. Onay
         if (!consent) {
             isValid = false;
             if (!silent && consentError) consentError.textContent = 'Yorumunuzu paylaşmak için Topluluk Kurallarını onaylamalısınız.';
+            if (!firstError) firstError = { id: 'rf-field-consent', el: consentError, msg: 'Topluluk Kurallarını onaylamalısınız.' };
         } else if (consentError) {
             consentError.textContent = '';
         }
 
+        // İlerleme Sayacı (5 zorunlu alan)
+        const checks = [Boolean(uni), selectedRating >= 1, isRecommended !== null, totalChars >= 40, Boolean(consent)];
+        const completed = checks.filter(Boolean).length;
+        if (progressText) progressText.textContent = `Zorunlu alanlar: ${completed}/5 tamam`;
+        if (bottomStatus) bottomStatus.classList.toggle('is-ready', completed === 5);
+
         if (submitBtn) {
-            submitBtn.disabled = !isValid;
+            if (isValid) {
+                submitBtn.removeAttribute('disabled');
+                submitBtn.setAttribute('aria-disabled', 'false');
+            } else {
+                submitBtn.setAttribute('disabled', 'disabled');
+                submitBtn.setAttribute('aria-disabled', 'true');
+            }
+        }
+
+        if (scrollToFirstError && firstError) {
+            highlightAndScroll(firstError.id, firstError.el, firstError.msg);
         }
 
         return isValid;
     }
 
-    // 9. Taslak Kaydetme / Geri Yükleme (Draft Autosave)
+    // Submit butonu pasifken tıklandığında eksik alana yönlendirme
+    if (submitBtn) {
+        submitBtn.addEventListener('click', (e) => {
+            if (submitBtn.getAttribute('aria-disabled') === 'true' || submitBtn.disabled) {
+                e.preventDefault();
+                validateForm(false, true);
+            }
+        });
+    }
+
+    // 10. Taslak Kaydetme / Geri Yükleme (Draft Autosave)
     function saveDraft() {
         try {
             const draft = {
                 uni: uniSelectHidden ? uniSelectHidden.value : '',
                 rating: selectedRating,
+                recommend: isRecommended,
+                is_anonymous: isAnonymous,
+                edu_status: educationStatus,
+                grad_year: educationStatus === 'graduate' ? graduationYear : null,
                 criteria: criteriaRatings,
                 dept: deptHidden ? deptHidden.value : (deptSearchInput ? deptSearchInput.value : ''),
-                student_class: classSelect ? classSelect.value : '',
+                student_class: educationStatus === 'student' && classSelect ? classSelect.value : '',
                 scholarship: scholarshipSelect ? scholarshipSelect.value : '',
                 pros: prosInput ? prosInput.value : '',
                 cons: consInput ? consInput.value : '',
-                tags: Array.from(selectedTags),
                 consent: consentCheckbox ? consentCheckbox.checked : false
             };
             localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
@@ -2734,6 +2901,21 @@ function initReviewForm() {
                 highlightStars(selectedRating);
             }
 
+            // Tavsiye
+            if (typeof draft.recommend === 'boolean') {
+                setRecommendation(draft.recommend);
+            }
+
+            // Anonimlik
+            if (typeof draft.is_anonymous === 'boolean') {
+                setAnonymous(draft.is_anonymous);
+            }
+
+            // Öğrenim Durumu
+            if (draft.edu_status) {
+                setEducationStatus(draft.edu_status, draft.grad_year);
+            }
+
             // Kriterler
             if (draft.criteria && typeof draft.criteria === 'object') {
                 Object.entries(draft.criteria).forEach(([k, v]) => {
@@ -2760,33 +2942,24 @@ function initReviewForm() {
             if (draft.cons && consInput) consInput.value = draft.cons;
             updateCharCount();
 
-            // Etiketler
-            if (Array.isArray(draft.tags)) {
-                draft.tags.forEach(tId => {
-                    selectedTags.add(tId);
-                    const b = document.querySelector(`.tag--selectable[data-tag-id="${tId}"]`);
-                    if (b) b.classList.add('tag--selected');
-                });
-                if (tagCountBadge) tagCountBadge.textContent = `${selectedTags.size} / 3 seçildi`;
-                if (tagsHidden) tagsHidden.value = Array.from(selectedTags).join(',');
-            }
-
             // Onay
             if (draft.consent && consentCheckbox) {
                 consentCheckbox.checked = true;
             }
 
+            updatePowerMeter();
             validateForm(true);
         } catch (_) {}
     }
 
     restoreDraft();
+    updatePowerMeter();
 
-    // 10. Form Gönderimi
+    // 11. Form Gönderimi
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        if (!validateForm(false)) {
+        if (!validateForm(false, true)) {
             showToast('⚠️ Lütfen formdaki zorunlu alanları eksiksiz doldurun.');
             return;
         }
@@ -2808,25 +2981,20 @@ function initReviewForm() {
         // Bağlam satırı
         const metaParts = [];
         const deptVal = deptHidden ? deptHidden.value.trim() : '';
-        const classVal = classSelect ? classSelect.value : '';
+        const classVal = (educationStatus === 'student' && classSelect) ? classSelect.value : '';
         const scholarshipVal = scholarshipSelect ? scholarshipSelect.value : '';
+        const gradYearVal = (educationStatus === 'graduate' && gradYearSelect) ? (parseInt(gradYearSelect.value, 10) || null) : null;
 
         if (deptVal) metaParts.push(`Bölüm: ${deptVal}`);
         if (classVal) metaParts.push(`Sınıf: ${classVal}`);
+        if (gradYearVal) metaParts.push(`Mezuniyet: ${gradYearVal}`);
         if (scholarshipVal) metaParts.push(`Burs: ${scholarshipVal}`);
 
         if (metaParts.length > 0) {
             combinedText += `\n\n(${metaParts.join(' • ')})`;
         }
 
-        // Kriter puanları etiketlere dahil edilir (yurt, yemekhane vb.)
-        const activeCritTags = Object.entries(criteriaRatings)
-            .filter(([_, v]) => v > 0)
-            .map(([k, _]) => k);
-
-        const allTags = Array.from(new Set([...Array.from(selectedTags), ...activeCritTags])).slice(0, 5);
-
-        // Yeni review objesi (mevcut backend API'sine tam uyumlu)
+        // Yeni review objesi (Requirement 3: gizlenen alan değeri gönderilmez, Requirement 5: boş etiket listesi)
         const newReview = {
             id: Date.now(),
             user: CURRENT_USER.name,
@@ -2834,9 +3002,12 @@ function initReviewForm() {
             university: university,
             date: new Date().toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' }),
             rating: selectedRating,
-            tags: allTags.length > 0 ? allTags : ['kampus'],
+            tags: [], // Requirement 5: Boş etiket listesi gönderilir
             text: combinedText,
-            // Ek bağlam alanları (istemci & genişletilebilir backend desteği için)
+            is_recommended: isRecommended,
+            is_anonymous: isAnonymous,
+            education_status: educationStatus || null,
+            graduation_year: gradYearVal,
             department: deptVal || undefined,
             student_class: classVal || undefined,
             scholarship: scholarshipVal || undefined,

@@ -293,7 +293,6 @@ export const TEMPLATES = {
                 <div class="ed-uni-tabs__inner">
                     <button type="button" class="ed-uni-tab active" data-target="sec-genel">Genel</button>
                     <button type="button" class="ed-uni-tab" data-target="sec-yorumlar">Yorumlar <span class="tab-badge" id="tab-reviews-count">0</span></button>
-                    <button type="button" class="ed-uni-tab" data-target="sec-bolumler">Bölümler</button>
                     <button type="button" class="ed-uni-tab" data-target="sec-yurtlar">Yurtlar <span class="tab-badge" id="tab-dorms-count">0</span></button>
                     <button type="button" class="ed-uni-tab" data-target="sec-ulasim">Ulaşım & Harita</button>
                 </div>
@@ -372,17 +371,7 @@ export const TEMPLATES = {
                         <div id="reviews-container" class="ed-reviews-list" data-stagger="80"></div>
                     </section>
 
-                    <!-- BÖLÜM 3: BÖLÜMLER -->
-                    <section class="profile-section uni-section" id="sec-bolumler">
-                        <div class="ed-section__head">
-                            <p class="ed-kicker">Akademik Birimler</p>
-                            <h2 class="ed-section__title">Öne Çıkan Bölümler</h2>
-                            <p class="section-desc">Öğrencilerin en çok ilgi gösterdiği ve değerlendirdiği lisans programları.</p>
-                        </div>
-                        <div class="uni-depts-grid" id="uni-depts-grid"></div>
-                    </section>
-
-                    <!-- BÖLÜM 4: YURTLAR -->
+                    <!-- BÖLÜM 3: YURTLAR -->
                     <section class="profile-section uni-section" id="sec-yurtlar">
                         <div class="ed-section__head uni-dorms-head">
                             <div>
@@ -616,7 +605,7 @@ export const TEMPLATES = {
                     <form id="add-review-form" class="rf-form" novalidate>
                         
                         <!-- 1. Üniversite Seçimi (Searchable Combobox) -->
-                        <div class="rf-field">
+                        <div class="rf-field" id="rf-field-uni">
                             <label class="rf-label" for="form-uni-hidden">
                                 Üniversite <span class="rf-req" aria-label="zorunlu">*</span>
                             </label>
@@ -635,168 +624,52 @@ export const TEMPLATES = {
                             <div class="rf-error" id="rf-uni-error" aria-live="polite"></div>
                         </div>
 
-                        <!-- 2. Genel Puan (Büyük belirgin yıldızlar + altında etiket) -->
-                        <div class="rf-field">
-                            <label class="rf-label">
-                                Genel Puanınız <span class="rf-req" aria-label="zorunlu">*</span>
-                            </label>
-                            <div class="rf-stars-wrap">
-                                <div id="star-rating" class="rf-stars" role="radiogroup" aria-label="Genel Puan">
-                                    <span class="rf-star" data-value="1" role="radio" aria-label="1 yıldız" tabindex="0">★</span>
-                                    <span class="rf-star" data-value="2" role="radio" aria-label="2 yıldız" tabindex="0">★</span>
-                                    <span class="rf-star" data-value="3" role="radio" aria-label="3 yıldız" tabindex="0">★</span>
-                                    <span class="rf-star" data-value="4" role="radio" aria-label="4 yıldız" tabindex="0">★</span>
-                                    <span class="rf-star" data-value="5" role="radio" aria-label="5 yıldız" tabindex="0">★</span>
+                        <!-- 2. Genel Puan + Tavsiye (Yan Yana) -->
+                        <div class="rf-rating-rec-row">
+                            <!-- Genel Puan -->
+                            <div class="rf-field" id="rf-field-rating">
+                                <label class="rf-label">
+                                    Genel Puanınız <span class="rf-req" aria-label="zorunlu">*</span>
+                                </label>
+                                <div class="rf-stars-wrap">
+                                    <div id="star-rating" class="rf-stars" role="radiogroup" aria-label="Genel Puan">
+                                        <span class="rf-star" data-value="1" role="radio" aria-label="1 yıldız" tabindex="0">★</span>
+                                        <span class="rf-star" data-value="2" role="radio" aria-label="2 yıldız" tabindex="0">★</span>
+                                        <span class="rf-star" data-value="3" role="radio" aria-label="3 yıldız" tabindex="0">★</span>
+                                        <span class="rf-star" data-value="4" role="radio" aria-label="4 yıldız" tabindex="0">★</span>
+                                        <span class="rf-star" data-value="5" role="radio" aria-label="5 yıldız" tabindex="0">★</span>
+                                    </div>
+                                    <div id="rf-rating-label" class="rf-rating-desc" aria-live="polite">Puan seçin (1-5)</div>
                                 </div>
-                                <div id="rf-rating-label" class="rf-rating-desc" aria-live="polite">Puan seçin (1-5)</div>
+                                <input type="hidden" id="form-rating" value="0" required>
+                                <div class="rf-error" id="rf-rating-error" aria-live="polite"></div>
                             </div>
-                            <input type="hidden" id="form-rating" value="0" required>
-                            <div class="rf-error" id="rf-rating-error" aria-live="polite"></div>
-                        </div>
 
-                        <!-- 3. İsteğe Bağlı Kriter Puanları -->
-                        <div class="rf-field rf-crit-group">
-                            <div class="rf-label-wrap">
-                                <span class="rf-label">Kriter Puanları</span>
-                                <span class="rf-opt-badge">İsteğe bağlı</span>
-                            </div>
-                            <p class="rf-help">Aşağıdaki alanları deneyimlediğin kadarıyla puanlayabilirsin.</p>
-                            
-                            <div class="rf-crit-grid">
-                                <!-- Yurt -->
-                                <div class="rf-crit-item" data-crit="yurt">
-                                    <div class="rf-crit-label">
-                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                                        <span>Yurt</span>
-                                    </div>
-                                    <div class="rf-crit-stars" data-crit="yurt">
-                                        <span class="rf-crit-star" data-v="1">★</span>
-                                        <span class="rf-crit-star" data-v="2">★</span>
-                                        <span class="rf-crit-star" data-v="3">★</span>
-                                        <span class="rf-crit-star" data-v="4">★</span>
-                                        <span class="rf-crit-star" data-v="5">★</span>
-                                    </div>
+                            <!-- Tavsiye Eder misin? -->
+                            <div class="rf-field" id="rf-field-recommend">
+                                <label class="rf-label">
+                                    Tavsiye eder misin? <span class="rf-req" aria-label="zorunlu">*</span>
+                                </label>
+                                <div class="rf-rec-group" role="radiogroup" aria-label="Tavsiye Durumu">
+                                    <button type="button" class="rf-rec-btn" data-value="yes" id="rf-rec-yes">
+                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                                        <span>Evet, tavsiye ederim</span>
+                                    </button>
+                                    <button type="button" class="rf-rec-btn" data-value="no" id="rf-rec-no">
+                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg>
+                                        <span>Hayır, tavsiye etmem</span>
+                                    </button>
                                 </div>
-
-                                <!-- Yemekhane -->
-                                <div class="rf-crit-item" data-crit="yemekhane">
-                                    <div class="rf-crit-label">
-                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 2v16"/><path d="M6 2v19"/><path d="M9 2a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3V2z"/></svg>
-                                        <span>Yemekhane</span>
-                                    </div>
-                                    <div class="rf-crit-stars" data-crit="yemekhane">
-                                        <span class="rf-crit-star" data-v="1">★</span>
-                                        <span class="rf-crit-star" data-v="2">★</span>
-                                        <span class="rf-crit-star" data-v="3">★</span>
-                                        <span class="rf-crit-star" data-v="4">★</span>
-                                        <span class="rf-crit-star" data-v="5">★</span>
-                                    </div>
-                                </div>
-
-                                <!-- Ulaşım -->
-                                <div class="rf-crit-item" data-crit="ulasim">
-                                    <div class="rf-crit-label">
-                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.6 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>
-                                        <span>Ulaşım</span>
-                                    </div>
-                                    <div class="rf-crit-stars" data-crit="ulasim">
-                                        <span class="rf-crit-star" data-v="1">★</span>
-                                        <span class="rf-crit-star" data-v="2">★</span>
-                                        <span class="rf-crit-star" data-v="3">★</span>
-                                        <span class="rf-crit-star" data-v="4">★</span>
-                                        <span class="rf-crit-star" data-v="5">★</span>
-                                    </div>
-                                </div>
-
-                                <!-- Sosyal Hayat -->
-                                <div class="rf-crit-item" data-crit="sosyal">
-                                    <div class="rf-crit-label">
-                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                                        <span>Sosyal Hayat</span>
-                                    </div>
-                                    <div class="rf-crit-stars" data-crit="sosyal">
-                                        <span class="rf-crit-star" data-v="1">★</span>
-                                        <span class="rf-crit-star" data-v="2">★</span>
-                                        <span class="rf-crit-star" data-v="3">★</span>
-                                        <span class="rf-crit-star" data-v="4">★</span>
-                                        <span class="rf-crit-star" data-v="5">★</span>
-                                    </div>
-                                </div>
-
-                                <!-- Akademik -->
-                                <div class="rf-crit-item" data-crit="egitim">
-                                    <div class="rf-crit-label">
-                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                                        <span>Akademik</span>
-                                    </div>
-                                    <div class="rf-crit-stars" data-crit="egitim">
-                                        <span class="rf-crit-star" data-v="1">★</span>
-                                        <span class="rf-crit-star" data-v="2">★</span>
-                                        <span class="rf-crit-star" data-v="3">★</span>
-                                        <span class="rf-crit-star" data-v="4">★</span>
-                                        <span class="rf-crit-star" data-v="5">★</span>
-                                    </div>
-                                </div>
+                                <input type="hidden" id="form-recommend" value="">
+                                <div class="rf-error" id="rf-recommend-error" aria-live="polite"></div>
                             </div>
                         </div>
 
-                        <!-- 4. Bağlam Alanları: Bölüm, Sınıf, Burs Durumu -->
-                        <div class="rf-field rf-context-group">
-                            <div class="rf-label-wrap">
-                                <span class="rf-label">Öğrenim Bilgilerin</span>
-                                <span class="rf-opt-badge">İsteğe bağlı</span>
-                            </div>
-
-                            <div class="rf-context-grid">
-                                <!-- Bölüm Combobox -->
-                                <div class="rf-context-col">
-                                    <label class="rf-sublabel" for="rf-dept-input">Bölüm</label>
-                                    <div class="custom-select" id="custom-dept-select-form">
-                                        <div class="custom-select__trigger" tabindex="0">
-                                            <span class="custom-select__text">Bölüm seçin...</span>
-                                            <span class="custom-select__icon">▼</span>
-                                        </div>
-                                        <div class="custom-select__dropdown">
-                                            <input type="text" id="rf-dept-input" class="custom-select__search" placeholder="Bölüm ara..." aria-label="Bölüm ara">
-                                            <ul class="custom-select__options"></ul>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" id="form-dept-hidden" value="">
-                                </div>
-
-                                <!-- Sınıf -->
-                                <div class="rf-context-col">
-                                    <label class="rf-sublabel" for="form-class-select">Sınıf</label>
-                                    <select id="form-class-select" class="rf-select">
-                                        <option value="">Seçiniz...</option>
-                                        <option value="Hazırlık">Hazırlık</option>
-                                        <option value="1. Sınıf">1. Sınıf</option>
-                                        <option value="2. Sınıf">2. Sınıf</option>
-                                        <option value="3. Sınıf">3. Sınıf</option>
-                                        <option value="4. Sınıf">4. Sınıf</option>
-                                        <option value="Mezun">Mezun</option>
-                                    </select>
-                                </div>
-
-                                <!-- Burs Durumu -->
-                                <div class="rf-context-col">
-                                    <label class="rf-sublabel" for="form-scholarship-select">Burs Durumu</label>
-                                    <select id="form-scholarship-select" class="rf-select">
-                                        <option value="">Seçiniz...</option>
-                                        <option value="Burslu">Burslu</option>
-                                        <option value="Yarı Burslu (%50)">Yarı burslu</option>
-                                        <option value="Burssuz">Burssuz</option>
-                                        <option value="Belirtmek istemiyorum">Belirtmek istemiyorum</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 5. İki Metin Alanı: Beğendiklerim & Geliştirilebilecek Yönler -->
-                        <div class="rf-field">
+                        <!-- 3. Beğendiklerim / Geliştirilebilecek Yönler -->
+                        <div class="rf-field" id="rf-field-pros">
                             <div class="rf-label-wrap">
                                 <label class="rf-label" for="form-pros">
-                                    Beğendiklerim <span class="rf-req" aria-label="zorunlu">*</span>
+                                    Beğendiklerim
                                 </label>
                                 <span class="rf-hint-pill">Olumlu yönler</span>
                             </div>
@@ -804,10 +677,10 @@ export const TEMPLATES = {
                                 placeholder="Kampüsün, eğitimin, sosyal çevrenin veya olanakların en sevdiğin yanları..."></textarea>
                         </div>
 
-                        <div class="rf-field">
+                        <div class="rf-field" id="rf-field-cons">
                             <div class="rf-label-wrap">
                                 <label class="rf-label" for="form-cons">
-                                    Geliştirilebilecek Yönler <span class="rf-req" aria-label="zorunlu">*</span>
+                                    Geliştirilebilecek Yönler
                                 </label>
                                 <span class="rf-hint-pill">Gelişime açık alanlar</span>
                             </div>
@@ -818,19 +691,218 @@ export const TEMPLATES = {
                                 <span id="rf-char-guidance" class="rf-char-guidance">Toplam en az 40 karakter yazmalısın.</span>
                                 <span id="char-count" class="rf-char-count">0 / 40 min</span>
                             </div>
+
+                            <!-- 7. Yorum Gücü Göstergesi -->
+                            <div class="rf-power-meter" id="rf-power-meter" aria-live="polite">
+                                <div class="rf-power-header">
+                                    <span class="rf-power-label">Yorum Gücü:</span>
+                                    <span class="rf-power-text" id="rf-power-text">Kısa</span>
+                                </div>
+                                <div class="rf-power-track">
+                                    <div class="rf-power-fill" id="rf-power-fill" style="width: 10%;"></div>
+                                </div>
+                            </div>
+
                             <div class="rf-error" id="rf-text-error" aria-live="polite"></div>
                         </div>
 
-                        <!-- 6. Etiketler (En fazla 3 adet, 44px dokunma alanı) -->
-                        <div class="rf-field">
+                        <!-- 4. Seni Tanıyalım (İsteğe Bağlı) Bloğu -->
+                        <div class="rf-field rf-context-group" id="rf-sec-profile">
                             <div class="rf-label-wrap">
-                                <label class="rf-label">Konu Etiketleri</label>
-                                <span class="rf-counter-badge" id="rf-tag-count">0 / 3 seçildi</span>
+                                <span class="rf-label">Seni tanıyalım</span>
+                                <span class="rf-opt-badge">İsteğe bağlı</span>
                             </div>
-                            <p class="rf-help">Yorumunun en çok hangi konulara odaklandığını belirt (en fazla 3 adet).</p>
-                            <div id="form-tags" class="rf-tags-container"></div>
-                            <input type="hidden" id="form-tags-hidden" value="">
-                            <div class="rf-error" id="rf-tags-error" aria-live="polite"></div>
+                            <p class="rf-help">Deneyiminin hangi bağlamda olduğunu belirtmek adaylara daha çok yardımcı olur.</p>
+
+                            <!-- Öğrenci / Mezun Seçimi (Başlangıçta seçili değil) -->
+                            <div class="rf-edu-segmented">
+                                <button type="button" class="rf-edu-btn" data-status="student" id="rf-edu-student">
+                                    <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                                    <span>Şu an öğrenciyim</span>
+                                </button>
+                                <button type="button" class="rf-edu-btn" data-status="graduate" id="rf-edu-graduate">
+                                    <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                    <span>Mezunum</span>
+                                </button>
+                            </div>
+                            <input type="hidden" id="form-edu-status" value="">
+
+                            <!-- Koşullu Alanlar: Öğrenciyse Sınıf, Mezunsa Mezuniyet Yılı -->
+                            <div class="rf-conditional-fields" id="rf-conditional-fields">
+                                <!-- Öğrenci: Sınıf -->
+                                <div class="rf-context-col" id="rf-student-class-wrap" style="display: none;">
+                                    <label class="rf-sublabel" for="form-class-select">Sınıf</label>
+                                    <select id="form-class-select" class="rf-select">
+                                        <option value="">Seçiniz...</option>
+                                        <option value="Hazırlık">Hazırlık</option>
+                                        <option value="1. Sınıf">1. Sınıf</option>
+                                        <option value="2. Sınıf">2. Sınıf</option>
+                                        <option value="3. Sınıf">3. Sınıf</option>
+                                        <option value="4. Sınıf">4. Sınıf</option>
+                                    </select>
+                                </div>
+
+                                <!-- Mezun: Mezuniyet Yılı (Son 15 Yıl Seçim Kutusu) -->
+                                <div class="rf-context-col" id="rf-grad-year-wrap" style="display: none;">
+                                    <label class="rf-sublabel" for="rf-grad-year-select">Mezuniyet Yılı</label>
+                                    <select id="rf-grad-year-select" class="rf-select">
+                                        <option value="">Seçiniz...</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2017">2017</option>
+                                        <option value="2016">2016</option>
+                                        <option value="2015">2015</option>
+                                        <option value="2014">2014</option>
+                                        <option value="2013">2013</option>
+                                        <option value="2012">2012</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="rf-context-grid">
+                                <!-- Bölüm Combobox -->
+                                <div class="rf-context-col">
+                                    <label class="rf-sublabel" for="rf-dept-input">Bölüm</label>
+                                    <div class="custom-select" id="custom-dept-select-form">
+                                        <div class="custom-select__trigger" tabindex="0">
+                                            <span class="custom-select__text">Bölüm ara…</span>
+                                            <span class="custom-select__icon">▼</span>
+                                        </div>
+                                        <div class="custom-select__dropdown">
+                                            <input type="text" id="rf-dept-input" class="custom-select__search" placeholder="Bölüm ara…" aria-label="Bölüm ara">
+                                            <ul class="custom-select__options"></ul>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="form-dept-hidden" value="">
+                                </div>
+
+                                <!-- Burs Durumu -->
+                                <div class="rf-context-col">
+                                    <label class="rf-sublabel" for="form-scholarship-select">Burs Durumu</label>
+                                    <select id="form-scholarship-select" class="rf-select">
+                                        <option value="">Seçiniz...</option>
+                                        <option value="Burslu">Burslu</option>
+                                        <option value="Yarı Burslu (%50)">Yarı burslu (%50)</option>
+                                        <option value="Burssuz">Burssuz</option>
+                                        <option value="Belirtmek istemiyorum">Belirtmek istemiyorum</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. Detaylı Puanlar (İsteğe Bağlı) Kapalı Akordeon Bölümü -->
+                        <details class="rf-accordion" id="rf-criteria-details">
+                            <summary class="rf-accordion-summary">
+                                <span class="rf-accordion-title">
+                                    <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    + 2 dakikada daha detaylı değerlendir
+                                </span>
+                                <span class="rf-accordion-chevron">▾</span>
+                            </summary>
+                            <div class="rf-accordion-content">
+                                <p class="rf-help">Aşağıdaki kriterleri deneyimlediğin kadarıyla 1-5 yıldız arasında puanlayabilirsin.</p>
+                                
+                                <div class="rf-crit-grid">
+                                    <!-- Yurt -->
+                                    <div class="rf-crit-item" data-crit="yurt">
+                                        <div class="rf-crit-label">
+                                            <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                            <span>Yurt</span>
+                                        </div>
+                                        <div class="rf-crit-stars" data-crit="yurt">
+                                            <span class="rf-crit-star" data-v="1">★</span>
+                                            <span class="rf-crit-star" data-v="2">★</span>
+                                            <span class="rf-crit-star" data-v="3">★</span>
+                                            <span class="rf-crit-star" data-v="4">★</span>
+                                            <span class="rf-crit-star" data-v="5">★</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Yemekhane -->
+                                    <div class="rf-crit-item" data-crit="yemekhane">
+                                        <div class="rf-crit-label">
+                                            <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 2v16"/><path d="M6 2v19"/><path d="M9 2a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3V2z"/></svg>
+                                            <span>Yemekhane</span>
+                                        </div>
+                                        <div class="rf-crit-stars" data-crit="yemekhane">
+                                            <span class="rf-crit-star" data-v="1">★</span>
+                                            <span class="rf-crit-star" data-v="2">★</span>
+                                            <span class="rf-crit-star" data-v="3">★</span>
+                                            <span class="rf-crit-star" data-v="4">★</span>
+                                            <span class="rf-crit-star" data-v="5">★</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Ulaşım -->
+                                    <div class="rf-crit-item" data-crit="ulasim">
+                                        <div class="rf-crit-label">
+                                            <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.6 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>
+                                            <span>Ulaşım</span>
+                                        </div>
+                                        <div class="rf-crit-stars" data-crit="ulasim">
+                                            <span class="rf-crit-star" data-v="1">★</span>
+                                            <span class="rf-crit-star" data-v="2">★</span>
+                                            <span class="rf-crit-star" data-v="3">★</span>
+                                            <span class="rf-crit-star" data-v="4">★</span>
+                                            <span class="rf-crit-star" data-v="5">★</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sosyal Hayat -->
+                                    <div class="rf-crit-item" data-crit="sosyal">
+                                        <div class="rf-crit-label">
+                                            <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                            <span>Sosyal Hayat</span>
+                                        </div>
+                                        <div class="rf-crit-stars" data-crit="sosyal">
+                                            <span class="rf-crit-star" data-v="1">★</span>
+                                            <span class="rf-crit-star" data-v="2">★</span>
+                                            <span class="rf-crit-star" data-v="3">★</span>
+                                            <span class="rf-crit-star" data-v="4">★</span>
+                                            <span class="rf-crit-star" data-v="5">★</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Akademik (Merkezlenmiş 5. eleman) -->
+                                    <div class="rf-crit-item rf-crit-item--full" data-crit="egitim">
+                                        <div class="rf-crit-label">
+                                            <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                                            <span>Akademik</span>
+                                        </div>
+                                        <div class="rf-crit-stars" data-crit="egitim">
+                                            <span class="rf-crit-star" data-v="1">★</span>
+                                            <span class="rf-crit-star" data-v="2">★</span>
+                                            <span class="rf-crit-star" data-v="3">★</span>
+                                            <span class="rf-crit-star" data-v="4">★</span>
+                                            <span class="rf-crit-star" data-v="5">★</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- 6. Anonimlik Anahtarı -->
+                        <div class="rf-field rf-anon-card" id="rf-field-anon">
+                            <div class="rf-anon-left">
+                                <span class="rf-anon-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z"/></svg>
+                                </span>
+                                <div>
+                                    <div class="rf-anon-title" id="rf-anon-label">Anonim olarak paylaş</div>
+                                    <div class="rf-anon-desc" id="rf-anon-desc">İsminiz gizlenir, yorumunuz "Anonim öğrenci" adıyla yayınlanır.</div>
+                                </div>
+                            </div>
+                            <label class="rf-switch" for="rf-anonymous-toggle" aria-label="Anonim paylaşım anahtarı">
+                                <input type="checkbox" id="rf-anonymous-toggle" checked aria-labelledby="rf-anon-label">
+                                <span class="rf-slider"></span>
+                            </label>
                         </div>
 
                         <!-- 7. Güven & Moderasyon Uyarısı -->
@@ -843,7 +915,7 @@ export const TEMPLATES = {
                         </div>
 
                         <!-- 8. Zorunlu Onay Kutusu -->
-                        <div class="rf-field rf-consent-field">
+                        <div class="rf-field rf-consent-field" id="rf-field-consent">
                             <label class="rf-checkbox-label" for="rf-consent">
                                 <input type="checkbox" id="rf-consent" class="rf-checkbox" required>
                                 <span class="rf-checkbox-text">
@@ -853,10 +925,18 @@ export const TEMPLATES = {
                             <div class="rf-error" id="rf-consent-error" aria-live="polite"></div>
                         </div>
 
-                        <!-- 9. Submit Butonu -->
-                        <button type="submit" id="rf-submit-btn" class="btn btn--primary rf-submit-btn" disabled>
-                            Yorumu paylaş
-                        </button>
+                        <!-- 9. Ekran Altında Sabit Gönderim Çubuğu (Sticky Bottom Bar) -->
+                        <div class="rf-bottom-bar" id="rf-bottom-bar">
+                            <div class="rf-bottom-bar__inner">
+                                <div class="rf-bottom-bar__status" id="rf-bottom-status">
+                                    <span class="rf-progress-dot"></span>
+                                    <span id="rf-progress-text">Zorunlu alanlar: 0/4 tamam</span>
+                                </div>
+                                <button type="submit" id="rf-submit-btn" class="btn btn--primary rf-submit-btn" aria-disabled="true">
+                                    Yorumu paylaş
+                                </button>
+                            </div>
+                        </div>
                     </form>
 
                     <!-- Gönderim Sonrası Teşekkür Kartı (Başlangıçta gizli) -->

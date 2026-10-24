@@ -50,6 +50,10 @@ class ReviewCreateRequest(BaseModel):
     rating: int
     tags: List[str]
     text: str
+    is_recommended: bool
+    is_anonymous: bool = True
+    education_status: Optional[str] = "student"
+    graduation_year: Optional[int] = None
 
 class ReplyCreateRequest(BaseModel):
     text: str
@@ -434,6 +438,16 @@ def create_review(
     now = time.localtime()
     date_str = f"{now.tm_mday:02d} {turkish_months[now.tm_mon - 1]} {now.tm_year}"
 
+    grad_year = None
+    if req.education_status == "graduate" and req.graduation_year:
+        try:
+            grad_year = int(req.graduation_year)
+            current_year = now.tm_year
+            if grad_year < 1950 or grad_year > current_year + 1:
+                grad_year = None
+        except (ValueError, TypeError):
+            grad_year = None
+
     review = Review(
         user_id=current_user.id,
         user_name=current_user.name,
@@ -442,6 +456,10 @@ def create_review(
         rating=max(1, min(5, req.rating)),
         tags_json=json.dumps(req.tags),
         text=req.text.strip(),
+        is_recommended=bool(req.is_recommended),
+        is_anonymous=bool(req.is_anonymous),
+        education_status=(req.education_status or "student").strip(),
+        graduation_year=grad_year,
         timestamp=now_ms,
         date=date_str
     )

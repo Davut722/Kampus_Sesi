@@ -114,7 +114,11 @@ export const api = {
                 university: reviewData.university,
                 rating: reviewData.rating,
                 tags: reviewData.tags,
-                text: reviewData.text
+                text: reviewData.text,
+                is_recommended: reviewData.is_recommended,
+                is_anonymous: reviewData.is_anonymous,
+                education_status: reviewData.education_status,
+                graduation_year: reviewData.graduation_year
             })
         });
     },

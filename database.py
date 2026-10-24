@@ -75,6 +75,10 @@ class Review(Base):
     text = Column(Text, nullable=False)
     timestamp = Column(BigInteger, default=lambda: int(time.time() * 1000))
     date = Column(String(50), nullable=False)
+    is_recommended = Column(Boolean, nullable=True)
+    is_anonymous = Column(Boolean, default=True, nullable=False)
+    education_status = Column(String(50), nullable=True)
+    graduation_year = Column(Integer, nullable=True)
 
     user = relationship("User", back_populates="reviews")
     replies = relationship(
@@ -104,6 +108,10 @@ class Review(Base):
             "rating": self.rating,
             "tags": tags,
             "text": self.text,
+            "is_recommended": self.is_recommended,
+            "is_anonymous": bool(self.is_anonymous) if self.is_anonymous is not None else True,
+            "education_status": self.education_status,
+            "graduation_year": self.graduation_year,
             "timestamp": self.timestamp,
             "date": self.date,
             "replies": [r.to_dict() for r in self.replies],
@@ -371,6 +379,21 @@ def init_db():
                 b_cols = [c['name'] for c in insp.get_columns('blog_submissions')]
                 if 'admin_note' not in b_cols:
                     conn.execute(text("ALTER TABLE blog_submissions ADD COLUMN admin_note TEXT"))
+                    conn.commit()
+
+            if 'reviews' in table_names:
+                r_cols = [c['name'] for c in insp.get_columns('reviews')]
+                if 'is_recommended' not in r_cols:
+                    conn.execute(text("ALTER TABLE reviews ADD COLUMN is_recommended BOOLEAN DEFAULT NULL"))
+                    conn.commit()
+                if 'is_anonymous' not in r_cols:
+                    conn.execute(text("ALTER TABLE reviews ADD COLUMN is_anonymous BOOLEAN DEFAULT 1"))
+                    conn.commit()
+                if 'education_status' not in r_cols:
+                    conn.execute(text("ALTER TABLE reviews ADD COLUMN education_status VARCHAR(50) DEFAULT NULL"))
+                    conn.commit()
+                if 'graduation_year' not in r_cols:
+                    conn.execute(text("ALTER TABLE reviews ADD COLUMN graduation_year INT DEFAULT NULL"))
                     conn.commit()
     except Exception as e:
         print(f"[WARN] Table migration check note: {e}")

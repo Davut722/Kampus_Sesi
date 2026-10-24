@@ -193,10 +193,20 @@ function getSavedReviews() {
 
 window.saveReview = async function(review) {
     const created = await api.createReview(review);
-    globalReviewsState.unshift(created);
+    const savedObj = {
+        ...review,
+        ...(created || {}),
+        rating_dorm: created && created.rating_dorm !== undefined && created.rating_dorm !== null ? created.rating_dorm : review.rating_dorm,
+        rating_food: created && created.rating_food !== undefined && created.rating_food !== null ? created.rating_food : review.rating_food,
+        rating_transport: created && created.rating_transport !== undefined && created.rating_transport !== null ? created.rating_transport : review.rating_transport,
+        rating_social: created && created.rating_social !== undefined && created.rating_social !== null ? created.rating_social : review.rating_social,
+        rating_academic: created && created.rating_academic !== undefined && created.rating_academic !== null ? created.rating_academic : review.rating_academic,
+        criteria: (created && created.criteria) || review.criteria
+    };
+    globalReviewsState.unshift(savedObj);
     if (currentRoute === 'university' && activeRenderers.university) activeRenderers.university();
     if (currentRoute === 'compare' && activeRenderers.compare) activeRenderers.compare();
-    return created;
+    return savedObj;
 };
 
 window.removeSavedReview = async function(id) {
@@ -1169,8 +1179,10 @@ function initUniversityPage(initialUni) {
 
     // Get reviews for current uni
     function getAllReviews() {
-        const userReviews = getSavedReviews().filter(r => r.university === selectedUni);
-        const mockReviews = ALL_MOCK.filter(r => r.university === selectedUni);
+        const norm = (s) => String(s || '').replace(/\s*\([^)]*\)/g, '').trim().toLocaleLowerCase('tr');
+        const target = norm(selectedUni);
+        const userReviews = getSavedReviews().filter(r => norm(r.university) === target || r.university === selectedUni);
+        const mockReviews = ALL_MOCK.filter(r => norm(r.university) === target || r.university === selectedUni);
         return [...userReviews, ...mockReviews];
     }
 
@@ -1298,34 +1310,39 @@ function initUniversityPage(initialUni) {
         if (!criteriaList) return;
 
         const CRITERIA_CONFIG = [
-            { id: 'akademik', label: 'Akademik Kalite', icon: 'graduation-cap', tags: ['egitim', 'akademik'] },
-            { id: 'yurt', label: 'Yurt Olanakları', icon: 'home', tags: ['yurt'] },
-            { id: 'yemekhane', label: 'Yemekhane & Beslenme', icon: 'utensils', tags: ['yemekhane'] },
-            { id: 'ulasim', label: 'Ulaşım Kolaylığı', icon: 'bus', tags: ['ulasim'] },
-            { id: 'sosyal', label: 'Sosyal Yaşam', icon: 'sparkles', tags: ['sosyal'] }
+            { id: 'akademik', key: 'rating_academic', altKey: 'egitim', label: 'Akademik Kalite', icon: 'graduation-cap' },
+            { id: 'yurt', key: 'rating_dorm', altKey: 'yurt', label: 'Yurt Olanakları', icon: 'home' },
+            { id: 'yemekhane', key: 'rating_food', altKey: 'yemekhane', label: 'Yemekhane & Beslenme', icon: 'utensils' },
+            { id: 'ulasim', key: 'rating_transport', altKey: 'ulasim', label: 'Ulaşım Kolaylığı', icon: 'bus' },
+            { id: 'sosyal', key: 'rating_social', altKey: 'sosyal', label: 'Sosyal Yaşam', icon: 'sparkles' }
         ];
 
         let html = '';
         CRITERIA_CONFIG.forEach(crit => {
             const scores = [];
-            allReviews.forEach(r => {
-                if (r.criteria && typeof r.criteria[crit.id] === 'number' && r.criteria[crit.id] > 0) {
-                    scores.push(r.criteria[crit.id]);
-                } else if (r.tags && r.tags.some(t => crit.tags.includes(t)) && r.rating) {
-                    scores.push(r.rating);
+            (allReviews || []).forEach(r => {
+                // Sadece geçerli puan verilmiş (1-5) yorumlar hesaba katılır
+                let score = r[crit.key];
+                if ((score === null || score === undefined || score === 0) && r.criteria) {
+                    score = r.criteria[crit.id] || r.criteria[crit.altKey];
+                }
+                const num = Number(score);
+                if (num >= 1 && num <= 5) {
+                    scores.push(num);
                 }
             });
 
             if (scores.length > 0) {
-                const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
-                const pct = Math.min(100, Math.max(0, Math.round((avg / 5) * 100)));
+                const count = scores.length;
+                const avg = (scores.reduce((a, b) => a + b, 0) / count).toFixed(1);
+                const pct = Math.min(100, Math.max(0, Math.round((parseFloat(avg) / 5) * 100)));
                 html += `
                     <div class="uni-criterion-row">
                         <div class="uni-criterion-head">
                             <span class="uni-criterion-label">
                                 <i data-lucide="${crit.icon}" class="icon-xs crit-icon"></i> ${crit.label}
                             </span>
-                            <span class="uni-criterion-score">${avg} <span class="uni-criterion-max">/ 5</span></span>
+                            <span class="uni-criterion-score">${avg} <span class="uni-criterion-count">(${count} yorum)</span></span>
                         </div>
                         <div class="uni-criterion-bar" role="progressbar" aria-valuenow="${avg}" aria-valuemin="0" aria-valuemax="5">
                             <div class="uni-criterion-fill" style="width: ${pct}%;"></div>
@@ -2358,6 +2375,7 @@ function initReviewForm() {
     const eduStudentBtn = document.getElementById('rf-edu-student');
     const eduGraduateBtn = document.getElementById('rf-edu-graduate');
     const eduStatusHidden = document.getElementById('form-edu-status');
+    const eduDetailsWrap = document.getElementById('rf-edu-details');
     const studentClassWrap = document.getElementById('rf-student-class-wrap');
     const gradYearWrap = document.getElementById('rf-grad-year-wrap');
     const gradYearSelect = document.getElementById('rf-grad-year-select');
@@ -2370,8 +2388,7 @@ function initReviewForm() {
     const classSelect = document.getElementById('form-class-select');
     const scholarshipSelect = document.getElementById('form-scholarship-select');
 
-    const prosInput = document.getElementById('form-pros');
-    const consInput = document.getElementById('form-cons');
+    const reviewTextInput = document.getElementById('form-review-text');
     const charCountEl = document.getElementById('char-count');
     const charGuidanceEl = document.getElementById('rf-char-guidance');
     const textError = document.getElementById('rf-text-error');
@@ -2476,6 +2493,7 @@ function initReviewForm() {
             if (eduStatusHidden) eduStatusHidden.value = 'student';
             if (eduStudentBtn) eduStudentBtn.classList.add('active');
             if (eduGraduateBtn) eduGraduateBtn.classList.remove('active');
+            if (eduDetailsWrap) eduDetailsWrap.style.display = 'block';
             if (studentClassWrap) studentClassWrap.style.display = 'block';
             if (gradYearWrap) gradYearWrap.style.display = 'none';
             graduationYear = null;
@@ -2485,6 +2503,7 @@ function initReviewForm() {
             if (eduStatusHidden) eduStatusHidden.value = 'graduate';
             if (eduGraduateBtn) eduGraduateBtn.classList.add('active');
             if (eduStudentBtn) eduStudentBtn.classList.remove('active');
+            if (eduDetailsWrap) eduDetailsWrap.style.display = 'block';
             if (gradYearWrap) gradYearWrap.style.display = 'block';
             if (studentClassWrap) studentClassWrap.style.display = 'none';
             if (classSelect) classSelect.value = '';
@@ -2497,11 +2516,20 @@ function initReviewForm() {
             if (eduStatusHidden) eduStatusHidden.value = '';
             if (eduStudentBtn) eduStudentBtn.classList.remove('active');
             if (eduGraduateBtn) eduGraduateBtn.classList.remove('active');
+            if (eduDetailsWrap) eduDetailsWrap.style.display = 'none';
             if (studentClassWrap) studentClassWrap.style.display = 'none';
             if (gradYearWrap) gradYearWrap.style.display = 'none';
             graduationYear = null;
             if (gradYearSelect) gradYearSelect.value = '';
             if (classSelect) classSelect.value = '';
+            if (deptHidden) deptHidden.value = '';
+            if (deptSearchInput) deptSearchInput.value = '';
+            const trig = document.querySelector('#custom-dept-select-form .custom-select__text');
+            if (trig) {
+                trig.textContent = 'Bölüm ara…';
+                trig.style.color = '';
+            }
+            if (scholarshipSelect) scholarshipSelect.value = '';
         }
         updatePowerMeter();
         saveDraft();
@@ -2605,7 +2633,9 @@ function initReviewForm() {
         const critStars = item.querySelectorAll('.rf-crit-star');
         critStars.forEach(s => {
             const v = Number(s.dataset.v);
-            s.addEventListener('click', () => {
+            s.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 if (criteriaRatings[critId] === v) {
                     criteriaRatings[critId] = 0;
                 } else {
@@ -2668,42 +2698,42 @@ function initReviewForm() {
         scholarshipSelect.addEventListener('change', () => saveDraft());
     }
 
-    // 5. İki Metin Alanı (Beğendiklerim & Geliştirilebilecek Yönler)
+    // 5. Tek Metin Alanı (Deneyimin)
     function updateCharCount() {
-        const pros = prosInput ? prosInput.value.trim() : '';
-        const cons = consInput ? consInput.value.trim() : '';
-        const total = pros.length + cons.length;
+        const text = reviewTextInput ? reviewTextInput.value.trim() : '';
+        const total = text.length;
 
         if (charCountEl) {
-            charCountEl.textContent = `${total} / 40 min`;
+            charCountEl.textContent = `${total} / 40 min (maks. 500)`;
             charCountEl.classList.toggle('is-valid', total >= 40);
         }
 
         if (charGuidanceEl) {
             if (total === 0) {
-                charGuidanceEl.textContent = 'En az bir alanı doldurmalı, toplamda en az 40 karakter yazmalısın.';
+                charGuidanceEl.textContent = 'En az 40 karakter yazmalısın.';
                 charGuidanceEl.style.color = '';
             } else if (total < 40) {
-                charGuidanceEl.textContent = `Toplam en az 40 karakter yazmalısın (kalan: ${40 - total} karakter).`;
+                charGuidanceEl.textContent = `En az 40 karakter yazmalısın (kalan: ${40 - total} karakter).`;
                 charGuidanceEl.style.color = 'var(--color-danger)';
             } else {
-                charGuidanceEl.textContent = `✓ Karakter sayısı yeterli (${total} karakter).`;
+                charGuidanceEl.textContent = `✓ Karakter sayısı yeterli (${total}/500 karakter).`;
                 charGuidanceEl.style.color = 'var(--color-success)';
             }
+        }
+        if (textError && total >= 40) {
+            textError.textContent = '';
         }
         updatePowerMeter();
         validateForm(true);
         saveDraft();
     }
 
-    if (prosInput) prosInput.addEventListener('input', updateCharCount);
-    if (consInput) consInput.addEventListener('input', updateCharCount);
+    if (reviewTextInput) reviewTextInput.addEventListener('input', updateCharCount);
 
     // 7. Yorum Gücü Göstergesi (Bilgilendirme)
     function updatePowerMeter() {
-        const pros = prosInput ? prosInput.value.trim() : '';
-        const cons = consInput ? consInput.value.trim() : '';
-        const totalChars = pros.length + cons.length;
+        const text = reviewTextInput ? reviewTextInput.value.trim() : '';
+        const totalChars = text.length;
 
         let score = 0;
         // Metin uzunluğu (max 50)
@@ -2715,7 +2745,7 @@ function initReviewForm() {
         if (isRecommended !== null) score += 15;
 
         // Bölüm (15)
-        const dept = deptHidden ? deptHidden.value.trim() : '';
+        const dept = (educationStatus && deptHidden) ? deptHidden.value.trim() : '';
         if (dept) score += 15;
 
         // Öğrenim durumu (10)
@@ -2765,9 +2795,8 @@ function initReviewForm() {
     // 9. Doğrulama ve Submit Butonu Durumu
     function validateForm(silent = false, scrollToFirstError = false) {
         const uni = uniSelectHidden ? uniSelectHidden.value.trim() : '';
-        const pros = prosInput ? prosInput.value.trim() : '';
-        const cons = consInput ? consInput.value.trim() : '';
-        const totalChars = pros.length + cons.length;
+        const text = reviewTextInput ? reviewTextInput.value.trim() : '';
+        const totalChars = text.length;
         const consent = consentCheckbox ? consentCheckbox.checked : false;
 
         let isValid = true;
@@ -2804,10 +2833,10 @@ function initReviewForm() {
         if (totalChars < 40) {
             isValid = false;
             const textMsg = totalChars === 0
-                ? 'Lütfen beğendiğiniz veya geliştirilmesini istediğiniz yönleri yazın (en az 40 karakter).'
-                : `Yorumunuz çok kısa. Lütfen en az ${40 - totalChars} karakter daha ekleyin.`;
+                ? 'Lütfen deneyimini detaylandıran bir değerlendirme yaz (en az 40 karakter).'
+                : `Yorumun çok kısa. Lütfen en az ${40 - totalChars} karakter daha ekle.`;
             if (!silent && textError) textError.textContent = textMsg;
-            if (!firstError) firstError = { id: 'rf-field-pros', el: textError, msg: textMsg };
+            if (!firstError) firstError = { id: 'rf-field-text', el: textError, msg: textMsg };
         } else if (textError) {
             textError.textContent = '';
         }
@@ -2865,11 +2894,10 @@ function initReviewForm() {
                 edu_status: educationStatus,
                 grad_year: educationStatus === 'graduate' ? graduationYear : null,
                 criteria: criteriaRatings,
-                dept: deptHidden ? deptHidden.value : (deptSearchInput ? deptSearchInput.value : ''),
-                student_class: educationStatus === 'student' && classSelect ? classSelect.value : '',
-                scholarship: scholarshipSelect ? scholarshipSelect.value : '',
-                pros: prosInput ? prosInput.value : '',
-                cons: consInput ? consInput.value : '',
+                dept: (educationStatus && deptHidden) ? deptHidden.value : ((educationStatus && deptSearchInput) ? deptSearchInput.value : ''),
+                student_class: (educationStatus === 'student' && classSelect) ? classSelect.value : '',
+                scholarship: (educationStatus && scholarshipSelect) ? scholarshipSelect.value : '',
+                text: reviewTextInput ? reviewTextInput.value : '',
                 consent: consentCheckbox ? consentCheckbox.checked : false
             };
             localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
@@ -2937,9 +2965,12 @@ function initReviewForm() {
             if (draft.student_class && classSelect) classSelect.value = draft.student_class;
             if (draft.scholarship && scholarshipSelect) scholarshipSelect.value = draft.scholarship;
 
-            // Metinler
-            if (draft.pros && prosInput) prosInput.value = draft.pros;
-            if (draft.cons && consInput) consInput.value = draft.cons;
+            // Metin
+            if (draft.text && reviewTextInput) {
+                reviewTextInput.value = draft.text;
+            } else if ((draft.pros || draft.cons) && reviewTextInput) {
+                reviewTextInput.value = [draft.pros, draft.cons].filter(Boolean).join('\n\n');
+            }
             updateCharCount();
 
             // Onay
@@ -2965,24 +2996,16 @@ function initReviewForm() {
         }
 
         const university = uniSelectHidden.value.trim();
-        const prosVal = prosInput ? prosInput.value.trim() : '';
-        const consVal = consInput ? consInput.value.trim() : '';
+        const textVal = reviewTextInput ? reviewTextInput.value.trim() : '';
 
-        // API metin formatlaması (Beğendiklerim & Geliştirilebilecek Yönler)
-        let combinedText = '';
-        if (prosVal && consVal) {
-            combinedText = `Beğendiklerim:\n${prosVal}\n\nGeliştirilebilecek Yönler:\n${consVal}`;
-        } else if (prosVal) {
-            combinedText = prosVal;
-        } else {
-            combinedText = consVal;
-        }
+        // Sade metin olarak kaydedilir
+        let reviewText = textVal;
 
-        // Bağlam satırı
+        // Bağlam satırı (eğer eğitim durumu seçildiyse)
         const metaParts = [];
-        const deptVal = deptHidden ? deptHidden.value.trim() : '';
+        const deptVal = (educationStatus && deptHidden) ? deptHidden.value.trim() : '';
         const classVal = (educationStatus === 'student' && classSelect) ? classSelect.value : '';
-        const scholarshipVal = scholarshipSelect ? scholarshipSelect.value : '';
+        const scholarshipVal = (educationStatus && scholarshipSelect) ? scholarshipSelect.value : '';
         const gradYearVal = (educationStatus === 'graduate' && gradYearSelect) ? (parseInt(gradYearSelect.value, 10) || null) : null;
 
         if (deptVal) metaParts.push(`Bölüm: ${deptVal}`);
@@ -2991,10 +3014,9 @@ function initReviewForm() {
         if (scholarshipVal) metaParts.push(`Burs: ${scholarshipVal}`);
 
         if (metaParts.length > 0) {
-            combinedText += `\n\n(${metaParts.join(' • ')})`;
+            reviewText += `\n\n(${metaParts.join(' • ')})`;
         }
 
-        // Yeni review objesi (Requirement 3: gizlenen alan değeri gönderilmez, Requirement 5: boş etiket listesi)
         const newReview = {
             id: Date.now(),
             user: CURRENT_USER.name,
@@ -3002,8 +3024,8 @@ function initReviewForm() {
             university: university,
             date: new Date().toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' }),
             rating: selectedRating,
-            tags: [], // Requirement 5: Boş etiket listesi gönderilir
-            text: combinedText,
+            tags: [], // Boş etiket listesi
+            text: reviewText,
             is_recommended: isRecommended,
             is_anonymous: isAnonymous,
             education_status: educationStatus || null,
@@ -3011,9 +3033,19 @@ function initReviewForm() {
             department: deptVal || undefined,
             student_class: classVal || undefined,
             scholarship: scholarshipVal || undefined,
-            criteria: criteriaRatings,
-            pros: prosVal,
-            cons: consVal
+            rating_dorm: criteriaRatings.yurt || null,
+            rating_food: criteriaRatings.yemekhane || null,
+            rating_transport: criteriaRatings.ulasim || null,
+            rating_social: criteriaRatings.sosyal || null,
+            rating_academic: criteriaRatings.egitim || null,
+            criteria: {
+                yurt: criteriaRatings.yurt || 0,
+                yemekhane: criteriaRatings.yemekhane || 0,
+                ulasim: criteriaRatings.ulasim || 0,
+                sosyal: criteriaRatings.sosyal || 0,
+                akademik: criteriaRatings.egitim || 0,
+                egitim: criteriaRatings.egitim || 0
+            }
         };
 
         if (submitBtn) {
@@ -3051,8 +3083,8 @@ function initReviewForm() {
             form.reset();
             selectedRating = 0;
             highlightStars(0);
-            selectedTags.clear();
-            document.querySelectorAll('.tag--selected').forEach(t => t.classList.remove('tag--selected'));
+            if (reviewTextInput) reviewTextInput.value = '';
+            setEducationStatus('');
             Object.keys(criteriaRatings).forEach(k => {
                 criteriaRatings[k] = 0;
                 const item = document.querySelector(`.rf-crit-item[data-crit="${k}"]`);
@@ -3061,9 +3093,8 @@ function initReviewForm() {
             if (uniSelectHidden) uniSelectHidden.value = '';
             const trig = document.querySelector('#custom-uni-select-form .custom-select__text');
             if (trig) trig.textContent = 'Üniversite seçin...';
-            if (tagCountBadge) tagCountBadge.textContent = '0 / 3 seçildi';
-            if (charCountEl) charCountEl.textContent = '0 / 40 min';
-            if (charGuidanceEl) charGuidanceEl.textContent = 'En az bir alanı doldurmalı, toplamda en az 40 karakter yazmalısın.';
+            if (charCountEl) charCountEl.textContent = '0 / 40 min (maks. 500)';
+            if (charGuidanceEl) charGuidanceEl.textContent = 'En az 40 karakter yazmalısın.';
             if (successCard) successCard.hidden = true;
             form.hidden = false;
             validateForm(true);

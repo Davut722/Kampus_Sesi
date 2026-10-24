@@ -79,6 +79,11 @@ class Review(Base):
     is_anonymous = Column(Boolean, default=True, nullable=False)
     education_status = Column(String(50), nullable=True)
     graduation_year = Column(Integer, nullable=True)
+    rating_dorm = Column(Integer, nullable=True)
+    rating_food = Column(Integer, nullable=True)
+    rating_transport = Column(Integer, nullable=True)
+    rating_social = Column(Integer, nullable=True)
+    rating_academic = Column(Integer, nullable=True)
 
     user = relationship("User", back_populates="reviews")
     replies = relationship(
@@ -112,6 +117,19 @@ class Review(Base):
             "is_anonymous": bool(self.is_anonymous) if self.is_anonymous is not None else True,
             "education_status": self.education_status,
             "graduation_year": self.graduation_year,
+            "rating_dorm": self.rating_dorm,
+            "rating_food": self.rating_food,
+            "rating_transport": self.rating_transport,
+            "rating_social": self.rating_social,
+            "rating_academic": self.rating_academic,
+            "criteria": {
+                "yurt": self.rating_dorm or 0,
+                "yemekhane": self.rating_food or 0,
+                "ulasim": self.rating_transport or 0,
+                "sosyal": self.rating_social or 0,
+                "akademik": self.rating_academic or 0,
+                "egitim": self.rating_academic or 0,
+            },
             "timestamp": self.timestamp,
             "date": self.date,
             "replies": [r.to_dict() for r in self.replies],
@@ -394,6 +412,21 @@ def init_db():
                     conn.commit()
                 if 'graduation_year' not in r_cols:
                     conn.execute(text("ALTER TABLE reviews ADD COLUMN graduation_year INT DEFAULT NULL"))
+                    conn.commit()
+                if 'rating_dorm' not in r_cols:
+                    conn.execute(text("ALTER TABLE reviews ADD COLUMN rating_dorm INT DEFAULT NULL"))
+                    conn.commit()
+                if 'rating_food' not in r_cols:
+                    conn.execute(text("ALTER TABLE reviews ADD COLUMN rating_food INT DEFAULT NULL"))
+                    conn.commit()
+                if 'rating_transport' not in r_cols:
+                    conn.execute(text("ALTER TABLE reviews ADD COLUMN rating_transport INT DEFAULT NULL"))
+                    conn.commit()
+                if 'rating_social' not in r_cols:
+                    conn.execute(text("ALTER TABLE reviews ADD COLUMN rating_social INT DEFAULT NULL"))
+                    conn.commit()
+                if 'rating_academic' not in r_cols:
+                    conn.execute(text("ALTER TABLE reviews ADD COLUMN rating_academic INT DEFAULT NULL"))
                     conn.commit()
     except Exception as e:
         print(f"[WARN] Table migration check note: {e}")

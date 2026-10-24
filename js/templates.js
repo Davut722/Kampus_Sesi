@@ -665,34 +665,23 @@ export const TEMPLATES = {
                             </div>
                         </div>
 
-                        <!-- 3. Beğendiklerim / Geliştirilebilecek Yönler -->
-                        <div class="rf-field" id="rf-field-pros">
+                        <!-- 3. Deneyimin (Tek Metin Alanı) -->
+                        <div class="rf-field" id="rf-field-text">
                             <div class="rf-label-wrap">
-                                <label class="rf-label" for="form-pros">
-                                    Beğendiklerim
+                                <label class="rf-label" for="form-review-text">
+                                    Deneyimin <span class="rf-req" aria-label="zorunlu">*</span>
                                 </label>
-                                <span class="rf-hint-pill">Olumlu yönler</span>
+                                <span class="rf-hint-pill">Kişisel deneyim</span>
                             </div>
-                            <textarea id="form-pros" class="rf-textarea" rows="3"
-                                placeholder="Kampüsün, eğitimin, sosyal çevrenin veya olanakların en sevdiğin yanları..."></textarea>
-                        </div>
-
-                        <div class="rf-field" id="rf-field-cons">
-                            <div class="rf-label-wrap">
-                                <label class="rf-label" for="form-cons">
-                                    Geliştirilebilecek Yönler
-                                </label>
-                                <span class="rf-hint-pill">Gelişime açık alanlar</span>
-                            </div>
-                            <textarea id="form-cons" class="rf-textarea" rows="3"
-                                placeholder="Yetersiz bulduğun, eksik gördüğün ya da zorlandığın noktalar..."></textarea>
+                            <textarea id="form-review-text" class="rf-textarea" rows="5" maxlength="500"
+                                placeholder="Kampüs, eğitim, yurt, yemekhane, sosyal çevre... Güçlü ve zayıf yönleriyle deneyimini anlat."></textarea>
                             
                             <div class="rf-char-bar">
-                                <span id="rf-char-guidance" class="rf-char-guidance">Toplam en az 40 karakter yazmalısın.</span>
-                                <span id="char-count" class="rf-char-count">0 / 40 min</span>
+                                <span id="rf-char-guidance" class="rf-char-guidance">En az 40 karakter yazmalısın.</span>
+                                <span id="char-count" class="rf-char-count">0 / 40 min (maks. 500)</span>
                             </div>
 
-                            <!-- 7. Yorum Gücü Göstergesi -->
+                            <!-- Yorum Gücü Göstergesi -->
                             <div class="rf-power-meter" id="rf-power-meter" aria-live="polite">
                                 <div class="rf-power-header">
                                     <span class="rf-power-label">Yorum Gücü:</span>
@@ -714,7 +703,7 @@ export const TEMPLATES = {
                             </div>
                             <p class="rf-help">Deneyiminin hangi bağlamda olduğunu belirtmek adaylara daha çok yardımcı olur.</p>
 
-                            <!-- Öğrenci / Mezun Seçimi (Başlangıçta seçili değil) -->
+                            <!-- Adım 1: Öğrenci / Mezun Seçimi (Başlangıçta ikisi de seçili değil) -->
                             <div class="rf-edu-segmented">
                                 <button type="button" class="rf-edu-btn" data-status="student" id="rf-edu-student">
                                     <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
@@ -727,72 +716,76 @@ export const TEMPLATES = {
                             </div>
                             <input type="hidden" id="form-edu-status" value="">
 
-                            <!-- Koşullu Alanlar: Öğrenciyse Sınıf, Mezunsa Mezuniyet Yılı -->
-                            <div class="rf-conditional-fields" id="rf-conditional-fields">
-                                <!-- Öğrenci: Sınıf -->
-                                <div class="rf-context-col" id="rf-student-class-wrap" style="display: none;">
-                                    <label class="rf-sublabel" for="form-class-select">Sınıf</label>
-                                    <select id="form-class-select" class="rf-select">
-                                        <option value="">Seçiniz...</option>
-                                        <option value="Hazırlık">Hazırlık</option>
-                                        <option value="1. Sınıf">1. Sınıf</option>
-                                        <option value="2. Sınıf">2. Sınıf</option>
-                                        <option value="3. Sınıf">3. Sınıf</option>
-                                        <option value="4. Sınıf">4. Sınıf</option>
-                                    </select>
-                                </div>
-
-                                <!-- Mezun: Mezuniyet Yılı (Son 15 Yıl Seçim Kutusu) -->
-                                <div class="rf-context-col" id="rf-grad-year-wrap" style="display: none;">
-                                    <label class="rf-sublabel" for="rf-grad-year-select">Mezuniyet Yılı</label>
-                                    <select id="rf-grad-year-select" class="rf-select">
-                                        <option value="">Seçiniz...</option>
-                                        <option value="2026">2026</option>
-                                        <option value="2025">2025</option>
-                                        <option value="2024">2024</option>
-                                        <option value="2023">2023</option>
-                                        <option value="2022">2022</option>
-                                        <option value="2021">2021</option>
-                                        <option value="2020">2020</option>
-                                        <option value="2019">2019</option>
-                                        <option value="2018">2018</option>
-                                        <option value="2017">2017</option>
-                                        <option value="2016">2016</option>
-                                        <option value="2015">2015</option>
-                                        <option value="2014">2014</option>
-                                        <option value="2013">2013</option>
-                                        <option value="2012">2012</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="rf-context-grid">
-                                <!-- Bölüm Combobox -->
-                                <div class="rf-context-col">
-                                    <label class="rf-sublabel" for="rf-dept-input">Bölüm</label>
-                                    <div class="custom-select" id="custom-dept-select-form">
-                                        <div class="custom-select__trigger" tabindex="0">
-                                            <span class="custom-select__text">Bölüm ara…</span>
-                                            <span class="custom-select__icon">▼</span>
+                            <!-- Adım 2: Durum seçilince açılan koşullu alanlar (Başlangıçta kapalı) -->
+                            <div class="rf-edu-details" id="rf-edu-details" style="display: none;">
+                                <div class="rf-context-grid">
+                                    <!-- Bölüm Combobox -->
+                                    <div class="rf-context-col">
+                                        <label class="rf-sublabel" for="rf-dept-input">Bölüm</label>
+                                        <div class="custom-select" id="custom-dept-select-form">
+                                            <div class="custom-select__trigger" tabindex="0">
+                                                <span class="custom-select__text">Bölüm ara…</span>
+                                                <span class="custom-select__icon">▼</span>
+                                            </div>
+                                            <div class="custom-select__dropdown">
+                                                <input type="text" id="rf-dept-input" class="custom-select__search" placeholder="Bölüm ara…" aria-label="Bölüm ara">
+                                                <ul class="custom-select__options"></ul>
+                                            </div>
                                         </div>
-                                        <div class="custom-select__dropdown">
-                                            <input type="text" id="rf-dept-input" class="custom-select__search" placeholder="Bölüm ara…" aria-label="Bölüm ara">
-                                            <ul class="custom-select__options"></ul>
-                                        </div>
+                                        <input type="hidden" id="form-dept-hidden" value="">
                                     </div>
-                                    <input type="hidden" id="form-dept-hidden" value="">
+
+                                    <!-- Burs Durumu (Her iki durumda Bölümün yanında) -->
+                                    <div class="rf-context-col">
+                                        <label class="rf-sublabel" for="form-scholarship-select">Burs Durumu <span class="rf-sub-opt">(isteğe bağlı)</span></label>
+                                        <select id="form-scholarship-select" class="rf-select">
+                                            <option value="">Seçiniz...</option>
+                                            <option value="Burslu">Burslu</option>
+                                            <option value="Yarı Burslu (%50)">Yarı burslu (%50)</option>
+                                            <option value="Burssuz">Burssuz</option>
+                                            <option value="Belirtmek istemiyorum">Belirtmek istemiyorum</option>
+                                        </select>
+                                    </div>
                                 </div>
 
-                                <!-- Burs Durumu -->
-                                <div class="rf-context-col">
-                                    <label class="rf-sublabel" for="form-scholarship-select">Burs Durumu</label>
-                                    <select id="form-scholarship-select" class="rf-select">
-                                        <option value="">Seçiniz...</option>
-                                        <option value="Burslu">Burslu</option>
-                                        <option value="Yarı Burslu (%50)">Yarı burslu (%50)</option>
-                                        <option value="Burssuz">Burssuz</option>
-                                        <option value="Belirtmek istemiyorum">Belirtmek istemiyorum</option>
-                                    </select>
+                                <!-- Koşullu Alanlar: Öğrenciyse Sınıf, Mezunsa Mezuniyet Yılı -->
+                                <div class="rf-conditional-fields" id="rf-conditional-fields" style="margin-top: 12px;">
+                                    <!-- Öğrenci: Sınıf -->
+                                    <div class="rf-context-col" id="rf-student-class-wrap" style="display: none;">
+                                        <label class="rf-sublabel" for="form-class-select">Sınıf</label>
+                                        <select id="form-class-select" class="rf-select">
+                                            <option value="">Seçiniz...</option>
+                                            <option value="Hazırlık">Hazırlık</option>
+                                            <option value="1. Sınıf">1. Sınıf</option>
+                                            <option value="2. Sınıf">2. Sınıf</option>
+                                            <option value="3. Sınıf">3. Sınıf</option>
+                                            <option value="4. Sınıf">4. Sınıf</option>
+                                            <option value="Lisansüstü">Lisansüstü</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Mezun: Mezuniyet Yılı (Son 15 Yıl Seçim Kutusu) -->
+                                    <div class="rf-context-col" id="rf-grad-year-wrap" style="display: none;">
+                                        <label class="rf-sublabel" for="rf-grad-year-select">Mezuniyet Yılı</label>
+                                        <select id="rf-grad-year-select" class="rf-select">
+                                            <option value="">Seçiniz...</option>
+                                            <option value="2026">2026</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2018">2018</option>
+                                            <option value="2017">2017</option>
+                                            <option value="2016">2016</option>
+                                            <option value="2015">2015</option>
+                                            <option value="2014">2014</option>
+                                            <option value="2013">2013</option>
+                                            <option value="2012">2012</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>

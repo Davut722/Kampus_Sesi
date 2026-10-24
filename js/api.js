@@ -108,17 +108,36 @@ export const api = {
     },
 
     async createReview(reviewData) {
+        const ratingDorm = reviewData.rating_dorm || reviewData.criteria?.yurt || null;
+        const ratingFood = reviewData.rating_food || reviewData.criteria?.yemekhane || null;
+        const ratingTransport = reviewData.rating_transport || reviewData.criteria?.ulasim || null;
+        const ratingSocial = reviewData.rating_social || reviewData.criteria?.sosyal || null;
+        const ratingAcademic = reviewData.rating_academic || reviewData.criteria?.egitim || reviewData.criteria?.akademik || null;
+
         return await request('/reviews', {
             method: 'POST',
             body: JSON.stringify({
                 university: reviewData.university,
                 rating: reviewData.rating,
-                tags: reviewData.tags,
+                tags: reviewData.tags || [],
                 text: reviewData.text,
                 is_recommended: reviewData.is_recommended,
                 is_anonymous: reviewData.is_anonymous,
                 education_status: reviewData.education_status,
-                graduation_year: reviewData.graduation_year
+                graduation_year: reviewData.graduation_year,
+                rating_dorm: ratingDorm,
+                rating_food: ratingFood,
+                rating_transport: ratingTransport,
+                rating_social: ratingSocial,
+                rating_academic: ratingAcademic,
+                criteria: {
+                    yurt: ratingDorm,
+                    yemekhane: ratingFood,
+                    ulasim: ratingTransport,
+                    sosyal: ratingSocial,
+                    akademik: ratingAcademic,
+                    egitim: ratingAcademic
+                }
             })
         });
     },

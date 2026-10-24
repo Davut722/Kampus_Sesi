@@ -1,7 +1,7 @@
 import os
 import json
 import time
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from fastapi import FastAPI, Depends, HTTPException, status, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -54,6 +54,18 @@ class ReviewCreateRequest(BaseModel):
     is_anonymous: bool = True
     education_status: Optional[str] = "student"
     graduation_year: Optional[int] = None
+    rating_dorm: Optional[int] = None
+    rating_food: Optional[int] = None
+    rating_transport: Optional[int] = None
+    rating_social: Optional[int] = None
+    rating_academic: Optional[int] = None
+    criteria: Optional[Dict[str, Any]] = None
+    yurt: Optional[int] = None
+    yemekhane: Optional[int] = None
+    ulasim: Optional[int] = None
+    sosyal: Optional[int] = None
+    akademik: Optional[int] = None
+    egitim: Optional[int] = None
 
 class ReplyCreateRequest(BaseModel):
     text: str
@@ -448,6 +460,23 @@ def create_review(
         except (ValueError, TypeError):
             grad_year = None
 
+    def clean_criterion(val):
+        if val is None:
+            return None
+        try:
+            v = int(val)
+            return v if 1 <= v <= 5 else None
+        except (ValueError, TypeError):
+            return None
+
+    crit_dict = req.criteria if isinstance(req.criteria, dict) else {}
+
+    r_dorm = clean_criterion(req.rating_dorm if req.rating_dorm is not None else (req.yurt if req.yurt is not None else crit_dict.get('yurt')))
+    r_food = clean_criterion(req.rating_food if req.rating_food is not None else (req.yemekhane if req.yemekhane is not None else crit_dict.get('yemekhane')))
+    r_trans = clean_criterion(req.rating_transport if req.rating_transport is not None else (req.ulasim if req.ulasim is not None else crit_dict.get('ulasim')))
+    r_soc = clean_criterion(req.rating_social if req.rating_social is not None else (req.sosyal if req.sosyal is not None else crit_dict.get('sosyal')))
+    r_acad = clean_criterion(req.rating_academic if req.rating_academic is not None else (req.akademik if req.akademik is not None else (req.egitim if req.egitim is not None else (crit_dict.get('akademik') if crit_dict.get('akademik') is not None else crit_dict.get('egitim')))))
+
     review = Review(
         user_id=current_user.id,
         user_name=current_user.name,
@@ -458,8 +487,13 @@ def create_review(
         text=req.text.strip(),
         is_recommended=bool(req.is_recommended),
         is_anonymous=bool(req.is_anonymous),
-        education_status=(req.education_status or "student").strip(),
+        education_status=(req.education_status or "student").strip() if req.education_status else None,
         graduation_year=grad_year,
+        rating_dorm=r_dorm,
+        rating_food=r_food,
+        rating_transport=r_trans,
+        rating_social=r_soc,
+        rating_academic=r_acad,
         timestamp=now_ms,
         date=date_str
     )

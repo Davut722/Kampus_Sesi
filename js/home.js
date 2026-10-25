@@ -192,7 +192,7 @@ function bindGlobalsOnce() {
     if (globalsBound) return;
     globalsBound = true;
     document.addEventListener('click', (e) => {
-        if (activeCtl && !(e.target.closest && e.target.closest('.ed-map__stage'))) activeCtl.hideTip(true);
+        if (activeCtl && !(e.target.closest && e.target.closest('.ed-map'))) activeCtl.hideTip(true);
     });
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && activeCtl) activeCtl.hideTip(true);
@@ -233,6 +233,10 @@ export function initHomeShowcase(ctx) {
 
     const svg = $('hm-map-svg');
     const tip = $('hm-tip');
+    const IDLE_TIP_HTML = `<div class="hm-tip-slot__idle">
+        <span class="hm-tip-slot__icon"><i data-lucide="map-pin" class="icon-xs"></i></span>
+        <span>Her nokta bir yerleşke. Koyu noktalar yorum almış okullar; üzerine gel ya da tıkla.</span>
+    </div>`;
 
     function renderMapDots() {
         if (!svg) return;
@@ -241,7 +245,7 @@ export function initHomeShowcase(ctx) {
         lastDotsKey = key;
         svg.innerHTML = universe.dots.map((d, i) => {
             const [x, y] = project(d.lat, d.lng);
-            return `<circle class="hm-dot" data-i="${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.2"/>`;
+            return `<circle class="hm-dot" data-i="${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.2" tabindex="0" role="link" aria-label="${esc(d.name)}"/>`;
         }).join('');
         paintDots();
     }
@@ -264,22 +268,42 @@ export function initHomeShowcase(ctx) {
 
         const entry = universe.byKey.get(d.key);
         const a = agg.get(d.key);
-        const city = entry && entry.city ? `<div class="hm-tip__meta">${esc(entry.city)}</div>` : '';
-        let rate;
-        if (a) rate = `<div class="hm-tip__rate">${starsHtml(a.sum / a.n)} <span>${fmt(a.sum / a.n)}</span> <small>· ${a.n} yorum</small></div>`;
-        else if (!ctx.isLoaded()) rate = '<div class="hm-tip__meta">Puan yükleniyor…</div>';
-        else rate = '<div class="hm-tip__meta">Henüz yorum yok</div>';
+        const cityName = entry && entry.city ? esc(entry.city) : '';
+        let rateHtml;
+        if (a) {
+            rateHtml = `<span class="hm-stars">${starsHtml(a.sum / a.n)}</span> <strong>${fmt(a.sum / a.n)}</strong> <small>(${a.n} yorum)</small>`;
+        } else if (!ctx.isLoaded()) {
+            rateHtml = `<small>Puan yükleniyor…</small>`;
+        } else {
+            rateHtml = `<small>Henüz yorum yok</small>`;
+        }
 
-        tip.innerHTML = `<div class="hm-tip__name">${esc(d.name)}</div>${city}${rate}<a href="${uniHref(d.name)}">Sayfaya git →</a>`;
+        const metaParts = [];
+        if (cityName) metaParts.push(`<span>${cityName}</span>`);
+        if (cityName && rateHtml) metaParts.push(`<span class="hm-tip-slot__dot">•</span>`);
+        if (rateHtml) metaParts.push(`<span>${rateHtml}</span>`);
 
-        const [x, y] = project(d.lat, d.lng);
-        const px = (x / MAP.w) * 100;
-        const py = ((y - MAP.vbY) / MAP.vbH) * 100;
-        tip.style.left = px + '%';
-        tip.style.top = py + '%';
-        tip.style.setProperty('--tx', px > 72 ? '-100%' : px < 28 ? '0%' : '-50%');
-        tip.style.setProperty('--ty', py < 32 ? '14px' : 'calc(-100% - 12px)');
+        tip.innerHTML = `
+            <div class="hm-tip-slot__info">
+                <div class="hm-tip-slot__name" title="${esc(d.name)}">${esc(d.name)}</div>
+                <div class="hm-tip-slot__meta">${metaParts.join(' ')}</div>
+            </div>
+            <a href="${uniHref(d.name)}" class="hm-tip-slot__btn" aria-label="${esc(d.name)} sayfasına git">
+                <span>Sayfaya git</span>
+                <i data-lucide="arrow-right" class="icon-xs"></i>
+            </a>
+        `;
+        tip.classList.add('is-active');
         tip.hidden = false;
+        tip.onclick = (e) => {
+            if (!e.target.closest('a')) {
+                window.location.hash = uniHref(d.name);
+            }
+        };
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     }
 
     function hideTip(force) {
@@ -287,19 +311,24 @@ export function initHomeShowcase(ctx) {
         if (pinned && !force) return;
         if (force) pinned = false;
         clearTimeout(hideTimer);
-        tip.hidden = true;
+        tip.classList.remove('is-active');
+        tip.innerHTML = IDLE_TIP_HTML;
+        tip.onclick = null;
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
         if (svg) svg.querySelectorAll('.is-active').forEach((c) => c.classList.remove('is-active'));
     }
 
     function scheduleHide() {
         clearTimeout(hideTimer);
-        hideTimer = setTimeout(() => hideTip(false), 260);
+        hideTimer = setTimeout(() => hideTip(false), 320);
     }
 
     if (svg && tip) {
         svg.addEventListener('pointerover', (e) => {
             const c = e.target.closest && e.target.closest('circle[data-i]');
-            if (c && !pinned) showTip(c);
+            if (c) showTip(c);
         });
         svg.addEventListener('pointerout', (e) => {
             if (e.target.closest && e.target.closest('circle[data-i]')) scheduleHide();
@@ -307,8 +336,29 @@ export function initHomeShowcase(ctx) {
         svg.addEventListener('click', (e) => {
             const c = e.target.closest && e.target.closest('circle[data-i]');
             if (!c) return;
-            pinned = true;
-            showTip(c);
+            const d = universe.dots[Number(c.dataset.i)];
+            if (d && d.name) {
+                window.location.hash = uniHref(d.name);
+            }
+        });
+        svg.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                const c = e.target.closest && e.target.closest('circle[data-i]');
+                if (c) {
+                    e.preventDefault();
+                    const d = universe.dots[Number(c.dataset.i)];
+                    if (d && d.name) {
+                        window.location.hash = uniHref(d.name);
+                    }
+                }
+            }
+        });
+        svg.addEventListener('focusin', (e) => {
+            const c = e.target.closest && e.target.closest('circle[data-i]');
+            if (c) showTip(c);
+        });
+        svg.addEventListener('focusout', (e) => {
+            if (e.target.closest && e.target.closest('circle[data-i]')) scheduleHide();
         });
         tip.addEventListener('pointerenter', () => clearTimeout(hideTimer));
         tip.addEventListener('pointerleave', scheduleHide);

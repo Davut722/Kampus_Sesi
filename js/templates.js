@@ -1400,7 +1400,7 @@ export const TEMPLATES = {
                         <label for="login-password">Şifre</label>
                         <input type="password" id="login-password" class="auth-input" placeholder="••••••••" required>
                     </div>
-                    <button type="submit" class="auth-submit-btn">Giriş Yap ✨</button>
+                    <button type="submit" class="auth-submit-btn">Giriş Yap </button>
                     <div id="login-error" style="color: var(--color-danger); margin-top: 15px; text-align: center; font-size: 0.9rem; font-weight: 500;"></div>
                 </form>
 
@@ -1429,7 +1429,7 @@ export const TEMPLATES = {
                         </label>
                     </div>
 
-                    <button type="submit" class="auth-submit-btn">Hesap Oluştur 🚀</button>
+                    <button type="submit" class="auth-submit-btn">Hesap Oluştur </button>
                     <div id="reg-error" style="color: var(--color-danger); margin-top: 15px; text-align: center; font-size: 0.9rem; font-weight: 500;"></div>
                 </form>
             </div>

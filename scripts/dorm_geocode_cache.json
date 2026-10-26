@@ -1,0 +1,4642 @@
+{
+  "İstanbul::Atatürk Kyk Kız Öğrenci Yurdu": {
+    "name": "Atatürk Kyk Kız Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.0136827,
+    "lng": 28.9119779,
+    "query": "Atatürk Öğrenci Yurdu, İstanbul",
+    "display_name": "Atatürk Öğrenci Yurdu, Merkezefendi Mahallesi, Zeytinburnu, İstanbul, Marmara Bölgesi, Türkiye"
+  },
+  "İstanbul::Esenyurt Kyk Erkek Öğrenci Yurdu": {
+    "name": "Esenyurt Kyk Erkek Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.0181187,
+    "lng": 28.6847666,
+    "query": "Esenyurt Öğrenci Yurdu, İstanbul",
+    "display_name": "İBB Esenyurt Yükseköğrenim Erkek Öğrenci Yurdu, 5, 160. Sokak, Zafer Mahallesi, Esenyurt, İstanbul, Marmara Bölgesi, 34513, Türkiye"
+  },
+  "İstanbul::Florya Beşyol Kyk Kız Öğrenci Yurdu": {
+    "name": "Florya Beşyol Kyk Kız Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 40.9906601,
+    "lng": 28.7942736,
+    "query": "Florya Beşyol Yurdu, İstanbul",
+    "display_name": "KYK Florya Beşyol Kız Öğrenci Yurdu, Fabrikalar Caddesi, Beşyol Mahallesi, Küçükçekmece, İstanbul, Marmara Bölgesi, 34295, Türkiye"
+  },
+  "İstanbul::Mahir İz Kyk Erkek Öğrenci Yurdu": {
+    "name": "Mahir İz Kyk Erkek Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.0219833,
+    "lng": 29.0429091,
+    "query": "Mahir İz, İstanbul",
+    "display_name": "Mahir İz Caddesi, Altunizade Mahallesi, Üsküdar, İstanbul, Marmara Bölgesi, 34662, Türkiye"
+  },
+  "İstanbul::Beşiktaş KYK Kız Öğrenci Yurdu": {
+    "name": "Beşiktaş KYK Kız Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.0428465,
+    "lng": 29.0075283,
+    "query": "Beşiktaş, İstanbul",
+    "display_name": "Beşiktaş, İstanbul, Marmara Bölgesi, Türkiye"
+  },
+  "İstanbul::Mahmut Celaleddin Ökten Kyk Erkek Öğrenci Yurdu": {
+    "name": "Mahmut Celaleddin Ökten Kyk Erkek Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.1897861,
+    "lng": 28.9861797,
+    "query": "Mahmut, İstanbul",
+    "display_name": "İkinci Mahmut Bendi, Bahçeköy Merkez Mahallesi, Sarıyer, İstanbul, Marmara Bölgesi, 34473, Türkiye"
+  },
+  "İstanbul::Validebağ Kyk Kız Öğrenci Yurdu": {
+    "name": "Validebağ Kyk Kız Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.0106202,
+    "lng": 29.0453528,
+    "query": "Validebağ, İstanbul",
+    "display_name": "Validebağ, Altunizade Mahallesi, Üsküdar, İstanbul, Marmara Bölgesi, 34662, Türkiye"
+  },
+  "İstanbul::Haliç Kyk Erkek Öğrenci Yurdu": {
+    "name": "Haliç Kyk Erkek Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.0411549,
+    "lng": 28.9457854,
+    "query": "Haliç, İstanbul",
+    "display_name": "Haliç, İstanbul, Marmara Bölgesi, Türkiye"
+  },
+  "Isparta::Mihri Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Mihri Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Isparta",
+    "lat": 37.8545662,
+    "lng": 30.5319621,
+    "query": "Mihri Hatun Yurdu, Isparta",
+    "display_name": "Mihri Hatun Kız Öğrenci Yurdu, Çünür Mahallesi, Isparta Belediyesi, Isparta Merkez, Isparta, Akdeniz Bölgesi, Türkiye"
+  },
+  "Isparta::Gülistan Kyk Kız Öğrenci Yurdu": {
+    "name": "Gülistan Kyk Kız Öğrenci Yurdu",
+    "city": "Isparta",
+    "lat": 37.7670425,
+    "lng": 30.5376625,
+    "query": "Gülistan, Isparta",
+    "display_name": "Gülistan Mahallesi, Isparta Belediyesi, Isparta Merkez, Isparta, Akdeniz Bölgesi, Türkiye"
+  },
+  "Isparta::Isparta Murat Hüdavendigar Kyk Erkek Öğrenci Yurdu": {
+    "name": "Isparta Murat Hüdavendigar Kyk Erkek Öğrenci Yurdu",
+    "city": "Isparta",
+    "lat": 37.7636722,
+    "lng": 30.5550569,
+    "query": "Isparta, Isparta",
+    "display_name": "Isparta Merkez, Isparta, Akdeniz Bölgesi, Türkiye"
+  },
+  "Isparta::Eğirdir Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Eğirdir Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Isparta",
+    "lat": 37.8744344,
+    "lng": 30.8500433,
+    "query": "Eğirdir, Isparta",
+    "display_name": "Eğirdir, Isparta, Akdeniz Bölgesi, 32500, Türkiye"
+  },
+  "Isparta::Gülkent Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Gülkent Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Isparta",
+    "lat": 37.7752635,
+    "lng": 30.5491926,
+    "query": "Gülkent, Isparta",
+    "display_name": "Gülkent Kavşağı, Süleyman Demirel Bulvarı, Modernevler Mahallesi, Isparta Belediyesi, Isparta Merkez, Isparta, Akdeniz Bölgesi, 32000, Türkiye"
+  },
+  "Isparta::Atabey Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Atabey Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Isparta",
+    "lat": 37.9509348,
+    "lng": 30.6374073,
+    "query": "Atabey, Isparta",
+    "display_name": "Atabey, Isparta, Akdeniz Bölgesi, Türkiye"
+  },
+  "Isparta::Şarkikaraağaç Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Şarkikaraağaç Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Isparta",
+    "lat": 38.080712,
+    "lng": 31.3660929,
+    "query": "Şarkikaraağaç, Isparta",
+    "display_name": "Şarkikaraağaç, Isparta, Akdeniz Bölgesi, Türkiye"
+  },
+  "Isparta::Gülcihan Kyk Kız Öğrenci Yurdu": {
+    "name": "Gülcihan Kyk Kız Öğrenci Yurdu",
+    "city": "Isparta",
+    "lat": 37.8267628,
+    "lng": 30.5251402,
+    "query": "Gülcihan Yurdu, Isparta",
+    "display_name": "KYK Gülcihan Kız Öğrenci Yurdu, 258. Cadde, Çünür Mahallesi, Isparta Belediyesi, Isparta Merkez, Isparta, Akdeniz Bölgesi, 32200, Türkiye"
+  },
+  "Antalya::Falez Kyk Kız Öğrenci Yurdu": {
+    "name": "Falez Kyk Kız Öğrenci Yurdu",
+    "city": "Antalya",
+    "lat": 36.5995196,
+    "lng": 30.5611896,
+    "query": "Falez, Antalya",
+    "display_name": "Falez, Ataturk Bulvarı, Merkez, Kemer, Antalya, Akdeniz Bölgesi, 07229, Türkiye"
+  },
+  "Antalya::Damlataş Kyk Erkek Öğrenci Yurdu": {
+    "name": "Damlataş Kyk Erkek Öğrenci Yurdu",
+    "city": "Antalya",
+    "lat": 36.5432092,
+    "lng": 31.9882543,
+    "query": "Damlataş, Antalya",
+    "display_name": "Damlataş, Sultan Alaaddin Caddesi, Saray Mahallesi, Alanya, Antalya, Akdeniz Bölgesi, 07400, Türkiye"
+  },
+  "Antalya::Alanya Terken Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Alanya Terken Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Antalya",
+    "lat": 36.8865728,
+    "lng": 30.7030242,
+    "query": "Alanya, Antalya",
+    "display_name": "Antalya, Muratpaşa, Antalya, Akdeniz Bölgesi, 07050, Türkiye"
+  },
+  "Antalya::Alanya Kyk Erkek Öğrenci Yurdu": {
+    "name": "Alanya Kyk Erkek Öğrenci Yurdu",
+    "city": "Antalya",
+    "lat": 36.8865728,
+    "lng": 30.7030242,
+    "query": "Alanya, Antalya",
+    "display_name": "Antalya, Muratpaşa, Antalya, Akdeniz Bölgesi, 07050, Türkiye"
+  },
+  "Antalya::Kumluca  Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Kumluca  Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Antalya",
+    "lat": 36.3669046,
+    "lng": 30.2858418,
+    "query": "Kumluca, Antalya",
+    "display_name": "Kumluca, Antalya, Akdeniz Bölgesi, Türkiye"
+  },
+  "Antalya::Korkuteli Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Korkuteli Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Antalya",
+    "lat": 37.0666523,
+    "lng": 30.1970497,
+    "query": "Korkuteli, Antalya",
+    "display_name": "Korkuteli, Antalya, Akdeniz Bölgesi, Türkiye"
+  },
+  "Antalya::Şehzade Korkut Kyk Erkek Öğrenci Yurdu": {
+    "name": "Şehzade Korkut Kyk Erkek Öğrenci Yurdu",
+    "city": "Antalya",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Antalya::Muratpaşa Kyk Erkek Öğrenci Yurdu": {
+    "name": "Muratpaşa Kyk Erkek Öğrenci Yurdu",
+    "city": "Antalya",
+    "lat": 36.8929235,
+    "lng": 30.6396644,
+    "query": "Muratpaşa Yurdu, Antalya",
+    "display_name": "KYK Muratpaşa Yurdu, Anadolu Caddesi, Siteler Mahallesi, Konyaaltı, Antalya, Akdeniz Bölgesi, 07070, Türkiye"
+  },
+  "İstanbul::Merkezefendi Kyk Kız Öğrenci Yurdu": {
+    "name": "Merkezefendi Kyk Kız Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.014371,
+    "lng": 28.9189855,
+    "query": "Merkezefendi, İstanbul",
+    "display_name": "Merkezefendi Mahallesi, Zeytinburnu, İstanbul, Marmara Bölgesi, 34015, Türkiye"
+  },
+  "İstanbul::Topkapı Kyk Kız Öğrenci Yurdu": {
+    "name": "Topkapı Kyk Kız Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.0207107,
+    "lng": 28.9281683,
+    "query": "Topkapı, İstanbul",
+    "display_name": "Topkapı Mahallesi, İstanbul, Fatih, İstanbul, Marmara Bölgesi, 34093, Türkiye"
+  },
+  "İstanbul::Merter Kyk Kız Öğrenci Yurdu": {
+    "name": "Merter Kyk Kız Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.0045933,
+    "lng": 28.8836021,
+    "query": "Merter Yurdu, İstanbul",
+    "display_name": "Özel Merter Yükseköğrenim Kız Öğrenci Yurdu, Nazım Erten Sokağı, Abdurrahman Nafiz Gürman Mahallesi, Güngören, İstanbul, Marmara Bölgesi, 34173, Türkiye"
+  },
+  "İstanbul::Nilay Aydoğan Kyk Öğrenci Yurdu": {
+    "name": "Nilay Aydoğan Kyk Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 40.9208345,
+    "lng": 29.2282795,
+    "query": "Nilay, İstanbul",
+    "display_name": "Nilay Sokak, Yakacık Çarşı Mahallesi, Kartal, İstanbul, Marmara Bölgesi, 34876, Türkiye"
+  },
+  "İstanbul::1453 Kyk Kız Öğrenci Yurdu": {
+    "name": "1453 Kyk Kız Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 40.9955699,
+    "lng": 28.8580971,
+    "query": "1453 Yurdu, İstanbul",
+    "display_name": "Atatürk Kız Yetiştirme Yurdu Müdürlüğü, Bahçelievler Mahallesi, Bahçelievler, İstanbul, Marmara Bölgesi, 34180, Türkiye"
+  },
+  "İstanbul::Fatih Sultan Mehmet Kyk Erkek Öğrenci Yurdu": {
+    "name": "Fatih Sultan Mehmet Kyk Erkek Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.030186,
+    "lng": 28.88586,
+    "query": "Fatih Sultan Mehmet Yurdu, İstanbul",
+    "display_name": "Fatih Sultan Mehmet Erkek Öğrenci Yurdu, YTU Davutpasa Yerleşkesi, YTÜ Davutpaşa Lojmanları, Gençosman Mahallesi, Güngören, İstanbul, Marmara Bölgesi, 34165, Türkiye"
+  },
+  "İstanbul::Avcılar Atatürk Kyk Kız Öğrenci Yurdu": {
+    "name": "Avcılar Atatürk Kyk Kız Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 40.9799389,
+    "lng": 28.7216689,
+    "query": "Avcılar, İstanbul",
+    "display_name": "Avcılar, İstanbul, Marmara Bölgesi, Türkiye"
+  },
+  "Kahramanmaraş::Göksun Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Göksun Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Kahramanmaraş",
+    "lat": 38.0213126,
+    "lng": 36.4945631,
+    "query": "Göksun, Kahramanmaraş",
+    "display_name": "Göksun, Kahramanmaraş, Akdeniz Bölgesi, 46600, Türkiye"
+  },
+  "Kahramanmaraş::Elbistan Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Elbistan Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Kahramanmaraş",
+    "lat": 38.2022294,
+    "lng": 37.1903006,
+    "query": "Elbistan, Kahramanmaraş",
+    "display_name": "Elbistan, Kahramanmaraş, Akdeniz Bölgesi, 46300, Türkiye"
+  },
+  "Kahramanmaraş::Afşin Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Afşin Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Kahramanmaraş",
+    "lat": 38.2438548,
+    "lng": 36.9152873,
+    "query": "Afşin, Kahramanmaraş",
+    "display_name": "Afşin, Kahramanmaraş, Akdeniz Bölgesi, 46500, Türkiye"
+  },
+  "Kahramanmaraş::Kahramanmaraş Avşar Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Kahramanmaraş Avşar Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Kahramanmaraş",
+    "lat": 37.5885518,
+    "lng": 36.8189117,
+    "query": "Kahramanmaraş Avşar, Kahramanmaraş",
+    "display_name": "Kahramanmaraş Sütçü İmam Üniversitesi Avşar Kampüsü, Batı Çevre Yolu Bulvarı, Üngüt Mahallesi, Onikişubat, Kahramanmaraş, Akdeniz Bölgesi, 46000, Türkiye"
+  },
+  "Kahramanmaraş::Kahramanmaraş Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kahramanmaraş Kyk Erkek Öğrenci Yurdu",
+    "city": "Kahramanmaraş",
+    "lat": 37.7830345,
+    "lng": 36.830655,
+    "query": "Kahramanmaraş, Türkiye",
+    "display_name": "Kahramanmaraş, Akdeniz Bölgesi, Türkiye"
+  },
+  "Ankara::Fatma Hanım Kyk Kız Öğrenci Yurdu": {
+    "name": "Fatma Hanım Kyk Kız Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 39.8981499,
+    "lng": 32.8028598,
+    "query": "Fatma, Ankara",
+    "display_name": "Fatma Seher Erden Caddesi, Çukurambar Mahallesi, Ankara, Çankaya, Ankara, İç Anadolu Bölgesi, 06530, Türkiye"
+  },
+  "Ankara::Mahmut Nedim Zapçı Kyk Kız Öğrenci Yurdu": {
+    "name": "Mahmut Nedim Zapçı Kyk Kız Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 39.9219052,
+    "lng": 32.8726848,
+    "query": "Mahmut Nedim Zapçı Yurdu, Ankara",
+    "display_name": "Mahmut Nedim Zapcı Erkek Öğrenci  Yurdu, Kıbrıs Caddesi, Topraklık Mahallesi, Ankara, Çankaya, Ankara, İç Anadolu Bölgesi, 06590, Türkiye"
+  },
+  "Ankara::Gölbaşı Şehit Özel Harekatçılar Kyk Kız Yurdu": {
+    "name": "Gölbaşı Şehit Özel Harekatçılar Kyk Kız Yurdu",
+    "city": "Ankara",
+    "lat": 39.7792622,
+    "lng": 32.8148438,
+    "query": "Gölbaşı Şehit Özel Harekatçılar Yurdu, Ankara",
+    "display_name": "Gölbaşı Şehit Özel Harekatçılar Öğrenci Yurdu, 35. Cadde, Bahçelievler Mahallesi, Gölbaşı, Ankara, İç Anadolu Bölgesi, 06830, Türkiye"
+  },
+  "Ankara::Gölbaşı Kyk Erkek Öğrenci Yurdu": {
+    "name": "Gölbaşı Kyk Erkek Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 39.7782189,
+    "lng": 32.816661,
+    "query": "Gölbaşı Yurdu, Ankara",
+    "display_name": "Kredi Yurtlar Kurumu Gölbaşı Erkek Yurdu, 35. Cadde, Bahçelievler Mahallesi, Gölbaşı, Ankara, İç Anadolu Bölgesi, 06830, Türkiye"
+  },
+  "Ankara::Bağlıca Kyk Kız Öğrenci Yurdu": {
+    "name": "Bağlıca Kyk Kız Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 40.305614,
+    "lng": 32.453869,
+    "query": "Bağlıca, Ankara",
+    "display_name": "Bağlıca, Kızılcahamam, Ankara, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Ankara::Alev Alatlı KYK Kız Öğrenci Yurdu": {
+    "name": "Alev Alatlı KYK Kız Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 39.8700917,
+    "lng": 32.7288018,
+    "query": "Alev Alatlı Yurdu, Ankara",
+    "display_name": "Alev Alatlı Kız Öğrenci Yurdu, Atatepe Otoparkı, Üniversiteler Mahallesi, Çankaya, Ankara, İç Anadolu Bölgesi, 06800, Türkiye"
+  },
+  "Ankara::Dışkapı KYK Kız Öğrenci Yurdu": {
+    "name": "Dışkapı KYK Kız Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 39.9554587,
+    "lng": 32.8586755,
+    "query": "Dışkapı, Ankara",
+    "display_name": "Dışkapı, Fatih Caddesi, Dışkapı, Zübeyde Hanım Mahallesi, Altındağ, Ankara, İç Anadolu Bölgesi, 06070, Türkiye"
+  },
+  "Ankara::Ayaş Kyk Öğrenci Yurdu": {
+    "name": "Ayaş Kyk Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 40.015144,
+    "lng": 32.3324224,
+    "query": "Ayaş, Ankara",
+    "display_name": "Ayaş, Ankara, İç Anadolu Bölgesi, 06710, Türkiye"
+  },
+  "Kırşehir::Elvin Buğra Arslan Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Elvin Buğra Arslan Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Kırşehir",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kırşehir::Mecidiye Kyk Kız Öğrenci Yurdu": {
+    "name": "Mecidiye Kyk Kız Öğrenci Yurdu",
+    "city": "Kırşehir",
+    "lat": 39.6035963,
+    "lng": 34.4158032,
+    "query": "Mecidiye, Kırşehir",
+    "display_name": "Çiçekdağı, Kırşehir, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Kırşehir::Saliha Sultan Kyk Kız Öğrenci Yurdu": {
+    "name": "Saliha Sultan Kyk Kız Öğrenci Yurdu",
+    "city": "Kırşehir",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kırşehir::Neşet Ertaş Kyk Erkek Öğrenci Yurdu": {
+    "name": "Neşet Ertaş Kyk Erkek Öğrenci Yurdu",
+    "city": "Kırşehir",
+    "lat": 39.3575933,
+    "lng": 33.7169833,
+    "query": "Neşet Ertaş, Kırşehir",
+    "display_name": "Neşet Ertaş Caddesi, Gaffar Mahallesi, Kaman, Kırşehir, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Kırşehir::Kaman Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Kaman Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Kırşehir",
+    "lat": 39.3588984,
+    "lng": 33.7243959,
+    "query": "Kaman, Kırşehir",
+    "display_name": "Kaman, Kırşehir, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Kırşehir::Kırşehir Ahi Evran Kyk Kız Öğrenci Yurdu": {
+    "name": "Kırşehir Ahi Evran Kyk Kız Öğrenci Yurdu",
+    "city": "Kırşehir",
+    "lat": 39.1584335,
+    "lng": 34.1633451,
+    "query": "Kırşehir Ahi Evran, Kırşehir",
+    "display_name": "Kırşehir Devlet Hastanesi, Kayseri-Kırıkkale yolu, Ahi Evran, Kırşehir Merkez, Kırşehir, İç Anadolu Bölgesi, 40200, Türkiye"
+  },
+  "Antalya::Manavgat Şelale Kyk Erkek Öğrenci Yurdu": {
+    "name": "Manavgat Şelale Kyk Erkek Öğrenci Yurdu",
+    "city": "Antalya",
+    "lat": 36.7920447,
+    "lng": 31.4691599,
+    "query": "Manavgat Şelale Yurdu, Antalya",
+    "display_name": "Manavgat Şelale KYK Erkek Öğrenci Yurdu, Salkım Evler, Çeltikçi, Manavgat, Antalya, Akdeniz Bölgesi, Türkiye"
+  },
+  "İstanbul::Darülaceze Kyk Kız Öğrenci Yurdu": {
+    "name": "Darülaceze Kyk Kız Öğrenci Yurdu",
+    "city": "İstanbul",
+    "lat": 41.0594532,
+    "lng": 28.9669778,
+    "query": "Darülaceze, İstanbul",
+    "display_name": "Darülaceze, 51, 1. Çevre Yolu, Talatpaşa Mahallesi, Kâğıthane, İstanbul, Marmara Bölgesi, 34384, Türkiye"
+  },
+  "Ankara::Yunus Emre Kyk Erkek Öğrenci Yurdu": {
+    "name": "Yunus Emre Kyk Erkek Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 39.9779999,
+    "lng": 32.599985,
+    "query": "Yunus Emre, Ankara",
+    "display_name": "Yunus Emre Mahallesi, Sincan, Ankara, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Ankara::Ankara Hacı Bayram Veli Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ankara Hacı Bayram Veli Kyk Erkek Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 39.576532,
+    "lng": 32.146256,
+    "query": "Ankara Hacı Bayram Veli, Ankara",
+    "display_name": "Continental Ankara Polatlı Lastik Bayi - Polat Ticaret, 16, Hacı Bayram Veli Bulvarı, Yeni Mahalle, Polatlı, Ankara, İç Anadolu Bölgesi, 06900, Türkiye"
+  },
+  "Ankara::Ulus Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ulus Kyk Erkek Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 39.9362396,
+    "lng": 32.842721,
+    "query": "Ulus, Ankara",
+    "display_name": "Ankara, Hipodrom Caddesi, Opera, Hacı Bayram Mahallesi, Altındağ, Ankara, İç Anadolu Bölgesi, 06050, Türkiye"
+  },
+  "Kayseri::Şule Yüksel Şenler Kyk Kız Öğrenci Yurdu": {
+    "name": "Şule Yüksel Şenler Kyk Kız Öğrenci Yurdu",
+    "city": "Kayseri",
+    "lat": 38.696154,
+    "lng": 35.540135,
+    "query": "Şule Yüksel Şenler Yurdu, Kayseri",
+    "display_name": "KYK Şule Yüksel Şenler Kız Yurdu D blok, Şaban Yılmaz Caddesi, Yenidoğan Mahallesi, Talas, Kayseri, İç Anadolu Bölgesi, 38280, Türkiye"
+  },
+  "Kayseri::Pertevniyal Sultan Kyk Kız Öğrenci Yurdu": {
+    "name": "Pertevniyal Sultan Kyk Kız Öğrenci Yurdu",
+    "city": "Kayseri",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kayseri::Seyyid Burhaneddin Kyk Erkek Öğrenci Yurdu": {
+    "name": "Seyyid Burhaneddin Kyk Erkek Öğrenci Yurdu",
+    "city": "Kayseri",
+    "lat": 38.7155097,
+    "lng": 35.4968068,
+    "query": "Seyyid Burhaneddin, Kayseri",
+    "display_name": "Hz. Seyyid Burhaneddin Türbesi ve Mezarlığı, Hunat Mahallesi, Kayseri, Melikgazi, Kayseri, İç Anadolu Bölgesi, 38140, Türkiye"
+  },
+  "Kayseri::Yılmaz Turhan Kız ve Erkek Kyk Öğrenci Yurdu": {
+    "name": "Yılmaz Turhan Kız ve Erkek Kyk Öğrenci Yurdu",
+    "city": "Kayseri",
+    "lat": 38.6990045,
+    "lng": 35.5387665,
+    "query": "Yılmaz, Kayseri",
+    "display_name": "Osman Yılmaz Parkı, Yenidoğan Mahallesi, Talas, Kayseri, İç Anadolu Bölgesi, 38280, Türkiye"
+  },
+  "Kayseri::Pınarbaşı Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Pınarbaşı Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Kayseri",
+    "lat": 38.7214464,
+    "lng": 36.3941324,
+    "query": "Pınarbaşı, Kayseri",
+    "display_name": "Pınarbaşı, Kayseri, İç Anadolu Bölgesi, 38700, Türkiye"
+  },
+  "Kayseri::Mevlüt Kahraman Kyk Kız Öğrenci Yurdu": {
+    "name": "Mevlüt Kahraman Kyk Kız Öğrenci Yurdu",
+    "city": "Kayseri",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kayseri::İbrahim Tennuri Kyk Erkek Öğrenci Yurdu": {
+    "name": "İbrahim Tennuri Kyk Erkek Öğrenci Yurdu",
+    "city": "Kayseri",
+    "lat": 38.6342963,
+    "lng": 35.5201989,
+    "query": "İbrahim Tennuri, Kayseri",
+    "display_name": "Hisarcık Ibrahim Tennuri Mahallesi, Hisarcık, Melikgazi, Kayseri, İç Anadolu Bölgesi, 38155, Türkiye"
+  },
+  "Kayseri::Sahabiye Kyk Erkek Öğrenci Yurdu": {
+    "name": "Sahabiye Kyk Erkek Öğrenci Yurdu",
+    "city": "Kayseri",
+    "lat": 38.7266535,
+    "lng": 35.4912142,
+    "query": "Sahabiye, Kayseri",
+    "display_name": "Sahabiye Mahallesi, Kocasinan, Kayseri, İç Anadolu Bölgesi, 38015, Türkiye"
+  },
+  "Ankara::Beypazarı KYK Öğrenci Yurdu": {
+    "name": "Beypazarı KYK Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 40.1557367,
+    "lng": 31.9092896,
+    "query": "Beypazarı Yurdu, Ankara",
+    "display_name": "Özel Beypazarı Eğitim Ve Kültür Derneği Fatih Ortaöğrenim Erkek Öğrenci Yurdu, Şehit Bünyamin Nacak Caddesi, Kurtuluş Mahallesi, Beypazarı, Ankara, İç Anadolu Bölgesi, 06730, Türkiye"
+  },
+  "Ankara::Ankara Hacı Bayram Veli KYK Kız Öğrenci Yurdu": {
+    "name": "Ankara Hacı Bayram Veli KYK Kız Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 39.576532,
+    "lng": 32.146256,
+    "query": "Ankara Hacı Bayram Veli, Ankara",
+    "display_name": "Continental Ankara Polatlı Lastik Bayi - Polat Ticaret, 16, Hacı Bayram Veli Bulvarı, Yeni Mahalle, Polatlı, Ankara, İç Anadolu Bölgesi, 06900, Türkiye"
+  },
+  "Ankara::Osman Tan KYK Erkek Öğrenci Yurdu": {
+    "name": "Osman Tan KYK Erkek Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 39.8764648,
+    "lng": 32.8123596,
+    "query": "Osman Tan, Ankara",
+    "display_name": "Ankara 70. Noterliği, 57B, Osman Tan Caddesi, Gökkuşağı Mahallesi, Ankara, Çankaya, Ankara, İç Anadolu Bölgesi, 06520, Türkiye"
+  },
+  "Ankara::Kızılcahamam KYK Kız Öğrenci Yurdu": {
+    "name": "Kızılcahamam KYK Kız Öğrenci Yurdu",
+    "city": "Ankara",
+    "lat": 40.4700945,
+    "lng": 32.6528555,
+    "query": "Kızılcahamam, Ankara",
+    "display_name": "Kızılcahamam, Ankara, İç Anadolu Bölgesi, 06890, Türkiye"
+  },
+  "Gümüşhane::Gümüşhane Kyk Kız Öğrenci Yurdu": {
+    "name": "Gümüşhane Kyk Kız Öğrenci Yurdu",
+    "city": "Gümüşhane",
+    "lat": 40.2533219,
+    "lng": 39.384968,
+    "query": "Gümüşhane, Türkiye",
+    "display_name": "Gümüşhane, Karadeniz Bölgesi, Türkiye"
+  },
+  "Gümüşhane::Osman Nuri Efendi Kyk Kız Öğrenci Yurdu": {
+    "name": "Osman Nuri Efendi Kyk Kız Öğrenci Yurdu",
+    "city": "Gümüşhane",
+    "lat": 40.4169712,
+    "lng": 39.6632905,
+    "query": "Osman, Gümüşhane",
+    "display_name": "Sobran, Bahçeli, Gümüşhane Merkez, Gümüşhane, Karadeniz Bölgesi, Türkiye"
+  },
+  "Gümüşhane::Mustafa Gül Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Mustafa Gül Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Gümüşhane",
+    "lat": 40.3464423,
+    "lng": 39.3105885,
+    "query": "Mustafa, Gümüşhane",
+    "display_name": "Karamustafa, Gümüşhane Merkez, Gümüşhane, Karadeniz Bölgesi, Türkiye"
+  },
+  "Gümüşhane::Hacı Şaban Cengiz Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Hacı Şaban Cengiz Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Gümüşhane",
+    "lat": 40.1359172,
+    "lng": 39.43781,
+    "query": "Hacı, Gümüşhane",
+    "display_name": "Hacı Yasin Işıldar Caddesi, İnönü, İnönü Mahallesi, Kelkit, Gümüşhane, Karadeniz Bölgesi, 29600, Türkiye"
+  },
+  "Gümüşhane::Zeynep Ana Kyk Kız Öğrenci Yurdu": {
+    "name": "Zeynep Ana Kyk Kız Öğrenci Yurdu",
+    "city": "Gümüşhane",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Gümüşhane::Ahmet Ziyaüddin Gümüşhanevi Kyk Erkek Yurdu": {
+    "name": "Ahmet Ziyaüddin Gümüşhanevi Kyk Erkek Yurdu",
+    "city": "Gümüşhane",
+    "lat": 40.1214687,
+    "lng": 39.4353389,
+    "query": "Ahmet, Gümüşhane",
+    "display_name": "Ahmet Yesevi, Kelkit, Gümüşhane, Karadeniz Bölgesi, 29600, Türkiye"
+  },
+  "Gümüşhane::Gümüşhane Halit Zarbun Kyk Kız Öğrenci Yurdu": {
+    "name": "Gümüşhane Halit Zarbun Kyk Kız Öğrenci Yurdu",
+    "city": "Gümüşhane",
+    "lat": 40.4617844,
+    "lng": 39.4757339,
+    "query": "Gümüşhane, Gümüşhane",
+    "display_name": "Gümüşhane Merkez, Gümüşhane, Karadeniz Bölgesi, Türkiye"
+  },
+  "Çanakkale::Ahmet Bican Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ahmet Bican Kyk Erkek Öğrenci Yurdu",
+    "city": "Çanakkale",
+    "lat": 40.2254313,
+    "lng": 27.2656447,
+    "query": "Ahmet Bican Yurdu, Çanakkale",
+    "display_name": "Ahmet Bican Erkek KYK Yurdu, Açıkgöz Caddesi, Şirintepe Mah., Şirintepe Mahallesi, Biga, Çanakkale, Marmara Bölgesi, 17200, Türkiye"
+  },
+  "Çanakkale::Kerime Sultan Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kerime Sultan Kyk Erkek Öğrenci Yurdu",
+    "city": "Çanakkale",
+    "lat": 40.147389,
+    "lng": 26.4481701,
+    "query": "Kerime Sultan Yurdu, Çanakkale",
+    "display_name": "Kerime Sultan KYK Erkek Öğrenci Yurdu, 55. Sokak, İsmetpaşa, İsmetpaşa Mahallesi, Çanakkale, Marmara Bölgesi, 17010, Türkiye"
+  },
+  "Çanakkale::Nusrat Kyk Erkek Öğrenci Yurdu": {
+    "name": "Nusrat Kyk Erkek Öğrenci Yurdu",
+    "city": "Çanakkale",
+    "lat": 40.1444229,
+    "lng": 26.4428127,
+    "query": "Nusrat Yurdu, Çanakkale",
+    "display_name": "Nusrat KYK Erkek Öğrenci Yurdu, No: 6, İsmetpaşa, İsmetpaşa Mahallesi, Çanakkale, Marmara Bölgesi, Türkiye"
+  },
+  "Çanakkale::Biga Kyk Kız Öğrenci Yurdu": {
+    "name": "Biga Kyk Kız Öğrenci Yurdu",
+    "city": "Çanakkale",
+    "lat": 40.2870618,
+    "lng": 27.1578427,
+    "query": "Biga Yurdu, Çanakkale",
+    "display_name": "Biga Kız KYK Yurdu, Bursa - Çanakkale Yolu, Ağaköy, Biga, Çanakkale, Marmara Bölgesi, Türkiye"
+  },
+  "Çanakkale::Gökçeada Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Gökçeada Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Çanakkale",
+    "lat": 40.1997087,
+    "lng": 25.9048308,
+    "query": "Gökçeada Yurdu, Çanakkale",
+    "display_name": "Gökçeada Yatılı Yurdu, Piri Reis Sk., Fatih, Gökçeada, Çanakkale, Marmara Bölgesi, 17760, Türkiye"
+  },
+  "Çanakkale::Safiye Hüseyin Kyk Kız Öğrenci Yurdu": {
+    "name": "Safiye Hüseyin Kyk Kız Öğrenci Yurdu",
+    "city": "Çanakkale",
+    "lat": 40.1114882,
+    "lng": 26.4306572,
+    "query": "Safiye Hüseyin Yurdu, Çanakkale",
+    "display_name": "Safiye Hüseyin Elbi Kız KYK Öğrenci Yurdu, Orman Sokak, Barbaros, Barbaros Mahallesi, Çanakkale, Marmara Bölgesi, 17020, Türkiye"
+  },
+  "Çanakkale::Adile Sultan Kyk Erkek Öğrenci Yurdu": {
+    "name": "Adile Sultan Kyk Erkek Öğrenci Yurdu",
+    "city": "Çanakkale",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Çanakkale::Çanakkale Kyk Kız Öğrenci Yurdu": {
+    "name": "Çanakkale Kyk Kız Öğrenci Yurdu",
+    "city": "Çanakkale",
+    "lat": 40.1117518,
+    "lng": 26.4234158,
+    "query": "Çanakkale Yurdu, Çanakkale",
+    "display_name": "Çanakkale Kız KYK Öğrenci Yurdu, Orman Sokak, Barbaros, Barbaros Mahallesi, Çanakkale, Marmara Bölgesi, 17020, Türkiye"
+  },
+  "Zonguldak::Hatice Turhan Sultan Kyk Kız Öğrenci Yurdu": {
+    "name": "Hatice Turhan Sultan Kyk Kız Öğrenci Yurdu",
+    "city": "Zonguldak",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Zonguldak::Çaycuma Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Çaycuma Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Zonguldak",
+    "lat": 41.3807565,
+    "lng": 32.0852853,
+    "query": "Çaycuma Yurdu, Zonguldak",
+    "display_name": "Çaycuma Yurdu Erkek Öğrenci, Zonguldak - Çaycuma Yolu, Kayıkçılar, Ahatlı, Çaycuma, Zonguldak, Karadeniz Bölgesi, 67900, Türkiye"
+  },
+  "Zonguldak::Zonguldak Kyk Erkek Öğrenci Yurdu": {
+    "name": "Zonguldak Kyk Erkek Öğrenci Yurdu",
+    "city": "Zonguldak",
+    "lat": 41.4532335,
+    "lng": 31.7587882,
+    "query": "Zonguldak Yurdu, Zonguldak",
+    "display_name": "Zonguldak KYK Karaelmas Kız Yurdu, 178, Milli Egemenlik Caddesi, İncivez, İncivez Mahallesi, Zonguldak Merkez, Zonguldak, Karadeniz Bölgesi, 67100, Türkiye"
+  },
+  "Zonguldak::Alaplı Kyk Erkek Öğrenci Yurdu": {
+    "name": "Alaplı Kyk Erkek Öğrenci Yurdu",
+    "city": "Zonguldak",
+    "lat": 41.180375,
+    "lng": 31.3861776,
+    "query": "Alaplı, Zonguldak",
+    "display_name": "Alaplı, Zonguldak, Karadeniz Bölgesi, 67852, Türkiye"
+  },
+  "Zonguldak::Abdullah Sabri Efendi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Abdullah Sabri Efendi Kyk Erkek Öğrenci Yurdu",
+    "city": "Zonguldak",
+    "lat": 41.4463046,
+    "lng": 31.759137,
+    "query": "Abdullah, Zonguldak",
+    "display_name": "Abdullah Sabri Öğrenci Yurdu, Taşbaca, Kozlu, Zonguldak, Karadeniz Bölgesi, Türkiye"
+  },
+  "Zonguldak::Zonguldak Karaelmas Kyk Kız Öğrenci Yurdu": {
+    "name": "Zonguldak Karaelmas Kyk Kız Öğrenci Yurdu",
+    "city": "Zonguldak",
+    "lat": 41.4532335,
+    "lng": 31.7587882,
+    "query": "Zonguldak Karaelmas Yurdu, Zonguldak",
+    "display_name": "Zonguldak KYK Karaelmas Kız Yurdu, 178, Milli Egemenlik Caddesi, İncivez, İncivez Mahallesi, Zonguldak Merkez, Zonguldak, Karadeniz Bölgesi, 67100, Türkiye"
+  },
+  "Zonguldak::Kilimli Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Kilimli Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Zonguldak",
+    "lat": 41.4840474,
+    "lng": 31.837393,
+    "query": "Kilimli Yurdu, Zonguldak",
+    "display_name": "Kilimli Erkek Öğrenci Yurdu, Karaelmas Caddesi, Güney, Kilimli, Zonguldak, Karadeniz Bölgesi, 67500, Türkiye"
+  },
+  "Zonguldak::Kozlu Kyk Kız Öğrenci Yurdu": {
+    "name": "Kozlu Kyk Kız Öğrenci Yurdu",
+    "city": "Zonguldak",
+    "lat": 41.4338739,
+    "lng": 31.7472847,
+    "query": "Kozlu, Zonguldak",
+    "display_name": "Kozlu, Zonguldak, Karadeniz Bölgesi, 67600, Türkiye"
+  },
+  "İzmir::Karabağlar Kyk Erkek Öğrenci Yurdu": {
+    "name": "Karabağlar Kyk Erkek Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 38.3763438,
+    "lng": 27.115469,
+    "query": "Karabağlar Yurdu, İzmir",
+    "display_name": "İzmir Karabağlar KYK Erkek Öğrenci Yurdu, 3763. Sokak, Eskiizmir, Kibar Mahallesi, Karabağlar, İzmir, Ege Bölgesi, 35120, Türkiye"
+  },
+  "İzmir::Bakırçay Kyk Kız Öğrenci Yurdu": {
+    "name": "Bakırçay Kyk Kız Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 38.5815231,
+    "lng": 26.961695,
+    "query": "Bakırçay Yurdu, İzmir",
+    "display_name": "Bakırçay KYK Öğrenci Yurdu, Gazi Mustafa Kemal Mahallesi, Menemen, İzmir, Ege Bölgesi, Türkiye"
+  },
+  "İzmir::İzmir Efeler Kyk Erkek Yurdu": {
+    "name": "İzmir Efeler Kyk Erkek Yurdu",
+    "city": "İzmir",
+    "lat": 38.3823488,
+    "lng": 27.1607161,
+    "query": "İzmir Efeler, İzmir",
+    "display_name": "İzmir Atlıspor İhtisas Kulübü, 306/2. Sokak, Efeler Mahallesi, Buca, İzmir, Ege Bölgesi, 35380, Türkiye"
+  },
+  "İzmir::Bakırçay Kyk Erkek Öğrenci Yurdu": {
+    "name": "Bakırçay Kyk Erkek Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 38.5815231,
+    "lng": 26.961695,
+    "query": "Bakırçay Yurdu, İzmir",
+    "display_name": "Bakırçay KYK Öğrenci Yurdu, Gazi Mustafa Kemal Mahallesi, Menemen, İzmir, Ege Bölgesi, Türkiye"
+  },
+  "İzmir::Bayraklı Kyk Kız Öğrenci Yurdu": {
+    "name": "Bayraklı Kyk Kız Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 38.4915249,
+    "lng": 27.177336,
+    "query": "Bayraklı Yurdu, İzmir",
+    "display_name": "Bayraklı Öğrenci Yurdu, 100. Yıl Mahallesi, Bayraklı, İzmir, Ege Bölgesi, Türkiye"
+  },
+  "İzmir::İzmir Kyk Kız Öğrenci Yurdu": {
+    "name": "İzmir Kyk Kız Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 38.3771953,
+    "lng": 27.1910131,
+    "query": "İzmir Yurdu, İzmir",
+    "display_name": "İzmir Kız Yurdu, Adatepe Mahallesi, Buca, İzmir, Ege Bölgesi, Türkiye"
+  },
+  "İzmir::Urla Kyk Kız Öğrenci Yurdu": {
+    "name": "Urla Kyk Kız Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 38.3253757,
+    "lng": 26.6347959,
+    "query": "Urla Yurdu, İzmir",
+    "display_name": "Urla KYK Yurdu, İYTE Yerleşkesi, Gülbahçe Mahallesi, Urla, İzmir, Ege Bölgesi, 35433, Türkiye"
+  },
+  "İzmir::İzmir Barbaros Kyk Erkek Öğrenci Yurdu": {
+    "name": "İzmir Barbaros Kyk Erkek Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 38.4356541,
+    "lng": 27.1821391,
+    "query": "İzmir Barbaros, İzmir",
+    "display_name": "DAP Yapı  Izmir, 4, Çamdibi, Barbaros Mahallesi, Bornova, İzmir, Ege Bölgesi, 35090, Türkiye"
+  },
+  "Kırıkkale::Keskin Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Keskin Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Kırıkkale",
+    "lat": 39.673994,
+    "lng": 33.615167,
+    "query": "Keskin, Kırıkkale",
+    "display_name": "Keskin, Kırıkkale, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Kırıkkale::Kırıkkale Hatice Hanım Kyk Kız Öğrenci Yurdu": {
+    "name": "Kırıkkale Hatice Hanım Kyk Kız Öğrenci Yurdu",
+    "city": "Kırıkkale",
+    "lat": 39.8850753,
+    "lng": 33.5785308,
+    "query": "Kırıkkale, Kırıkkale",
+    "display_name": "Kırıkkale Merkez, Kırıkkale, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Kırıkkale::Ümmü Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Ümmü Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Kırıkkale",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kırıkkale::Kırıkkale Kızılırmak Kyk Kız Öğrenci Yurdu": {
+    "name": "Kırıkkale Kızılırmak Kyk Kız Öğrenci Yurdu",
+    "city": "Kırıkkale",
+    "lat": 39.8417636,
+    "lng": 33.4789446,
+    "query": "Kırıkkale Kızılırmak, Kırıkkale",
+    "display_name": "Kayseri-Kırıkkale yolu, Kızılırmak Mahallesi, Yahşihan, Kırıkkale Merkez, Kırıkkale, İç Anadolu Bölgesi, 71450, Türkiye"
+  },
+  "Kırıkkale::Kaletepe Kyk Kız Öğrenci Yurdu Müdürlüğü": {
+    "name": "Kaletepe Kyk Kız Öğrenci Yurdu Müdürlüğü",
+    "city": "Kırıkkale",
+    "lat": 39.8524484,
+    "lng": 33.5090906,
+    "query": "Kaletepe, Kırıkkale",
+    "display_name": "Kaletepe Mahallesi, Kırıkkale Belediyesi, Kırıkkale Merkez, Kırıkkale, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Kırıkkale::Hamidiye Kyk Erkek Öğrenci Yurdu": {
+    "name": "Hamidiye Kyk Erkek Öğrenci Yurdu",
+    "city": "Kırıkkale",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kırıkkale::Türkan Hatun Kyk Erkek Öğrenci Yurdu": {
+    "name": "Türkan Hatun Kyk Erkek Öğrenci Yurdu",
+    "city": "Kırıkkale",
+    "lat": 39.8860105,
+    "lng": 33.8278992,
+    "query": "Türkan, Kırıkkale",
+    "display_name": "Kırıkkale, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Adıyaman::Besni Servi M.erdemoğlu Kyk Kız Ve Erkek Yurdu": {
+    "name": "Besni Servi M.erdemoğlu Kyk Kız Ve Erkek Yurdu",
+    "city": "Adıyaman",
+    "lat": 37.6910896,
+    "lng": 37.8622739,
+    "query": "Besni, Adıyaman",
+    "display_name": "Besni, Adıyaman, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Adıyaman::Adıyaman Kyk Kız Öğrenci Yurdu": {
+    "name": "Adıyaman Kyk Kız Öğrenci Yurdu",
+    "city": "Adıyaman",
+    "lat": 37.7376559,
+    "lng": 38.2193325,
+    "query": "Adıyaman Yurdu, Adıyaman",
+    "display_name": "TÜGVA Adıyaman Erkek Öğrenci Yurdu, Atatürk Bulvarı, Altınşehir Mah., Yarmakaya, Adıyaman Merkez, Adıyaman, Güneydoğu Anadolu Bölgesi, 02000, Türkiye"
+  },
+  "Adıyaman::Safvan Bin Muattal Kyk Kız Öğrenci Yurdu": {
+    "name": "Safvan Bin Muattal Kyk Kız Öğrenci Yurdu",
+    "city": "Adıyaman",
+    "lat": 37.7354274,
+    "lng": 38.2258861,
+    "query": "Safvan Bin Muattal Yurdu, Adıyaman",
+    "display_name": "Safvan Bin Muattal Kyk Kız Yurdu, Altınşehir Mah., Adıyaman Merkez, Adıyaman, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Adıyaman::Kahta Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Kahta Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Adıyaman",
+    "lat": 37.7860716,
+    "lng": 38.6217178,
+    "query": "Kahta, Adıyaman",
+    "display_name": "Kâhta, Adıyaman, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Adıyaman::Veysel Karani Kyk Erkek Öğrenci Yurdu": {
+    "name": "Veysel Karani Kyk Erkek Öğrenci Yurdu",
+    "city": "Adıyaman",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Adıyaman::Yediyaman Kyk Erkek Öğrenci Yurdu": {
+    "name": "Yediyaman Kyk Erkek Öğrenci Yurdu",
+    "city": "Adıyaman",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Balıkesir::Edremit Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Edremit Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Balıkesir",
+    "lat": 39.5938352,
+    "lng": 27.0156844,
+    "query": "Edremit, Balıkesir",
+    "display_name": "Edremit, Balıkesir, Marmara Bölgesi, Türkiye"
+  },
+  "Balıkesir::Ayvalık Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Ayvalık Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Balıkesir",
+    "lat": 39.3180962,
+    "lng": 26.6916708,
+    "query": "Ayvalık, Balıkesir",
+    "display_name": "Ayvalık, Balıkesir, Marmara Bölgesi, Türkiye"
+  },
+  "Balıkesir::Fatma Ana Kyk Kız Öğrenci Yurdu": {
+    "name": "Fatma Ana Kyk Kız Öğrenci Yurdu",
+    "city": "Balıkesir",
+    "lat": 40.3400768,
+    "lng": 27.9309726,
+    "query": "Fatma Ana Yurdu, Balıkesir",
+    "display_name": "Fatma Ana Kız Öğrenci Yurdu, Dorukoba, Yeni Mahallesi, Bandırma, Balıkesir, Marmara Bölgesi, Türkiye"
+  },
+  "Balıkesir::Yarbay Vecihibey Kyk Kız Öğrenci Yurdu": {
+    "name": "Yarbay Vecihibey Kyk Kız Öğrenci Yurdu",
+    "city": "Balıkesir",
+    "lat": 40.3401036,
+    "lng": 27.9332844,
+    "query": "Yarbay, Balıkesir",
+    "display_name": "Yarbay Vecihi Bey Kız Öğrenci Yurdu, Dorukoba, Yeni Mahallesi, Bandırma, Balıkesir, Marmara Bölgesi, Türkiye"
+  },
+  "Balıkesir::Zağnos Paşa Kyk Erkek Öğrenci Yurdu": {
+    "name": "Zağnos Paşa Kyk Erkek Öğrenci Yurdu",
+    "city": "Balıkesir",
+    "lat": 40.333352,
+    "lng": 27.9375951,
+    "query": "Zağnos Paşa Yurdu, Balıkesir",
+    "display_name": "Zağnos Paşa Erkek Öğrenci Yurdu, Liseler Vadisi, Yeni Mahallesi, Bandırma, Balıkesir, Marmara Bölgesi, Türkiye"
+  },
+  "Balıkesir::Bandırma Kuş Cenneti Kyk Erkek Öğrenci Yurdu": {
+    "name": "Bandırma Kuş Cenneti Kyk Erkek Öğrenci Yurdu",
+    "city": "Balıkesir",
+    "lat": 40.3554705,
+    "lng": 27.9697603,
+    "query": "Bandırma, Balıkesir",
+    "display_name": "Bandırma, Balıkesir, Marmara Bölgesi, Türkiye"
+  },
+  "Balıkesir::Altıeylül Kyk Kız Öğrenci Yurdu": {
+    "name": "Altıeylül Kyk Kız Öğrenci Yurdu",
+    "city": "Balıkesir",
+    "lat": 39.6469144,
+    "lng": 27.8885353,
+    "query": "Altıeylül, Balıkesir",
+    "display_name": "Balıkesir, Vasıf Çınar Caddesi, Balıkesir, Kasaplar, 1. Gündoğan, Altıeylül, Balıkesir, Marmara Bölgesi, 10100, Türkiye"
+  },
+  "Balıkesir::Burhaniye Kyk Kız Öğrenci Yurdu": {
+    "name": "Burhaniye Kyk Kız Öğrenci Yurdu",
+    "city": "Balıkesir",
+    "lat": 39.5030179,
+    "lng": 26.9807391,
+    "query": "Burhaniye, Balıkesir",
+    "display_name": "Burhaniye, Balıkesir, Marmara Bölgesi, 10700, Türkiye"
+  },
+  "Bolu::Gerede Kyk Kız Öğrenci Yurdu": {
+    "name": "Gerede Kyk Kız Öğrenci Yurdu",
+    "city": "Bolu",
+    "lat": 40.7987548,
+    "lng": 32.2009075,
+    "query": "Gerede, Bolu",
+    "display_name": "Gerede, Bolu, Karadeniz Bölgesi, Türkiye"
+  },
+  "Bolu::Mudurnu Hacı Mehmet Astarcı Kyk Kız ve Erkek Yurdu": {
+    "name": "Mudurnu Hacı Mehmet Astarcı Kyk Kız ve Erkek Yurdu",
+    "city": "Bolu",
+    "lat": 40.4656959,
+    "lng": 31.2112312,
+    "query": "Mudurnu, Bolu",
+    "display_name": "Mudurnu, Bolu, Karadeniz Bölgesi, Türkiye"
+  },
+  "Bolu::Seben İzzet Baysal Myo Kız Ve Erkek Kyk Yurdu": {
+    "name": "Seben İzzet Baysal Myo Kız Ve Erkek Kyk Yurdu",
+    "city": "Bolu",
+    "lat": 40.4085088,
+    "lng": 31.5713451,
+    "query": "Seben, Bolu",
+    "display_name": "Seben, Bolu, Karadeniz Bölgesi, Türkiye"
+  },
+  "Bolu::Bolu Gölköy Kyk Kız Öğrenci Yurdu": {
+    "name": "Bolu Gölköy Kyk Kız Öğrenci Yurdu",
+    "city": "Bolu",
+    "lat": 40.7119441,
+    "lng": 31.5095406,
+    "query": "Bolu Gölköy, Bolu",
+    "display_name": "Bolu Abant İzzet Baysal Üniversitesi Lojmanları, Çayır Sokak, Karaköy Mahallesi, Gölköy, Bolu Merkez, Bolu, Karadeniz Bölgesi, 14030, Türkiye"
+  },
+  "Bolu::Hayreddin Tokadi Kyk Kız Öğrenci Yurdu": {
+    "name": "Hayreddin Tokadi Kyk Kız Öğrenci Yurdu",
+    "city": "Bolu",
+    "lat": 40.7106369,
+    "lng": 31.5108908,
+    "query": "Hayreddin Tokadi Yurdu, Bolu",
+    "display_name": "KYK Hayreddin Tokadi Yurdu, Çayır Sokak, Karaköy Mahallesi, Gölköy, Bolu Merkez, Bolu, Karadeniz Bölgesi, 14030, Türkiye"
+  },
+  "Bolu::Seyit Avşar Kyk Erkek Öğrenci Yurdu": {
+    "name": "Seyit Avşar Kyk Erkek Öğrenci Yurdu",
+    "city": "Bolu",
+    "lat": 40.7122999,
+    "lng": 31.5700694,
+    "query": "Seyit Avşar Yurdu, Bolu",
+    "display_name": "Seyit Avşar Erkek KYK Yurdu, D160, Seyit Mahallesi, Doğancı, Bolu Merkez, Bolu, Karadeniz Bölgesi, 14000, Türkiye"
+  },
+  "Bolu::Seyyide Nefise Kyk Kız Öğrenci Yurdu": {
+    "name": "Seyyide Nefise Kyk Kız Öğrenci Yurdu",
+    "city": "Bolu",
+    "lat": 40.718253,
+    "lng": 31.5315452,
+    "query": "Seyyide Nefise, Bolu",
+    "display_name": "KYK Seyyide Nefise Yurt Müdürlüğü, 76, BOLU YOLU, Karaköy Mahallesi, Yumrukaya Köyü, Bolu Merkez, Bolu, Karadeniz Bölgesi, 14030, Türkiye"
+  },
+  "Bolu::Bolu İzzet Baysal Kyk Kız Öğrenci Yurdu": {
+    "name": "Bolu İzzet Baysal Kyk Kız Öğrenci Yurdu",
+    "city": "Bolu",
+    "lat": 40.7119441,
+    "lng": 31.5095406,
+    "query": "Bolu İzzet Baysal, Bolu",
+    "display_name": "Bolu Abant İzzet Baysal Üniversitesi Lojmanları, Çayır Sokak, Karaköy Mahallesi, Gölköy, Bolu Merkez, Bolu, Karadeniz Bölgesi, 14030, Türkiye"
+  },
+  "Eskişehir::Doğan Aslan Bey Kyk Erkek Öğrenci Yurdu": {
+    "name": "Doğan Aslan Bey Kyk Erkek Öğrenci Yurdu",
+    "city": "Eskişehir",
+    "lat": 39.8265438,
+    "lng": 31.2146074,
+    "query": "Doğan, Eskişehir",
+    "display_name": "Doğanoğlu, Beylikova, Eskişehir, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Eskişehir::Gündüzalp Kyk Erkek Öğrenci Yurdu": {
+    "name": "Gündüzalp Kyk Erkek Öğrenci Yurdu",
+    "city": "Eskişehir",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Eskişehir::Osman Efendi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Osman Efendi Kyk Erkek Öğrenci Yurdu",
+    "city": "Eskişehir",
+    "lat": 39.7488643,
+    "lng": 30.4645528,
+    "query": "Osman Efendi Yurdu, Eskişehir",
+    "display_name": "Osman Efendi KYK Yurdu, Eskişehir - Kütahya Yolu, Orhangazi Mahallesi, Karacaşehir, Odunpazarı, Eskişehir, İç Anadolu Bölgesi, 26160, Türkiye"
+  },
+  "Eskişehir::Hızır Bey Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Hızır Bey Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Eskişehir",
+    "lat": 39.8275383,
+    "lng": 30.5417487,
+    "query": "Hızır Bey Yurdu, Eskişehir",
+    "display_name": "Hızır Bey Yurdu, Muttalip Orta Mahallesi, Tepebaşı, Eskişehir, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Eskişehir::Cumhuriyet Kyk Kız Öğrenci Yurdu": {
+    "name": "Cumhuriyet Kyk Kız Öğrenci Yurdu",
+    "city": "Eskişehir",
+    "lat": 39.8305355,
+    "lng": 30.6426921,
+    "query": "Cumhuriyet, Eskişehir",
+    "display_name": "Cumhuriyet Mahallesi, Tepebaşı, Eskişehir, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Eskişehir::Mükrime Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Mükrime Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Eskişehir",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Eskişehir::Eskişehir Kyk Kız Öğrenci Yurdu": {
+    "name": "Eskişehir Kyk Kız Öğrenci Yurdu",
+    "city": "Eskişehir",
+    "lat": 39.7743941,
+    "lng": 30.519116,
+    "query": "Eskişehir, Türkiye",
+    "display_name": "Eskişehir, Odunpazarı, Eskişehir, İç Anadolu Bölgesi, 26010, Türkiye"
+  },
+  "Eskişehir::Bala Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Bala Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Eskişehir",
+    "lat": 39.7480641,
+    "lng": 30.494572,
+    "query": "Bala Hatun Yurdu, Eskişehir",
+    "display_name": "Bala Hatun Öğrenci Yurdu C Blok, Gençlik Bulvarı, Yenikent, Eskişehir, Odunpazarı, Eskişehir, İç Anadolu Bölgesi, 26040, Türkiye"
+  },
+  "Hatay::Antakya Kyk Kız Öğrenci Yurdu": {
+    "name": "Antakya Kyk Kız Öğrenci Yurdu",
+    "city": "Hatay",
+    "lat": 36.2011448,
+    "lng": 36.1627314,
+    "query": "Antakya Yurdu, Hatay",
+    "display_name": "Cahidem Antakya, 31, 40 Asırlık Türk Yurdu Caddesi, Ulucami Mahallesi, Hatay, Antakya, Hatay, Akdeniz Bölgesi, 31070, Türkiye"
+  },
+  "Hatay::Cemil Meriç Kyk Erkek Öğrenci Yurdu": {
+    "name": "Cemil Meriç Kyk Erkek Öğrenci Yurdu",
+    "city": "Hatay",
+    "lat": 36.4905322,
+    "lng": 36.3668988,
+    "query": "Cemil Meriç, Hatay",
+    "display_name": "Cemil Meriç Bulvarı, Alsancak, Reşatlı, Kırıkhan, Hatay, Akdeniz Bölgesi, 31440, Türkiye"
+  },
+  "Hatay::Yayladağı Kyk Kız Öğrenci Yurdu": {
+    "name": "Yayladağı Kyk Kız Öğrenci Yurdu",
+    "city": "Hatay",
+    "lat": 35.9029545,
+    "lng": 36.0625987,
+    "query": "Yayladağı, Hatay",
+    "display_name": "Yayladağı, Hatay, Akdeniz Bölgesi, 31550, Türkiye"
+  },
+  "Hatay::Gaziye Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Gaziye Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Hatay",
+    "lat": 36.5733833,
+    "lng": 36.1472223,
+    "query": "Gaziye Hatun Yurdu, Hatay",
+    "display_name": "Gaziye Hatun Kız Öğrenci Yurdu, 543 Sokak, Karaağaç Konarlı, Karaağaç Konarlı Mahallesi, Arsuz, Hatay, Akdeniz Bölgesi, 31230, Türkiye"
+  },
+  "Hatay::İskenderun Kyk Erkek Öğrenci Yurdu": {
+    "name": "İskenderun Kyk Erkek Öğrenci Yurdu",
+    "city": "Hatay",
+    "lat": 36.5749786,
+    "lng": 36.1469042,
+    "query": "İskenderun Yurdu, Hatay",
+    "display_name": "İskenderun Gaziye Hatun , Erkek Öğrenci Yurdu, 543 Sokak, Karaağaç Konarlı, Karaağaç Konarlı Mahallesi, Arsuz, Hatay, Akdeniz Bölgesi, 31230, Türkiye"
+  },
+  "Hatay::Muhyiddin İbni Arabi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Muhyiddin İbni Arabi Kyk Erkek Öğrenci Yurdu",
+    "city": "Hatay",
+    "lat": 36.5742226,
+    "lng": 36.1481107,
+    "query": "Muhyiddin, Hatay",
+    "display_name": "Muhyiddin İbn-i Arabi Erkek Öğrenci Yurdu, 543 Sokak, Karaağaç, Karaağaç Konarlı, Karaağaç Konarlı Mahallesi, Arsuz, Hatay, Akdeniz Bölgesi, 31230, Türkiye"
+  },
+  "Hatay::Tayfur Sökmen Kyk Kız Öğrenci Yurdu": {
+    "name": "Tayfur Sökmen Kyk Kız Öğrenci Yurdu",
+    "city": "Hatay",
+    "lat": 36.2483793,
+    "lng": 36.4076237,
+    "query": "Tayfur Sökmen, Hatay",
+    "display_name": "Tayfur Sökmen Mahallesi, Reyhanlı, Hatay, Akdeniz Bölgesi, Türkiye"
+  },
+  "Giresun::Giresun Sahil Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Giresun Sahil Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Giresun",
+    "lat": 40.9181483,
+    "lng": 38.3294861,
+    "query": "Giresun Sahil, Giresun",
+    "display_name": "Giresun Sahil Plajı, Güre, Güre Mahallesi, Giresun Merkez, Giresun, Karadeniz Bölgesi, Türkiye"
+  },
+  "Giresun::Seyyid Vakkas Kyk Erkek Öğrenci Yurdu": {
+    "name": "Seyyid Vakkas Kyk Erkek Öğrenci Yurdu",
+    "city": "Giresun",
+    "lat": 40.9046788,
+    "lng": 38.410658,
+    "query": "Seyyid Vakkas Yurdu, Giresun",
+    "display_name": "Seyyid Vakkas Erkek Öğrenci Yurdu ( Yarı Özel ), 98. Sokak, Gedikkaya, Giresun Merkez, Giresun, Karadeniz Bölgesi, 28100, Türkiye"
+  },
+  "Giresun::Giresun Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Giresun Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Giresun",
+    "lat": 40.6531617,
+    "lng": 38.5172032,
+    "query": "Giresun, Türkiye",
+    "display_name": "Giresun, Karadeniz Bölgesi, Türkiye"
+  },
+  "Giresun::Tirebolu Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Tirebolu Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Giresun",
+    "lat": 41.0072009,
+    "lng": 38.8146309,
+    "query": "Tirebolu, Giresun",
+    "display_name": "Tirebolu, Giresun, Karadeniz Bölgesi, 28500, Türkiye"
+  },
+  "Giresun::Aziz Hüseyin Gökçe Kyk Kız Öğrenci Yurdu": {
+    "name": "Aziz Hüseyin Gökçe Kyk Kız Öğrenci Yurdu",
+    "city": "Giresun",
+    "lat": 40.9525735,
+    "lng": 38.124757,
+    "query": "Aziz, Giresun",
+    "display_name": "Piraziz, Giresun, Karadeniz Bölgesi, Türkiye"
+  },
+  "Giresun::Alucra Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Alucra Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Giresun",
+    "lat": 40.319666,
+    "lng": 38.7651849,
+    "query": "Alucra, Giresun",
+    "display_name": "Alucra, Giresun, Karadeniz Bölgesi, Türkiye"
+  },
+  "Giresun::Şebinkarahisar Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Şebinkarahisar Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Giresun",
+    "lat": 40.2886007,
+    "lng": 38.4236116,
+    "query": "Şebinkarahisar, Giresun",
+    "display_name": "Şebinkarahisar, Giresun, Karadeniz Bölgesi, 28400, Türkiye"
+  },
+  "Giresun::Eynesil Kyk Kız Öğrenci Yurdu": {
+    "name": "Eynesil Kyk Kız Öğrenci Yurdu",
+    "city": "Giresun",
+    "lat": 41.0646879,
+    "lng": 39.1434047,
+    "query": "Eynesil, Giresun",
+    "display_name": "Eynesil, Giresun, Karadeniz Bölgesi, 28850, Türkiye"
+  },
+  "Van::Süleyman Şah Kyk Erkek Öğrenci Yurdu": {
+    "name": "Süleyman Şah Kyk Erkek Öğrenci Yurdu",
+    "city": "Van",
+    "lat": 39.1271215,
+    "lng": 43.3767239,
+    "query": "Süleyman, Van",
+    "display_name": "Süleyman, Erciş, Van, Doğu Anadolu Bölgesi, 65400, Türkiye"
+  },
+  "Van::Özalp Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Özalp Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Van",
+    "lat": 38.6533516,
+    "lng": 43.9897272,
+    "query": "Özalp, Van",
+    "display_name": "Özalp, Van Saray yolu, Kargalı, Özalp, Van, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Van::Amine Hatun Kyk Erkek Öğrenci Yurdu": {
+    "name": "Amine Hatun Kyk Erkek Öğrenci Yurdu",
+    "city": "Van",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Van::Erciş Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Erciş Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Van",
+    "lat": 39.0289887,
+    "lng": 43.3591059,
+    "query": "Erciş, Van",
+    "display_name": "Erciş, Van, Doğu Anadolu Bölgesi, 65400, Türkiye"
+  },
+  "Van::Gevaş Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Gevaş Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Van",
+    "lat": 38.2952862,
+    "lng": 43.108271,
+    "query": "Gevaş, Van",
+    "display_name": "Gevaş, Van, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Van::Aişe Sıddıka Kyk Kız Öğrenci Yurdu": {
+    "name": "Aişe Sıddıka Kyk Kız Öğrenci Yurdu",
+    "city": "Van",
+    "lat": 38.5016651,
+    "lng": 43.3901038,
+    "query": "Aişe, Van",
+    "display_name": "Hz.Aişe Mescidi, Nurbaba Sokak, Bahçıvan Mahallesi, Van, İpekyolu, Van, Doğu Anadolu Bölgesi, 65030, Türkiye"
+  },
+  "Van::Van Kyk Kız Öğrenci Yurdu": {
+    "name": "Van Kyk Kız Öğrenci Yurdu",
+    "city": "Van",
+    "lat": 38.3249599,
+    "lng": 43.6589825,
+    "query": "Van, Türkiye",
+    "display_name": "Van, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Van::Seyyid Fehim Arvasi Kyk Kız Öğrenci Yurdu": {
+    "name": "Seyyid Fehim Arvasi Kyk Kız Öğrenci Yurdu",
+    "city": "Van",
+    "lat": 38.5103479,
+    "lng": 43.4251293,
+    "query": "Seyyid, Van",
+    "display_name": "Seyyid Abdulkadir Geylani Camii, Kurtuluş Caddesi, Bostaniçi Mahallesi, Van, İpekyolu, Van, Doğu Anadolu Bölgesi, 65030, Türkiye"
+  },
+  "Kayseri::Develi Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Develi Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Kayseri",
+    "lat": 38.3879285,
+    "lng": 35.4900997,
+    "query": "Develi, Kayseri",
+    "display_name": "Develi, Kayseri, İç Anadolu Bölgesi, 38400, Türkiye"
+  },
+  "Sakarya::Akyazı Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Akyazı Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Sakarya",
+    "lat": 40.6814188,
+    "lng": 30.6246106,
+    "query": "Akyazı, Sakarya",
+    "display_name": "Akyazı, Sakarya, Marmara Bölgesi, 54400, Türkiye"
+  },
+  "Sakarya::Karasu Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Karasu Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Sakarya",
+    "lat": 41.0940608,
+    "lng": 30.691709,
+    "query": "Karasu, Sakarya",
+    "display_name": "Karasu, Sakarya, Marmara Bölgesi, 54500, Türkiye"
+  },
+  "Sakarya::Sakarya Kyk Kız Öğrenci Yurdu": {
+    "name": "Sakarya Kyk Kız Öğrenci Yurdu",
+    "city": "Sakarya",
+    "lat": 40.7731834,
+    "lng": 30.481606,
+    "query": "Sakarya, Türkiye",
+    "display_name": "Sakarya, Marmara Bölgesi, Türkiye"
+  },
+  "Sakarya::Arif Nihat Asya Kyk Kız Öğrenci Yurdu": {
+    "name": "Arif Nihat Asya Kyk Kız Öğrenci Yurdu",
+    "city": "Sakarya",
+    "lat": 40.6962783,
+    "lng": 30.2664033,
+    "query": "Arif, Sakarya",
+    "display_name": "Arif Yıldız, Rüstempaşa, Sapanca, Sakarya, Marmara Bölgesi, 54600, Türkiye"
+  },
+  "Sakarya::Rahime Sultan Kyk Kız Öğrenci Yurdu": {
+    "name": "Rahime Sultan Kyk Kız Öğrenci Yurdu",
+    "city": "Sakarya",
+    "lat": 40.7005821,
+    "lng": 30.3091963,
+    "query": "Rahime Sultan, Sakarya",
+    "display_name": "Rahime Sultan Cami Parseli, Göl, Uzunkum, Sapanca, Sakarya, Marmara Bölgesi, Türkiye"
+  },
+  "Sakarya::Geyve Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Geyve Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Sakarya",
+    "lat": 40.5090547,
+    "lng": 30.2902514,
+    "query": "Geyve, Sakarya",
+    "display_name": "Geyve, Sakarya, Marmara Bölgesi, Türkiye"
+  },
+  "Sakarya::Sakarya Sabahattin Zaim Kyk Kız Öğrenci Yurdu": {
+    "name": "Sakarya Sabahattin Zaim Kyk Kız Öğrenci Yurdu",
+    "city": "Sakarya",
+    "lat": 40.8165584,
+    "lng": 30.3578095,
+    "query": "Sakarya Sabahattin Zaim, Sakarya",
+    "display_name": "Sakarya Tenis Akademisi Spor Kompleksi, Profesör Doktor Sabahattin Zaim Bulvarı, Şeker Mahallesi, Karakamış Mahallesi, Adapazarı, Sakarya, Marmara Bölgesi, 54040, Türkiye"
+  },
+  "Sakarya::Ayşe Hümeyra Ökten Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ayşe Hümeyra Ökten Kyk Erkek Öğrenci Yurdu",
+    "city": "Sakarya",
+    "lat": 40.7766926,
+    "lng": 30.4066974,
+    "query": "Ayşe, Sakarya",
+    "display_name": "Ayşe Handan Eczanesi, Turan Caddesi, Tığcılar Mahallesi, Sakarya, Adapazarı, Sakarya, Marmara Bölgesi, 54040, Türkiye"
+  },
+  "Mersin::Silifke Taşucu Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Silifke Taşucu Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Mersin",
+    "lat": 36.3130066,
+    "lng": 33.861497,
+    "query": "Silifke Taşucu, Mersin",
+    "display_name": "Mersin - Antalya Yolu, Taşucu, Silifke, Mersin, Akdeniz Bölgesi, 33900, Türkiye"
+  },
+  "Mersin::Tarsus Kyk Kız Öğrenci Yurdu": {
+    "name": "Tarsus Kyk Kız Öğrenci Yurdu",
+    "city": "Mersin",
+    "lat": 36.9164834,
+    "lng": 34.895149,
+    "query": "Tarsus, Mersin",
+    "display_name": "Tarsus, Mersin, Akdeniz Bölgesi, Türkiye"
+  },
+  "Mersin::Müfide İlhan Kyk Kız Öğrenci Yurdu": {
+    "name": "Müfide İlhan Kyk Kız Öğrenci Yurdu",
+    "city": "Mersin",
+    "lat": 36.8192954,
+    "lng": 34.6528581,
+    "query": "Müfide İlhan, Mersin",
+    "display_name": "Müfide İlhan Mahallesi, Mersin, Akdeniz, Mersin, Akdeniz Bölgesi, Türkiye"
+  },
+  "Mersin::Anamur Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Anamur Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Mersin",
+    "lat": 36.080323,
+    "lng": 32.8312106,
+    "query": "Anamur, Mersin",
+    "display_name": "Anamur, Mersin, Akdeniz Bölgesi, Türkiye"
+  },
+  "Mersin::Erdemli Kız Ve Erkek Kyk Öğrenci Yurdu": {
+    "name": "Erdemli Kız Ve Erkek Kyk Öğrenci Yurdu",
+    "city": "Mersin",
+    "lat": 36.5920497,
+    "lng": 34.284945,
+    "query": "Erdemli Yurdu, Mersin",
+    "display_name": "Erdemli Kız Kalesi Öğrenci Yurdu, Alparslan Türkeş Bulvarı, Akdeniz, Erdemli, Mersin, Akdeniz Bölgesi, 33730, Türkiye"
+  },
+  "Mersin::Tarsus Kyk Erkek Öğrenci Yurdu": {
+    "name": "Tarsus Kyk Erkek Öğrenci Yurdu",
+    "city": "Mersin",
+    "lat": 36.9164834,
+    "lng": 34.895149,
+    "query": "Tarsus, Mersin",
+    "display_name": "Tarsus, Mersin, Akdeniz Bölgesi, Türkiye"
+  },
+  "Mersin::Mersin Kyk Kız Öğrenci Yurdu": {
+    "name": "Mersin Kyk Kız Öğrenci Yurdu",
+    "city": "Mersin",
+    "lat": 36.7896332,
+    "lng": 34.5365662,
+    "query": "Mersin Yurdu, Mersin",
+    "display_name": "Mersin KYK Kız Öğrenci Yurdu, Çiftlikköy Mahallesi, Yenişehir, Mersin, Akdeniz Bölgesi, Türkiye"
+  },
+  "Şanlıurfa::Mehmet Akif İnan Kyk Erkek Öğrenci Yurdu": {
+    "name": "Mehmet Akif İnan Kyk Erkek Öğrenci Yurdu",
+    "city": "Şanlıurfa",
+    "lat": 37.1836064,
+    "lng": 38.8126487,
+    "query": "Mehmet Akif İnan, Şanlıurfa",
+    "display_name": "Mehmet Akif İnan Eğitim ve Araştırma Hastanesi, PROF. S.ATTİLA Caddesi, Ertuğrul Gazi Mahallesi, Şanlıurfa, Haliliye, Şanlıurfa, Güneydoğu Anadolu Bölgesi, 63000, Türkiye"
+  },
+  "Şanlıurfa::Şifa Hatun Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Şifa Hatun Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Şanlıurfa",
+    "lat": 37.1644958,
+    "lng": 38.8302784,
+    "query": "Şifa, Şanlıurfa",
+    "display_name": "Şifa Eczanesi, Recep Tayyip Erdoğan Bulvarı, Karşıyaka Mahallesi, Şanlıurfa, Haliliye, Şanlıurfa, Güneydoğu Anadolu Bölgesi, 63050, Türkiye"
+  },
+  "Şanlıurfa::Harran Kyk Kız Öğrenci Yurdu (ş.urfa)": {
+    "name": "Harran Kyk Kız Öğrenci Yurdu (ş.urfa)",
+    "city": "Şanlıurfa",
+    "lat": 36.8710059,
+    "lng": 39.0251364,
+    "query": "Harran, Şanlıurfa",
+    "display_name": "Harran, Şanlıurfa, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Şanlıurfa::Şanlıurfa Kyk Kız Öğrenci Yurdu": {
+    "name": "Şanlıurfa Kyk Kız Öğrenci Yurdu",
+    "city": "Şanlıurfa",
+    "lat": 37.2595198,
+    "lng": 39.0408174,
+    "query": "Şanlıurfa, Türkiye",
+    "display_name": "Şanlıurfa, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Şanlıurfa::Hacer Ana Kyk Kız Öğrenci Yurdu": {
+    "name": "Hacer Ana Kyk Kız Öğrenci Yurdu",
+    "city": "Şanlıurfa",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Gaziantep::Oğuzeli Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Oğuzeli Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Gaziantep",
+    "lat": 36.9651081,
+    "lng": 37.5085487,
+    "query": "Oğuzeli, Gaziantep",
+    "display_name": "Oğuzeli, Gaziantep, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Gaziantep::Şahinbey Kyk Kız Öğrenci Yurdu": {
+    "name": "Şahinbey Kyk Kız Öğrenci Yurdu",
+    "city": "Gaziantep",
+    "lat": 37.0628317,
+    "lng": 37.3792617,
+    "query": "Şahinbey, Gaziantep",
+    "display_name": "Gaziantep, Şahinbey, Gaziantep, Güneydoğu Anadolu Bölgesi, 27220, Türkiye"
+  },
+  "Gaziantep::Ukkaşe Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Ukkaşe Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Gaziantep",
+    "lat": 37.0803969,
+    "lng": 36.8379663,
+    "query": "Ukkaşe, Gaziantep",
+    "display_name": "Hazreti Ukkaşe Türbesi, Torunlar - Altınova yolu, Altınova Mahallesi, Nurdağı, Gaziantep, Güneydoğu Anadolu Bölgesi, 27840, Türkiye"
+  },
+  "Gaziantep::Gazikent Kyk Kız Öğrenci Yurdu": {
+    "name": "Gazikent Kyk Kız Öğrenci Yurdu",
+    "city": "Gaziantep",
+    "lat": 37.0887116,
+    "lng": 37.4288485,
+    "query": "Gazikent, Gaziantep",
+    "display_name": "Gazikent Mahallesi, Şehitkamil, Gaziantep, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Gaziantep::Abdülkadir Güllüoğlu Kyk Kız ve Erkek Yurdu": {
+    "name": "Abdülkadir Güllüoğlu Kyk Kız ve Erkek Yurdu",
+    "city": "Gaziantep",
+    "lat": 37.0625497,
+    "lng": 37.3791348,
+    "query": "Abdülkadir Güllüoğlu, Gaziantep",
+    "display_name": "Abdulkadir Gulluoglu, Istasyon Caddesi, Bey Mahallesi, Gaziantep, Şahinbey, Gaziantep, Güneydoğu Anadolu Bölgesi, 27220, Türkiye"
+  },
+  "Gaziantep::Ezogelin Kyk Kız Öğrenci Yurdu": {
+    "name": "Ezogelin Kyk Kız Öğrenci Yurdu",
+    "city": "Gaziantep",
+    "lat": 37.0613569,
+    "lng": 37.3671022,
+    "query": "Ezogelin, Gaziantep",
+    "display_name": "Ezogelin Halk Eğitim Merkezi, Atatürk Bulvarı, Bahçelievler Mahallesi, Gaziantep, Şahinbey, Gaziantep, Güneydoğu Anadolu Bölgesi, 27220, Türkiye"
+  },
+  "Gaziantep::Ümmü Gülsüm Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ümmü Gülsüm Kyk Erkek Öğrenci Yurdu",
+    "city": "Gaziantep",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Gaziantep::Nizip Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Nizip Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Gaziantep",
+    "lat": 37.0011838,
+    "lng": 37.789031,
+    "query": "Nizip, Gaziantep",
+    "display_name": "Nizip, 27-30, İstasyon Mah., İstasyon Mahallesi, Nizip, Gaziantep, Güneydoğu Anadolu Bölgesi, 27700, Türkiye"
+  },
+  "Artvin::Hamdi Efendi Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Hamdi Efendi Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Artvin",
+    "lat": 41.1791408,
+    "lng": 41.8181102,
+    "query": "Hamdi, Artvin",
+    "display_name": "Ahmet Hamdi Tanpınar Kültür Merkezi, İnönü Caddesi, Çarşı, Çarşı Mahallesi, Artvin Merkez, Artvin, Karadeniz Bölgesi, 08000, Türkiye"
+  },
+  "Artvin::Nedime Lütfiye Günal Kyk Kız Ve Erkek Yurdu": {
+    "name": "Nedime Lütfiye Günal Kyk Kız Ve Erkek Yurdu",
+    "city": "Artvin",
+    "lat": 41.1828281,
+    "lng": 41.8330031,
+    "query": "Nedime Lütfiye Günal Yurdu, Artvin",
+    "display_name": "Nedime Lütfiye Günal Kız Öğrenci Yurdu, Fevzi Çakmak Caddesi, Çayağzı, Çayağzı Mahallesi, Artvin Merkez, Artvin, Karadeniz Bölgesi, 08000, Türkiye"
+  },
+  "Artvin::Şavşat Kyk Kız Öğrenci Yurdu": {
+    "name": "Şavşat Kyk Kız Öğrenci Yurdu",
+    "city": "Artvin",
+    "lat": 41.2524882,
+    "lng": 42.3568859,
+    "query": "Şavşat, Artvin",
+    "display_name": "Şavşat, Artvin, Karadeniz Bölgesi, 08700, Türkiye"
+  },
+  "Artvin::Şah Sultan Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Şah Sultan Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Artvin",
+    "lat": 41.1878994,
+    "lng": 41.806885,
+    "query": "Şah Sultan, Artvin",
+    "display_name": "Şah Sultan Yurt Müdürlüğü, Edip Dinç Sokak, Yeni, Fıstıklı, Artvin Merkez, Artvin, Karadeniz Bölgesi, 08000, Türkiye"
+  },
+  "Artvin::Çoruh Kyk Kız Öğrenci Yurdu": {
+    "name": "Çoruh Kyk Kız Öğrenci Yurdu",
+    "city": "Artvin",
+    "lat": 40.8113254,
+    "lng": 41.5221574,
+    "query": "Çoruh, Artvin",
+    "display_name": "Çoruh Mah., Yusufeli, Artvin, Karadeniz Bölgesi, 08890, Türkiye"
+  },
+  "Artvin::Artvin Kyk Erkek Öğrenci Yurdu": {
+    "name": "Artvin Kyk Erkek Öğrenci Yurdu",
+    "city": "Artvin",
+    "lat": 41.160506,
+    "lng": 41.8398627,
+    "query": "Artvin, Türkiye",
+    "display_name": "Artvin, Karadeniz Bölgesi, Türkiye"
+  },
+  "Artvin::Hopa Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Hopa Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Artvin",
+    "lat": 41.3853867,
+    "lng": 41.4631932,
+    "query": "Hopa, Artvin",
+    "display_name": "Hopa, Artvin, Karadeniz Bölgesi, 08600, Türkiye"
+  },
+  "Bursa::Gülruh Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Gülruh Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Bursa",
+    "lat": 40.1906475,
+    "lng": 29.045407,
+    "query": "Gülruh Hatun, Bursa",
+    "display_name": "Gülruh Hatun Türbesi, Kaplıca Caddesi, Kocanaip, Muradiye Mahallesi, Osmangazi, Bursa, Marmara Bölgesi, 16104, Türkiye"
+  },
+  "Bursa::Halime Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Halime Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Bursa",
+    "lat": 40.2323184,
+    "lng": 28.8667832,
+    "query": "Halime Hatun Yurdu, Bursa",
+    "display_name": "Halime Hatun Kız Öğrenci Yurdu, Üniversite-1 Cd., Görükle Mahallesi, Nilüfer, Bursa, Marmara Bölgesi, 16065, Türkiye"
+  },
+  "Bursa::Uludağ Kyk Kız Öğrenci Yurdu": {
+    "name": "Uludağ Kyk Kız Öğrenci Yurdu",
+    "city": "Bursa",
+    "lat": 40.2317279,
+    "lng": 28.8651444,
+    "query": "Uludağ Yurdu, Bursa",
+    "display_name": "Uludağ Kız Öğrenci Yurdu, Üniversite-1 Cd., Görükle Mahallesi, Nilüfer, Bursa, Marmara Bölgesi, 16065, Türkiye"
+  },
+  "Bursa::Şirin Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Şirin Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Bursa",
+    "lat": 40.190754,
+    "lng": 29.0454231,
+    "query": "Şirin Hatun, Bursa",
+    "display_name": "Şirin Hatun Türbesi, Kaplıca Caddesi, Kocanaip, Muradiye Mahallesi, Osmangazi, Bursa, Marmara Bölgesi, 16104, Türkiye"
+  },
+  "Bursa::Malhun Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Malhun Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Bursa",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Bursa::Mehmed Zahid Kotku Kyk Erkek Öğrenci Yurdu": {
+    "name": "Mehmed Zahid Kotku Kyk Erkek Öğrenci Yurdu",
+    "city": "Bursa",
+    "lat": 40.1830019,
+    "lng": 29.0579909,
+    "query": "Mehmed, Bursa",
+    "display_name": "Üftade Mehmed Muhyiddin Hz. Türbesi, Üftade Sokak, Kavaklı, Kavaklı Mahallesi, Osmangazi, Bursa, Marmara Bölgesi, 16020, Türkiye"
+  },
+  "Bursa::Karacabey Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Karacabey Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Bursa",
+    "lat": 40.2159844,
+    "lng": 28.3590588,
+    "query": "Karacabey, Bursa",
+    "display_name": "Karacabey, Bursa, Marmara Bölgesi, 16700, Türkiye"
+  },
+  "Bursa::Nilüfer Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Nilüfer Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Bursa",
+    "lat": 40.2186983,
+    "lng": 28.8884695,
+    "query": "Nilüfer Hatun Yurdu, Bursa",
+    "display_name": "Bursa - Nilüfer Hatun Kız Öğrenci Yurdu, 2, 521. Sokak, Yüzüncüyıl, Yüzüncüyıl Mahallesi, Nilüfer, Bursa, Marmara Bölgesi, 16120, Türkiye"
+  },
+  "Kütahya::Yesevi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Yesevi Kyk Erkek Öğrenci Yurdu",
+    "city": "Kütahya",
+    "lat": 39.1882447,
+    "lng": 28.8740006,
+    "query": "Yesevi, Kütahya",
+    "display_name": "Ahmet Yesevi Sokağı, Savcılar, Akdağ, Simav, Kütahya, Ege Bölgesi, Türkiye"
+  },
+  "Kütahya::Hezar Dinari Kyk Erkek Öğrenci Yurdu": {
+    "name": "Hezar Dinari Kyk Erkek Öğrenci Yurdu",
+    "city": "Kütahya",
+    "lat": 39.4853059,
+    "lng": 29.9105447,
+    "query": "Hezar Dinari Yurdu, Kütahya",
+    "display_name": "Hezar Dinari KYK Erkek Öğrenci Yurdu, Kütahya - Balıkesir Yolu, Kirazpınar, Kütahya Merkez, Kütahya, Ege Bölgesi, Türkiye"
+  },
+  "Kütahya::Arslan Bey Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Arslan Bey Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Kütahya",
+    "lat": 39.0850798,
+    "lng": 29.0076842,
+    "query": "Arslan, Kütahya",
+    "display_name": "Şehit Erdem Arslan Sokağı, Esenevler Mahallesi, Mamak, Simav, Kütahya, Ege Bölgesi, 43500, Türkiye"
+  },
+  "Kütahya::Hüsnü Özyeğin Kyk Kız Öğrenci Yurdu": {
+    "name": "Hüsnü Özyeğin Kyk Kız Öğrenci Yurdu",
+    "city": "Kütahya",
+    "lat": 39.4073847,
+    "lng": 30.0145535,
+    "query": "Hüsnü, Kütahya",
+    "display_name": "Hüsnü Kişioğlu Mesleki ve Teknik Anadolu Lisesi, 1. Cihan Sokak, Yenidoğan Mahallesi, Kütahya Merkez, Kütahya, Ege Bölgesi, 43020, Türkiye"
+  },
+  "Kütahya::Emet Kyk Kız Öğrenci Yurdu": {
+    "name": "Emet Kyk Kız Öğrenci Yurdu",
+    "city": "Kütahya",
+    "lat": 39.341462,
+    "lng": 29.2585932,
+    "query": "Emet, Kütahya",
+    "display_name": "Emet, Kütahya, Ege Bölgesi, Türkiye"
+  },
+  "Kütahya::Gediz Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Gediz Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Kütahya",
+    "lat": 38.9898441,
+    "lng": 29.3939571,
+    "query": "Gediz, Kütahya",
+    "display_name": "Gediz, Kütahya, Ege Bölgesi, 43600, Türkiye"
+  },
+  "Kütahya::Kütahya Zafertepe Kyk Kız Öğrenci Yurdu": {
+    "name": "Kütahya Zafertepe Kyk Kız Öğrenci Yurdu",
+    "city": "Kütahya",
+    "lat": 38.9466382,
+    "lng": 30.0884801,
+    "query": "Kütahya Zafertepe, Kütahya",
+    "display_name": "Kütahya - Dumlupınar Yolu, Zafertepeçalköy, Altıntaş, Kütahya, Ege Bölgesi, Türkiye"
+  },
+  "Kütahya::Dumlupınar Kyk Kız Öğrenci Yurdu": {
+    "name": "Dumlupınar Kyk Kız Öğrenci Yurdu",
+    "city": "Kütahya",
+    "lat": 38.8478635,
+    "lng": 29.985265,
+    "query": "Dumlupınar, Kütahya",
+    "display_name": "Dumlupınar, Kütahya - Dumlupınar Yolu, Dumlupınar, Kütahya, Ege Bölgesi, Türkiye"
+  },
+  "Yalova::Akça Hatun Kyk Kız Öğrenci Yurdu Müdürlüğü": {
+    "name": "Akça Hatun Kyk Kız Öğrenci Yurdu Müdürlüğü",
+    "city": "Yalova",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Yalova::Dilşad Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Dilşad Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Yalova",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Yalova::Çınarcık Kyk Kız Öğrenci Yurdu": {
+    "name": "Çınarcık Kyk Kız Öğrenci Yurdu",
+    "city": "Yalova",
+    "lat": 40.6434005,
+    "lng": 29.1193017,
+    "query": "Çınarcık, Yalova",
+    "display_name": "Çınarcık, Yalova, Marmara Bölgesi, Türkiye"
+  },
+  "Yalova::Yalova Kyk Erkek Öğrenci Yurdu": {
+    "name": "Yalova Kyk Erkek Öğrenci Yurdu",
+    "city": "Yalova",
+    "lat": 40.6416331,
+    "lng": 29.2563106,
+    "query": "Yalova Yurdu, Yalova",
+    "display_name": "Özel Yalova Evim Erkek Öğrenci Yurdu, Beyazıt Caddesi, Adnan Menderes Mahallesi, Yalova Belediye sınırı, Yalova Merkez, Yalova, Marmara Bölgesi, 77200, Türkiye"
+  },
+  "Yalova::Termal Kyk Erkek Öğrenci Yurdu": {
+    "name": "Termal Kyk Erkek Öğrenci Yurdu",
+    "city": "Yalova",
+    "lat": 40.6126107,
+    "lng": 29.1729603,
+    "query": "Termal Yurdu, Yalova",
+    "display_name": "KYK Termal Erkek Öğrenci Yurdu Kantini, Kışla Caddesi, Akköy, Termal, Yalova, Marmara Bölgesi, 77400, Türkiye"
+  },
+  "Diyarbakır::Süleyman Bin Halid Kyk Kız Öğrenci Yurdu": {
+    "name": "Süleyman Bin Halid Kyk Kız Öğrenci Yurdu",
+    "city": "Diyarbakır",
+    "lat": 37.9149281,
+    "lng": 40.2420977,
+    "query": "Süleyman, Diyarbakır",
+    "display_name": "Hazreti Süleyman Camii, Hazreti Süleyman Caddesi, Cevat Paşa Mahallesi, Diyarbakır, Sur, Diyarbakır, Güneydoğu Anadolu Bölgesi, 21300, Türkiye"
+  },
+  "Diyarbakır::Diyarbakır Selahattin Eyyubi Kyk Erkek Yurdu": {
+    "name": "Diyarbakır Selahattin Eyyubi Kyk Erkek Yurdu",
+    "city": "Diyarbakır",
+    "lat": 38.0162642,
+    "lng": 40.1162305,
+    "query": "Diyarbakır Selahattin Eyyubi, Diyarbakır",
+    "display_name": "Diyarbakır Tekstil İhtisas OSB, Çimenler, Yenişehir, Diyarbakır, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Diyarbakır::Halid Bin Velid Kyk Erkek Öğrenci Yurdu": {
+    "name": "Halid Bin Velid Kyk Erkek Öğrenci Yurdu",
+    "city": "Diyarbakır",
+    "lat": 37.9101455,
+    "lng": 40.1451904,
+    "query": "Halid Bin Velid Yurdu, Diyarbakır",
+    "display_name": "KYK Halid Bin Velid Yurdu, 10, Bağcılar Mahallesi, Yeşildallı, Bağlar, Diyarbakır, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Eskişehir::Taptuk Emre Kyk Kız Öğrenci Yurdu": {
+    "name": "Taptuk Emre Kyk Kız Öğrenci Yurdu",
+    "city": "Eskişehir",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Adana::Kozan Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Kozan Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Adana",
+    "lat": 37.4477857,
+    "lng": 35.8166308,
+    "query": "Kozan, Adana",
+    "display_name": "Kozan, Adana, Akdeniz Bölgesi, Türkiye"
+  },
+  "Adana::Kutul Amare Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kutul Amare Kyk Erkek Öğrenci Yurdu",
+    "city": "Adana",
+    "lat": 37.0506073,
+    "lng": 35.3903497,
+    "query": "Kutul Amare Yurdu, Adana",
+    "display_name": "Kutul Amare Ögrenci Yurdu, Balcalı Mahallesi, Sarıçam, Adana, Akdeniz Bölgesi, Türkiye"
+  },
+  "Adana::Adana Kyk Erkek Öğrenci Yurdu": {
+    "name": "Adana Kyk Erkek Öğrenci Yurdu",
+    "city": "Adana",
+    "lat": 37.0395462,
+    "lng": 35.3595355,
+    "query": "Adana Yurdu, Adana",
+    "display_name": "Adana Öğrenci Yurdu, Mithat Özsan Bulvarı, Balcalı Mahallesi, Sarıçam, Adana, Akdeniz Bölgesi, 01330, Türkiye"
+  },
+  "Adana::Beş Ocak Kyk Kız Öğrenci Yurdu": {
+    "name": "Beş Ocak Kyk Kız Öğrenci Yurdu",
+    "city": "Adana",
+    "lat": 37.0437286,
+    "lng": 35.2958493,
+    "query": "Beş, Adana",
+    "display_name": "Beş Yıldız APT, 78169. Sokak, Toros Mahallesi, Çukurova, Adana, Akdeniz Bölgesi, 01170, Türkiye"
+  },
+  "Adana::Toroslar Kyk Kız Öğrenci Yurdu": {
+    "name": "Toroslar Kyk Kız Öğrenci Yurdu",
+    "city": "Adana",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Adana::Çukurova Kyk Erkek Öğrenci Yurdu": {
+    "name": "Çukurova Kyk Erkek Öğrenci Yurdu",
+    "city": "Adana",
+    "lat": 37.0468862,
+    "lng": 35.2823275,
+    "query": "Çukurova, Adana",
+    "display_name": "Çukurova, Adana, Akdeniz Bölgesi, Türkiye"
+  },
+  "Adana::Fevzi Çakmak Kyk Kız Öğrenci Yurdu": {
+    "name": "Fevzi Çakmak Kyk Kız Öğrenci Yurdu",
+    "city": "Adana",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Adana::Mahmut Sami Ramazanoğlu Kyk Kız Öğrenci Yurdu": {
+    "name": "Mahmut Sami Ramazanoğlu Kyk Kız Öğrenci Yurdu",
+    "city": "Adana",
+    "lat": 37.053712,
+    "lng": 35.7991993,
+    "query": "Mahmut, Adana",
+    "display_name": "Mahmut Kara 33 Dekar-Ceytaş 11 Dekar, Koruklu, Küçük Mangıt, Ceyhan, Adana, Akdeniz Bölgesi, Türkiye"
+  },
+  "Kilis::Muhammed Bedevi Kyk Kız Öğrenci Yurdu": {
+    "name": "Muhammed Bedevi Kyk Kız Öğrenci Yurdu",
+    "city": "Kilis",
+    "lat": 36.7125678,
+    "lng": 37.0891708,
+    "query": "Muhammed Bedevi, Kilis",
+    "display_name": "Şeyh Muhammed Bedevi Turbesi, Demirışık yolu, Öncüpınar Mahallesi, Demirışık Köyü, Kilis Merkez, Kilis, Güneydoğu Anadolu Bölgesi, 79103, Türkiye"
+  },
+  "Kilis::Nakşidil Valide Sultan Kyk Kız Öğrenci Yurdu": {
+    "name": "Nakşidil Valide Sultan Kyk Kız Öğrenci Yurdu",
+    "city": "Kilis",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kilis::Kilis Kyk Kız Öğrenci Yurdu": {
+    "name": "Kilis Kyk Kız Öğrenci Yurdu",
+    "city": "Kilis",
+    "lat": 36.7797231,
+    "lng": 37.1416892,
+    "query": "Kilis, Türkiye",
+    "display_name": "Kilis, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Kilis::Kilis Mercidabık Kyk Kız Öğrenci Yurdu": {
+    "name": "Kilis Mercidabık Kyk Kız Öğrenci Yurdu",
+    "city": "Kilis",
+    "lat": 36.7093509,
+    "lng": 37.1091724,
+    "query": "Kilis Mercidabık, Kilis",
+    "display_name": "Kilis Anadolu Lisesi, Aydoğan Sk., Mercidabık Mahallesi, Kilis Merkez, Kilis, Güneydoğu Anadolu Bölgesi, 79103, Türkiye"
+  },
+  "Kilis::Kartal Bey Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kartal Bey Kyk Erkek Öğrenci Yurdu",
+    "city": "Kilis",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kilis::Bilali Habeşi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Bilali Habeşi Kyk Erkek Öğrenci Yurdu",
+    "city": "Kilis",
+    "lat": 36.7208851,
+    "lng": 37.1268156,
+    "query": "Bilali, Kilis",
+    "display_name": "Bilali Habeş Mahallesi, Kilis Merkez, Kilis, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Çankırı::Sabiha Anne Kyk Kız Öğrenci Yurdu": {
+    "name": "Sabiha Anne Kyk Kız Öğrenci Yurdu",
+    "city": "Çankırı",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Çankırı::Hacı Murat Veli Kyk Erkek Öğrenci Yurdu": {
+    "name": "Hacı Murat Veli Kyk Erkek Öğrenci Yurdu",
+    "city": "Çankırı",
+    "lat": 40.5999759,
+    "lng": 33.6305464,
+    "query": "Hacı Murat Veli Yurdu, Çankırı",
+    "display_name": "Çankırı Hacı Murat Veli Yurdu (Kyk), Somaki Bulvarı, Buğday Pazarı, Çankırı Merkez, Çankırı, İç Anadolu Bölgesi, 18100, Türkiye"
+  },
+  "Çankırı::Emir Karatekin Kyk Erkek Öğrenci Yurdu": {
+    "name": "Emir Karatekin Kyk Erkek Öğrenci Yurdu",
+    "city": "Çankırı",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Çankırı::Çankırı Kyk Kız Öğrenci Yurdu": {
+    "name": "Çankırı Kyk Kız Öğrenci Yurdu",
+    "city": "Çankırı",
+    "lat": 40.5999759,
+    "lng": 33.6305464,
+    "query": "Çankırı Yurdu, Çankırı",
+    "display_name": "Çankırı Hacı Murat Veli Yurdu (Kyk), Somaki Bulvarı, Buğday Pazarı, Çankırı Merkez, Çankırı, İç Anadolu Bölgesi, 18100, Türkiye"
+  },
+  "Tokat::Zile Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Zile Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Tokat",
+    "lat": 40.2814617,
+    "lng": 35.9314057,
+    "query": "Zile, Tokat",
+    "display_name": "Zile, Zile - Pazar yolu, İstasyon, Korucuk, Zile, Tokat, Karadeniz Bölgesi, Türkiye"
+  },
+  "Tokat::Erbaa Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Erbaa Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Tokat",
+    "lat": 40.6746301,
+    "lng": 36.5334383,
+    "query": "Erbaa Yurdu, Tokat",
+    "display_name": "Erbaa Kız Öğrenci Yurdu, Melodi Sokağı, Yavuzsultanselim Mahallesi, Erbaa, Tokat, Karadeniz Bölgesi, 60540, Türkiye"
+  },
+  "Tokat::Turhal Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Turhal Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Tokat",
+    "lat": 40.4021512,
+    "lng": 36.063244,
+    "query": "Turhal Yurdu, Tokat",
+    "display_name": "Gençlik ve Spor Bakanlığı KYK Turhal Yurdu, Lalegül Sokak, Emek, Gökdere, Turhal, Tokat, Karadeniz Bölgesi, 60300, Türkiye"
+  },
+  "Tokat::Gülsüm Ana Kyk Kız Öğrenci Yurdu": {
+    "name": "Gülsüm Ana Kyk Kız Öğrenci Yurdu",
+    "city": "Tokat",
+    "lat": 40.3274033,
+    "lng": 36.4850079,
+    "query": "Gülsüm Ana Yurdu, Tokat",
+    "display_name": "Gülsüm Ana Öğrenci Yurdu, Taşlıçiftlik Köyü, Tokat, Karadeniz Bölgesi, Türkiye"
+  },
+  "Tokat::Mehmed Emin Tokadi Kyk Kız Öğrenci Yurdu": {
+    "name": "Mehmed Emin Tokadi Kyk Kız Öğrenci Yurdu",
+    "city": "Tokat",
+    "lat": 40.7778196,
+    "lng": 36.7315476,
+    "query": "Mehmed, Tokat",
+    "display_name": "Ustamehmet, Erbaa, Tokat, Karadeniz Bölgesi, Türkiye"
+  },
+  "Tokat::Tokat İbni Kemal Kyk Kız Öğrenci Yurdu": {
+    "name": "Tokat İbni Kemal Kyk Kız Öğrenci Yurdu",
+    "city": "Tokat",
+    "lat": 40.3233534,
+    "lng": 36.552162,
+    "query": "Tokat, Tokat",
+    "display_name": "Tokat, Karadeniz Bölgesi, Türkiye"
+  },
+  "Tokat::Ballıca Kyk Kız Öğrenci Yurdu": {
+    "name": "Ballıca Kyk Kız Öğrenci Yurdu",
+    "city": "Tokat",
+    "lat": 40.3264573,
+    "lng": 36.4865029,
+    "query": "Ballıca Yurdu, Tokat",
+    "display_name": "Ballıca Öğrenci Yurdu, İbni Kemal Öğrenci Yurdu, Taşlıçiftlik Köyü, Tokat, Karadeniz Bölgesi, Türkiye"
+  },
+  "Tokat::Aydoğan Aydın Kyk Erkek Öğrenci Yurdu": {
+    "name": "Aydoğan Aydın Kyk Erkek Öğrenci Yurdu",
+    "city": "Tokat",
+    "lat": 40.6762813,
+    "lng": 36.5229328,
+    "query": "Aydoğan Aydın, Tokat",
+    "display_name": "Şht.Tümg.Aydoğan Aydın Caddesi, Evyaba Mahallesi, Erbaa, Tokat, Karadeniz Bölgesi, 60540, Türkiye"
+  },
+  "Sivas::Yıldız Kyk Kız Öğrenci Yurdu": {
+    "name": "Yıldız Kyk Kız Öğrenci Yurdu",
+    "city": "Sivas",
+    "lat": 40.0777502,
+    "lng": 36.9131924,
+    "query": "Yıldız, Sivas",
+    "display_name": "Yıldız Beldesi, Sivas Merkez, Sivas, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Sivas::Sivas Sancaktar Kyk Kız Öğrenci Yurdu": {
+    "name": "Sivas Sancaktar Kyk Kız Öğrenci Yurdu",
+    "city": "Sivas",
+    "lat": 39.7503574,
+    "lng": 37.0145173,
+    "query": "Sivas, Sivas",
+    "display_name": "Sivas Merkez, Sivas, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Sivas::Yıldızeli Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Yıldızeli Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Sivas",
+    "lat": 39.8764218,
+    "lng": 36.5872532,
+    "query": "Yıldızeli Yurdu, Sivas",
+    "display_name": "Yurtkur Yıldızeli Yurdu, Karşıyaka, Yıldızeli, Sivas, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Sivas::Zara Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Zara Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Sivas",
+    "lat": 39.8845368,
+    "lng": 37.7337005,
+    "query": "Zara Yurdu, Sivas",
+    "display_name": "Sivas Zara KYK Kız Ve Erkek Öğrenci Yurdu, İsmet Paşa Caddesi, Ahmet Başyurt Mah., Zara, Sivas, İç Anadolu Bölgesi, 58000, Türkiye"
+  },
+  "Sivas::Prof.Dr. Mahir Tevrüz Kyk Kız Ve Erkek Yurdu": {
+    "name": "Prof.Dr. Mahir Tevrüz Kyk Kız Ve Erkek Yurdu",
+    "city": "Sivas",
+    "lat": 39.3690098,
+    "lng": 38.1146613,
+    "query": "Prof.Dr. Mahir Tevrüz, Sivas",
+    "display_name": "Prof. Dr. Mahir Tevruz Anaokulu, 58-27, Divriği, Kale Mahallesi, Divriği Belediyesi, Divriği, Sivas, İç Anadolu Bölgesi, 58300, Türkiye"
+  },
+  "Sivas::Gürün Enver Bostancı Kyk Kız Ve Erkek Yurdu": {
+    "name": "Gürün Enver Bostancı Kyk Kız Ve Erkek Yurdu",
+    "city": "Sivas",
+    "lat": 38.7189455,
+    "lng": 37.3081203,
+    "query": "Gürün Enver Bostancı Yurdu, Sivas",
+    "display_name": "Gürün Enver Bostancı KYK Kız Öğrenci Yurdu, Kayseri-Malatya yolu, Çayboyu Mahallesi, Gürün Belediyesi, Gürün, Sivas, İç Anadolu Bölgesi, 58800, Türkiye"
+  },
+  "Sivas::Hafik Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Hafik Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Sivas",
+    "lat": 39.8545854,
+    "lng": 37.3889604,
+    "query": "Hafik, Sivas",
+    "display_name": "Hafik, Sivas, İç Anadolu Bölgesi, 58760, Türkiye"
+  },
+  "Sivas::Kangal Hasan Yılmaz Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Kangal Hasan Yılmaz Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Sivas",
+    "lat": 39.2760303,
+    "lng": 37.4508649,
+    "query": "Kangal, Sivas",
+    "display_name": "Kangal, 58-32, Armağan, Kavak, Kangal, Sivas, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Konya::Kutalmışoğlu Süleyman Şah Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kutalmışoğlu Süleyman Şah Kyk Erkek Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.9467478,
+    "lng": 32.5198567,
+    "query": "Kutalmışoğlu Süleyman Şah Yurdu, Konya",
+    "display_name": "Kutalmışoğlu Süleyman Şah Erkek Öğrenci Yurdu, 35/A, Büyükşahin Caddesi, Horozluhan Mahallesi, Konya, Selçuklu, Konya, İç Anadolu Bölgesi, 42120, Türkiye"
+  },
+  "Konya::Cihanbeyli Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Cihanbeyli Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 38.6589897,
+    "lng": 32.9237305,
+    "query": "Cihanbeyli, Konya",
+    "display_name": "Cihanbeyli, Konya, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Konya::Ilgın Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ilgın Kyk Erkek Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 38.2906898,
+    "lng": 31.9102341,
+    "query": "Ilgın, Konya",
+    "display_name": "Ilgın, Konya-Afyon yolu, İstasyon Mahallesi, Ilgın, Konya, İç Anadolu Bölgesi, 42600, Türkiye"
+  },
+  "Konya::Meram Kyk Kız Öğrenci Yurdu": {
+    "name": "Meram Kyk Kız Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.866922,
+    "lng": 32.4026907,
+    "query": "Meram Yurdu, Konya",
+    "display_name": "GSB Meram Öğrenci Yurdu, Köyceğiz Mahallesi, Meram, Konya, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Konya::Hacıveyiszade Kyk Erkek Öğrenci Yurdu": {
+    "name": "Hacıveyiszade Kyk Erkek Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.8754085,
+    "lng": 32.4105934,
+    "query": "Hacıveyiszade Yurdu, Konya",
+    "display_name": "GSB Hacıveyiszade Öğrenci Yurdu, Köyceğiz Mahallesi, Meram, Konya, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Konya::Mesnevi Kyk Kız Öğrenci Yurdu": {
+    "name": "Mesnevi Kyk Kız Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.9007525,
+    "lng": 32.5260143,
+    "query": "Mesnevi, Konya",
+    "display_name": "Mesnevi (1198), Başak Caddesi, Ulubatlıhasan Mahallesi, Karatay, Konya, İç Anadolu Bölgesi, 42050, Türkiye"
+  },
+  "Konya::Büyük Selçuklu Kyk Erkek Öğrenci Yurdu": {
+    "name": "Büyük Selçuklu Kyk Erkek Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 38.0206038,
+    "lng": 32.5020375,
+    "query": "Büyük Selçuklu, Konya",
+    "display_name": "Büyük Selçuklu KYK Sosyal Tesisler, Ali Fuat Cebesoy Caddesi, Akademi Mahallesi, Selçuklu, Konya, İç Anadolu Bölgesi, 42150, Türkiye"
+  },
+  "Konya::Anadolu Kyk Kız Öğrenci Yurdu": {
+    "name": "Anadolu Kyk Kız Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.8778325,
+    "lng": 32.4990809,
+    "query": "Anadolu Yurdu, Konya",
+    "display_name": "Anadolu Erkek Ogrenci Yurdu, Sultan Veled Caddesi, Sultan Mesud Mahallesi, Karatay, Konya, İç Anadolu Bölgesi, 42200, Türkiye"
+  },
+  "Manisa::Manisa Hüma Hatun Kyk Kız Öğrenci Yurdu Müdürlüğü": {
+    "name": "Manisa Hüma Hatun Kyk Kız Öğrenci Yurdu Müdürlüğü",
+    "city": "Manisa",
+    "lat": 38.6125793,
+    "lng": 27.4333969,
+    "query": "Manisa, Manisa",
+    "display_name": "Manisa, Şehzadeler, Manisa, Ege Bölgesi, 45020, Türkiye"
+  },
+  "Manisa::Demirci Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Demirci Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Manisa",
+    "lat": 39.0474167,
+    "lng": 28.6583675,
+    "query": "Demirci, Manisa",
+    "display_name": "Demirci, Manisa, Ege Bölgesi, Türkiye"
+  },
+  "Manisa::Kırkağaç Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Kırkağaç Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Manisa",
+    "lat": 39.1155007,
+    "lng": 27.6859781,
+    "query": "Kırkağaç, Manisa",
+    "display_name": "Kırkağaç, Akhisar - Bergama Yolu, Şair Eşref, Kayadibi, Kırkağaç, Manisa, Ege Bölgesi, 45700, Türkiye"
+  },
+  "Manisa::Köprübaşı  Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Köprübaşı  Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Manisa",
+    "lat": 38.746243,
+    "lng": 28.396704,
+    "query": "Köprübaşı Yurdu, Manisa",
+    "display_name": "Özel Köprübaşı Orta Öğrenim Erkek Öğrenci Yurdu, Cumhuriyet Caddesi, Temrek, Köprübaşı, Manisa, Ege Bölgesi, Türkiye"
+  },
+  "Manisa::Gördes Molla Gürani Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Gördes Molla Gürani Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Manisa",
+    "lat": 38.9330357,
+    "lng": 28.2886492,
+    "query": "Gördes, Manisa",
+    "display_name": "Gördes, Manisa, Ege Bölgesi, Türkiye"
+  },
+  "Manisa::Kula Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Kula Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Manisa",
+    "lat": 38.5468907,
+    "lng": 28.6474338,
+    "query": "Kula, Manisa",
+    "display_name": "Kula, Manisa, Ege Bölgesi, 45170, Türkiye"
+  },
+  "Manisa::Ayşe Hafsa Sultan Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ayşe Hafsa Sultan Kyk Erkek Öğrenci Yurdu",
+    "city": "Manisa",
+    "lat": 38.652888,
+    "lng": 27.317263,
+    "query": "Ayşe Hafsa Sultan Yurdu, Manisa",
+    "display_name": "Ayşe Hafsa Sultan KYK Yurdu, Muradiye Mahallesi, Yunus Emre, Manisa, Ege Bölgesi, 45140, Türkiye"
+  },
+  "Manisa::Manisa Yunus Emre Kyk Kız Öğrenci Yurdu": {
+    "name": "Manisa Yunus Emre Kyk Kız Öğrenci Yurdu",
+    "city": "Manisa",
+    "lat": 38.6789982,
+    "lng": 27.308789,
+    "query": "Manisa Yunus Emre, Manisa",
+    "display_name": "Manisa Celal Bayar Üniversitesi Muradiye Kampüsü, Kampüs Bulvarı, Yağcılar, Yunus Emre, Manisa, Ege Bölgesi, 45140, Türkiye"
+  },
+  "Burdur::Safahat Kyk Kız Öğrenci Yurdu": {
+    "name": "Safahat Kyk Kız Öğrenci Yurdu",
+    "city": "Burdur",
+    "lat": 37.7228137,
+    "lng": 30.2461992,
+    "query": "Safahat Yurdu, Burdur",
+    "display_name": "Eski Safahat Kız Öğrenci Yurdu, Şehit Rıza Çelik Caddesi, Armağan İlci Mahallesi, Burdur Merkez, Burdur, Akdeniz Bölgesi, 15100, Türkiye"
+  },
+  "Burdur::Asımın Nesli Kyk Erkek Öğrenci Yurdu": {
+    "name": "Asımın Nesli Kyk Erkek Öğrenci Yurdu",
+    "city": "Burdur",
+    "lat": 37.6746602,
+    "lng": 30.3236518,
+    "query": "Asımın Nesli Yurdu, Burdur",
+    "display_name": "KYK Asımın Nesli Erkek Öğrenci Yurdu, Antalya - Burdur Yolu, Necati Bey Mahallesi, Kurna, Burdur Merkez, Burdur, Akdeniz Bölgesi, 15030, Türkiye"
+  },
+  "Burdur::Fereli Sinan Efendi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Fereli Sinan Efendi Kyk Erkek Öğrenci Yurdu",
+    "city": "Burdur",
+    "lat": 37.6767644,
+    "lng": 30.3314272,
+    "query": "Fereli Sinan Efendi Yurdu, Burdur",
+    "display_name": "KYK Fereli Sinan Efendi Yurdu, 120, Antalya - Burdur Yolu, Kurna, Burdur Merkez, Burdur, Akdeniz Bölgesi, 15200, Türkiye"
+  },
+  "Burdur::Bucak Kyk Kız Öğrenci Yurdu": {
+    "name": "Bucak Kyk Kız Öğrenci Yurdu",
+    "city": "Burdur",
+    "lat": 37.4567447,
+    "lng": 30.5855392,
+    "query": "Bucak, Burdur",
+    "display_name": "Bucak, Burdur, Akdeniz Bölgesi, 15300, Türkiye"
+  },
+  "Burdur::Gölhisar Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Gölhisar Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Burdur",
+    "lat": 37.1510866,
+    "lng": 29.5107155,
+    "query": "Gölhisar, Burdur",
+    "display_name": "Gölhisar, Burdur, Akdeniz Bölgesi, 15400, Türkiye"
+  },
+  "Burdur::Burdur Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Burdur Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Burdur",
+    "lat": 37.7221139,
+    "lng": 30.2476457,
+    "query": "Burdur Yurdu, Burdur",
+    "display_name": "KYK Burdur Kız Öğrenci Yurdu, Şehit Rıza Çelik Caddesi, Armağan İlci Mahallesi, Burdur Merkez, Burdur, Akdeniz Bölgesi, 15100, Türkiye"
+  },
+  "Tunceli::Ehlibeyt Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Ehlibeyt Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Tunceli",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Tunceli::Tunceli Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Tunceli Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Tunceli",
+    "lat": 39.2197553,
+    "lng": 39.4139674,
+    "query": "Tunceli, Türkiye",
+    "display_name": "Tunceli, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Tunceli::Munzur Kyk Erkek Öğrenci Yurdu": {
+    "name": "Munzur Kyk Erkek Öğrenci Yurdu",
+    "city": "Tunceli",
+    "lat": 39.44,
+    "lng": 39.075,
+    "query": "Munzur, Tunceli",
+    "display_name": "Munzur Dağları, Ovacık, Tunceli, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Tunceli::Çemişgezek Kyk Kız Öğrenci Yurdu": {
+    "name": "Çemişgezek Kyk Kız Öğrenci Yurdu",
+    "city": "Tunceli",
+    "lat": 39.0628601,
+    "lng": 38.9104258,
+    "query": "Çemişgezek, Tunceli",
+    "display_name": "Çemişgezek, Tunceli, Doğu Anadolu Bölgesi, 62600, Türkiye"
+  },
+  "Tunceli::100. Yıl Kyk Kız Öğrenci Yurdu": {
+    "name": "100. Yıl Kyk Kız Öğrenci Yurdu",
+    "city": "Tunceli",
+    "lat": 39.1060641,
+    "lng": 39.5482693,
+    "query": "100, Tunceli",
+    "display_name": "Tunceli, Tunceli Merkez, Tunceli, Doğu Anadolu Bölgesi, 62000, Türkiye"
+  },
+  "Bilecik::Şeyh Edebalı Kyk Erkek Öğrenci Yurdu": {
+    "name": "Şeyh Edebalı Kyk Erkek Öğrenci Yurdu",
+    "city": "Bilecik",
+    "lat": 40.1900369,
+    "lng": 29.9668186,
+    "query": "Şeyh Edebalı, Bilecik",
+    "display_name": "Bilecik Şeyh Edebali Üniversitesi, D160, Kurlar, Hürriyet 2. OSB, Gülümbe, Bilecik Merkez, Bilecik, Marmara Bölgesi, 11230, Türkiye"
+  },
+  "Bilecik::Ertuğrulgazi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ertuğrulgazi Kyk Erkek Öğrenci Yurdu",
+    "city": "Bilecik",
+    "lat": 40.1363986,
+    "lng": 29.9778699,
+    "query": "Ertuğrulgazi, Bilecik",
+    "display_name": "Ertuğrulgazi, Ertuğrulgazi Mahallesi, Bilecik Merkez, Bilecik, Marmara Bölgesi, 11000, Türkiye"
+  },
+  "Bilecik::Bilecik Halime Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Bilecik Halime Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Bilecik",
+    "lat": 40.1435101,
+    "lng": 29.9752911,
+    "query": "Bilecik, Bilecik",
+    "display_name": "Bilecik Merkez, Bilecik, Marmara Bölgesi, Türkiye"
+  },
+  "Bilecik::Bilecik Kyk Kız Öğrenci Yurdu": {
+    "name": "Bilecik Kyk Kız Öğrenci Yurdu",
+    "city": "Bilecik",
+    "lat": 40.1543234,
+    "lng": 30.1479907,
+    "query": "Bilecik, Türkiye",
+    "display_name": "Bilecik, Marmara Bölgesi, Türkiye"
+  },
+  "Bilecik::Pazaryeri Kyk Kız Öğrenci Yurdu": {
+    "name": "Pazaryeri Kyk Kız Öğrenci Yurdu",
+    "city": "Bilecik",
+    "lat": 39.9954056,
+    "lng": 29.9031259,
+    "query": "Pazaryeri, Bilecik",
+    "display_name": "Pazaryeri, Bilecik, Marmara Bölgesi, 11800, Türkiye"
+  },
+  "Ordu::Ordu Lebibe Ergin Karlıbel Kyk Kız Öğrenci Yurdu": {
+    "name": "Ordu Lebibe Ergin Karlıbel Kyk Kız Öğrenci Yurdu",
+    "city": "Ordu",
+    "lat": 40.972368,
+    "lng": 37.9705174,
+    "query": "Ordu Lebibe Ergin Karlıbel Yurdu, Ordu",
+    "display_name": "Ordu Üniversitesi Lebibe Ergin Karlıbel Kız Öğrenci Yurdu, Ordu-Giresun yolu, Cumhuriyet Mahallesi, Ordu, Altınordu, Ordu, Karadeniz Bölgesi, 52200, Türkiye"
+  },
+  "Ordu::Ordu Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ordu Kyk Erkek Öğrenci Yurdu",
+    "city": "Ordu",
+    "lat": 40.972368,
+    "lng": 37.9705174,
+    "query": "Ordu Yurdu, Ordu",
+    "display_name": "Ordu Üniversitesi Lebibe Ergin Karlıbel Kız Öğrenci Yurdu, Ordu-Giresun yolu, Cumhuriyet Mahallesi, Ordu, Altınordu, Ordu, Karadeniz Bölgesi, 52200, Türkiye"
+  },
+  "Ordu::Hekimoğlu Kyk Erkek Öğrenci Yurdu": {
+    "name": "Hekimoğlu Kyk Erkek Öğrenci Yurdu",
+    "city": "Ordu",
+    "lat": 40.9824459,
+    "lng": 37.9103239,
+    "query": "Hekimoğlu, Ordu",
+    "display_name": "Hekimoğlu Eczanesi, 817 Sokak, Akyazı Mahallesi, Ordu, Altınordu, Ordu, Karadeniz Bölgesi, 52200, Türkiye"
+  },
+  "Ordu::Fatsa Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Fatsa Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Ordu",
+    "lat": 41.0412422,
+    "lng": 37.4815938,
+    "query": "Fatsa Yurdu, Ordu",
+    "display_name": "KYK Fatsa Öğrenci Yurdu, Arslan Aydınlık Cd., Evkaf Mahallesi, Fatsa, Ordu, Karadeniz Bölgesi, 52400, Türkiye"
+  },
+  "Ordu::Ünye Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Ünye Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Ordu",
+    "lat": 41.1389928,
+    "lng": 37.2401555,
+    "query": "Ünye Yurdu, Ordu",
+    "display_name": "Ünye KYK Kız Yurdu, Çöremez Sokak, Gölevi, Ünye, Ordu, Karadeniz Bölgesi, 52300, Türkiye"
+  },
+  "Ordu::Mehmet Fuad Köprülü Kyk Kız Öğrenci Yurdu": {
+    "name": "Mehmet Fuad Köprülü Kyk Kız Öğrenci Yurdu",
+    "city": "Ordu",
+    "lat": 40.9657657,
+    "lng": 37.4133652,
+    "query": "Mehmet, Ordu",
+    "display_name": "Mehmetakif Mahallesi, Fatsa, Ordu, Karadeniz Bölgesi, Türkiye"
+  },
+  "Ordu::Evliya Çelebi Kyk Kız Öğrenci Yurdu": {
+    "name": "Evliya Çelebi Kyk Kız Öğrenci Yurdu",
+    "city": "Ordu",
+    "lat": 40.9784844,
+    "lng": 37.9556899,
+    "query": "Evliya Çelebi Yurdu, Ordu",
+    "display_name": "Evliya Çelebi Kız Öğrenci Yurdu, 1305 Sokak, Cumhuriyet Mahallesi, Ordu, Altınordu, Ordu, Karadeniz Bölgesi, 52200, Türkiye"
+  },
+  "Aydın::Sultanhisar Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Sultanhisar Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Aydın",
+    "lat": 37.8919953,
+    "lng": 28.1521382,
+    "query": "Sultanhisar Yurdu, Aydın",
+    "display_name": "Sultanhisar Cevdet İnci Öğrenci Yurdu, 09-01, Zafer, Kabaca, Sultanhisar, Aydın, Ege Bölgesi, Türkiye"
+  },
+  "Aydın::Hacı Mustafa Efendizade Kyk Erkek Öğrenci Yurdu": {
+    "name": "Hacı Mustafa Efendizade Kyk Erkek Öğrenci Yurdu",
+    "city": "Aydın",
+    "lat": 37.8884193,
+    "lng": 28.3207811,
+    "query": "Hacı Mustafa Efendizade Yurdu, Aydın",
+    "display_name": "Hacı Mustafa Efendizade Erkek Öğrenci Yurdu, Sümer, Nazilli, Aydın, Ege Bölgesi, Türkiye"
+  },
+  "Aydın::Nazilli Kyk Erkek Öğrenci Yurdu": {
+    "name": "Nazilli Kyk Erkek Öğrenci Yurdu",
+    "city": "Aydın",
+    "lat": 37.9140609,
+    "lng": 28.3270857,
+    "query": "Nazilli, Aydın",
+    "display_name": "Nazilli, 173 Sk., Cumhuriyet, Cumhuriyet Mahallesi, Nazilli, Aydın, Ege Bölgesi, 09800, Türkiye"
+  },
+  "Aydın::Karacasu Kyk Erkek Öğrenci Yurdu Müdürlüğü": {
+    "name": "Karacasu Kyk Erkek Öğrenci Yurdu Müdürlüğü",
+    "city": "Aydın",
+    "lat": 37.7306842,
+    "lng": 28.6062646,
+    "query": "Karacasu, Aydın",
+    "display_name": "Karacasu, Aydın, Ege Bölgesi, Türkiye"
+  },
+  "Aydın::İsabeyli Kyk Kız Öğrenci Yurdu (nazilli)": {
+    "name": "İsabeyli Kyk Kız Öğrenci Yurdu (nazilli)",
+    "city": "Aydın",
+    "lat": 37.8951389,
+    "lng": 28.2677675,
+    "query": "İsabeyli (nazilli), Aydın",
+    "display_name": "İsabeyli, 171 Sk., Dallıca, Nazilli, Aydın, Ege Bölgesi, 09900, Türkiye"
+  },
+  "Aydın::Gevherhan Sultan Kyk Kız Öğrenci Yurdu": {
+    "name": "Gevherhan Sultan Kyk Kız Öğrenci Yurdu",
+    "city": "Aydın",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Aydın::Adnan Menderes Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Adnan Menderes Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Aydın",
+    "lat": 37.7596719,
+    "lng": 27.703582,
+    "query": "Adnan Menderes, Aydın",
+    "display_name": "Adnan Menderes, Büyükdere, Koçarlı, Aydın, Ege Bölgesi, Türkiye"
+  },
+  "Aydın::Efe Ayşe Kyk Kız ve Erkek Öğrenci Yurdu Müdürlüğü": {
+    "name": "Efe Ayşe Kyk Kız ve Erkek Öğrenci Yurdu Müdürlüğü",
+    "city": "Aydın",
+    "lat": 37.8536272,
+    "lng": 27.8198473,
+    "query": "Efe, Aydın",
+    "display_name": "Yörük Ali Efe Bulvarı, Girne Mahallesi, Aydın, Efeler, Aydın, Ege Bölgesi, 09100, Türkiye"
+  },
+  "İzmir::Yörük Ali Efe Kyk Erkek Öğrenci Yurdu": {
+    "name": "Yörük Ali Efe Kyk Erkek Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 38.3869281,
+    "lng": 27.1592712,
+    "query": "Yörük Ali Efe, İzmir",
+    "display_name": "Yörük Ali Efe Parkı, Efeler Mahallesi, Buca, İzmir, Ege Bölgesi, Türkiye"
+  },
+  "İzmir::Bornova Kyk Kız Öğrenci Yurdu": {
+    "name": "Bornova Kyk Kız Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 38.4499609,
+    "lng": 27.2310205,
+    "query": "Bornova Yurdu, İzmir",
+    "display_name": "Bornova KYK Öğrenci Yurdu, Mevlana Mahallesi, Bornova, İzmir, Ege Bölgesi, Türkiye"
+  },
+  "Konya::Fahrünnisa Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Fahrünnisa Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.8578302,
+    "lng": 32.5048867,
+    "query": "Fahrünnisa Hatun, Konya",
+    "display_name": "Karatay Fahrünnisa Hatun Anaokulu, 18/2, Aksay Öncel Sokak, Sarıyakup Mahallesi, Karatay, Konya, İç Anadolu Bölgesi, 42020, Türkiye"
+  },
+  "Konya::Ereğli Kyk Kız Öğrenci Yurdu": {
+    "name": "Ereğli Kyk Kız Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.5140718,
+    "lng": 34.0473423,
+    "query": "Ereğli, Konya",
+    "display_name": "Ereğli, Konya, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Konya::Ali Ulvi Kurucu Kyk Kız Öğrenci Yurdu": {
+    "name": "Ali Ulvi Kurucu Kyk Kız Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.7394837,
+    "lng": 32.5546401,
+    "query": "Ali Ulvi Kurucu, Konya",
+    "display_name": "Ali Ulvi Kurucu Mahallesi, Meram, Konya, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Konya::Konya Kimya Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Konya Kimya Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.872734,
+    "lng": 32.4924376,
+    "query": "Konya, Konya",
+    "display_name": "Konya, Selçuklu, Konya, İç Anadolu Bölgesi, 42040, Türkiye"
+  },
+  "Konya::Konya Şemsi Tebrizi Kyk Kız Öğrenci Yurdu": {
+    "name": "Konya Şemsi Tebrizi Kyk Kız Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.872734,
+    "lng": 32.4924376,
+    "query": "Konya, Konya",
+    "display_name": "Konya, Selçuklu, Konya, İç Anadolu Bölgesi, 42040, Türkiye"
+  },
+  "Konya::Kadınhanı Ali Fatma Sündüs Kyk Kız Erkek Yurdu": {
+    "name": "Kadınhanı Ali Fatma Sündüs Kyk Kız Erkek Yurdu",
+    "city": "Konya",
+    "lat": 38.2400504,
+    "lng": 32.2122055,
+    "query": "Kadınhanı, Konya",
+    "display_name": "Kadınhanı, Konya, İç Anadolu Bölgesi, 42800, Türkiye"
+  },
+  "Konya::Beyhekim Kyk Kız Öğrenci Yurdu": {
+    "name": "Beyhekim Kyk Kız Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.9854089,
+    "lng": 32.4924388,
+    "query": "Beyhekim, Konya",
+    "display_name": "Beyhekim Mahallesi, Konya, Selçuklu, Konya, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Karaman::Ermenek  Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Ermenek  Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Karaman",
+    "lat": 36.6389037,
+    "lng": 32.8888721,
+    "query": "Ermenek, Karaman",
+    "display_name": "Ermenek, Karaman, İç Anadolu Bölgesi, 70400, Türkiye"
+  },
+  "Karaman::Hatuniye Kyk Kız Öğrenci Yurdu": {
+    "name": "Hatuniye Kyk Kız Öğrenci Yurdu",
+    "city": "Karaman",
+    "lat": 37.1828389,
+    "lng": 33.2115064,
+    "query": "Hatuniye, Karaman",
+    "display_name": "Hatuniye Medresesi, Atatürk Bulvarı, İmaret Mahallesi, Karaman Merkez, Karaman, İç Anadolu Bölgesi, 70100, Türkiye"
+  },
+  "Karaman::Karaman Kyk Kız Öğrenci Yurdu": {
+    "name": "Karaman Kyk Kız Öğrenci Yurdu",
+    "city": "Karaman",
+    "lat": 37.1796848,
+    "lng": 33.3383665,
+    "query": "Karaman, Türkiye",
+    "display_name": "Karaman, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Karaman::Nefise Sultan Kyk Kız Öğrenci Yurdu": {
+    "name": "Nefise Sultan Kyk Kız Öğrenci Yurdu",
+    "city": "Karaman",
+    "lat": 37.1933895,
+    "lng": 33.2150877,
+    "query": "Nefise Sultan, Karaman",
+    "display_name": "Karaman, Atatürk Caddesi, Nefise Sultan Mahallesi, Karaman Merkez, Karaman, İç Anadolu Bölgesi, 70100, Türkiye"
+  },
+  "Karaman::Karamanoğlu Mehmetbey Kyk Erkek Öğrenci Yurdu": {
+    "name": "Karamanoğlu Mehmetbey Kyk Erkek Öğrenci Yurdu",
+    "city": "Karaman",
+    "lat": 37.1725771,
+    "lng": 33.2584112,
+    "query": "Karamanoğlu Mehmetbey, Karaman",
+    "display_name": "Karamanoğlu Mehmetbey Üniversitesi Yunus Emre Yerleşkesi, 1101. Sokak, Üniversite, Karaman Merkez, Karaman, İç Anadolu Bölgesi, 70100, Türkiye"
+  },
+  "Karaman::Karaman Piri Reis Kyk Erkek Öğrenci Yurdu": {
+    "name": "Karaman Piri Reis Kyk Erkek Öğrenci Yurdu",
+    "city": "Karaman",
+    "lat": 37.1808502,
+    "lng": 33.2194554,
+    "query": "Karaman, Karaman",
+    "display_name": "Karaman Merkez, Karaman, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Bolu::Bolu Abant Kyk Kız Öğrenci Yurdu": {
+    "name": "Bolu Abant Kyk Kız Öğrenci Yurdu",
+    "city": "Bolu",
+    "lat": 40.7119441,
+    "lng": 31.5095406,
+    "query": "Bolu Abant, Bolu",
+    "display_name": "Bolu Abant İzzet Baysal Üniversitesi Lojmanları, Çayır Sokak, Karaköy Mahallesi, Gölköy, Bolu Merkez, Bolu, Karadeniz Bölgesi, 14030, Türkiye"
+  },
+  "Bolu::Geredeli İshak Bey Kyk Erkek Öğrenci Yurdu": {
+    "name": "Geredeli İshak Bey Kyk Erkek Öğrenci Yurdu",
+    "city": "Bolu",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "İzmir::İzmir Urla Kyk Erkek Öğrenci Yurdu": {
+    "name": "İzmir Urla Kyk Erkek Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 38.3226588,
+    "lng": 26.6377295,
+    "query": "İzmir Urla, İzmir",
+    "display_name": "İzmir Yüksek Teknoloji Enstitüsü, Karaburun Yolu, İYTE Yerleşkesi, Gülbahçe Mahallesi, Urla, İzmir, Ege Bölgesi, 35433, Türkiye"
+  },
+  "İzmir::Bergama Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Bergama Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 39.0977154,
+    "lng": 27.1592482,
+    "query": "Bergama Yurdu, İzmir",
+    "display_name": "İzmir Bergama Ali İpek Erkek Öğrenci Yurdu, Özgürlük Caddesi, Fatih Mahallesi, Bergama, İzmir, Ege Bölgesi, 35700, Türkiye"
+  },
+  "İzmir::Tire Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Tire Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "İzmir",
+    "lat": 38.0925722,
+    "lng": 27.7280375,
+    "query": "Tire, İzmir",
+    "display_name": "Tire, Fahrettin Altay Caddesi, Fatih, Fatih Mahallesi, Tire, İzmir, Ege Bölgesi, 35900, Türkiye"
+  },
+  "Denizli::Tavas Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Tavas Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Denizli",
+    "lat": 37.5729263,
+    "lng": 29.0712601,
+    "query": "Tavas, Denizli",
+    "display_name": "Tavas, Denizli, Ege Bölgesi, Türkiye"
+  },
+  "Denizli::Buldan Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Buldan Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Denizli",
+    "lat": 38.0494358,
+    "lng": 28.8370455,
+    "query": "Buldan Yurdu, Denizli",
+    "display_name": "Buldan KYK Öğrenci Yurdu, Mehmetçik Sokak, Yeni, Buldan, Denizli, Ege Bölgesi, Türkiye"
+  },
+  "Denizli::Honaz Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Honaz Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Denizli",
+    "lat": 37.752386,
+    "lng": 29.2696961,
+    "query": "Honaz, Denizli",
+    "display_name": "Honaz, Denizli, Ege Bölgesi, Türkiye"
+  },
+  "Denizli::Bekilli Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Bekilli Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Denizli",
+    "lat": 38.2294869,
+    "lng": 29.4208248,
+    "query": "Bekilli, Denizli",
+    "display_name": "Bekilli, Denizli, Ege Bölgesi, Türkiye"
+  },
+  "Denizli::Biruni Kyk Kız Öğrenci Yurdu": {
+    "name": "Biruni Kyk Kız Öğrenci Yurdu",
+    "city": "Denizli",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Denizli::Pamukkale Kyk Kız Öğrenci Yurdu": {
+    "name": "Pamukkale Kyk Kız Öğrenci Yurdu",
+    "city": "Denizli",
+    "lat": 37.7827875,
+    "lng": 29.0966476,
+    "query": "Pamukkale, Denizli",
+    "display_name": "Denizli, Pamukkale, Denizli, Ege Bölgesi, 20175, Türkiye"
+  },
+  "Denizli::Fatma Yıldız Hanım Kyk Kız Öğrenci Yurdu": {
+    "name": "Fatma Yıldız Hanım Kyk Kız Öğrenci Yurdu",
+    "city": "Denizli",
+    "lat": 37.7323032,
+    "lng": 29.1388656,
+    "query": "Fatma, Denizli",
+    "display_name": "Fatma-tül Zehra cami, 3040 Sokak, Kervansaray Mahallesi, Denizli, Pamukkale, Denizli, Ege Bölgesi, 20160, Türkiye"
+  },
+  "Denizli::İbni Rüşd Kyk Kız Öğrenci Yurdu": {
+    "name": "İbni Rüşd Kyk Kız Öğrenci Yurdu",
+    "city": "Denizli",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Siirt::Kurtalan Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Kurtalan Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Siirt",
+    "lat": 37.9284229,
+    "lng": 41.6973637,
+    "query": "Kurtalan, Siirt",
+    "display_name": "Kurtalan, Gençlik Caddesi, Cumhuriyet Mah., Sümer Mahallesi, Kurtalan, Siirt, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Siirt::Hassa Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Hassa Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Siirt",
+    "lat": 37.9644902,
+    "lng": 41.8576562,
+    "query": "Hassa Hatun Yurdu, Siirt",
+    "display_name": "Hassa Hatun Kız Öğrenci Yurdu, 56-77, Akıncı, Pınarca, Siirt, Güneydoğu Anadolu Bölgesi, 56700, Türkiye"
+  },
+  "Siirt::Esmehan Sultan Kyk Kız Öğrenci Yurdu": {
+    "name": "Esmehan Sultan Kyk Kız Öğrenci Yurdu",
+    "city": "Siirt",
+    "lat": 37.9620772,
+    "lng": 41.8434463,
+    "query": "Esmehan Sultan Yurdu, Siirt",
+    "display_name": "Esmehan Sultan Kız Öğrenci Yurdu, Köprübaşı, Siirt, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Siirt::İsmail Fakirullah Kyk Erkek Öğrenci Yurdu": {
+    "name": "İsmail Fakirullah Kyk Erkek Öğrenci Yurdu",
+    "city": "Siirt",
+    "lat": 37.9442538,
+    "lng": 41.8944575,
+    "query": "İsmail Fakirullah Yurdu, Siirt",
+    "display_name": "İsmail fakirullah erkek öğrenci yurdu, 71, D370, Veysel Karani Mah., Yağmurtepe, Siirt, Güneydoğu Anadolu Bölgesi, 56700, Türkiye"
+  },
+  "Siirt::Siirt Kyk Erkek Öğrenci Yurdu": {
+    "name": "Siirt Kyk Erkek Öğrenci Yurdu",
+    "city": "Siirt",
+    "lat": 37.8646916,
+    "lng": 42.0510294,
+    "query": "Siirt, Türkiye",
+    "display_name": "Siirt, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Düzce::Mahpeyker Sultan Kyk Kız Öğrenci Yurdu": {
+    "name": "Mahpeyker Sultan Kyk Kız Öğrenci Yurdu",
+    "city": "Düzce",
+    "lat": 40.9010195,
+    "lng": 31.1882454,
+    "query": "Mahpeyker Sultan Yurdu, Düzce",
+    "display_name": "Mahpeyker Sultan Kız Öğrenci Yurdu, 480. Sokak, Düzce Üniversitesi Yurtları, Orhangazi, Yörük, Düzce Merkez, Düzce, Karadeniz Bölgesi, 81110, Türkiye"
+  },
+  "Düzce::Akçakoca Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Akçakoca Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Düzce",
+    "lat": 41.0882278,
+    "lng": 31.1239833,
+    "query": "Akçakoca, Düzce",
+    "display_name": "Akçakoca, Düzce, Karadeniz Bölgesi, 81650, Türkiye"
+  },
+  "Düzce::Düzce Konuralp Kyk Kız Öğrenci Yurdu": {
+    "name": "Düzce Konuralp Kyk Kız Öğrenci Yurdu",
+    "city": "Düzce",
+    "lat": 40.9003601,
+    "lng": 31.1546841,
+    "query": "Düzce Konuralp, Düzce",
+    "display_name": "Düzce-Ereğli yolu, Çiftepınarlar Mah., Konuralp, Şehit Hüseyin Kıl, Yakaköy, Düzce Merkez, Düzce, Karadeniz Bölgesi, 81110, Türkiye"
+  },
+  "Düzce::Necla Pekolcay Kyk Kız Öğrenci Yurdu": {
+    "name": "Necla Pekolcay Kyk Kız Öğrenci Yurdu",
+    "city": "Düzce",
+    "lat": 40.8938701,
+    "lng": 31.1625271,
+    "query": "Necla Pekolcay Yurdu, Düzce",
+    "display_name": "Düzce Merkez Necla Pekolcay Kız Öğrenci Yurdu, Konuralp 252. Sokak, Şehit Bayram Gökmen, Düzce Merkez, Düzce, Karadeniz Bölgesi, 81110, Türkiye"
+  },
+  "Düzce::Cahit Zarifoğlu Kyk Erkek Öğrenci Yurdu": {
+    "name": "Cahit Zarifoğlu Kyk Erkek Öğrenci Yurdu",
+    "city": "Düzce",
+    "lat": 40.9056462,
+    "lng": 31.1703347,
+    "query": "Cahit Zarifoğlu Yurdu, Düzce",
+    "display_name": "Yurtkur Cahit Zarifoğlu Erkek Öğrenci Yurdu, Konuralp 436. Sokak, Şehit Murat Demir, Hatipliketenciler, Düzce Merkez, Düzce, Karadeniz Bölgesi, 81110, Türkiye"
+  },
+  "Düzce::Düzce Avni Akyol Kyk Erkek Öğrenci Yurdu": {
+    "name": "Düzce Avni Akyol Kyk Erkek Öğrenci Yurdu",
+    "city": "Düzce",
+    "lat": 40.8391531,
+    "lng": 31.1595361,
+    "query": "Düzce, Düzce",
+    "display_name": "Düzce Merkez, Düzce, Karadeniz Bölgesi, Türkiye"
+  },
+  "Düzce::Aliye İzzet Begoviç Kyk Erkek Öğrenci Yurdu": {
+    "name": "Aliye İzzet Begoviç Kyk Erkek Öğrenci Yurdu",
+    "city": "Düzce",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Düzce::Hafız Hasan Şen Kyk Erkek Öğrenci Yurdu": {
+    "name": "Hafız Hasan Şen Kyk Erkek Öğrenci Yurdu",
+    "city": "Düzce",
+    "lat": 40.8614001,
+    "lng": 31.2283443,
+    "query": "Hafız Hasan Şen, Düzce",
+    "display_name": "Hafız Hasan Şen İmam Hatip Ortaokulu, Bahçelievler, Güzelbahçe Mahallesi, Akbıyıklar, Düzce Merkez, Düzce, Karadeniz Bölgesi, 81630, Türkiye"
+  },
+  "Samsun::İlkadım Kyk Kız Öğrenci Yurdu": {
+    "name": "İlkadım Kyk Kız Öğrenci Yurdu",
+    "city": "Samsun",
+    "lat": 41.3309914,
+    "lng": 36.2880475,
+    "query": "İlkadım Yurdu, Samsun",
+    "display_name": "İlkadım Öğrenci Yurdu, Atatürk Bulvarı, Mimarsinan Mahallesi, Atakum, Samsun, Karadeniz Bölgesi, 55090, Türkiye"
+  },
+  "Samsun::Turgut Özal Kyk Kız Öğrenci Yurdu": {
+    "name": "Turgut Özal Kyk Kız Öğrenci Yurdu",
+    "city": "Samsun",
+    "lat": 41.3788833,
+    "lng": 36.2176341,
+    "query": "Turgut Özal Yurdu, Samsun",
+    "display_name": "Turgut Özal Öğrenci Yurdu, Atatürk Bulvarı 5. Kısım, Kurupelit, Körfez, Atakum, Samsun, Karadeniz Bölgesi, 55270, Türkiye"
+  },
+  "Samsun::Münevver Ayaşlı Kyk Kız Öğrenci Yurdu": {
+    "name": "Münevver Ayaşlı Kyk Kız Öğrenci Yurdu",
+    "city": "Samsun",
+    "lat": 41.3697215,
+    "lng": 36.2004948,
+    "query": "Münevver Ayaşlı Yurdu, Samsun",
+    "display_name": "KYK Münevver Ayaşlı Kız Öğrenci Yurdu, İncesu Yalı, Atakum, Samsun, Karadeniz Bölgesi, Türkiye"
+  },
+  "Samsun::Havza Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Havza Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Samsun",
+    "lat": 40.9657067,
+    "lng": 35.6671033,
+    "query": "Havza, Samsun",
+    "display_name": "Havza, İnönü Bulvarı, İcadiye, Havza, Samsun, Karadeniz Bölgesi, 55700, Türkiye"
+  },
+  "Samsun::Samsun Kyk Kız Öğrenci Yurdu": {
+    "name": "Samsun Kyk Kız Öğrenci Yurdu",
+    "city": "Samsun",
+    "lat": 41.2303557,
+    "lng": 35.9683338,
+    "query": "Samsun, Türkiye",
+    "display_name": "Samsun, Karadeniz Bölgesi, Türkiye"
+  },
+  "Samsun::Atakum Kyk Erkek Öğrenci Yurdu": {
+    "name": "Atakum Kyk Erkek Öğrenci Yurdu",
+    "city": "Samsun",
+    "lat": 41.3322588,
+    "lng": 36.2704652,
+    "query": "Atakum, Samsun",
+    "display_name": "Atakum, Samsun, Karadeniz Bölgesi, Türkiye"
+  },
+  "Samsun::Çarşamba Kyk Erkek Öğrenci Yurdu": {
+    "name": "Çarşamba Kyk Erkek Öğrenci Yurdu",
+    "city": "Samsun",
+    "lat": 41.1982911,
+    "lng": 36.7270196,
+    "query": "Çarşamba, Samsun",
+    "display_name": "Çarşamba, Samsun, Karadeniz Bölgesi, Türkiye"
+  },
+  "Samsun::Karadeniz Kyk Kız Öğrenci Yurdu": {
+    "name": "Karadeniz Kyk Kız Öğrenci Yurdu",
+    "city": "Samsun",
+    "lat": 41.3715756,
+    "lng": 36.1994312,
+    "query": "Karadeniz Yurdu, Samsun",
+    "display_name": "KYK Karadeniz Erkek Öğrenci Yurdu, İncesu Yalı, Atakum, Samsun, Karadeniz Bölgesi, Türkiye"
+  },
+  "Afyonkarahisar::Esma Sultan Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Esma Sultan Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Afyonkarahisar",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Afyonkarahisar::Şuhut Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Şuhut Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Afyonkarahisar",
+    "lat": 38.5339612,
+    "lng": 30.5461288,
+    "query": "Şuhut, Afyonkarahisar",
+    "display_name": "Şuhut, Afyonkarahisar, Ege Bölgesi, Türkiye"
+  },
+  "Afyonkarahisar::Emirdağ  Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Emirdağ  Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Afyonkarahisar",
+    "lat": 39.0230856,
+    "lng": 31.1541444,
+    "query": "Emirdağ Yurdu, Afyonkarahisar",
+    "display_name": "Emirdağ Erkek Öğrenci Yurdu, Eskişehir Caddesi, Aziziye Mahallesi, Emirdağ, Afyonkarahisar, Ege Bölgesi, 03600, Türkiye"
+  },
+  "Afyonkarahisar::Dinar Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Dinar Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Afyonkarahisar",
+    "lat": 38.0656331,
+    "lng": 30.1562047,
+    "query": "Dinar, Afyonkarahisar",
+    "display_name": "Dinar, Denizli - Afyonkarahisar Yolu, Dinar, Afyonkarahisar, Ege Bölgesi, 03400, Türkiye"
+  },
+  "Afyonkarahisar::Bayat Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Bayat Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Afyonkarahisar",
+    "lat": 38.9844235,
+    "lng": 30.925576,
+    "query": "Bayat, Afyonkarahisar",
+    "display_name": "Bayat, Afyonkarahisar, Ege Bölgesi, Türkiye"
+  },
+  "Afyonkarahisar::Bolvadin Kyk Kız Öğrenci Yurdu": {
+    "name": "Bolvadin Kyk Kız Öğrenci Yurdu",
+    "city": "Afyonkarahisar",
+    "lat": 38.7115866,
+    "lng": 31.0454865,
+    "query": "Bolvadin, Afyonkarahisar",
+    "display_name": "Bolvadin, Afyonkarahisar, Ege Bölgesi, 03300, Türkiye"
+  },
+  "Afyonkarahisar::Kamil Miras Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kamil Miras Kyk Erkek Öğrenci Yurdu",
+    "city": "Afyonkarahisar",
+    "lat": 38.7588954,
+    "lng": 30.5497495,
+    "query": "Kamil Miras, Afyonkarahisar",
+    "display_name": "Prof. Kamil Miras Caddesi, Dumlupınar, Dumlupınar Mahallesi, Afyonkarahisar Merkez, Afyonkarahisar, Ege Bölgesi, 03200, Türkiye"
+  },
+  "Afyonkarahisar::Bolvadin Kyk Erkek Öğrenci Yurdu": {
+    "name": "Bolvadin Kyk Erkek Öğrenci Yurdu",
+    "city": "Afyonkarahisar",
+    "lat": 38.7115866,
+    "lng": 31.0454865,
+    "query": "Bolvadin, Afyonkarahisar",
+    "display_name": "Bolvadin, Afyonkarahisar, Ege Bölgesi, 03300, Türkiye"
+  },
+  "Yozgat::Sorgun Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Sorgun Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Yozgat",
+    "lat": 39.8098675,
+    "lng": 35.1854305,
+    "query": "Sorgun, Yozgat",
+    "display_name": "Sorgun, Yozgat, İç Anadolu Bölgesi, 66700, Türkiye"
+  },
+  "Yozgat::Yerköy Molla Hüsrev Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Yerköy Molla Hüsrev Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Yozgat",
+    "lat": 39.6871011,
+    "lng": 34.4657364,
+    "query": "Yerköy, Yozgat",
+    "display_name": "Yerköy YHT, Kırıkkale - Yozgat Yolu, Buruncuk, Yerköy, Yozgat, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Yozgat::Akdağmadeni Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Akdağmadeni Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Yozgat",
+    "lat": 39.7821471,
+    "lng": 35.8920926,
+    "query": "Akdağmadeni, Yozgat",
+    "display_name": "Akdağmadeni YHT, 66-06, Bulgurlu, Akdağmadeni, Yozgat, İç Anadolu Bölgesi, 66300, Türkiye"
+  },
+  "Yozgat::Yozgat Kyk Kız Öğrenci Yurdu": {
+    "name": "Yozgat Kyk Kız Öğrenci Yurdu",
+    "city": "Yozgat",
+    "lat": 39.7785066,
+    "lng": 34.7863138,
+    "query": "Yozgat Yurdu, Yozgat",
+    "display_name": "Yozgat Kınalı Hasan KYK Kız Öğrenci Yurdu, Cemil Çiçek Bulvarı, Çapanoğlu, Yozgat, Yozgat Merkez, Yozgat, İç Anadolu Bölgesi, 66000, Türkiye"
+  },
+  "Yozgat::Yozgat Sürmeli Kyk Kız Öğrenci Yurdu": {
+    "name": "Yozgat Sürmeli Kyk Kız Öğrenci Yurdu",
+    "city": "Yozgat",
+    "lat": 39.8221974,
+    "lng": 34.8080972,
+    "query": "Yozgat, Yozgat",
+    "display_name": "Yozgat, Yozgat Merkez, Yozgat, İç Anadolu Bölgesi, 66100, Türkiye"
+  },
+  "Yozgat::Kınalı Hasan Kyk Kız Öğrenci Yurdu": {
+    "name": "Kınalı Hasan Kyk Kız Öğrenci Yurdu",
+    "city": "Yozgat",
+    "lat": 39.7785066,
+    "lng": 34.7863138,
+    "query": "Kınalı Hasan Yurdu, Yozgat",
+    "display_name": "Yozgat Kınalı Hasan KYK Kız Öğrenci Yurdu, Cemil Çiçek Bulvarı, Çapanoğlu, Yozgat, Yozgat Merkez, Yozgat, İç Anadolu Bölgesi, 66000, Türkiye"
+  },
+  "Yozgat::Yozgat Esentepe Kyk Erkek Öğrenci Yurdu": {
+    "name": "Yozgat Esentepe Kyk Erkek Öğrenci Yurdu",
+    "city": "Yozgat",
+    "lat": 39.8221974,
+    "lng": 34.8080972,
+    "query": "Yozgat, Yozgat",
+    "display_name": "Yozgat, Yozgat Merkez, Yozgat, İç Anadolu Bölgesi, 66100, Türkiye"
+  },
+  "Yozgat::Ahmet Efendi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ahmet Efendi Kyk Erkek Öğrenci Yurdu",
+    "city": "Yozgat",
+    "lat": 39.8158012,
+    "lng": 35.1721053,
+    "query": "Ahmet Efendi, Yozgat",
+    "display_name": "Ahmetefendi, Sorgun, Yozgat, İç Anadolu Bölgesi, 66700, Türkiye"
+  },
+  "Erzincan::Refahiye Sydv Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Refahiye Sydv Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Erzincan",
+    "lat": 39.9027528,
+    "lng": 38.7681749,
+    "query": "Refahiye, Erzincan",
+    "display_name": "Refahiye, Erzincan, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Erzincan::Kemah Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Kemah Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Erzincan",
+    "lat": 39.6036254,
+    "lng": 39.0336886,
+    "query": "Kemah, Erzincan",
+    "display_name": "Kemah, Behiçsadi Abbasoğlu Caddesi, Çarşı Mahallesi, Kemah, Erzincan, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Erzincan::Kemaliye Osman Nuri Akın Kyk Kız Ve Erkek Yurdu": {
+    "name": "Kemaliye Osman Nuri Akın Kyk Kız Ve Erkek Yurdu",
+    "city": "Erzincan",
+    "lat": 39.2620966,
+    "lng": 38.4965266,
+    "query": "Kemaliye, Erzincan",
+    "display_name": "Kemaliye, Erzincan, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Erzincan::Tercan M.Refik Şimşek Kyk Kız Ve Erkek Yurdu": {
+    "name": "Tercan M.Refik Şimşek Kyk Kız Ve Erkek Yurdu",
+    "city": "Erzincan",
+    "lat": 39.7764866,
+    "lng": 40.383,
+    "query": "Tercan, Erzincan",
+    "display_name": "Tercan, Erzincan, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Erzincan::Terzibaba Kyk Kız Öğrenci Yurdu": {
+    "name": "Terzibaba Kyk Kız Öğrenci Yurdu",
+    "city": "Erzincan",
+    "lat": 39.71553,
+    "lng": 39.568981,
+    "query": "Terzibaba, Erzincan",
+    "display_name": "Terzibaba, Hancıçiftliği, Erzincan Merkez, Erzincan, Doğu Anadolu Bölgesi, 24000, Türkiye"
+  },
+  "Erzincan::Erzincan Mengücek Gazi Kyk Kız Öğrenci Yurdu": {
+    "name": "Erzincan Mengücek Gazi Kyk Kız Öğrenci Yurdu",
+    "city": "Erzincan",
+    "lat": 39.8040106,
+    "lng": 39.3717483,
+    "query": "Erzincan Mengücek Gazi Yurdu, Erzincan",
+    "display_name": "Erzincan Mengücek Gazi Öğrenci Yurdu, Hürrem Palangası, Elmaköy, Erzincan Merkez, Erzincan, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Erzincan::Çayırlı Davut Sulari Kyk Kız ve Erkek Yurdu": {
+    "name": "Çayırlı Davut Sulari Kyk Kız ve Erkek Yurdu",
+    "city": "Erzincan",
+    "lat": 39.8040818,
+    "lng": 40.0371836,
+    "query": "Çayırlı, Erzincan",
+    "display_name": "Çayırlı, Erzincan, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Erzincan::İliç Dursun Yıldırım Kyk Kız ve Erkek Yurdu": {
+    "name": "İliç Dursun Yıldırım Kyk Kız ve Erkek Yurdu",
+    "city": "Erzincan",
+    "lat": 39.4638635,
+    "lng": 38.5589526,
+    "query": "İliç Dursun Yıldırım, Erzincan",
+    "display_name": "İliç Dursun Yıldırım Meslek Yüksekokulu, Yeni Şehir / 9 Sokağı, İstasyon Mah., İliç, Erzincan, Doğu Anadolu Bölgesi, 24700, Türkiye"
+  },
+  "Iğdır::Süreyya Sülün Hanım Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Süreyya Sülün Hanım Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Iğdır",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Iğdır::Selman I Farisi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Selman I Farisi Kyk Erkek Öğrenci Yurdu",
+    "city": "Iğdır",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Muş::Malazgirt Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Malazgirt Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Muş",
+    "lat": 39.1461406,
+    "lng": 42.5409459,
+    "query": "Malazgirt, Muş",
+    "display_name": "Malazgirt, Muş, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Muş::Muş Müştak Baba Kyk Kız Öğrenci Yurdu": {
+    "name": "Muş Müştak Baba Kyk Kız Öğrenci Yurdu",
+    "city": "Muş",
+    "lat": 38.7322221,
+    "lng": 41.4898925,
+    "query": "Muş, Muş",
+    "display_name": "Muş Merkez, Muş, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Muş::Sultan Alparslan Kyk Kız Öğrenci Yurdu": {
+    "name": "Sultan Alparslan Kyk Kız Öğrenci Yurdu",
+    "city": "Muş",
+    "lat": 38.7398862,
+    "lng": 41.4956322,
+    "query": "Sultan Alparslan Yurdu, Muş",
+    "display_name": "Sultan Alparslan Kız Öğrenci Yurdu, Atatürk Bulvarı, Kültür, Kültür Mahallesi, Muş Merkez, Muş, Doğu Anadolu Bölgesi, 49001, Türkiye"
+  },
+  "Muş::Danişmend Gazi Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Danişmend Gazi Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Muş",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Nevşehir::Ürgüp Kyk Kız Öğrenci Yurdu": {
+    "name": "Ürgüp Kyk Kız Öğrenci Yurdu",
+    "city": "Nevşehir",
+    "lat": 38.5928119,
+    "lng": 34.9594552,
+    "query": "Ürgüp, Nevşehir",
+    "display_name": "Ürgüp, Nevşehir, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Nevşehir::Avanos Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Avanos Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Nevşehir",
+    "lat": 38.7100019,
+    "lng": 34.8426646,
+    "query": "Avanos Yurdu, Nevşehir",
+    "display_name": "KYK Kız Yurdu, Kapadokya Caddesi, Avanos İlçe Merkezi, Avanos, Nevşehir, İç Anadolu Bölgesi, 50500, Türkiye"
+  },
+  "Nevşehir::Hünkar Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Hünkar Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Nevşehir",
+    "lat": 38.9420514,
+    "lng": 34.5618154,
+    "query": "Hünkar, Nevşehir",
+    "display_name": "Hünkar, Velbert Caddesi, Hacıbektaş İlçe Merkezi, Hacıbektaş, Nevşehir, İç Anadolu Bölgesi, 50800, Türkiye"
+  },
+  "Nevşehir::Fatıma Sultan Kyk Kız Öğrenci Yurdu": {
+    "name": "Fatıma Sultan Kyk Kız Öğrenci Yurdu",
+    "city": "Nevşehir",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Nevşehir::Ayşe Hümaşah Sultan Kyk Kız Öğrenci Yurdu": {
+    "name": "Ayşe Hümaşah Sultan Kyk Kız Öğrenci Yurdu",
+    "city": "Nevşehir",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Nevşehir::Nevşehir Kyk Kız Öğrenci Yurdu": {
+    "name": "Nevşehir Kyk Kız Öğrenci Yurdu",
+    "city": "Nevşehir",
+    "lat": 38.6695587,
+    "lng": 34.7422599,
+    "query": "Nevşehir Yurdu, Nevşehir",
+    "display_name": "SHÇEK Nevşehir Yetiştirme Yurdu, 27. Sokak, 2000 Evler, Nevşehir İl Merkezi, Nevşehir Merkez, Nevşehir, İç Anadolu Bölgesi, 50200, Türkiye"
+  },
+  "Nevşehir::Kozaklı Kyk Kız Öğrenci Yurdu": {
+    "name": "Kozaklı Kyk Kız Öğrenci Yurdu",
+    "city": "Nevşehir",
+    "lat": 39.2111791,
+    "lng": 34.7818429,
+    "query": "Kozaklı, Nevşehir",
+    "display_name": "Kozaklı, Nevşehir, İç Anadolu Bölgesi, 50600, Türkiye"
+  },
+  "Nevşehir::Nevşehir Kyk Erkek Öğrenci Yurdu": {
+    "name": "Nevşehir Kyk Erkek Öğrenci Yurdu",
+    "city": "Nevşehir",
+    "lat": 38.6695587,
+    "lng": 34.7422599,
+    "query": "Nevşehir Yurdu, Nevşehir",
+    "display_name": "SHÇEK Nevşehir Yetiştirme Yurdu, 27. Sokak, 2000 Evler, Nevşehir İl Merkezi, Nevşehir Merkez, Nevşehir, İç Anadolu Bölgesi, 50200, Türkiye"
+  },
+  "Malatya::İlhan Akıncı Kyk Erkek Öğrenci Yurdu": {
+    "name": "İlhan Akıncı Kyk Erkek Öğrenci Yurdu",
+    "city": "Malatya",
+    "lat": 38.3299085,
+    "lng": 38.4503216,
+    "query": "İlhan Akıncı Yurdu, Malatya",
+    "display_name": "İlhan Akıncı Erkek Öğrenci Yurdu, Üniversite Mahallesi, Malatya, Battalgazi, Malatya, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Malatya::Arapgir Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Arapgir Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Malatya",
+    "lat": 39.0422423,
+    "lng": 38.4898342,
+    "query": "Arapgir, Malatya",
+    "display_name": "Arapgir, Malatya, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Malatya::Battalgazi Kyk Kız Öğrenci Yurdu": {
+    "name": "Battalgazi Kyk Kız Öğrenci Yurdu",
+    "city": "Malatya",
+    "lat": 38.3466025,
+    "lng": 38.4040677,
+    "query": "Battalgazi Yurdu, Malatya",
+    "display_name": "Battalgazi Erkek Yurdu, Kanyon Caddesi, Bulgurlu Mahallesi, Malatya, Battalgazi, Malatya, Doğu Anadolu Bölgesi, 44050, Türkiye"
+  },
+  "Malatya::Eşref Bitlis Kyk Kız Öğrenci Yurdu": {
+    "name": "Eşref Bitlis Kyk Kız Öğrenci Yurdu",
+    "city": "Malatya",
+    "lat": 38.3479154,
+    "lng": 38.3011238,
+    "query": "Eşref Bitlis, Malatya",
+    "display_name": "Orgeneral Eşref Bitlis Alt Geçidi, Sıtmapınarı, Şifa Mahallesi, Malatya, Battalgazi, Malatya, Doğu Anadolu Bölgesi, 44070, Türkiye"
+  },
+  "Malatya::Beydağı Kyk Erkek Öğrenci Yurdu": {
+    "name": "Beydağı Kyk Erkek Öğrenci Yurdu",
+    "city": "Malatya",
+    "lat": 38.2918055,
+    "lng": 38.4771637,
+    "query": "Beydağı, Malatya",
+    "display_name": "Beydağı Mahallesi, Battalgazi, Malatya, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Malatya::Malatya Kyk Kız Öğrenci Yurdu": {
+    "name": "Malatya Kyk Kız Öğrenci Yurdu",
+    "city": "Malatya",
+    "lat": 38.3486769,
+    "lng": 38.3191313,
+    "query": "Malatya, Türkiye",
+    "display_name": "Malatya, Battalgazi, Malatya, Doğu Anadolu Bölgesi, 44000, Türkiye"
+  },
+  "Muğla::Milas Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Milas Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Muğla",
+    "lat": 37.3162709,
+    "lng": 27.7799762,
+    "query": "Milas, Muğla",
+    "display_name": "Milas, Muğla, Ege Bölgesi, Türkiye"
+  },
+  "Muğla::Muğla Ortaca Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Muğla Ortaca Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Muğla",
+    "lat": 36.8867958,
+    "lng": 28.7474701,
+    "query": "Muğla Ortaca, Muğla",
+    "display_name": "Muğla - Fethiye Yolu, Ortaca, Muğla, Ege Bölgesi, Türkiye"
+  },
+  "Muğla::Muğla Milli Piyango Kyk Kız Öğrenci Yurdu": {
+    "name": "Muğla Milli Piyango Kyk Kız Öğrenci Yurdu",
+    "city": "Muğla",
+    "lat": 37.2151784,
+    "lng": 28.363733,
+    "query": "Muğla, Muğla",
+    "display_name": "Muğla, Menteşe, Muğla, Ege Bölgesi, 48050, Türkiye"
+  },
+  "Muğla::Şahidi Kyk Kız Öğrenci Yurdu": {
+    "name": "Şahidi Kyk Kız Öğrenci Yurdu",
+    "city": "Muğla",
+    "lat": 37.1694262,
+    "lng": 28.3825026,
+    "query": "Şahidi Yurdu, Muğla",
+    "display_name": "Şahidi Kız Öğrenci Yurdu, 232. Sokak, Kötekli, Menteşe, Muğla, Ege Bölgesi, 48050, Türkiye"
+  },
+  "Muğla::Muğla Kyk Erkek Öğrenci Yurdu": {
+    "name": "Muğla Kyk Erkek Öğrenci Yurdu",
+    "city": "Muğla",
+    "lat": 37.1714335,
+    "lng": 28.3765522,
+    "query": "Muğla Yurdu, Muğla",
+    "display_name": "Muğla Erkek Öğrenci Yurdu, Kötekli, Menteşe, Muğla, Ege Bölgesi, Türkiye"
+  },
+  "Muğla::Fethiye Kyk Kız Öğrenci Yurdu Müdürlüğü": {
+    "name": "Fethiye Kyk Kız Öğrenci Yurdu Müdürlüğü",
+    "city": "Muğla",
+    "lat": 36.6247724,
+    "lng": 29.1219087,
+    "query": "Fethiye Müdürlüğü, Muğla",
+    "display_name": "Fethiye Gençlik Ve Spor Müdürlüğü, Muzaffer Dontlu Caddesi, Tuzla, Tuzla Mahallesi, Fethiye, Muğla, Ege Bölgesi, 48300, Türkiye"
+  },
+  "Muğla::Marmaris Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Marmaris Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Muğla",
+    "lat": 36.8522547,
+    "lng": 28.2742661,
+    "query": "Marmaris, Muğla",
+    "display_name": "Marmaris, Muğla, Ege Bölgesi, Türkiye"
+  },
+  "Muğla::Fethiye Sıtkı Mefharet Koçman Kyk Erkek Yurdu": {
+    "name": "Fethiye Sıtkı Mefharet Koçman Kyk Erkek Yurdu",
+    "city": "Muğla",
+    "lat": 36.6221154,
+    "lng": 29.1153384,
+    "query": "Fethiye, Muğla",
+    "display_name": "Fethiye, Muğla, Ege Bölgesi, Türkiye"
+  },
+  "Hakkari::Afife Kyk Kız Öğrenci Yurdu": {
+    "name": "Afife Kyk Kız Öğrenci Yurdu",
+    "city": "Hakkari",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Hakkari::Hakkari Kyk Erkek Öğrenci Yurdu": {
+    "name": "Hakkari Kyk Erkek Öğrenci Yurdu",
+    "city": "Hakkari",
+    "lat": 37.495358,
+    "lng": 44.1054777,
+    "query": "Hakkari, Türkiye",
+    "display_name": "Hakkâri, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Kars::Kars  Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kars  Kyk Erkek Öğrenci Yurdu",
+    "city": "Kars",
+    "lat": 40.6012761,
+    "lng": 43.0930834,
+    "query": "Kars Yurdu, Kars",
+    "display_name": "Kars Yetiştirme Yurdu, Kars Yetiştirme Yurdu Yolu, Ortakapı Mahallesi, Kars Merkez, Kars, Doğu Anadolu Bölgesi, 36100, Türkiye"
+  },
+  "Kars::İpekyolu Kyk Erkek Öğrenci Yurdu": {
+    "name": "İpekyolu Kyk Erkek Öğrenci Yurdu",
+    "city": "Kars",
+    "lat": 40.6050555,
+    "lng": 43.0964971,
+    "query": "İpekyolu, Kars",
+    "display_name": "İpekyolu Oteli, Faik Aksoy Caddesi, Ortakapı Mahallesi, Kars Merkez, Kars, Doğu Anadolu Bölgesi, 36100, Türkiye"
+  },
+  "Kars::Kars Hasan Harakani Kyk Kız Öğrenci Yurdu": {
+    "name": "Kars Hasan Harakani Kyk Kız Öğrenci Yurdu",
+    "city": "Kars",
+    "lat": 40.6070761,
+    "lng": 43.0947521,
+    "query": "Kars, Kars",
+    "display_name": "Kars Merkez, Kars, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Kars::Şeref Taşlıova Kyk Kız Öğrenci Yurdu": {
+    "name": "Şeref Taşlıova Kyk Kız Öğrenci Yurdu",
+    "city": "Kars",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kars::Murat Çobanoğlu Kyk Kız Öğrenci Yurdu": {
+    "name": "Murat Çobanoğlu Kyk Kız Öğrenci Yurdu",
+    "city": "Kars",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kars::Nuri Paşa Kyk Kız Öğrenci Yurdu Müdürlüğü": {
+    "name": "Nuri Paşa Kyk Kız Öğrenci Yurdu Müdürlüğü",
+    "city": "Kars",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kars::Serhat Kyk Kız Öğrenci Yurdu Müdürlüğü": {
+    "name": "Serhat Kyk Kız Öğrenci Yurdu Müdürlüğü",
+    "city": "Kars",
+    "lat": 40.5784365,
+    "lng": 43.0812507,
+    "query": "Serhat, Kars",
+    "display_name": "KYK Serhat Öğrenci Yurdu, Alparslan Türkeş Bulvarı, Yenişehir Mahallesi, Karacaören, Kars Merkez, Kars, Doğu Anadolu Bölgesi, 36100, Türkiye"
+  },
+  "Afyonkarahisar::Abdürrahim Mısri Kyk Erkek Öğrenci Yurdu": {
+    "name": "Abdürrahim Mısri Kyk Erkek Öğrenci Yurdu",
+    "city": "Afyonkarahisar",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Aksaray::Mahperi Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Mahperi Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Aksaray",
+    "lat": 38.3320591,
+    "lng": 33.9755875,
+    "query": "Mahperi Hatun Yurdu, Aksaray",
+    "display_name": "Mahperi Hatun Kız Yurdu, Ankara - Adana Yolu, Aratol İstiklal, Aksaray Merkez, Aksaray, İç Anadolu Bölgesi, 68000, Türkiye"
+  },
+  "Aksaray::Aksaray Kyk Kız Öğrenci Yurdu": {
+    "name": "Aksaray Kyk Kız Öğrenci Yurdu",
+    "city": "Aksaray",
+    "lat": 38.3563023,
+    "lng": 33.9799991,
+    "query": "Aksaray Yurdu, Aksaray",
+    "display_name": "KYK Aksaray Kız Yurdu, 5730. Sokak, Aratol İstiklal, Aksaray Merkez, Aksaray, İç Anadolu Bölgesi, 68000, Türkiye"
+  },
+  "Aksaray::Aksaray Cemaleddin Aksarayi Kyk Kız Öğrenci Yurdu": {
+    "name": "Aksaray Cemaleddin Aksarayi Kyk Kız Öğrenci Yurdu",
+    "city": "Aksaray",
+    "lat": 38.3705416,
+    "lng": 34.026907,
+    "query": "Aksaray, Aksaray",
+    "display_name": "Aksaray Merkez, Aksaray, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Aksaray::Aksaray Kyk Erkek Öğrenci Yurdu": {
+    "name": "Aksaray Kyk Erkek Öğrenci Yurdu",
+    "city": "Aksaray",
+    "lat": 38.3563023,
+    "lng": 33.9799991,
+    "query": "Aksaray Yurdu, Aksaray",
+    "display_name": "KYK Aksaray Kız Yurdu, 5730. Sokak, Aratol İstiklal, Aksaray Merkez, Aksaray, İç Anadolu Bölgesi, 68000, Türkiye"
+  },
+  "Aksaray::Hamidi Veli Kyk Erkek Öğrenci Yurdu": {
+    "name": "Hamidi Veli Kyk Erkek Öğrenci Yurdu",
+    "city": "Aksaray",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Aksaray::Sultan Mesud Kyk Erkek Öğrenci Yurdu": {
+    "name": "Sultan Mesud Kyk Erkek Öğrenci Yurdu",
+    "city": "Aksaray",
+    "lat": 38.2474175,
+    "lng": 33.5489796,
+    "query": "Sultan, Aksaray",
+    "display_name": "Sultanhanı, Aksaray, İç Anadolu Bölgesi, 68802, Türkiye"
+  },
+  "Aksaray::Ortaköy Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Ortaköy Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Aksaray",
+    "lat": 38.7390363,
+    "lng": 34.0287366,
+    "query": "Ortaköy Yurdu, Aksaray",
+    "display_name": "Ortaköy Talebe Yurdu, Şereflikoçhisar Caddesi, Hocabeyli, Ortaköy, Aksaray, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Aksaray::Güzelyurt Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Güzelyurt Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Aksaray",
+    "lat": 38.2778702,
+    "lng": 34.3714161,
+    "query": "Güzelyurt, Aksaray",
+    "display_name": "Güzelyurt, Aksaray, İç Anadolu Bölgesi, 68500, Türkiye"
+  },
+  "Karabük::İsmail Necati Efendi Kyk Erkek Öğrenci Yurdu": {
+    "name": "İsmail Necati Efendi Kyk Erkek Öğrenci Yurdu",
+    "city": "Karabük",
+    "lat": 41.2250899,
+    "lng": 32.7155739,
+    "query": "İsmail Necati Efendi Yurdu, Karabük",
+    "display_name": "İsmail Necati Efendi KYK Yurdu, Bartın-Karabük yolu, Karaali, Karıt, Safranbolu, Karabük, Karadeniz Bölgesi, 78600, Türkiye"
+  },
+  "Karabük::Karabük Bahaddin Gazi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Karabük Bahaddin Gazi Kyk Erkek Öğrenci Yurdu",
+    "city": "Karabük",
+    "lat": 41.1955402,
+    "lng": 32.6231154,
+    "query": "Karabük, Karabük",
+    "display_name": "Karabük Merkez, Karabük, Karadeniz Bölgesi, Türkiye"
+  },
+  "Karabük::Karabük Taşkent Kyk Kız Öğrenci Yurdu": {
+    "name": "Karabük Taşkent Kyk Kız Öğrenci Yurdu",
+    "city": "Karabük",
+    "lat": 41.1955402,
+    "lng": 32.6231154,
+    "query": "Karabük, Karabük",
+    "display_name": "Karabük Merkez, Karabük, Karadeniz Bölgesi, Türkiye"
+  },
+  "Karabük::Karabük Kyk Kız Öğrenci Yurdu": {
+    "name": "Karabük Kyk Kız Öğrenci Yurdu",
+    "city": "Karabük",
+    "lat": 41.1110349,
+    "lng": 32.6193901,
+    "query": "Karabük, Türkiye",
+    "display_name": "Karabük, Karadeniz Bölgesi, Türkiye"
+  },
+  "Karabük::Hubbi Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Hubbi Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Karabük",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Karabük::Asiye Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Asiye Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Karabük",
+    "lat": 41.2042731,
+    "lng": 32.6605995,
+    "query": "Asiye Hatun, Karabük",
+    "display_name": "Asiye Hatun KYK, Kılavuzlar Mahallesi, Karabük Merkez, Karabük, Karadeniz Bölgesi, Türkiye"
+  },
+  "Karabük::Eskipazar Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Eskipazar Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Karabük",
+    "lat": 40.9372836,
+    "lng": 32.5121694,
+    "query": "Eskipazar Yurdu, Karabük",
+    "display_name": "Eskipazar KYK Yurdu İnşaatı, Bahçepınar Mahallesi, Eskipazar Belediyesi, Eskipazar, Karabük, Karadeniz Bölgesi, Türkiye"
+  },
+  "Karabük::Katip Çelebi Kyk Kız Öğrenci Yurdu": {
+    "name": "Katip Çelebi Kyk Kız Öğrenci Yurdu",
+    "city": "Karabük",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Amasya::Suluova Kyk Kız Öğrenci Yurdu": {
+    "name": "Suluova Kyk Kız Öğrenci Yurdu",
+    "city": "Amasya",
+    "lat": 40.8318939,
+    "lng": 35.6536849,
+    "query": "Suluova Yurdu, Amasya",
+    "display_name": "Özel Suluova Ortaöğretim Kız Öğrenci Yurdu, Fazilet Sokağı, Hürriyet, Oğulbağı, Suluova, Amasya, Karadeniz Bölgesi, 05500, Türkiye"
+  },
+  "Amasya::Amasya Yeşilırmak Kyk Kız Öğrenci Yurdu": {
+    "name": "Amasya Yeşilırmak Kyk Kız Öğrenci Yurdu",
+    "city": "Amasya",
+    "lat": 40.7542268,
+    "lng": 36.3023872,
+    "query": "Amasya Yeşilırmak, Amasya",
+    "display_name": "Amasya-Erzincan Yolu, Yeşilırmak, Güvendik, Taşova, Amasya, Karadeniz Bölgesi, Türkiye"
+  },
+  "Amasya::Hüsnüşah Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Hüsnüşah Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Amasya",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Amasya::Merzifon Kyk Kız Öğrenci Yurdu": {
+    "name": "Merzifon Kyk Kız Öğrenci Yurdu",
+    "city": "Amasya",
+    "lat": 40.8721392,
+    "lng": 35.4635383,
+    "query": "Merzifon, Amasya",
+    "display_name": "Merzifon, Amasya, Karadeniz Bölgesi, Türkiye"
+  },
+  "Amasya::Kara Mustafa Paşa Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kara Mustafa Paşa Kyk Erkek Öğrenci Yurdu",
+    "city": "Amasya",
+    "lat": 40.8725639,
+    "lng": 35.464043,
+    "query": "Kara Mustafa Paşa, Amasya",
+    "display_name": "Kara Mustafa Paşa Camii, Cumhuriyet Caddesi, Hocasüleyman, Hocasüleyman Mahallesi, Merzifon, Amasya, Karadeniz Bölgesi, 05300, Türkiye"
+  },
+  "Amasya::Amasya Kyk Erkek Öğrenci Yurdu": {
+    "name": "Amasya Kyk Erkek Öğrenci Yurdu",
+    "city": "Amasya",
+    "lat": 40.6569451,
+    "lng": 35.7727169,
+    "query": "Amasya, Türkiye",
+    "display_name": "Amasya, Karadeniz Bölgesi, Türkiye"
+  },
+  "Amasya::Sultan Bayezid Kyk Erkek Öğrenci Yurdu": {
+    "name": "Sultan Bayezid Kyk Erkek Öğrenci Yurdu",
+    "city": "Amasya",
+    "lat": 40.6023077,
+    "lng": 35.8201946,
+    "query": "Sultan Bayezid Yurdu, Amasya",
+    "display_name": "Sultan Bayezid Kyk Erkek Öğrenci Yurdu, Koza, Amasya, İpekköy, Amasya, Karadeniz Bölgesi, Türkiye"
+  },
+  "Bursa::Ulu Şehir Kyk Kız Öğrenci Yurdu": {
+    "name": "Ulu Şehir Kyk Kız Öğrenci Yurdu",
+    "city": "Bursa",
+    "lat": 40.1948754,
+    "lng": 29.063458,
+    "query": "Ulu, Bursa",
+    "display_name": "Ulu, Ulu Mahallesi, Osmangazi, Bursa, Marmara Bölgesi, 16040, Türkiye"
+  },
+  "Bursa::Bursa Hüma Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Bursa Hüma Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Bursa",
+    "lat": 40.1825734,
+    "lng": 29.0675039,
+    "query": "Bursa, Bursa",
+    "display_name": "Bursa, Osmangazi, Bursa, Marmara Bölgesi, 16010, Türkiye"
+  },
+  "Kırklareli::Lüleburgaz Kyk Kız Öğrenci Yurdu": {
+    "name": "Lüleburgaz Kyk Kız Öğrenci Yurdu",
+    "city": "Kırklareli",
+    "lat": 41.4041358,
+    "lng": 27.3554651,
+    "query": "Lüleburgaz, Kırklareli",
+    "display_name": "Lüleburgaz, Kırklareli, Marmara Bölgesi, Türkiye"
+  },
+  "Kırklareli::Babaeski Kyk Kız Öğrenci Yurdu": {
+    "name": "Babaeski Kyk Kız Öğrenci Yurdu",
+    "city": "Kırklareli",
+    "lat": 41.4302616,
+    "lng": 27.0917789,
+    "query": "Babaeski, Kırklareli",
+    "display_name": "Babaeski, Kırklareli, Marmara Bölgesi, Türkiye"
+  },
+  "Kırklareli::Hundi Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Hundi Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Kırklareli",
+    "lat": 41.6271058,
+    "lng": 27.5147984,
+    "query": "Hundi Hatun, Kırklareli",
+    "display_name": "Hundi Hatun Camii, Büyükpınar Sokak, Camiikebir Mahallesi, Pınarhisar, Kırklareli, Marmara Bölgesi, 39300, Türkiye"
+  },
+  "Kırklareli::Evladı Fatihan Kyk Kız Öğrenci Yurdu": {
+    "name": "Evladı Fatihan Kyk Kız Öğrenci Yurdu",
+    "city": "Kırklareli",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kırklareli::Mehmed Eşref Efendi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Mehmed Eşref Efendi Kyk Erkek Öğrenci Yurdu",
+    "city": "Kırklareli",
+    "lat": 41.4077613,
+    "lng": 27.3459136,
+    "query": "Mehmed, Kırklareli",
+    "display_name": "Sokullu Mehmed Paşa Köprüsü, Lüleburgaz Köprübaşı (Eski) Sanayi Sitesi, Kocasinan Mahallesi, Lüleburgaz, Kırklareli, Marmara Bölgesi, 39750, Türkiye"
+  },
+  "Kırklareli::Kırklareli Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kırklareli Kyk Erkek Öğrenci Yurdu",
+    "city": "Kırklareli",
+    "lat": 41.7078046,
+    "lng": 27.6051334,
+    "query": "Kırklareli, Türkiye",
+    "display_name": "Kırklareli, Marmara Bölgesi, Türkiye"
+  },
+  "Kırklareli::Ahmet Cevdet Paşa Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ahmet Cevdet Paşa Kyk Erkek Öğrenci Yurdu",
+    "city": "Kırklareli",
+    "lat": 41.7869029,
+    "lng": 27.2023715,
+    "query": "Ahmet Cevdet Paşa Yurdu, Kırklareli",
+    "display_name": "Ahmet Cevdet Paşa Erkek Öğrenci Yurdu, Karakoç, Kırklareli Merkez, Kırklareli, Marmara Bölgesi, Türkiye"
+  },
+  "Kırklareli::Şemsettin Sami Kyk Erkek Öğrenci Yurdu": {
+    "name": "Şemsettin Sami Kyk Erkek Öğrenci Yurdu",
+    "city": "Kırklareli",
+    "lat": 41.7192149,
+    "lng": 27.1918409,
+    "query": "Şemsettin Sami Yurdu, Kırklareli",
+    "display_name": "Semsettin Sami Erkek Yurdu KYK, Yurt Sokak, Karahıdır, Karahıdır Mahallesi, Kırklareli Merkez, Kırklareli, Marmara Bölgesi, 39010, Türkiye"
+  },
+  "Ardahan::Niyazi Mısri Kyk Kız Öğrenci Yurdu": {
+    "name": "Niyazi Mısri Kyk Kız Öğrenci Yurdu",
+    "city": "Ardahan",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Ardahan::Ardahan Kyk Kız Öğrenci Yurdu": {
+    "name": "Ardahan Kyk Kız Öğrenci Yurdu",
+    "city": "Ardahan",
+    "lat": 41.0372501,
+    "lng": 42.7462189,
+    "query": "Ardahan, Türkiye",
+    "display_name": "Ardahan, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Ardahan::Kaşgarlı Mahmut Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kaşgarlı Mahmut Kyk Erkek Öğrenci Yurdu",
+    "city": "Ardahan",
+    "lat": 41.1079361,
+    "lng": 42.7346336,
+    "query": "Kaşgarlı Mahmut Yurdu, Ardahan",
+    "display_name": "Kaşgarlı Mahmut Erkek Öğrenci Yurdu, Atatürk, Ardahan Merkez, Ardahan, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Bartın::Hacı İbrahim Paşa Kyk Kız Öğrenci Yurdu": {
+    "name": "Hacı İbrahim Paşa Kyk Kız Öğrenci Yurdu",
+    "city": "Bartın",
+    "lat": 41.5609707,
+    "lng": 32.3092095,
+    "query": "Hacı İbrahim Paşa Yurdu, Bartın",
+    "display_name": "Hacı İbrahim Paşa KYK Kız Yurdu, Bartın-Zonguldak yolu, Kuyumcular, Tuzcular, Bartın Merkez, Bartın, Karadeniz Bölgesi, Türkiye"
+  },
+  "Bartın::Bartın Kyk Kız Öğrenci Yurdu": {
+    "name": "Bartın Kyk Kız Öğrenci Yurdu",
+    "city": "Bartın",
+    "lat": 41.4947715,
+    "lng": 32.4354255,
+    "query": "Bartın, Türkiye",
+    "display_name": "Bartın, Karadeniz Bölgesi, Türkiye"
+  },
+  "Bartın::Bartın Çeşmi Cihan Kyk Kız Öğrenci Yurdu": {
+    "name": "Bartın Çeşmi Cihan Kyk Kız Öğrenci Yurdu",
+    "city": "Bartın",
+    "lat": 41.6350461,
+    "lng": 32.3366205,
+    "query": "Bartın, Bartın",
+    "display_name": "Bartın Merkez, Bartın, Karadeniz Bölgesi, Türkiye"
+  },
+  "Bitlis::Bitlis Kyk Kız Öğrenci Yurdu": {
+    "name": "Bitlis Kyk Kız Öğrenci Yurdu",
+    "city": "Bitlis",
+    "lat": 38.4950867,
+    "lng": 42.1678372,
+    "query": "Bitlis, Türkiye",
+    "display_name": "Bitlis, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Bitlis::Adilcevaz Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Adilcevaz Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Bitlis",
+    "lat": 38.8116258,
+    "lng": 42.7529849,
+    "query": "Adilcevaz Yurdu, Bitlis",
+    "display_name": "Adilcevaz KYK Öğrenci Yurdu, 13-07, Çayır Mahallesi, Adilcevaz, Bitlis, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Bitlis::Tatvan Kyk Kız Öğrenci Yurdu": {
+    "name": "Tatvan Kyk Kız Öğrenci Yurdu",
+    "city": "Bitlis",
+    "lat": 38.508744,
+    "lng": 42.2758544,
+    "query": "Tatvan, Bitlis",
+    "display_name": "Tatvan, İstasyon Caddesi, Aydınlar Mahallesi, Tatvan, Bitlis, Doğu Anadolu Bölgesi, 13200, Türkiye"
+  },
+  "Bitlis::Beşminare Kyk Erkek Öğrenci Yurdu": {
+    "name": "Beşminare Kyk Erkek Öğrenci Yurdu",
+    "city": "Bitlis",
+    "lat": 38.4466283,
+    "lng": 42.142731,
+    "query": "Beşminare, Bitlis",
+    "display_name": "Beşminare Cami, Ahmet Eren Bulvarı, Beş Minare Mahallesi, Yumurtatepe, Bitlis Merkez, Bitlis, Doğu Anadolu Bölgesi, 13000, Türkiye"
+  },
+  "Mardin::Kasımiye Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kasımiye Kyk Erkek Öğrenci Yurdu",
+    "city": "Mardin",
+    "lat": 37.3076107,
+    "lng": 40.7198051,
+    "query": "Kasımiye, Mardin",
+    "display_name": "Kasımiye Medresesi, 4. Sokak, Yenişehir Mah., Cumhuriyet Mah., Mardin, Artuklu, Mardin, Güneydoğu Anadolu Bölgesi, 47100, Türkiye"
+  },
+  "Mardin::Mardin Kyk Kız Öğrenci Yurdu": {
+    "name": "Mardin Kyk Kız Öğrenci Yurdu",
+    "city": "Mardin",
+    "lat": 37.3294818,
+    "lng": 40.72816,
+    "query": "Mardin Yurdu, Mardin",
+    "display_name": "Mardin Anadolu Lisesi Öğrenci Yurdu, 3/A, 13 Mart Caddesi, Yenişehir Mah., Yalım, Mardin, Artuklu, Mardin, Güneydoğu Anadolu Bölgesi, 47060, Türkiye"
+  },
+  "Sakarya::Sapanca Kyk Kız Öğrenci Yurdu": {
+    "name": "Sapanca Kyk Kız Öğrenci Yurdu",
+    "city": "Sakarya",
+    "lat": 40.6930585,
+    "lng": 30.273417,
+    "query": "Sapanca, Sakarya",
+    "display_name": "Sapanca, Prof. Dr. Mehmet Abuç Caddesi, Göl, Hacımercan, Sapanca, Sakarya, Marmara Bölgesi, 54600, Türkiye"
+  },
+  "Edirne::Sedefkar Mehmed Ağa Kyk Kız Öğrenci Yurdu": {
+    "name": "Sedefkar Mehmed Ağa Kyk Kız Öğrenci Yurdu",
+    "city": "Edirne",
+    "lat": 41.6357269,
+    "lng": 26.6103217,
+    "query": "Sedefkar Mehmed Ağa Yurdu, Edirne",
+    "display_name": "Sedefkâr Mehmed Ağa Öğrenci Yurdu, 97, Atatürk Bulvarı, Koca Sinan Mahallesi, Edirne Merkez, Edirne, Marmara Bölgesi, 22100, Türkiye"
+  },
+  "Edirne::Gülşeni Kyk Kız Öğrenci Yurdu": {
+    "name": "Gülşeni Kyk Kız Öğrenci Yurdu",
+    "city": "Edirne",
+    "lat": 41.6751711,
+    "lng": 26.5786574,
+    "query": "Gülşeni, Edirne",
+    "display_name": "KYK Gülşeni Yurt Müdürlüğü, Şehit Cem Dilay Kerman Bulvarı, Atatürk Mahallesi, Edirne Merkez, Edirne, Marmara Bölgesi, 22100, Türkiye"
+  },
+  "Edirne::Keşan Kyk Kız Öğrenci Yurdu": {
+    "name": "Keşan Kyk Kız Öğrenci Yurdu",
+    "city": "Edirne",
+    "lat": 40.8672329,
+    "lng": 26.6216357,
+    "query": "Keşan Yurdu, Edirne",
+    "display_name": "Kredi Ve Yurtlar Kurumu Keşan Yurdu, Edirne Çanakkale Yolu, Büyük Cami Mahallesi, Keşan, Edirne, Marmara Bölgesi, 22800, Türkiye"
+  },
+  "Edirne::Meriç Kyk Kız Öğrenci Yurdu": {
+    "name": "Meriç Kyk Kız Öğrenci Yurdu",
+    "city": "Edirne",
+    "lat": 41.6503646,
+    "lng": 26.6183258,
+    "query": "Meriç Yurdu, Edirne",
+    "display_name": "Meriç Öğrenci Yurdu, Fatih Mahallesi, Edirne Merkez, Edirne, Marmara Bölgesi, 22100, Türkiye"
+  },
+  "Edirne::Edirne Kyk Erkek Öğrenci Yurdu": {
+    "name": "Edirne Kyk Erkek Öğrenci Yurdu",
+    "city": "Edirne",
+    "lat": 41.64591,
+    "lng": 26.6170113,
+    "query": "Edirne Yurdu, Edirne",
+    "display_name": "KYK Edirne Kız Öğrenci Yurdu, Koca Sinan Mahallesi, Edirne Merkez, Edirne, Marmara Bölgesi, 22100, Türkiye"
+  },
+  "Edirne::İpsala Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "İpsala Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Edirne",
+    "lat": 40.9217064,
+    "lng": 26.3839845,
+    "query": "İpsala, Edirne",
+    "display_name": "İpsala, Edirne, Marmara Bölgesi, 22400, Türkiye"
+  },
+  "Edirne::Selimiye Kyk Kız Öğrenci Yurdu": {
+    "name": "Selimiye Kyk Kız Öğrenci Yurdu",
+    "city": "Edirne",
+    "lat": 41.6443163,
+    "lng": 26.6145905,
+    "query": "Selimiye Yurdu, Edirne",
+    "display_name": "KYK Selimiye Öğrenci Yurdu, Koca Sinan Mahallesi, Edirne Merkez, Edirne, Marmara Bölgesi, 22100, Türkiye"
+  },
+  "Edirne::Edirne Kyk Kız Öğrenci Yurdu": {
+    "name": "Edirne Kyk Kız Öğrenci Yurdu",
+    "city": "Edirne",
+    "lat": 41.64591,
+    "lng": 26.6170113,
+    "query": "Edirne Yurdu, Edirne",
+    "display_name": "KYK Edirne Kız Öğrenci Yurdu, Koca Sinan Mahallesi, Edirne Merkez, Edirne, Marmara Bölgesi, 22100, Türkiye"
+  },
+  "Tekirdağ::Çorlu Kyk Kız Öğrenci Yurdu": {
+    "name": "Çorlu Kyk Kız Öğrenci Yurdu",
+    "city": "Tekirdağ",
+    "lat": 41.1815008,
+    "lng": 27.8260502,
+    "query": "Çorlu Yurdu, Tekirdağ",
+    "display_name": "Çorlu KYK Erkek Öğrenci Yurdu, Silahtarağa Mahallesi, Çorlu, Tekirdağ, Marmara Bölgesi, Türkiye"
+  },
+  "Tekirdağ::Çorlu Kyk Erkek Öğrenci Yurdu": {
+    "name": "Çorlu Kyk Erkek Öğrenci Yurdu",
+    "city": "Tekirdağ",
+    "lat": 41.1815008,
+    "lng": 27.8260502,
+    "query": "Çorlu Yurdu, Tekirdağ",
+    "display_name": "Çorlu KYK Erkek Öğrenci Yurdu, Silahtarağa Mahallesi, Çorlu, Tekirdağ, Marmara Bölgesi, Türkiye"
+  },
+  "Tekirdağ::Süleymanpaşa Kyk Kız Öğrenci Yurdu": {
+    "name": "Süleymanpaşa Kyk Kız Öğrenci Yurdu",
+    "city": "Tekirdağ",
+    "lat": 40.9781214,
+    "lng": 27.5107799,
+    "query": "Süleymanpaşa, Tekirdağ",
+    "display_name": "Tekirdağ, Süleymanpaşa, Tekirdağ, Marmara Bölgesi, 59200, Türkiye"
+  },
+  "Tekirdağ::Günebakan Kyk Kız Öğrenci Yurdu": {
+    "name": "Günebakan Kyk Kız Öğrenci Yurdu",
+    "city": "Tekirdağ",
+    "lat": 41.1405251,
+    "lng": 27.8821445,
+    "query": "Günebakan, Tekirdağ",
+    "display_name": "Günebakan Evleri, Önerler Mahallesi, Çorlu, Tekirdağ, Marmara Bölgesi, Türkiye"
+  },
+  "Tekirdağ::Dr. Sadık Ahmet Kyk Erkek Öğrenci Yurdu": {
+    "name": "Dr. Sadık Ahmet Kyk Erkek Öğrenci Yurdu",
+    "city": "Tekirdağ",
+    "lat": 41.3333873,
+    "lng": 27.9809946,
+    "query": "Dr. Sadık Ahmet, Tekirdağ",
+    "display_name": "Dr. Sadık Ahmet Caddesi, Kapaklı, Cumhuriyet Mahallesi, Kapaklı, Tekirdağ, Marmara Bölgesi, 59510, Türkiye"
+  },
+  "Tekirdağ::Tekirdağ Kyk Kız Öğrenci Yurdu": {
+    "name": "Tekirdağ Kyk Kız Öğrenci Yurdu",
+    "city": "Tekirdağ",
+    "lat": 40.9969971,
+    "lng": 27.5743146,
+    "query": "Tekirdağ Yurdu, Tekirdağ",
+    "display_name": "KYK Tekirdağ Yurdu E, F Blok, Namık Kemal Mahallesi, Tekirdağ, Süleymanpaşa, Tekirdağ, Marmara Bölgesi, Türkiye"
+  },
+  "Trabzon::Özcan Kırali Kyk Kız Yurdu": {
+    "name": "Özcan Kırali Kyk Kız Yurdu",
+    "city": "Trabzon",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Trabzon::Münür Özkurt Kyk Erkek Öğrenci Yurdu": {
+    "name": "Münür Özkurt Kyk Erkek Öğrenci Yurdu",
+    "city": "Trabzon",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Trabzon::Fuat Sezgin Kyk Kız Öğrenci Yurdu": {
+    "name": "Fuat Sezgin Kyk Kız Öğrenci Yurdu",
+    "city": "Trabzon",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Trabzon::Beşikdüzü Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Beşikdüzü Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Trabzon",
+    "lat": 41.0527305,
+    "lng": 39.2280377,
+    "query": "Beşikdüzü, Trabzon",
+    "display_name": "Beşikdüzü, Trabzon, Karadeniz Bölgesi, 61800, Türkiye"
+  },
+  "Trabzon::Maçka Şükrü Karadeniz Kyk Kız Ve Erkek Yurdu": {
+    "name": "Maçka Şükrü Karadeniz Kyk Kız Ve Erkek Yurdu",
+    "city": "Trabzon",
+    "lat": 40.8120424,
+    "lng": 39.6127153,
+    "query": "Maçka, Trabzon",
+    "display_name": "Maçka, Trabzon, Karadeniz Bölgesi, 61750, Türkiye"
+  },
+  "Trabzon::Akçaabat Fatih Kyk Erkek Öğrenci Yurdu": {
+    "name": "Akçaabat Fatih Kyk Erkek Öğrenci Yurdu",
+    "city": "Trabzon",
+    "lat": 41.0120168,
+    "lng": 39.6041774,
+    "query": "Akçaabat Fatih, Trabzon",
+    "display_name": "Trabzon Akçaabat Mesleki Eğitim Merkezi, Fatih Sultan Mehmet Caddesi, Söğütlü Mahallesi, Osmanbaba, Akçaabat, Trabzon, Karadeniz Bölgesi, 61300, Türkiye"
+  },
+  "Trabzon::Yomra Kanuni Kyk Erkek Öğrenci Yurdu": {
+    "name": "Yomra Kanuni Kyk Erkek Öğrenci Yurdu",
+    "city": "Trabzon",
+    "lat": 40.9600605,
+    "lng": 39.8485641,
+    "query": "Yomra Kanuni Yurdu, Trabzon",
+    "display_name": "Yomra Kanuni Öğrenci Yurdu, D010, Kaşüstü, Sancak, Yomra, Trabzon, Karadeniz Bölgesi, 61290, Türkiye"
+  },
+  "Trabzon::Gülbahar Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Gülbahar Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Trabzon",
+    "lat": 41.0033919,
+    "lng": 39.7160622,
+    "query": "Gülbahar Hatun, Trabzon",
+    "display_name": "Gülbahar Hatun Cami, Yavuz Selim Bulvarı, Gülbaharhatun Mahallesi, Trabzon, Ortahisar, Trabzon, Karadeniz Bölgesi, 61030, Türkiye"
+  },
+  "Elazığ::Ömer Bilginoğlu Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ömer Bilginoğlu Kyk Erkek Öğrenci Yurdu",
+    "city": "Elazığ",
+    "lat": 38.6559447,
+    "lng": 39.1561471,
+    "query": "Ömer Bilginoğlu Yurdu, Elazığ",
+    "display_name": "Ömer Bilginoğlu Erkek Öğrenci Yurdu, Malatya Caddesi, Ataşehir Mahallesi, Sarıçubuk, Elâzığ Merkez, Elazığ, Doğu Anadolu Bölgesi, 23270, Türkiye"
+  },
+  "Elazığ::Elazığ Fırat Kyk Erkek Öğrenci Yurdu": {
+    "name": "Elazığ Fırat Kyk Erkek Öğrenci Yurdu",
+    "city": "Elazığ",
+    "lat": 38.7981912,
+    "lng": 38.7366244,
+    "query": "Elazığ Fırat, Elazığ",
+    "display_name": "Elazığ-Keban yolu, Fırat Mahallesi, Keban, Elazığ, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Elazığ::Sare Ana Kyk Kız Öğrenci Yurdu": {
+    "name": "Sare Ana Kyk Kız Öğrenci Yurdu",
+    "city": "Elazığ",
+    "lat": 38.6743332,
+    "lng": 39.1847124,
+    "query": "Sare, Elazığ",
+    "display_name": "Sare Öğrenci Yurdu, Elazığ-Keban yolu, Üniversite Mahallesi, Çaydaçıra Mahallesi, Elâzığ Merkez, Elazığ, Doğu Anadolu Bölgesi, 23270, Türkiye"
+  },
+  "Elazığ::Fethi Sekin Kyk Kız Öğrenci Yurdu": {
+    "name": "Fethi Sekin Kyk Kız Öğrenci Yurdu",
+    "city": "Elazığ",
+    "lat": 38.6519488,
+    "lng": 39.1591153,
+    "query": "Fethi Sekin Yurdu, Elazığ",
+    "display_name": "Fethi Sekin Öğrenci Yurdu, 48, Kuvayı Milliye Caddesi, Ataşehir Mahallesi, Sarıçubuk, Elâzığ Merkez, Elazığ, Doğu Anadolu Bölgesi, 23040, Türkiye"
+  },
+  "Elazığ::Harput Kyk Kız Öğrenci Yurdu": {
+    "name": "Harput Kyk Kız Öğrenci Yurdu",
+    "city": "Elazığ",
+    "lat": 38.7046229,
+    "lng": 39.2521174,
+    "query": "Harput, Elazığ",
+    "display_name": "Harput, Elâzığ Merkez, Elazığ, Doğu Anadolu Bölgesi, 23280, Türkiye"
+  },
+  "Elazığ::İzzetpaşa Kyk Kız Öğrenci Yurdu": {
+    "name": "İzzetpaşa Kyk Kız Öğrenci Yurdu",
+    "city": "Elazığ",
+    "lat": 38.6772863,
+    "lng": 39.1582443,
+    "query": "İzzetpaşa Yurdu, Elazığ",
+    "display_name": "İzzetpaşa Kız Yurdu, Elazığ-Keban yolu, Çaydaçıra Mah., Çaydaçıra Mahallesi, Elâzığ Merkez, Elazığ, Doğu Anadolu Bölgesi, 23270, Türkiye"
+  },
+  "Elazığ::Ahmet Kabaklı Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ahmet Kabaklı Kyk Erkek Öğrenci Yurdu",
+    "city": "Elazığ",
+    "lat": 38.6924266,
+    "lng": 39.1711717,
+    "query": "Ahmet Kabaklı Yurdu, Elazığ",
+    "display_name": "AHMET KABAKLI KYK ÖĞRENCİ YURDU, Prof. Dr. Necmettin Erbakan Bulvarı, Çaydaçıra Mah., Çaydaçıra Mahallesi, Elâzığ Merkez, Elazığ, Doğu Anadolu Bölgesi, 23270, Türkiye"
+  },
+  "Erzurum::Nurettin Topçu Kyk Erkek Öğrenci Yurdu": {
+    "name": "Nurettin Topçu Kyk Erkek Öğrenci Yurdu",
+    "city": "Erzurum",
+    "lat": 39.4516368,
+    "lng": 40.6685328,
+    "query": "Nurettin, Erzurum",
+    "display_name": "Nurettin, Karabey, Çat, Erzurum, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Erzurum::Oltu Kyk Kız Öğrenci Yurdu": {
+    "name": "Oltu Kyk Kız Öğrenci Yurdu",
+    "city": "Erzurum",
+    "lat": 40.5387638,
+    "lng": 41.9746986,
+    "query": "Oltu Yurdu, Erzurum",
+    "display_name": "Oltu KYK Yurdu A Blok, NO:1, Oltu, Erzurum, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Erzurum::Narman Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Narman Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Erzurum",
+    "lat": 40.3452003,
+    "lng": 41.871138,
+    "query": "Narman, Erzurum",
+    "display_name": "Narman, Erzurum, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Erzurum::Erzurum Kyk Kız Öğrenci Yurdu": {
+    "name": "Erzurum Kyk Kız Öğrenci Yurdu",
+    "city": "Erzurum",
+    "lat": 39.90632,
+    "lng": 41.2727715,
+    "query": "Erzurum, Türkiye",
+    "display_name": "Erzurum, Yakutiye, Erzurum, Doğu Anadolu Bölgesi, 25050, Türkiye"
+  },
+  "Erzurum::Aşkale Kyk Erkek Öğrenci Yurdu": {
+    "name": "Aşkale Kyk Erkek Öğrenci Yurdu",
+    "city": "Erzurum",
+    "lat": 39.9218496,
+    "lng": 40.6826834,
+    "query": "Aşkale, Erzurum",
+    "display_name": "Aşkale, Mehmet Akif Ersoy Caddesi, Cahit Aybar, Gümüşseren, Aşkale, Erzurum, Doğu Anadolu Bölgesi, 25500, Türkiye"
+  },
+  "Erzurum::Hınıs Kyk Kız Öğrenci Yurdu": {
+    "name": "Hınıs Kyk Kız Öğrenci Yurdu",
+    "city": "Erzurum",
+    "lat": 39.3584857,
+    "lng": 41.7003273,
+    "query": "Hınıs, Erzurum",
+    "display_name": "Hınıs, Erzurum, Doğu Anadolu Bölgesi, 25600, Türkiye"
+  },
+  "Erzurum::Horasan Kyk Kız Öğrenci Yurdu Müdürlüğü": {
+    "name": "Horasan Kyk Kız Öğrenci Yurdu Müdürlüğü",
+    "city": "Erzurum",
+    "lat": 40.0407979,
+    "lng": 42.1624501,
+    "query": "Horasan, Erzurum",
+    "display_name": "Horasan, Şehit Harun Lal Caddesi, Esentepe, Horasan, Erzurum, Doğu Anadolu Bölgesi, 25800, Türkiye"
+  },
+  "Erzurum::Aziziye Kyk Erkek Öğrenci Yurdu": {
+    "name": "Aziziye Kyk Erkek Öğrenci Yurdu",
+    "city": "Erzurum",
+    "lat": 39.9454672,
+    "lng": 41.1060051,
+    "query": "Aziziye, Erzurum",
+    "display_name": "Aziziye, Erzurum, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Kütahya::Hayme Ana Kyk Kız Öğrenci Yurdu": {
+    "name": "Hayme Ana Kyk Kız Öğrenci Yurdu",
+    "city": "Kütahya",
+    "lat": 39.4265428,
+    "lng": 29.9634988,
+    "query": "Hayme Ana Yurdu, Kütahya",
+    "display_name": "KYK Hayme Ana Kız Öğrenci Yurdu, 8, Ahmet Derin Caddesi, Bölücek, Kütahya Merkez, Kütahya, Ege Bölgesi, 43040, Türkiye"
+  },
+  "Osmaniye::Cebelibereket Kyk Erkek Öğrenci Yurdu": {
+    "name": "Cebelibereket Kyk Erkek Öğrenci Yurdu",
+    "city": "Osmaniye",
+    "lat": 37.0489607,
+    "lng": 36.4301775,
+    "query": "Cebelibereket, Osmaniye",
+    "display_name": "Yarpuz, Osmaniye Merkez, Osmaniye, Akdeniz Bölgesi, Türkiye"
+  },
+  "Osmaniye::Kadirli Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Kadirli Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Osmaniye",
+    "lat": 37.4617702,
+    "lng": 36.1694093,
+    "query": "Kadirli, Osmaniye",
+    "display_name": "Kadirli, Osmaniye, Akdeniz Bölgesi, Türkiye"
+  },
+  "Osmaniye::Osmaniye Kyk Kız Öğrenci Yurdu": {
+    "name": "Osmaniye Kyk Kız Öğrenci Yurdu",
+    "city": "Osmaniye",
+    "lat": 37.0511501,
+    "lng": 36.2320751,
+    "query": "Osmaniye Yurdu, Osmaniye",
+    "display_name": "Osmaniye KYK Kız Yurdu, Prof. Dr. Alper Akınoğlu Caddesi, Fakıuşağı, Dereobası, Osmaniye Merkez, Osmaniye, Akdeniz Bölgesi, 80000, Türkiye"
+  },
+  "Osmaniye::Karacaoğlan Kyk Erkek Öğrenci Yurdu": {
+    "name": "Karacaoğlan Kyk Erkek Öğrenci Yurdu",
+    "city": "Osmaniye",
+    "lat": 37.0373772,
+    "lng": 36.226587,
+    "query": "Karacaoğlan Yurdu, Osmaniye",
+    "display_name": "Osmaniye Karacaoğlan Kız Öğrenci Yurdu, 45018. Sokak, Fakıuşağı, Dereobası, Osmaniye Merkez, Osmaniye, Akdeniz Bölgesi, 80000, Türkiye"
+  },
+  "Osmaniye::Kayıboyu Kyk Kız Öğrenci Yurdu": {
+    "name": "Kayıboyu Kyk Kız Öğrenci Yurdu",
+    "city": "Osmaniye",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kastamonu::Abana Kyk Erkek Öğrenci Yurdu": {
+    "name": "Abana Kyk Erkek Öğrenci Yurdu",
+    "city": "Kastamonu",
+    "lat": 41.9785014,
+    "lng": 34.0077229,
+    "query": "Abana, Kastamonu",
+    "display_name": "Abana, Kastamonu, Karadeniz Bölgesi, Türkiye"
+  },
+  "Kastamonu::Şeyh Şaban I Veli Kyk Erkek Öğrenci Yurdu.": {
+    "name": "Şeyh Şaban I Veli Kyk Erkek Öğrenci Yurdu.",
+    "city": "Kastamonu",
+    "lat": 41.6614739,
+    "lng": 34.5934863,
+    "query": "Şeyh Şaban I Veli, Kastamonu",
+    "display_name": "Şeyh Şaban-ı Veli, Hanönü, Kastamonu, Karadeniz Bölgesi, Türkiye"
+  },
+  "Kastamonu::Kastamonu Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kastamonu Kyk Erkek Öğrenci Yurdu",
+    "city": "Kastamonu",
+    "lat": 41.3680217,
+    "lng": 33.7619177,
+    "query": "Kastamonu, Türkiye",
+    "display_name": "Kastamonu, Karadeniz Bölgesi, Türkiye"
+  },
+  "Kastamonu::Tosya Kyk Kız Öğrenci Yurdu": {
+    "name": "Tosya Kyk Kız Öğrenci Yurdu",
+    "city": "Kastamonu",
+    "lat": 41.0164957,
+    "lng": 34.0386079,
+    "query": "Tosya, Kastamonu",
+    "display_name": "Tosya, Kastamonu, Karadeniz Bölgesi, 37300, Türkiye"
+  },
+  "Kastamonu::Fatma Aliye Hanım Kyk Kız Öğrenci Yurdu": {
+    "name": "Fatma Aliye Hanım Kyk Kız Öğrenci Yurdu",
+    "city": "Kastamonu",
+    "lat": 41.4282461,
+    "lng": 33.7711985,
+    "query": "Fatma Aliye Hanım Yurdu, Kastamonu",
+    "display_name": "Fatma Aliye Hanım Kız Yurdu, Kuzeykent Mahallesi, Kastamonu Merkez, Kastamonu, Karadeniz Bölgesi, Türkiye"
+  },
+  "Kastamonu::Baharzade Feride Hanım Kyk Kız Öğrenci Yurdu": {
+    "name": "Baharzade Feride Hanım Kyk Kız Öğrenci Yurdu",
+    "city": "Kastamonu",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kastamonu::Kastamonu Hüma Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Kastamonu Hüma Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Kastamonu",
+    "lat": 41.3765359,
+    "lng": 33.7770087,
+    "query": "Kastamonu, Kastamonu",
+    "display_name": "Kastamonu Merkez, Kastamonu, Karadeniz Bölgesi, Türkiye"
+  },
+  "Niğde::Bor Kyk Kız Öğrenci Yurdu": {
+    "name": "Bor Kyk Kız Öğrenci Yurdu",
+    "city": "Niğde",
+    "lat": 37.8876069,
+    "lng": 34.5625033,
+    "query": "Bor, Niğde",
+    "display_name": "Bor, İstasyon Caddesi, Selçuk, Bor, Niğde, İç Anadolu Bölgesi, 51700, Türkiye"
+  },
+  "Niğde::Sultan II. Kılıçarslan Kyk Kız Öğrenci Yurdu": {
+    "name": "Sultan II. Kılıçarslan Kyk Kız Öğrenci Yurdu",
+    "city": "Niğde",
+    "lat": 37.9326613,
+    "lng": 34.5923904,
+    "query": "Sultan, Niğde",
+    "display_name": "Yavuz Sultan Selim Caddesi, Toplu Konut, Bor, Niğde, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Niğde::Ahmet Kuddusi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ahmet Kuddusi Kyk Erkek Öğrenci Yurdu",
+    "city": "Niğde",
+    "lat": 37.9125735,
+    "lng": 34.5667082,
+    "query": "Ahmet Kuddusi, Niğde",
+    "display_name": "Ahmet Kuddusi, Bor, Niğde, İç Anadolu Bölgesi, 51700, Türkiye"
+  },
+  "Niğde::Ömer Halisdemir Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ömer Halisdemir Kyk Erkek Öğrenci Yurdu",
+    "city": "Niğde",
+    "lat": 37.9363074,
+    "lng": 34.6167201,
+    "query": "Ömer Halisdemir Yurdu, Niğde",
+    "display_name": "Niğde Ömer Halisdemir Üniversitesi Ayhan Şahenk Yurdu, Niğde-Bor yolu, Sarıköprü Mahallesi, Niğde Merkez, Niğde, İç Anadolu Bölgesi, 51200, Türkiye"
+  },
+  "Niğde::Niğde Milli Piyango Kyk Erkek Öğrenci Yurdu": {
+    "name": "Niğde Milli Piyango Kyk Erkek Öğrenci Yurdu",
+    "city": "Niğde",
+    "lat": 37.969849,
+    "lng": 34.6764495,
+    "query": "Niğde, Niğde",
+    "display_name": "Niğde Merkez, Niğde, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Niğde::Niğde Ertuğrulgazi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Niğde Ertuğrulgazi Kyk Erkek Öğrenci Yurdu",
+    "city": "Niğde",
+    "lat": 37.969849,
+    "lng": 34.6764495,
+    "query": "Niğde, Niğde",
+    "display_name": "Niğde Merkez, Niğde, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Niğde::Ulukışla Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Ulukışla Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Niğde",
+    "lat": 37.5457083,
+    "lng": 34.4803603,
+    "query": "Ulukışla, Niğde",
+    "display_name": "Ulukışla, Ankara-Adana yolu, Alpağut, Bayağıl, Ulukışla, Niğde, İç Anadolu Bölgesi, 51902, Türkiye"
+  },
+  "Niğde::Sultan I. Kılıçarslan Kyk Kız Öğrenci Yurdu": {
+    "name": "Sultan I. Kılıçarslan Kyk Kız Öğrenci Yurdu",
+    "city": "Niğde",
+    "lat": 37.9326613,
+    "lng": 34.5923904,
+    "query": "Sultan, Niğde",
+    "display_name": "Yavuz Sultan Selim Caddesi, Toplu Konut, Bor, Niğde, İç Anadolu Bölgesi, Türkiye"
+  },
+  "Sinop::Türkeli Kyk Kız Öğrenci Yurdu Müdürlüğü": {
+    "name": "Türkeli Kyk Kız Öğrenci Yurdu Müdürlüğü",
+    "city": "Sinop",
+    "lat": 41.9483005,
+    "lng": 34.3395857,
+    "query": "Türkeli, Sinop",
+    "display_name": "Türkeli, Sinop, Karadeniz Bölgesi, Türkiye"
+  },
+  "Sinop::Boyabat Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Boyabat Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Sinop",
+    "lat": 41.4689736,
+    "lng": 34.7672274,
+    "query": "Boyabat, Sinop",
+    "display_name": "Boyabat, Sinop, Karadeniz Bölgesi, 57200, Türkiye"
+  },
+  "Sinop::Ayancık Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Ayancık Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Sinop",
+    "lat": 41.9460725,
+    "lng": 34.588309,
+    "query": "Ayancık, Sinop",
+    "display_name": "Ayancık, Sinop, Karadeniz Bölgesi, 57400, Türkiye"
+  },
+  "Sinop::Mahmud Kefevi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Mahmud Kefevi Kyk Erkek Öğrenci Yurdu",
+    "city": "Sinop",
+    "lat": 41.8097668,
+    "lng": 35.1138972,
+    "query": "Mahmud, Sinop",
+    "display_name": "Mahmuttırı, Gerze, Sinop, Karadeniz Bölgesi, Türkiye"
+  },
+  "Sinop::Sinop Kyk Kız Öğrenci Yurdu": {
+    "name": "Sinop Kyk Kız Öğrenci Yurdu",
+    "city": "Sinop",
+    "lat": 41.6476377,
+    "lng": 34.9560137,
+    "query": "Sinop, Türkiye",
+    "display_name": "Sinop, Karadeniz Bölgesi, Türkiye"
+  },
+  "Sinop::Gerze Kyk Kız Öğrenci Yurdu": {
+    "name": "Gerze Kyk Kız Öğrenci Yurdu",
+    "city": "Sinop",
+    "lat": 41.8032697,
+    "lng": 35.1996164,
+    "query": "Gerze, Sinop",
+    "display_name": "Gerze, Sinop, Karadeniz Bölgesi, 57600, Türkiye"
+  },
+  "Sinop::Seyyid İbrahim Bilal Kyk Kız Öğrenci Yurdu": {
+    "name": "Seyyid İbrahim Bilal Kyk Kız Öğrenci Yurdu",
+    "city": "Sinop",
+    "lat": 42.0048379,
+    "lng": 35.070902,
+    "query": "Seyyid İbrahim Bilal Yurdu, Sinop",
+    "display_name": "Seyyid İbrahim Bilal Kız Yurdu, D010-13, Osmaniye, Sinop Merkez, Sinop, Karadeniz Bölgesi, 57002, Türkiye"
+  },
+  "Erzurum::Oğuzhan Yaşar Kyk Erkek Öğrenci Yurdu Müdürlüğü": {
+    "name": "Oğuzhan Yaşar Kyk Erkek Öğrenci Yurdu Müdürlüğü",
+    "city": "Erzurum",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Rize::Rize Kyk Kız Öğrenci Yurdu": {
+    "name": "Rize Kyk Kız Öğrenci Yurdu",
+    "city": "Rize",
+    "lat": 40.9569617,
+    "lng": 40.884428,
+    "query": "Rize, Türkiye",
+    "display_name": "Rize, Karadeniz Bölgesi, Türkiye"
+  },
+  "Rize::Güneysu Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Güneysu Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Rize",
+    "lat": 40.977154,
+    "lng": 40.6135914,
+    "query": "Güneysu, Rize",
+    "display_name": "Güneysu, Rize, Karadeniz Bölgesi, Türkiye"
+  },
+  "Rize::Ardeşen Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Ardeşen Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Rize",
+    "lat": 41.191875,
+    "lng": 40.9894178,
+    "query": "Ardeşen, Rize",
+    "display_name": "Ardeşen, Rize, Karadeniz Bölgesi, Türkiye"
+  },
+  "Rize::Çayeli A.Mesut Yılmaz Kyk Kız Ve Erkek Yurdu": {
+    "name": "Çayeli A.Mesut Yılmaz Kyk Kız Ve Erkek Yurdu",
+    "city": "Rize",
+    "lat": 41.0878328,
+    "lng": 40.7236973,
+    "query": "Çayeli, Rize",
+    "display_name": "Çayeli, Rize, Karadeniz Bölgesi, Türkiye"
+  },
+  "Rize::Fındıklı Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Fındıklı Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Rize",
+    "lat": 41.271235,
+    "lng": 41.1414159,
+    "query": "Fındıklı, Rize",
+    "display_name": "Fındıklı, Rize, Karadeniz Bölgesi, Türkiye"
+  },
+  "Rize::Pazar Kyk Kız Öğrenci Yurdu": {
+    "name": "Pazar Kyk Kız Öğrenci Yurdu",
+    "city": "Rize",
+    "lat": 41.1802584,
+    "lng": 40.8868482,
+    "query": "Pazar, Rize",
+    "display_name": "Pazar, Rize, Karadeniz Bölgesi, Türkiye"
+  },
+  "Rize::Ayder Kyk Kız Öğrenci Yurdu": {
+    "name": "Ayder Kyk Kız Öğrenci Yurdu",
+    "city": "Rize",
+    "lat": 40.9525203,
+    "lng": 41.1020508,
+    "query": "Ayder, Rize",
+    "display_name": "Ayder, Kaplıca, Çamlıhemşin, Rize, Karadeniz Bölgesi, 53750, Türkiye"
+  },
+  "Rize::Tenzile Erdoğan Kyk Kız Öğrenci Yurdu": {
+    "name": "Tenzile Erdoğan Kyk Kız Öğrenci Yurdu",
+    "city": "Rize",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Bayburt::Ağlarbaba Kyk Kız Öğrenci Yurdu": {
+    "name": "Ağlarbaba Kyk Kız Öğrenci Yurdu",
+    "city": "Bayburt",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Bayburt::Dede Korkut Kyk Erkek Öğrenci Yurdu": {
+    "name": "Dede Korkut Kyk Erkek Öğrenci Yurdu",
+    "city": "Bayburt",
+    "lat": 40.2505632,
+    "lng": 40.2306111,
+    "query": "Dede Korkut, Bayburt",
+    "display_name": "T.C. Bayburt Üniversitesi Dede Korkut Kampüsü, Muteber Sokak, Zahit, Gençosman Mahallesi, Bayburt Merkez, Bayburt, Karadeniz Bölgesi, 69000, Türkiye"
+  },
+  "Bayburt::Bayburt Kyk Erkek Öğrenci Yurdu": {
+    "name": "Bayburt Kyk Erkek Öğrenci Yurdu",
+    "city": "Bayburt",
+    "lat": 40.2023027,
+    "lng": 40.2121599,
+    "query": "Bayburt, Türkiye",
+    "display_name": "Bayburt, Karadeniz Bölgesi, Türkiye"
+  },
+  "Bayburt::Sultan Fahriye Kyk Kız Öğrenci Yurdu": {
+    "name": "Sultan Fahriye Kyk Kız Öğrenci Yurdu",
+    "city": "Bayburt",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Şırnak::Şırnak Kyk Erkek Öğrenci Yurdu": {
+    "name": "Şırnak Kyk Erkek Öğrenci Yurdu",
+    "city": "Şırnak",
+    "lat": 37.455253,
+    "lng": 42.5212049,
+    "query": "Şırnak, Türkiye",
+    "display_name": "Şırnak, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Şırnak::Cezeri Kyk Kız Öğrenci Yurdu": {
+    "name": "Cezeri Kyk Kız Öğrenci Yurdu",
+    "city": "Şırnak",
+    "lat": 37.3207966,
+    "lng": 42.185247,
+    "query": "Cezeri, Şırnak",
+    "display_name": "El Cezeri Sokak, Sur Mahallesi, Cizre, Şırnak, Güneydoğu Anadolu Bölgesi, 73200, Türkiye"
+  },
+  "Konya::Akademi Kyk Kız Öğrenci Yurdu": {
+    "name": "Akademi Kyk Kız Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 38.0152727,
+    "lng": 32.5049398,
+    "query": "Akademi, Konya",
+    "display_name": "Akademi Mahallesi, Selçuklu, Konya, İç Anadolu Bölgesi, 42150, Türkiye"
+  },
+  "Konya::Yazır Kyk Kız Öğrenci Yurdu": {
+    "name": "Yazır Kyk Kız Öğrenci Yurdu",
+    "city": "Konya",
+    "lat": 37.9664469,
+    "lng": 32.5093094,
+    "query": "Yazır, Konya",
+    "display_name": "Yazır Mahallesi, Konya, Selçuklu, Konya, İç Anadolu Bölgesi, 42130, Türkiye"
+  },
+  "Uşak::Mehmet Hacım Kyk Erkek Öğrenci Yurdu": {
+    "name": "Mehmet Hacım Kyk Erkek Öğrenci Yurdu",
+    "city": "Uşak",
+    "lat": 38.6953749,
+    "lng": 29.3875488,
+    "query": "Mehmet Hacım Yurdu, Uşak",
+    "display_name": "Mehmet Hacım Yurdu, Gediz Uluyolu, Karaağaç Mahallesi, Uşak, Ege Bölgesi, 64400, Türkiye"
+  },
+  "Uşak::Yaren Kyk Kız Öğrenci Yurdu": {
+    "name": "Yaren Kyk Kız Öğrenci Yurdu",
+    "city": "Uşak",
+    "lat": 38.6806232,
+    "lng": 29.3970942,
+    "query": "Yaren, Uşak",
+    "display_name": "Yaren Sokak, Karaağaç Mahallesi, Uşak, Ege Bölgesi, 64100, Türkiye"
+  },
+  "Uşak::Uşak Kyk Kız Öğrenci Yurdu": {
+    "name": "Uşak Kyk Kız Öğrenci Yurdu",
+    "city": "Uşak",
+    "lat": 38.6581522,
+    "lng": 29.3894134,
+    "query": "Uşak Yurdu, Uşak",
+    "display_name": "Uşak Fen Lisesi Öğrenci Yurdu, Kuyucak Uluyolu, Kemalöz Mahallesi, Uşak, Ege Bölgesi, 64200, Türkiye"
+  },
+  "Uşak::Latife Hanım Kyk Kız Öğrenci Yurdu": {
+    "name": "Latife Hanım Kyk Kız Öğrenci Yurdu",
+    "city": "Uşak",
+    "lat": 38.6742513,
+    "lng": 29.3174087,
+    "query": "Latife Hanım Yurdu, Uşak",
+    "display_name": "KYK Latife Hanım Kız Öğrenci Yurdu, Uşak - İzmir Yolu, Hacıkadem, Çınarcık, Uşak, Ege Bölgesi, Türkiye"
+  },
+  "Uşak::Uşak Kyk Erkek Öğrenci Yurdu": {
+    "name": "Uşak Kyk Erkek Öğrenci Yurdu",
+    "city": "Uşak",
+    "lat": 38.6581522,
+    "lng": 29.3894134,
+    "query": "Uşak Yurdu, Uşak",
+    "display_name": "Uşak Fen Lisesi Öğrenci Yurdu, Kuyucak Uluyolu, Kemalöz Mahallesi, Uşak, Ege Bölgesi, 64200, Türkiye"
+  },
+  "Kocaeli::Canfeda Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Canfeda Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.7870879,
+    "lng": 29.9743506,
+    "query": "Canfeda Hatun Yurdu, Kocaeli",
+    "display_name": "Canfeda Hatun Kız Yurdu, Pembe Sokak, Yeşilova Mahallesi, Kocaeli, İzmit, Kocaeli, Marmara Bölgesi, 41060, Türkiye"
+  },
+  "Kocaeli::Samiha Ayverdi Kyk Kız Öğrenci Yurdu": {
+    "name": "Samiha Ayverdi Kyk Kız Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.8189094,
+    "lng": 29.9235686,
+    "query": "Samiha Ayverdi Yurdu, Kocaeli",
+    "display_name": "KYK Samiha Ayverdi Kız Yurdu, Patika, Kabaoğlu, Kabaoğlu Mahallesi, İzmit, Kocaeli, Marmara Bölgesi, 41001, Türkiye"
+  },
+  "Kocaeli::Kartepe Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kartepe Kyk Erkek Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.7454357,
+    "lng": 30.0112827,
+    "query": "Kartepe, Kocaeli",
+    "display_name": "Kartepe, Kocaeli, Marmara Bölgesi, Türkiye"
+  },
+  "Kocaeli::Gebze Nilüfer Hatun Kyk Kız Öğrenci Yurdu": {
+    "name": "Gebze Nilüfer Hatun Kyk Kız Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.8006696,
+    "lng": 29.431767,
+    "query": "Gebze, Kocaeli",
+    "display_name": "Gebze, Kocaeli, Marmara Bölgesi, 41400, Türkiye"
+  },
+  "Kocaeli::Pertevpaşa Kyk Kız Öğrenci Yurdu": {
+    "name": "Pertevpaşa Kyk Kız Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Kocaeli::Sultan Baba Kyk Kız Öğrenci Yurdu": {
+    "name": "Sultan Baba Kyk Kız Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.7641446,
+    "lng": 29.9623847,
+    "query": "Sultan Baba, Kocaeli",
+    "display_name": "Sultan Baba Sokak, Yenişehir Mahallesi, Kocaeli, İzmit, Kocaeli, Marmara Bölgesi, 41050, Türkiye"
+  },
+  "Kocaeli::Gölcük Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Gölcük Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.7019288,
+    "lng": 29.8146326,
+    "query": "Gölcük Yurdu, Kocaeli",
+    "display_name": "Gölcük KYK Yurdu, Barbaros Hayrettin Caddesi, Şehitler Mahallesi, Gölcük, Kocaeli, Marmara Bölgesi, 41650, Türkiye"
+  },
+  "Kocaeli::Kocaeli Zekiye Gündoğdu Kyk Kız Öğrenci Yurdu": {
+    "name": "Kocaeli Zekiye Gündoğdu Kyk Kız Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.7653892,
+    "lng": 29.9407361,
+    "query": "Kocaeli, Kocaeli",
+    "display_name": "Kocaeli, İzmit, Kocaeli, Marmara Bölgesi, 41040, Türkiye"
+  },
+  "Bingöl::Pir Ali Bey Kyk Kız Öğrenci Yurdu": {
+    "name": "Pir Ali Bey Kyk Kız Öğrenci Yurdu",
+    "city": "Bingöl",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Bingöl::Bingöl Kyk Erkek Öğrenci Yurdu": {
+    "name": "Bingöl Kyk Erkek Öğrenci Yurdu",
+    "city": "Bingöl",
+    "lat": 39.073803,
+    "lng": 40.7296181,
+    "query": "Bingöl, Türkiye",
+    "display_name": "Bingöl, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Bingöl::Mürsel Paşa Kyk Erkek Öğrenci Yurdu": {
+    "name": "Mürsel Paşa Kyk Erkek Öğrenci Yurdu",
+    "city": "Bingöl",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Bingöl::Bingöl Kyk Kız Öğrenci Yurdu": {
+    "name": "Bingöl Kyk Kız Öğrenci Yurdu",
+    "city": "Bingöl",
+    "lat": 39.073803,
+    "lng": 40.7296181,
+    "query": "Bingöl, Türkiye",
+    "display_name": "Bingöl, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Kocaeli::Ali Fuat Cebesoy Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ali Fuat Cebesoy Kyk Erkek Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.7907016,
+    "lng": 29.9813677,
+    "query": "Ali Fuat Cebesoy Yurdu, Kocaeli",
+    "display_name": "KYK Ali Fuat Cebesoy Erkek Öğrenci Yurdu, İzmit - Kandıra Yolu, Yeşilova Mahallesi, Kocaeli, İzmit, Kocaeli, Marmara Bölgesi, 41060, Türkiye"
+  },
+  "Kocaeli::Gebze Kyk Erkek Öğrenci Yurdu": {
+    "name": "Gebze Kyk Erkek Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.789278,
+    "lng": 29.4922493,
+    "query": "Gebze Yurdu, Kocaeli",
+    "display_name": "Gebze Öğrenci Yurdu, Muallim Mahallesi, Gebze, Kocaeli, Marmara Bölgesi, Türkiye"
+  },
+  "Kocaeli::Gazi Süleyman Paşa Kyk Erkek Öğrenci Yurdu": {
+    "name": "Gazi Süleyman Paşa Kyk Erkek Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.825677,
+    "lng": 29.9282132,
+    "query": "Gazi Süleyman Paşa Yurdu, Kocaeli",
+    "display_name": "Gazi Süleyman Paşa Erkek Yurdu, Profesör Baki Komsuoğlu Bulvarı, Kabaoğlu, Kabaoğlu Mahallesi, İzmit, Kocaeli, Marmara Bölgesi, 41001, Türkiye"
+  },
+  "Kocaeli::Fatma Seher Hanım Kyk Kız Öğrenci Yurdu": {
+    "name": "Fatma Seher Hanım Kyk Kız Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.8244723,
+    "lng": 29.9241542,
+    "query": "Fatma Seher Hanım Yurdu, Kocaeli",
+    "display_name": "Fatma Seher Hanım Kız Yurdu B Blok, Profesör Baki Komsuoğlu Bulvarı, Kabaoğlu, Kabaoğlu Mahallesi, İzmit, Kocaeli, Marmara Bölgesi, 41001, Türkiye"
+  },
+  "Ağrı::Ümmü Eyüp Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ümmü Eyüp Kyk Erkek Öğrenci Yurdu",
+    "city": "Ağrı",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Ağrı::Ağrı Ahmedi Hani Kyk Kız Öğrenci Yurdu": {
+    "name": "Ağrı Ahmedi Hani Kyk Kız Öğrenci Yurdu",
+    "city": "Ağrı",
+    "lat": 39.719125,
+    "lng": 43.0504894,
+    "query": "Ağrı, Ağrı",
+    "display_name": "Ağrı Merkez, Ağrı, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Ağrı::İshak Paşa Kyk Erkek Öğrenci Yurdu": {
+    "name": "İshak Paşa Kyk Erkek Öğrenci Yurdu",
+    "city": "Ağrı",
+    "lat": 39.5203827,
+    "lng": 44.1296852,
+    "query": "İshak Paşa, Ağrı",
+    "display_name": "İshak Paşa Sarayı, İshak Paşa Sarayı yolu, Sarıgül, Doğubayazıt, Ağrı, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Ağrı::Abdurrahim Arvasi Kyk Kız Öğrenci Yurdu": {
+    "name": "Abdurrahim Arvasi Kyk Kız Öğrenci Yurdu",
+    "city": "Ağrı",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Ağrı::Ağrı Kyk Kız Öğrenci Yurdu": {
+    "name": "Ağrı Kyk Kız Öğrenci Yurdu",
+    "city": "Ağrı",
+    "lat": 39.52916,
+    "lng": 43.3835645,
+    "query": "Ağrı, Türkiye",
+    "display_name": "Ağrı, Doğu Anadolu Bölgesi, Türkiye"
+  },
+  "Trabzon::Trabzon Doğu Karadeniz Kyk Kız Öğrenci Yurdu": {
+    "name": "Trabzon Doğu Karadeniz Kyk Kız Öğrenci Yurdu",
+    "city": "Trabzon",
+    "lat": 41.0054605,
+    "lng": 39.7301463,
+    "query": "Trabzon, Trabzon",
+    "display_name": "Trabzon, Ortahisar, Trabzon, Karadeniz Bölgesi, 61050, Türkiye"
+  },
+  "Çorum::Kerebi Gazi Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kerebi Gazi Kyk Erkek Öğrenci Yurdu",
+    "city": "Çorum",
+    "lat": 40.545542,
+    "lng": 34.9480169,
+    "query": "Kerebi Gazi, Çorum",
+    "display_name": "Kerebi Gazi 1.Cadde, Çepni Mahallesi, Çorum Merkez, Çorum, Karadeniz Bölgesi, 19040, Türkiye"
+  },
+  "Çorum::Hitit Kyk Kız Öğrenci Yurdu": {
+    "name": "Hitit Kyk Kız Öğrenci Yurdu",
+    "city": "Çorum",
+    "lat": 40.5718837,
+    "lng": 34.983975,
+    "query": "Hitit, Çorum",
+    "display_name": "Çorum Hitit Üniversitesi, Çorum-Samsun yolu, Üçtutlar Mahallesi, Çorum Merkez, Çorum, Karadeniz Bölgesi, 19030, Türkiye"
+  },
+  "Çorum::Alaca Kyk Kız ve Erkek Öğrenci Yurdu": {
+    "name": "Alaca Kyk Kız ve Erkek Öğrenci Yurdu",
+    "city": "Çorum",
+    "lat": 40.1690118,
+    "lng": 34.8414772,
+    "query": "Alaca, Çorum",
+    "display_name": "Alaca, Çorum, Karadeniz Bölgesi, 19600, Türkiye"
+  },
+  "Çorum::Sungurlu Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Sungurlu Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Çorum",
+    "lat": 40.1638239,
+    "lng": 34.3753355,
+    "query": "Sungurlu, Çorum",
+    "display_name": "Sungurlu, Çorum, Karadeniz Bölgesi, 19302, Türkiye"
+  },
+  "Çorum::Osmancık Kyk Kız Ve Erkek Öğrenci Yurdu": {
+    "name": "Osmancık Kyk Kız Ve Erkek Öğrenci Yurdu",
+    "city": "Çorum",
+    "lat": 40.9714839,
+    "lng": 34.8010408,
+    "query": "Osmancık, Çorum",
+    "display_name": "Osmancık, Çorum, Karadeniz Bölgesi, 19500, Türkiye"
+  },
+  "Çorum::İskilipli Atıf Hoca Kyk Kız Öğrenci Yurdu": {
+    "name": "İskilipli Atıf Hoca Kyk Kız Öğrenci Yurdu",
+    "city": "Çorum",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Çorum::Hayrettin Karaman Kyk Kız Öğrenci Yurdu": {
+    "name": "Hayrettin Karaman Kyk Kız Öğrenci Yurdu",
+    "city": "Çorum",
+    "lat": null,
+    "lng": null,
+    "query": null,
+    "display_name": null
+  },
+  "Çorum::İskilip Kyk Kız Öğrenci Yurdu": {
+    "name": "İskilip Kyk Kız Öğrenci Yurdu",
+    "city": "Çorum",
+    "lat": 40.7306912,
+    "lng": 34.4710113,
+    "query": "İskilip, Çorum",
+    "display_name": "İskilip, Çorum, Karadeniz Bölgesi, 19400, Türkiye"
+  },
+  "Batman::Batman Kyk Kız Öğrenci Yurdu": {
+    "name": "Batman Kyk Kız Öğrenci Yurdu",
+    "city": "Batman",
+    "lat": 37.7901714,
+    "lng": 41.0714976,
+    "query": "Batman Yurdu, Batman",
+    "display_name": "KYK Batman Kız Öğrenci Yurdu, Üniversites İçi Yolu, Batman Merkez, Batman, Güneydoğu Anadolu Bölgesi, Türkiye"
+  },
+  "Batman::Süveybe Ana Kyk Kız Öğrenci Yurdu": {
+    "name": "Süveybe Ana Kyk Kız Öğrenci Yurdu",
+    "city": "Batman",
+    "lat": 37.8603973,
+    "lng": 41.1523915,
+    "query": "Süveybe Ana Yurdu, Batman",
+    "display_name": "KYK Süveybe Ana Kız Öğrenci Yurdu, Batı Raman Bulvarı, Başakşehir Mahallesi, Batman Merkez, Batman, Güneydoğu Anadolu Bölgesi, 72040, Türkiye"
+  },
+  "Batman::Seyyid Bilal Kyk Erkek Öğrenci Yurdu": {
+    "name": "Seyyid Bilal Kyk Erkek Öğrenci Yurdu",
+    "city": "Batman",
+    "lat": 37.873586,
+    "lng": 41.1463892,
+    "query": "Seyyid Bilal Yurdu, Batman",
+    "display_name": "KYK Seyyid Bilal Erkek Öğrenci Yurdu, 129, Özgürlük Bulvarı, Bayındır Mahallesi, Batman Merkez, Batman, Güneydoğu Anadolu Bölgesi, 72040, Türkiye"
+  },
+  "Kocaeli::Kandıra İl Özel İdaresi Kyk Kız Ve Erkek Yurdu": {
+    "name": "Kandıra İl Özel İdaresi Kyk Kız Ve Erkek Yurdu",
+    "city": "Kocaeli",
+    "lat": 41.0703914,
+    "lng": 30.1523298,
+    "query": "Kandıra, Kocaeli",
+    "display_name": "Kandıra, Kocaeli, Marmara Bölgesi, 41600, Türkiye"
+  },
+  "Kocaeli::Kocaeli Kyk Erkek Öğrenci Yurdu": {
+    "name": "Kocaeli Kyk Erkek Öğrenci Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.7690961,
+    "lng": 29.9515646,
+    "query": "Kocaeli Yurdu, Kocaeli",
+    "display_name": "Özel Kocaeli Yüksek Öğrenim Erkek Öğrenci Yurdu, Zincirlikuyu Caddesi, Doğu Kışla, Mehmet Ali Paşa Mahallesi, Kocaeli, İzmit, Kocaeli, Marmara Bölgesi, 41050, Türkiye"
+  },
+  "Kocaeli::Kocaeli Vilayetler Hizmet Birliği Kyk Erkek Yurdu": {
+    "name": "Kocaeli Vilayetler Hizmet Birliği Kyk Erkek Yurdu",
+    "city": "Kocaeli",
+    "lat": 40.7653892,
+    "lng": 29.9407361,
+    "query": "Kocaeli, Kocaeli",
+    "display_name": "Kocaeli, İzmit, Kocaeli, Marmara Bölgesi, 41040, Türkiye"
+  }
+}

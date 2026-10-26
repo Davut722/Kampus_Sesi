@@ -1385,85 +1385,15 @@ function initUniversityPage(initialUni) {
 
     // Render Dormitories (KYK & Private)
     function renderKykSection(yurtlar) {
-        const grid = document.getElementById('kyk-grid');
-        const expandWrap = document.getElementById('dorm-expand-wrap');
-        const totalCountEl = document.getElementById('dorms-total-count');
-        const tabDormCountEl = document.getElementById('tab-dorms-count');
-        if (!grid) return;
-
         rawDorms = Array.isArray(yurtlar) ? yurtlar : [];
-        if (tabDormCountEl) tabDormCountEl.textContent = rawDorms.length;
-
-        if (rawDorms.length === 0) {
-            grid.innerHTML = '<div class="empty-state-text" style="color: var(--color-text-muted); padding: 1.5rem 0;">Bu üniversite çevresinde henüz kayıtlı yurt bilgisi bulunmuyor.</div>';
-            if (expandWrap) expandWrap.style.display = 'none';
+        if (typeof window.renderUniversityDorms === 'function') {
+            window.renderUniversityDorms({
+                dorms: rawDorms,
+                filter: currentDormFilter,
+                expanded: dormsExpanded
+            });
             return;
         }
-
-        // Distance sorted
-        let sorted = [...rawDorms].sort((a, b) => parseDistanceMeters(a.mesafe) - parseDistanceMeters(b.mesafe));
-
-        // Gender filter
-        let filtered = currentDormFilter === 'all'
-            ? sorted
-            : sorted.filter(y => (y.tip || '').toLowerCase().includes(currentDormFilter.toLowerCase()));
-
-        if (totalCountEl) totalCountEl.textContent = filtered.length;
-
-        // Show first 4 cards or all
-        const visibleDorms = dormsExpanded ? filtered : filtered.slice(0, 4);
-
-        if (expandWrap) {
-            if (filtered.length > 4) {
-                expandWrap.style.display = 'block';
-                const expandBtn = document.getElementById('dorms-expand-btn');
-                if (expandBtn) {
-                    expandBtn.innerHTML = dormsExpanded
-                        ? `Daha Az Göster <i data-lucide="chevron-up" class="icon-xs"></i>`
-                        : `Tümünü Gör (${filtered.length}) <i data-lucide="chevron-down" class="icon-xs"></i>`;
-                }
-            } else {
-                expandWrap.style.display = 'none';
-            }
-        }
-
-        let html = '';
-        visibleDorms.forEach(yurt => {
-            let badgeClass = 'kyk-badge--karma';
-            const tipLower = (yurt.tip || '').toLowerCase();
-            if (tipLower.includes('kız')) badgeClass = 'kyk-badge--kiz';
-            else if (tipLower.includes('erkek')) badgeClass = 'kyk-badge--erkek';
-
-            html += `
-                <div class="kyk-card ed-card">
-                    <div class="kyk-card__header">
-                        <h3 class="kyk-card__title">${escapeHtml(yurt.ad)}</h3>
-                        <span class="kyk-badge ${badgeClass}">${escapeHtml(yurt.tip)}</span>
-                    </div>
-                    <div class="kyk-details-grid">
-                        <div class="kyk-detail">
-                            <i data-lucide="map-pin" class="icon-sm"></i>
-                            <span>${escapeHtml(yurt.mesafe || 'Mesafesi belirtilmedi')}</span>
-                        </div>
-                        <div class="kyk-detail">
-                            <i data-lucide="wallet" class="icon-sm"></i>
-                            <span>${escapeHtml(yurt.ucret || 'Ücret bilgisi yok')}</span>
-                        </div>
-                        <div class="kyk-detail">
-                            <i data-lucide="users" class="icon-sm"></i>
-                            <span>Kapasite: ${escapeHtml(yurt.kapasite || 'Belirtilmedi')}</span>
-                        </div>
-                        <div class="kyk-detail kyk-detail--date">
-                            <i data-lucide="calendar" class="icon-sm"></i>
-                            <span>Güncelleme: ${escapeHtml(yurt.guncelleme || 'Dönem Başı 2024')}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-
-        grid.innerHTML = html;
-        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     // Wikipedia image fallback helper
@@ -1579,15 +1509,26 @@ function initUniversityPage(initialUni) {
         if (sbMapCity) sbMapCity.textContent = `${city}, Türkiye`;
 
         // 7. About Text
-        const textShort = document.getElementById('about-text-short');
-        const textLong = document.getElementById('about-text-long');
-        if (textShort) {
-            textShort.textContent = typeof UNI_DETAILS[selectedUni] !== 'undefined'
-                ? details.aboutShort
-                : `${selectedUni}, ${details.aboutShort}`;
-        }
-        if (textLong) {
-            textLong.textContent = details.aboutLong;
+        if (typeof window.renderUniversityAbout === 'function') {
+            window.renderUniversityAbout({
+                name: selectedUni,
+                city: city,
+                type: uniType,
+                founded: foundedYear,
+                about: '',
+                about_source: ''
+            });
+        } else {
+            const textShort = document.getElementById('about-text-short');
+            const textLong = document.getElementById('about-text-long');
+            if (textShort) {
+                textShort.textContent = typeof UNI_DETAILS[selectedUni] !== 'undefined'
+                    ? details.aboutShort
+                    : `${selectedUni}, ${details.aboutShort}`;
+            }
+            if (textLong) {
+                textLong.textContent = details.aboutLong;
+            }
         }
 
         // 8. Favorite Button
@@ -1656,6 +1597,32 @@ function initUniversityPage(initialUni) {
             if (uniDb) {
                 const currentTitle = document.getElementById('uni-hero-title');
                 if (currentTitle && currentTitle.textContent.trim() === selectedUni.trim()) {
+                    const dbCity = (uniDb.city && uniDb.city.trim() && uniDb.city.trim() !== 'Belirtilmemiş') ? uniDb.city.trim() : city;
+                    const dbType = (uniDb.type && uniDb.type.trim())
+                        ? (uniDb.type.toLowerCase().includes('vakıf') ? 'Vakıf Üniversitesi' : (uniDb.type.toLowerCase().includes('devlet') ? 'Devlet Üniversitesi' : uniDb.type.trim()))
+                        : uniType;
+                    const dbFounded = (uniDb.founded !== null && uniDb.founded !== undefined && String(uniDb.founded).trim() !== '')
+                        ? String(uniDb.founded).trim()
+                        : foundedYear;
+
+                    if (heroTypeEl) heroTypeEl.textContent = dbType;
+                    if (heroCityEl) heroCityEl.textContent = dbCity;
+                    if (heroYearEl) heroYearEl.textContent = dbFounded !== '—' ? `Kuruluş: ${dbFounded}` : 'Türkiye';
+                    if (sbType) sbType.textContent = dbType;
+                    if (sbCity) sbCity.textContent = dbCity;
+                    if (sbYear) sbYear.textContent = dbFounded;
+
+                    if (typeof window.renderUniversityAbout === 'function') {
+                        window.renderUniversityAbout({
+                            name: uniDb.name || selectedUni,
+                            city: dbCity,
+                            type: dbType,
+                            founded: dbFounded,
+                            about: uniDb.about,
+                            about_source: uniDb.about_source
+                        });
+                    }
+
                     if (uniDb.image_url && uniDb.image_url.trim() !== '') {
                         if (heroImg) heroImg.src = uniDb.image_url;
                     } else {

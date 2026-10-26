@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 
 from database import (
     init_db, get_db, User, Review, Reply, Interaction,
-    University, UniversityAddress, KykDorm, SchoolSuggestion, ContactMessage, BlogSubmission, UserFavorite
+    University, UniversityAddress, KykDorm, UniversityDorm, SchoolSuggestion, ContactMessage, BlogSubmission, UserFavorite
 )
 from auth_utils import hash_password, verify_password, create_access_token, decode_access_token
 
@@ -635,7 +635,7 @@ def get_all_interactions(db: Session = Depends(get_db)):
 
 # ─── Universities Endpoints ──────────────────────────────
 
-from database import University, UniversityAddress, KykDorm
+from database import University, UniversityAddress, KykDorm, UniversityDorm
 
 @app.get("/api/universities")
 def get_universities(db: Session = Depends(get_db)):
@@ -677,16 +677,11 @@ def get_university_address(uni_identifier: str, db: Session = Depends(get_db)):
 
 @app.get("/api/universities/{uni_identifier}/dorms")
 def get_university_dorms(uni_identifier: str, db: Session = Depends(get_db)):
-    """ID'si veya adı verilen üniversiteye ait tüm KYK ve özel yurtları getirir."""
-    # 1. Sayısal ID ile ara
+    """ID'si veya adı verilen üniversiteye yakın (<= 10 km) KYK yurtlarını mesafeye göre artan sırada getirir."""
+    target_uid = None
     if uni_identifier.isdigit():
-        uid = int(uni_identifier)
-        dorms = db.query(KykDorm).filter(KykDorm.university_id == uid).all()
-        if dorms:
-            return [d.to_dict() for d in dorms]
-        record = db.query(University).filter(University.id == uid).first()
+        target_uid = int(uni_identifier)
     else:
-        # 2. Üniversite adıyla ara
         clean = uni_identifier.strip()
         record = db.query(University).filter(University.name == clean).first()
         if not record:
@@ -695,21 +690,32 @@ def get_university_dorms(uni_identifier: str, db: Session = Depends(get_db)):
                 (University.name.ilike(f"%{base_name}%")) |
                 (University.name.ilike(f"%{clean}%"))
             ).first()
+        if record:
+            target_uid = record.id
 
-    if record:
-        dorms = db.query(KykDorm).filter(KykDorm.university_id == record.id).all()
-        if dorms:
-            return [d.to_dict() for d in dorms]
+    if target_uid is None:
+        return []
 
-    # 3. Son çare genel yurt fallback
-    fallback = db.query(KykDorm).limit(8).all()
-    return [d.to_dict() for d in fallback]
+    matches = (
+        db.query(UniversityDorm)
+        .filter(UniversityDorm.university_id == target_uid)
+        .order_by(UniversityDorm.distance_km.asc())
+        .all()
+    )
+    return [
+        m.dorm.to_dict(distance_km=m.distance_km, nearest_campus=m.nearest_campus)
+        for m in matches
+        if m.dorm is not None
+    ]
 
 @app.get("/api/universities/{uni_name}")
 def get_university(uni_name: str, db: Session = Depends(get_db)):
     """Spesifik bir üniversitenin detaylarını (ve bağlı adresini) getirir."""
     clean = uni_name.strip()
-    record = db.query(University).filter(University.name == clean).first()
+    if clean.isdigit():
+        record = db.query(University).filter(University.id == int(clean)).first()
+    else:
+        record = db.query(University).filter(University.name == clean).first()
     if not record:
         base_name = clean.split("(")[0].strip()
         record = db.query(University).filter(
@@ -719,7 +725,11 @@ def get_university(uni_name: str, db: Session = Depends(get_db)):
 
     if not record:
         raise HTTPException(status_code=404, detail="Üniversite bulunamadı")
-    return record.to_dict()
+    data = record.to_dict()
+    data["about"] = record.about
+    data["about_source"] = record.about_source
+    data["about_updated"] = record.about_updated.isoformat() if record.about_updated else None
+    return data
 
 # ─── Suggestions, Contact, Blog & Favorites Endpoints ────
 

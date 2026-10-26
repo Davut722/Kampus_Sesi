@@ -1,0 +1,50 @@
+[
+  {
+    "name": "İstanbul Sağlık ve Sosyal Bilimler Meslek Yüksekokulu",
+    "reason": "düşük başlık benzerliği",
+    "candidate_title": "Sağlık Bilimleri Üniversitesi",
+    "match_score": 0.298
+  },
+  {
+    "name": "İnönü Üniversitesi",
+    "reason": "özet metninde 'üniversite' geçmiyor",
+    "candidate_title": "İnönü Üniversitesi",
+    "match_score": 1.0
+  },
+  {
+    "name": "Kafkas Üniversitesi",
+    "reason": "anlam ayrımı (disambiguation) sayfası",
+    "candidate_title": "Kafkas Üniversitesi",
+    "match_score": 1.0
+  },
+  {
+    "name": "İstanbul Şişli Meslek Yüksekokulu",
+    "reason": "düşük başlık benzerliği",
+    "candidate_title": "İstanbul Topkapı Üniversitesi",
+    "match_score": 0.321
+  },
+  {
+    "name": "İzmir Yüksek Teknoloji Enstitüsü",
+    "reason": "başlıkta 'üniversite' içeren arama sonucu bulunamadı",
+    "candidate_title": null,
+    "match_score": 0.0
+  },
+  {
+    "name": "Ataşehir Adıgüzel Meslek Yüksekokulu",
+    "reason": "düşük başlık benzerliği",
+    "candidate_title": "İstanbul'daki üniversiteler listesi",
+    "match_score": 0.139
+  },
+  {
+    "name": "Anka Teknoloji Üniversitesi",
+    "reason": "düşük başlık benzerliği",
+    "candidate_title": "Türkiye'deki üniversiteler listesi",
+    "match_score": 0.325
+  },
+  {
+    "name": "İzmir Kavram Meslek Yüksekokulu",
+    "reason": "düşük başlık benzerliği",
+    "candidate_title": "İzmir'deki üniversiteler listesi",
+    "match_score": 0.274
+  }
+]

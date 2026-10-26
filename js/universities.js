@@ -3225,3 +3225,237 @@ window.UNIVERSITY_ADDRESSES_DB = {
         "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=41.1055941,29.0253401&query_place_id=ChIJ1-qyJMK1yhQRGRaXhEuYKEo"
     }
 };
+
+
+// ─── Üniversite Hakkında Bölümü Gösterim Yardımcıları ───
+(function () {
+    function escapeAboutHtml(str) {
+        if (typeof window.escapeHtml === 'function') {
+            return window.escapeHtml(String(str ?? ''));
+        }
+        return String(str ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function formatAboutSourceHtml(sourceStr) {
+        const raw = String(sourceStr || '').trim();
+        if (!raw) return '';
+        const urlRegex = /(https?:\/\/[^\s,]+)/g;
+        let result = '';
+        let lastIndex = 0;
+        let match;
+        while ((match = urlRegex.exec(raw)) !== null) {
+            if (match.index > lastIndex) {
+                result += escapeAboutHtml(raw.slice(lastIndex, match.index));
+            }
+            const url = match[1];
+            const safeUrl = escapeAboutHtml(url);
+            result += `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">${safeUrl}</a>`;
+            lastIndex = match.index + url.length;
+        }
+        if (lastIndex < raw.length) {
+            result += escapeAboutHtml(raw.slice(lastIndex));
+        }
+        return result;
+    }
+
+    function buildAutoAboutText(uniData) {
+        const name = String((uniData && uniData.name) || '').trim();
+        if (!name) return '';
+
+        const rawCity = String((uniData && uniData.city) || '').trim();
+        const city = (rawCity && rawCity !== '—' && rawCity !== 'Belirtilmemiş' && rawCity !== 'Türkiye') ? rawCity : '';
+
+        const rawFounded = String((uniData && uniData.founded) || '').trim();
+        const founded = (rawFounded && rawFounded !== '—' && rawFounded !== 'null' && rawFounded !== 'undefined' && /^\d{4}$/.test(rawFounded)) ? rawFounded : '';
+
+        const rawType = String((uniData && uniData.type) || '').trim().toLocaleLowerCase('tr');
+        let typePhrase = 'bir yükseköğretim kurumudur';
+        if (rawType.includes('vakıf') || rawType.includes('vakif')) {
+            typePhrase = 'bir vakıf üniversitesidir';
+        } else if (rawType.includes('devlet')) {
+            typePhrase = 'bir devlet üniversitesidir';
+        }
+
+        if (city && founded) {
+            return `${name}, ${city} ilinde ${founded} yılında kurulan ${typePhrase}.`;
+        }
+        if (city && !founded) {
+            return `${name}, ${city} ilinde faaliyet gösteren ${typePhrase}.`;
+        }
+        if (!city && founded) {
+            return `${name}, ${founded} yılında kurulan ${typePhrase}.`;
+        }
+        return `${name}, yükseköğretim faaliyetleri yürüten ${typePhrase}.`;
+    }
+
+    function renderUniversityAbout(uniData) {
+        const contentWrap = document.querySelector('#sec-genel .about-content');
+        const toggleBtn = document.getElementById('about-toggle-btn');
+        if (!contentWrap) return;
+
+        if (toggleBtn) {
+            toggleBtn.style.display = 'none';
+        }
+
+        const aboutRaw = String((uniData && uniData.about) || '').trim();
+        const sourceRaw = String((uniData && uniData.about_source) || '').trim();
+
+        if (aboutRaw) {
+            const paragraphs = aboutRaw
+                .split(/\n\s*\n/)
+                .map(p => p.trim())
+                .filter(Boolean);
+
+            let html = paragraphs
+                .map((p, idx) => `<p${idx === 0 ? ' id="about-text-short"' : ' style="margin-top: 0.75rem;"'}>${escapeAboutHtml(p)}</p>`)
+                .join('');
+
+            if (sourceRaw) {
+                html += `<p class="about-source-note" style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--color-text-muted, #888); line-height: 1.4;">${formatAboutSourceHtml(sourceRaw)}</p>`;
+            }
+            contentWrap.innerHTML = html;
+        } else {
+            const fallbackSentence = buildAutoAboutText(uniData);
+            contentWrap.innerHTML = `<p id="about-text-short">${escapeAboutHtml(fallbackSentence)}</p>`;
+        }
+    }
+
+    window.buildAutoAboutText = buildAutoAboutText;
+    window.formatAboutSourceHtml = formatAboutSourceHtml;
+    window.renderUniversityAbout = renderUniversityAbout;
+})();
+
+
+// ─── Üniversite KYK Yurtları Yakınlık Gösterim Yardımcıları ───
+(function () {
+    function escapeDormHtml(str) {
+        if (typeof window.escapeHtml === 'function') {
+            return window.escapeHtml(String(str ?? ''));
+        }
+        return String(str ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function formatKykDistance(yurt) {
+        if (yurt && yurt.distance_km !== undefined && yurt.distance_km !== null && !Number.isNaN(Number(yurt.distance_km))) {
+            const d = Number(yurt.distance_km);
+            if (d < 1.0) {
+                const meters = Math.max(1, Math.round(d * 1000));
+                return `Kuş uçuşu ${meters} m`;
+            }
+            return `Kuş uçuşu ${d.toFixed(1).replace('.', ',')} km`;
+        }
+        const rawMesafe = String((yurt && yurt.mesafe) || '').trim();
+        if (rawMesafe.startsWith('Kuş uçuşu')) {
+            return rawMesafe;
+        }
+        return '';
+    }
+
+    function renderUniversityDorms(options) {
+        const opts = options || {};
+        const grid = document.getElementById('kyk-grid');
+        const expandWrap = document.getElementById('dorm-expand-wrap');
+        const totalCountEl = document.getElementById('dorms-total-count');
+        const tabDormCountEl = document.getElementById('tab-dorms-count');
+        if (!grid) return;
+
+        const rawDorms = Array.isArray(opts.dorms) ? opts.dorms : [];
+        const currentDormFilter = opts.filter || 'all';
+        const dormsExpanded = Boolean(opts.expanded);
+
+        if (tabDormCountEl) tabDormCountEl.textContent = rawDorms.length;
+
+        if (rawDorms.length === 0) {
+            if (totalCountEl) totalCountEl.textContent = 0;
+            grid.innerHTML = '<div class="empty-state-text" style="color: var(--color-text-muted); padding: 1.5rem 0;">Yakın çevrede KYK yurdu bulunamadı.</div>';
+            if (expandWrap) expandWrap.style.display = 'none';
+            return;
+        }
+
+        const sorted = [...rawDorms].sort((a, b) => {
+            const da = (a && a.distance_km !== undefined && a.distance_km !== null) ? Number(a.distance_km) : 9999;
+            const db = (b && b.distance_km !== undefined && b.distance_km !== null) ? Number(b.distance_km) : 9999;
+            return da - db;
+        });
+
+        const filtered = currentDormFilter === 'all'
+            ? sorted
+            : sorted.filter(y => (y.tip || '').toLocaleLowerCase('tr').includes(currentDormFilter.toLocaleLowerCase('tr')));
+
+        if (totalCountEl) totalCountEl.textContent = filtered.length;
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div class="empty-state-text" style="color: var(--color-text-muted); padding: 1.5rem 0;">Yakın çevrede KYK yurdu bulunamadı.</div>';
+            if (expandWrap) expandWrap.style.display = 'none';
+            return;
+        }
+
+        const visibleDorms = dormsExpanded ? filtered : filtered.slice(0, 4);
+
+        if (expandWrap) {
+            if (filtered.length > 4) {
+                expandWrap.style.display = 'block';
+                const expandBtn = document.getElementById('dorms-expand-btn');
+                if (expandBtn) {
+                    expandBtn.innerHTML = dormsExpanded
+                        ? `Daha Az Göster <i data-lucide="chevron-up" class="icon-xs"></i>`
+                        : `Tümünü Gör (${filtered.length}) <i data-lucide="chevron-down" class="icon-xs"></i>`;
+                }
+            } else {
+                expandWrap.style.display = 'none';
+            }
+        }
+
+        let html = '';
+        visibleDorms.forEach(yurt => {
+            let badgeClass = 'kyk-badge--karma';
+            const tipLower = (yurt.tip || '').toLocaleLowerCase('tr');
+            if (tipLower.includes('kız')) badgeClass = 'kyk-badge--kiz';
+            else if (tipLower.includes('erkek')) badgeClass = 'kyk-badge--erkek';
+
+            const distLabel = formatKykDistance(yurt);
+            const distHtml = distLabel
+                ? `<div class="kyk-detail">
+                        <i data-lucide="map-pin" class="icon-sm"></i>
+                        <span>${escapeDormHtml(distLabel)}</span>
+                   </div>`
+                : '';
+
+            html += `
+                <div class="kyk-card ed-card">
+                    <div class="kyk-card__header">
+                        <h3 class="kyk-card__title">${escapeDormHtml(yurt.ad)}</h3>
+                        <span class="kyk-badge ${badgeClass}">${escapeDormHtml(yurt.tip)}</span>
+                    </div>
+                    <div class="kyk-details-grid">
+                        ${distHtml}
+                        <div class="kyk-detail">
+                            <i data-lucide="wallet" class="icon-sm"></i>
+                            <span>${escapeDormHtml(yurt.ucret || 'Ücret bilgisi yok')}</span>
+                        </div>
+                        <div class="kyk-detail">
+                            <i data-lucide="users" class="icon-sm"></i>
+                            <span>Kapasite: ${escapeDormHtml(yurt.kapasite || 'Belirtilmedi')}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        grid.innerHTML = html;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    window.formatKykDistance = formatKykDistance;
+    window.renderUniversityDorms = renderUniversityDorms;
+})();

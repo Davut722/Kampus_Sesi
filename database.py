@@ -2,7 +2,7 @@ import os
 import json
 import time
 from datetime import datetime
-from sqlalchemy import create_engine, Column, Integer, BigInteger, Float, String, Text, DateTime, ForeignKey, UniqueConstraint, JSON, Boolean, inspect, text
+from sqlalchemy import create_engine, Column, Integer, BigInteger, Float, String, Text, Date, DateTime, ForeignKey, UniqueConstraint, JSON, Boolean, inspect, text
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
 # ---------------------------------------------------------------------------
@@ -178,6 +178,9 @@ class University(Base):
     name = Column(String(200), unique=True, index=True, nullable=False)
     image_url = Column(String(500), default="")
     website_url = Column(String(255), default="")
+    about = Column(Text, nullable=True)
+    about_source = Column(Text, nullable=True)
+    about_updated = Column(Date, nullable=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     dorms = relationship("KykDorm", back_populates="university", cascade="all, delete-orphan")
@@ -189,6 +192,9 @@ class University(Base):
             "name": self.name,
             "image_url": self.image_url,
             "website_url": self.website_url,
+            "about": self.about,
+            "about_source": self.about_source,
+            "about_updated": self.about_updated.isoformat() if self.about_updated else None,
             "address": self.address.to_dict() if self.address else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None
         }
@@ -244,17 +250,50 @@ class KykDorm(Base):
     distance = Column(String(100), default="")
     fee = Column(String(100), default="")
     capacity = Column(String(50), default="")
+    lat = Column(Float(precision=53), nullable=True)
+    lng = Column(Float(precision=53), nullable=True)
 
     university = relationship("University", back_populates="dorms")
 
-    def to_dict(self):
-        return {
+    def to_dict(self, distance_km=None, nearest_campus=None):
+        mesafe_str = self.distance
+        if distance_km is not None:
+            d = float(distance_km)
+            if d < 1.0:
+                mesafe_str = f"Kuş uçuşu {int(round(d * 1000))} m"
+            else:
+                mesafe_str = f"Kuş uçuşu {d:.1f} km".replace(".", ",")
+        data = {
+            "id": self.id,
             "ad": self.name,
             "tip": self.type,
-            "mesafe": self.distance,
+            "mesafe": mesafe_str,
             "ucret": self.fee,
-            "kapasite": self.capacity
+            "kapasite": self.capacity,
+            "lat": self.lat,
+            "lng": self.lng,
         }
+        if distance_km is not None:
+            data["distance_km"] = round(float(distance_km), 2)
+        if nearest_campus:
+            data["nearest_campus"] = nearest_campus
+        return data
+
+class UniversityDorm(Base):
+    __tablename__ = "university_dorm"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    university_id = Column(Integer, ForeignKey("universities.id", ondelete="CASCADE"), nullable=False, index=True)
+    dorm_id = Column(Integer, ForeignKey("kyk_dorms.id", ondelete="CASCADE"), nullable=False, index=True)
+    distance_km = Column(Float(precision=53), nullable=False)
+    nearest_campus = Column(String(200), nullable=True)
+
+    __table_args__ = (
+        UniqueConstraint("university_id", "dorm_id", name="uq_university_dorm"),
+    )
+
+    university = relationship("University")
+    dorm = relationship("KykDorm")
 
 class SchoolSuggestion(Base):
     __tablename__ = "school_suggestions"
@@ -427,6 +466,27 @@ def init_db():
                     conn.commit()
                 if 'rating_academic' not in r_cols:
                     conn.execute(text("ALTER TABLE reviews ADD COLUMN rating_academic INT DEFAULT NULL"))
+                    conn.commit()
+
+            if 'universities' in table_names:
+                u_cols = [c['name'] for c in insp.get_columns('universities')]
+                if 'about' not in u_cols:
+                    conn.execute(text("ALTER TABLE universities ADD COLUMN about TEXT DEFAULT NULL"))
+                    conn.commit()
+                if 'about_source' not in u_cols:
+                    conn.execute(text("ALTER TABLE universities ADD COLUMN about_source TEXT DEFAULT NULL"))
+                    conn.commit()
+                if 'about_updated' not in u_cols:
+                    conn.execute(text("ALTER TABLE universities ADD COLUMN about_updated DATE DEFAULT NULL"))
+                    conn.commit()
+
+            if 'kyk_dorms' in table_names:
+                k_cols = [c['name'] for c in insp.get_columns('kyk_dorms')]
+                if 'lat' not in k_cols:
+                    conn.execute(text("ALTER TABLE kyk_dorms ADD COLUMN lat DOUBLE DEFAULT NULL"))
+                    conn.commit()
+                if 'lng' not in k_cols:
+                    conn.execute(text("ALTER TABLE kyk_dorms ADD COLUMN lng DOUBLE DEFAULT NULL"))
                     conn.commit()
     except Exception as e:
         print(f"[WARN] Table migration check note: {e}")

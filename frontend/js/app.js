@@ -4246,6 +4246,78 @@ function initComparePage() {
 
     const normKey = (s) => String(s || '').replace(/\s*\([^)]*\)/g, '').trim().toLocaleLowerCase('tr');
 
+    const UNIS_WITH_PHOTO_INSTEAD_OF_LOGO = new Set([
+        'Boğaziçi Üniversitesi',
+        'İstanbul Teknik Üniversitesi',
+        'Sabancı Üniversitesi',
+        'Koç Üniversitesi',
+        'Özyeğin Üniversitesi',
+        'Galatasaray Üniversitesi',
+        'Mimar Sinan Güzel Sanatlar Üniversitesi',
+        'Anadolu Üniversitesi',
+        'Kadir Has Üniversitesi',
+        'Bahçeşehir Üniversitesi',
+        'Fenerbahçe Üniversitesi',
+        'Işık Üniversitesi',
+        'Yaşar Üniversitesi',
+        'Çankaya Üniversitesi',
+        'İstanbul Kültür Üniversitesi',
+        'Ankara Medipol Üniversitesi',
+        'Ankara Sosyal Bilimler Üniversitesi',
+        'Çanakkale Onsekiz Mart Üniversitesi',
+        'Burdur Mehmet Akif Ersoy Üniversitesi',
+        'Erzincan Binali Yıldırım Üniversitesi',
+        'İzmir Katip Çelebi Üniversitesi',
+        'İzmir Demokrasi Üniversitesi',
+        'İzmir Tınaztepe Üniversitesi',
+        'Karadeniz Teknik Üniversitesi',
+        'Trabzon Üniversitesi',
+        'Osmaniye Korkut Ata Üniversitesi',
+        'Siirt Üniversitesi',
+        'İskenderun Teknik Üniversitesi',
+        'Recep Tayyip Erdoğan Üniversitesi',
+        'Gebze Teknik Üniversitesi',
+        'Avrasya Üniversitesi',
+        'Mudanya Üniversitesi',
+        'Kıbrıs İlim Üniversitesi',
+        'Kahramanmaraş İstiklal Üniversitesi',
+        'Antalya Akev Üniversitesi',
+        'Çağ Üniversitesi',
+        'Yüksek İhtisas Üniversitesi',
+        'İstanbul Sağlık ve Sosyal Bilimler Meslek Yüksekokulu',
+        'Kilis 7 Aralık Üniversitesi',
+        'İstanbul Esenyurt Üniversitesi',
+        'Nişantaşı Üniversitesi',
+        'Anka Teknoloji Üniversitesi',
+        'İstanbul Sağlık ve Teknoloji Üniversitesi',
+        'Toros Üniversitesi'
+    ]);
+
+    function getUniAcronym(name) {
+        if (!name) return 'ÜNİ';
+        const paren = name.match(/\(([^)]+)\)/);
+        if (paren && paren[1].trim()) return paren[1].trim().toUpperCase();
+        const clean = name.replace(/\([^)]*\)/g, '').trim();
+        const words = clean.split(/\s+/).filter(w => !['ve', '&', 'ile', 'veya'].includes(w.toLowerCase()));
+        if (words.length === 1) return words[0].substring(0, 3).toUpperCase();
+        if (words.length === 2) return (words[0][0] + words[1][0]).toUpperCase();
+        return words.slice(0, 3).map(w => w[0] || '').join('').toUpperCase();
+    }
+
+    function isPhotoUrlOrKnownNonLogo(name, url) {
+        if (!url) return true;
+        if (name && UNIS_WITH_PHOTO_INSTEAD_OF_LOGO.has(name)) return true;
+        const lower = url.toLowerCase();
+        if (lower.includes('ui-avatars.com')) return true;
+        if (lower.includes('.svg') || lower.includes('logo') || lower.includes('emblem') || lower.includes('arma') || lower.includes('seal') || lower.includes('simge')) {
+            return false;
+        }
+        if (lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.includes('campus') || lower.includes('panoramio') || lower.includes('binas') || lower.includes('giris') || lower.includes('giri%c5%9f') || lower.includes('armory') || lower.includes('front_door')) {
+            return true;
+        }
+        return false;
+    }
+
     function getUniStats(name) {
         const target = normKey(name);
         const reviews = getAllReviewsGlobal().filter(r => normKey(r.university) === target);
@@ -4283,7 +4355,31 @@ function initComparePage() {
         const details2 = UNI_DETAILS[uni2] ? { ...UNI_DETAILS[uni2] } : { ...GENERIC_UNI_DATA };
 
         function buildColHtml(name, statsObj, otherStatsObj, details, colIdx) {
-            const initial = String(name || '?').trim().charAt(0).toLocaleUpperCase('tr');
+            const acronym = getUniAcronym(name);
+            const mapEntry = typeof findCampusMapEntry === 'function' ? findCampusMapEntry(name) : (typeof CAMPUS_MAP_DATA !== 'undefined' ? CAMPUS_MAP_DATA[name] : null);
+            let sub = details.subtitle;
+            if (!sub || sub === 'Türkiye') {
+                if (mapEntry && mapEntry.city) {
+                    sub = `${mapEntry.city}, Türkiye`;
+                } else {
+                    sub = 'Türkiye';
+                }
+            }
+
+            const isPhoto = isPhotoUrlOrKnownNonLogo(name, details.image);
+            let logoHtml = '';
+            if (details.image && !isPhoto && !details.image.endsWith('.jpg') && !details.image.includes('placeholder')) {
+                logoHtml = `
+                    <img src="${escapeHtml(details.image)}"
+                         class="cmp-card__logo-img compare-logo-img-${colIdx}"
+                         alt="${escapeHtml(name)} Logosu"
+                         loading="lazy"
+                         onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'cmp-card__logo-mono\\'>${escapeHtml(acronym)}</span>';">
+                `;
+            } else {
+                logoHtml = `<span class="cmp-card__logo-mono">${escapeHtml(acronym)}</span>`;
+            }
+
             const criteriaHtml = COMPARE_CRITERIA.map(crit => {
                 const s = statsObj.stats[crit.id];
                 const o = otherStatsObj.stats[crit.id];
@@ -4315,17 +4411,18 @@ function initComparePage() {
             }).join('');
 
             return `
-                <div class="cmp-card__photo-box">
-                    <img src="${details.image}" class="cmp-card__cover compare-img-${colIdx}" alt="${name}" loading="lazy">
-                    <div class="cmp-card__logo-badge">
-                        <span class="cmp-card__logo--mono compare-logo-${colIdx}" aria-hidden="true">${initial}</span>
+                <div class="cmp-card__header">
+                    <div class="cmp-card__logo-box" id="cmp-logo-box-${colIdx}">
+                        ${logoHtml}
                     </div>
-                </div>
-                <h2 class="cmp-card__title">${name}</h2>
-                <div class="cmp-card__meta">
-                    <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span>${details.subtitle || 'Türkiye'}</span>
-                    ${statsObj.totalReviews > 0 ? `<span>· ${statsObj.totalReviews} değerlendirme</span>` : ''}
+                    <div class="cmp-card__header-info">
+                        <h2 class="cmp-card__title">${escapeHtml(name)}</h2>
+                        <div class="cmp-card__meta compare-meta-${colIdx}">
+                            <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span class="cmp-meta-sub">${escapeHtml(sub)}</span>
+                            ${statsObj.totalReviews > 0 ? `<span class="cmp-meta-count">· ${statsObj.totalReviews} değerlendirme</span>` : ''}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="cmp-metrics">
@@ -4342,7 +4439,7 @@ function initComparePage() {
                 ${details.aboutShort ? `
                     <div class="compare-section">
                         <h3 class="cmp-sec-title">Hakkında</h3>
-                        <p class="cmp-sec-desc">${details.aboutShort}</p>
+                        <p class="cmp-sec-desc">${escapeHtml(details.aboutShort)}</p>
                     </div>
                 ` : ''}
 
@@ -4352,7 +4449,7 @@ function initComparePage() {
                         <ul class="cmp-transport-list">
                             ${details.transport.map(t => `
                                 <li>
-                                    <strong>${t.from}</strong> <span class="cmp-arrow">→</span> ${t.duration} <small>(${t.type})</small>
+                                    <strong>${escapeHtml(t.from)}</strong> <span class="cmp-arrow">→</span> ${escapeHtml(t.duration)} <small>(${escapeHtml(t.type)})</small>
                                 </li>
                             `).join('')}
                         </ul>
@@ -4364,41 +4461,43 @@ function initComparePage() {
         res1.innerHTML = buildColHtml(uni1, u1Stats, u2Stats, details1, 1);
         res2.innerHTML = buildColHtml(uni2, u2Stats, u1Stats, details2, 2);
 
-        // Fetch cover images and logos asynchronously from API / Wikipedia
+        // Fetch university details and logos asynchronously from API
         [ { name: uni1, idx: 1 }, { name: uni2, idx: 2 } ].forEach(({ name, idx }) => {
             const container = idx === 1 ? res1 : res2;
+            const logoBox = container.querySelector(`#cmp-logo-box-${idx}`);
+            const acronym = getUniAcronym(name);
+
             api.getUniversity(name).then(uniDb => {
-                if (uniDb && uniDb.image_url && uniDb.image_url.trim() !== '') {
-                    const logoContainer = container.querySelector(`.compare-logo-${idx}`);
-                    if (logoContainer) {
-                        const img = document.createElement('img');
-                        img.src = uniDb.image_url;
-                        img.className = 'cmp-card__logo';
-                        img.alt = '';
-                        img.loading = 'lazy';
-                        img.onerror = () => { img.replaceWith(logoContainer); };
-                        logoContainer.replaceWith(img);
+                if (uniDb) {
+                    // Update location and foundation year if available from DB
+                    const metaSub = container.querySelector(`.compare-meta-${idx} .cmp-meta-sub`);
+                    if (metaSub && uniDb.city && uniDb.city.trim() && uniDb.city.trim() !== 'Belirtilmemiş') {
+                        const yearPart = (uniDb.founded && String(uniDb.founded).trim() && String(uniDb.founded).trim() !== '—')
+                            ? ` · ${String(uniDb.founded).trim()}'den beri eğitim`
+                            : '';
+                        metaSub.textContent = `${uniDb.city.trim()}, Türkiye${yearPart}`;
                     }
-                }
-                if (uniDb && uniDb.cover_url && uniDb.cover_url.trim() !== '') {
-                    const imgEl = container.querySelector(`.compare-img-${idx}`);
-                    if (imgEl) imgEl.src = uniDb.cover_url;
-                } else {
-                    fetchWikipediaImage(name).then(url => {
-                        if (url) {
-                            const imgEl = container.querySelector(`.compare-img-${idx}`);
-                            if (imgEl) imgEl.src = url;
+
+                    // Update logo
+                    if (uniDb.image_url && uniDb.image_url.trim() !== '') {
+                        if (!isPhotoUrlOrKnownNonLogo(name, uniDb.image_url)) {
+                            if (logoBox) {
+                                logoBox.innerHTML = `
+                                    <img src="${escapeHtml(uniDb.image_url)}"
+                                         class="cmp-card__logo-img"
+                                         alt="${escapeHtml(name)} Logosu"
+                                         loading="lazy"
+                                         onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'cmp-card__logo-mono\\'>${escapeHtml(acronym)}</span>';">
+                                `;
+                            }
+                        } else {
+                            if (logoBox) {
+                                logoBox.innerHTML = `<span class="cmp-card__logo-mono">${escapeHtml(acronym)}</span>`;
+                            }
                         }
-                    }).catch(() => {});
-                }
-            }).catch(() => {
-                fetchWikipediaImage(name).then(url => {
-                    if (url) {
-                        const imgEl = container.querySelector(`.compare-img-${idx}`);
-                        if (imgEl) imgEl.src = url;
                     }
-                }).catch(() => {});
-            });
+                }
+            }).catch(() => {});
         });
     }
 

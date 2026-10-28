@@ -10,3 +10,10 @@ venv/
 .DS_Store
 node_modules/
 scratch/
+*.bak
+*.old
+*.tmp
+*.swp
+*.log
+.pytest_cache/
+.idea/

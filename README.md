@@ -14,7 +14,6 @@ uni-review/
 │   ├── index.html          # Ana uygulama kabuğu
 │   ├── css/                # Stil ve tema dosyaları (style.css, theme.css, animations.css)
 │   ├── js/                 # İstemci tarafı modüller (app.js, templates.js, universities.js, api.js, home.js)
-│   ├── img/                # Görseller
 │   └── assets/             # Logo ve ikon varlıkları
 ├── scripts/                # Veri çekme (fetch), geocoding ve veritabanı yükleme (seed) betikleri
 │   ├── fetch_about_wikipedia.py
@@ -23,9 +22,9 @@ uni-review/
 │   ├── fetch_and_seed_all_kyk.py
 │   ├── geocode_dorms.py
 │   ├── seed_kyk.py
-│   ├── fetch_and_seed_all_addresses.py
-│   └── seed_addresses.py
+│   └── fetch_and_seed_all_addresses.py
 ├── data/                   # Önbellek (JSON) ve veritabanı yedek/seed (SQL) dosyaları
+├── baslat.bat              # Tek tıkla yerel sunucu ve tarayıcı başlatıcı
 ├── .gitignore
 ├── requirements.txt
 └── README.md

@@ -1018,13 +1018,6 @@ def create_school_suggestion(req: SchoolSuggestionCreate, request: Request, db: 
     db.refresh(suggestion)
     return {"success": True, "message": "Üniversite öneriniz başarıyla kaydedildi.", "data": suggestion.to_dict()}
 
-@app.get("/api/suggestions/school")
-def get_school_suggestions(
-    db: Session = Depends(get_db),
-    admin: User = Depends(require_moderator_or_admin)
-):
-    suggestions = db.query(SchoolSuggestion).order_by(SchoolSuggestion.created_at.desc()).all()
-    return [s.to_dict() for s in suggestions]
 
 def notify_discord_new_message(name: str, email: str, subject: str, message: str):
     """Optionally send notification to Discord webhook when a new contact message is received."""
@@ -1104,13 +1097,6 @@ def create_contact_message(req: ContactMessageCreate, request: Request, db: Sess
 
     return {"success": True, "message": "Mesajınız başarıyla iletildi.", "data": msg.to_dict()}
 
-@app.get("/api/contact")
-def get_contact_messages(
-    db: Session = Depends(get_db),
-    admin: User = Depends(require_admin)
-):
-    msgs = db.query(ContactMessage).order_by(ContactMessage.created_at.desc()).all()
-    return [m.to_dict() for m in msgs]
 
 @app.post("/api/blog/submissions")
 def create_blog_submission(req: BlogSubmissionCreate, request: Request, db: Session = Depends(get_db)):
@@ -1144,13 +1130,6 @@ def create_blog_submission(req: BlogSubmissionCreate, request: Request, db: Sess
     db.refresh(sub)
     return {"success": True, "message": "Blog yazınız başarıyla kaydedildi.", "data": sub.to_dict()}
 
-@app.get("/api/blog/submissions")
-def get_blog_submissions(
-    db: Session = Depends(get_db),
-    admin: User = Depends(require_moderator_or_admin)
-):
-    subs = db.query(BlogSubmission).order_by(BlogSubmission.created_at.desc()).all()
-    return [s.to_dict() for s in subs]
 
 @app.get("/api/users/me/favorites")
 def get_user_favorites(

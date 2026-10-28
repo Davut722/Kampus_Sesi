@@ -3,15 +3,11 @@ import sys
 import json
 import time
 import html
-import smtplib
-import ssl
 import urllib.request
 import urllib.error
 from datetime import datetime
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from typing import Optional, List, Dict, Any
-from fastapi import FastAPI, Depends, HTTPException, status, Header, BackgroundTasks
+from fastapi import FastAPI, Depends, HTTPException, status, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -847,6 +843,40 @@ def get_school_suggestions(db: Session = Depends(get_db)):
     suggestions = db.query(SchoolSuggestion).order_by(SchoolSuggestion.created_at.desc()).all()
     return [s.to_dict() for s in suggestions]
 
+def notify_discord_new_message(name: str, email: str, subject: str, message: str):
+    """Optionally send notification to Discord webhook when a new contact message is received."""
+    _load_dotenv_files()
+    webhook_url = os.getenv("DISCORD_WEBHOOK_URL", "").strip()
+    if not webhook_url:
+        return
+    try:
+        clean_name = (name or "").strip()
+        clean_email = (email or "").strip()
+        clean_subj = (subject or "").strip()
+        raw_msg = (message or "").strip()
+        truncated_msg = raw_msg[:200]
+        if len(raw_msg) > 200:
+            truncated_msg += "..."
+
+        discord_payload = {
+            "content": f"📬 **Yeni İletişim Mesajı**\n**Gönderen:** {clean_name} ({clean_email})\n**Konu:** {clean_subj}\n**Mesaj:**\n> {truncated_msg}"
+        }
+        payload_bytes = json.dumps(discord_payload).encode("utf-8")
+        req = urllib.request.Request(
+            webhook_url,
+            data=payload_bytes,
+            headers={
+                "Content-Type": "application/json",
+                "User-Agent": "KampusSesi-Notifier/1.0"
+            },
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            pass
+    except Exception as e:
+        print(f"[WARN] Discord webhook notification failed: {e}")
+
+
 @app.post("/api/contact")
 def create_contact_message(req: ContactMessageCreate, db: Session = Depends(get_db)):
     if not req.name.strip() or not req.email.strip() or not req.message.strip():
@@ -861,6 +891,18 @@ def create_contact_message(req: ContactMessageCreate, db: Session = Depends(get_
     db.add(msg)
     db.commit()
     db.refresh(msg)
+
+    # Optional Discord notification (failure never blocks or fails user request)
+    try:
+        notify_discord_new_message(
+            name=msg.name,
+            email=msg.email,
+            subject=msg.subject,
+            message=msg.message
+        )
+    except Exception:
+        pass
+
     return {"success": True, "message": "Mesajınız başarıyla iletildi.", "data": msg.to_dict()}
 
 @app.get("/api/contact")
@@ -1102,214 +1144,8 @@ def admin_delete_review(
     db.commit()
     return {"success": True, "message": "Yorum yayından kaldırıldı."}
 
-class MessageReplyRequest(BaseModel):
-    reply_text: str
-
-
-# Double-click / rapid-fire reply protection per message_id (timestamp in seconds)
-_LAST_MESSAGE_REPLY_TS: Dict[int, float] = {}
-REPLY_COOLDOWN_SECONDS = 4.0
-
-
-def is_email_configured() -> bool:
-    """Check whether SMTP or Resend credentials are configured in environment / .env."""
-    _load_dotenv_files()
-    resend_key = os.getenv("RESEND_API_KEY", "").strip()
-    if resend_key:
-        return True
-    smtp_host = os.getenv("SMTP_HOST", "").strip()
-    smtp_user = os.getenv("SMTP_USER", "").strip()
-    smtp_password = os.getenv("SMTP_PASSWORD", "").strip()
-    return bool(smtp_host and smtp_user and smtp_password)
-
-
-def build_reply_email_content(
-    message_id: int,
-    user_name: str,
-    original_message: str,
-    reply_text: str
-):
-    """Build subject, plain-text body, and HTML-escaped body for contact reply emails."""
-    subject = f"Kampüs Sesi — Mesajına yanıt verdik (#{message_id})"
-
-    safe_name = html.escape((user_name or "Öğrenci").strip(), quote=True)
-    safe_reply = html.escape((reply_text or "").strip(), quote=True).replace("\n", "<br>")
-    safe_original = html.escape((original_message or "").strip(), quote=True).replace("\n", "<br>")
-
-    text_body = (
-        f"Merhaba {(user_name or 'Öğrenci').strip()},\n\n"
-        f"Kampüs Sesi iletişim formundan gönderdiğin (#{message_id}) numaralı mesajına yanıtımız aşağıdadır:\n\n"
-        f"{(reply_text or '').strip()}\n\n"
-        f"----------------------------------------\n"
-        f"Senin mesajın:\n"
-        f"{(original_message or '').strip()}\n"
-        f"----------------------------------------\n\n"
-        f"Sevgiler,\n"
-        f"Kampüs Sesi Destek Ekibi"
-    )
-
-    html_body = f"""<!DOCTYPE html>
-<html lang="tr">
-<head>
-  <meta charset="UTF-8">
-  <title>{html.escape(subject, quote=True)}</title>
-</head>
-<body style="margin:0;padding:24px;background-color:#f6f1e7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1c1917;">
-  <div style="max-width:600px;margin:0 auto;background-color:#ffffff;border:1px solid #e7e0d3;border-radius:14px;padding:28px;">
-    <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#c85a17;margin-bottom:8px;">
-      Kampüs Sesi · İletişim &amp; Destek
-    </div>
-    <h2 style="margin:0 0 16px 0;font-size:20px;color:#18181b;">
-      Merhaba {safe_name},
-    </h2>
-    <p style="margin:0 0 12px 0;font-size:14px;line-height:1.6;color:#3f3f46;">
-      İletişim formundan bize ilettiğin <strong>#{message_id}</strong> numaralı mesajına ekip yanıtımız:
-    </p>
-    <div style="background-color:#fff8f1;border-left:4px solid #c85a17;border-radius:8px;padding:16px;margin:16px 0 24px 0;font-size:15px;line-height:1.65;color:#18181b;">
-      {safe_reply}
-    </div>
-    <div style="border-top:1px solid #e4e4e7;padding-top:16px;margin-top:16px;">
-      <div style="font-size:12px;font-weight:700;color:#71717a;margin-bottom:6px;">
-        Senin mesajın:
-      </div>
-      <div style="background-color:#f4f4f5;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.55;color:#52525b;">
-        {safe_original}
-      </div>
-    </div>
-    <p style="margin:24px 0 0 0;font-size:12px;color:#a1a1aa;">
-      Kampüs Sesi — Üniversite Değerlendirme Platformu
-    </p>
-  </div>
-</body>
-</html>"""
-    return subject, text_body, html_body
-
-
-def deliver_reply_email(
-    message_id: int,
-    to_email: str,
-    user_name: str,
-    original_message: str,
-    reply_text: str
-) -> bool:
-    """Send reply email via SMTP or Resend API. Returns True on success, False on any failure."""
-    _load_dotenv_files()
-    subject, text_body, html_body = build_reply_email_content(
-        message_id=message_id,
-        user_name=user_name,
-        original_message=original_message,
-        reply_text=reply_text
-    )
-
-    resend_key = os.getenv("RESEND_API_KEY", "").strip()
-    smtp_from = os.getenv("SMTP_FROM", "").strip() or os.getenv(" SMTP_USER", "").strip() or os.getenv("SMTP_USER", "").strip()
-
-    # 1. Try Resend API if RESEND_API_KEY is configured
-    if resend_key:
-        try:
-            sender = smtp_from or "Kampüs Sesi <onboarding@resend.dev>"
-            payload = json.dumps({
-                "from": sender,
-                "to": [to_email],
-                "subject": subject,
-                "text": text_body,
-                "html": html_body
-            }).encode("utf-8")
-            req = urllib.request.Request(
-                "https://api.resend.com/emails",
-                data=payload,
-                headers={
-                    "Authorization": f"Bearer {resend_key}",
-                    "Content-Type": "application/json",
-                    "User-Agent": "KampusSesi/1.0"
-                },
-                method="POST"
-            )
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                if 200 <= resp.status < 300:
-                    return True
-        except Exception as e:
-            print(f"[WARN] Resend API email delivery failed for message #{message_id}: {e}")
-            return False
-
-    # 2. Try SMTP if SMTP_HOST, SMTP_USER, SMTP_PASSWORD are configured
-    smtp_host = os.getenv("SMTP_HOST", "").strip()
-    smtp_port_str = os.getenv("SMTP_PORT", "587").strip()
-    smtp_user = os.getenv("SMTP_USER", "").strip()
-    smtp_password = os.getenv("SMTP_PASSWORD", "").strip()
-
-    if not (smtp_host and smtp_user and smtp_password):
-        print(f"[WARN] Email settings (SMTP / RESEND_API_KEY) not configured. Reply saved for message #{message_id}, email skipped.")
-        return False
-
-    try:
-        smtp_port = int(smtp_port_str) if smtp_port_str else 587
-        from_header = smtp_from or smtp_user
-
-        mime_msg = MIMEMultipart("alternative")
-        mime_msg["Subject"] = subject
-        mime_msg["From"] = from_header
-        mime_msg["To"] = to_email
-
-        mime_msg.attach(MIMEText(text_body, "plain", "utf-8"))
-        mime_msg.attach(MIMEText(html_body, "html", "utf-8"))
-
-        if smtp_port == 465:
-            context = ssl.create_default_context()
-            with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=10, context=context) as server:
-                server.login(smtp_user, smtp_password)
-                server.sendmail(smtp_user, [to_email], mime_msg.as_string())
-        else:
-            with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
-                server.ehlo()
-                server.starttls(context=ssl.create_default_context())
-                server.ehlo()
-                server.login(smtp_user, smtp_password)
-                server.sendmail(smtp_user, [to_email], mime_msg.as_string())
-        return True
-    except Exception as e:
-        print(f"[WARN] SMTP email delivery failed for message #{message_id}: {e}")
-        return False
-
-
-def background_send_reply_email(
-    message_id: int,
-    reply_id: Optional[int],
-    to_email: str,
-    user_name: str,
-    original_message: str,
-    reply_text: str
-):
-    """Background task that sends the reply email and updates email_status in the database."""
-    sent_ok = False
-    try:
-        sent_ok = deliver_reply_email(
-            message_id=message_id,
-            to_email=to_email,
-            user_name=user_name,
-            original_message=original_message,
-            reply_text=reply_text
-        )
-    except Exception as e:
-        print(f"[ERROR] Unexpected error in background_send_reply_email (#{message_id}): {e}")
-        sent_ok = False
-
-    new_status = "sent" if sent_ok else "failed"
-    db = SessionLocal()
-    try:
-        msg = db.query(ContactMessage).filter(ContactMessage.id == message_id).first()
-        if msg:
-            msg.email_status = new_status
-        if reply_id:
-            rep = db.query(ContactMessageReply).filter(ContactMessageReply.id == reply_id).first()
-            if rep:
-                rep.email_status = new_status
-        db.commit()
-    except Exception as db_err:
-        db.rollback()
-        print(f"[ERROR] Could not update email_status for message #{message_id}: {db_err}")
-    finally:
-        db.close()
+class ToggleMessageRepliedRequest(BaseModel):
+    replied: Optional[bool] = None
 
 
 @app.get("/api/admin/messages")
@@ -1330,14 +1166,16 @@ def toggle_message_read(
     msg = db.query(ContactMessage).filter(ContactMessage.id == message_id).first()
     if not msg:
         raise HTTPException(status_code=404, detail="Mesaj bulunamadı.")
+    
     if msg.status == "replied":
-        # Replied messages stay 'replied' unless explicitly toggled between unread and replied
         msg.status = "unread"
     elif msg.status == "unread":
-        msg.status = "read" if not msg.reply_text else "replied"
+        msg.status = "replied" if msg.replied_at else "read"
     else:
         msg.status = "unread"
+    
     db.commit()
+    db.refresh(msg)
     return {
         "success": True,
         "status": msg.status,
@@ -1346,143 +1184,36 @@ def toggle_message_read(
     }
 
 
+@app.patch("/api/admin/messages/{message_id}/replied")
 @app.post("/api/admin/messages/{message_id}/reply")
-def reply_to_contact_message(
+def toggle_message_replied(
     message_id: int,
-    req: MessageReplyRequest,
-    background_tasks: BackgroundTasks,
-    db: Session = Depends(get_db),
-    admin: User = Depends(require_admin)
-):
-    clean_reply = (req.reply_text or "").strip()
-    if len(clean_reply) < 1:
-        raise HTTPException(status_code=400, detail="Yanıt metni boş olamaz (en az 1 karakter).")
-    if len(clean_reply) > 2000:
-        raise HTTPException(status_code=400, detail="Yanıt metni en fazla 2000 karakter olabilir.")
-
-    msg = db.query(ContactMessage).filter(ContactMessage.id == message_id).first()
-    if not msg:
-        raise HTTPException(status_code=404, detail="Mesaj bulunamadı.")
-
-    # Rapid-fire / double-click guard
-    now_ts = time.time()
-    last_ts = _LAST_MESSAGE_REPLY_TS.get(message_id, 0.0)
-    if (now_ts - last_ts) < REPLY_COOLDOWN_SECONDS:
-        raise HTTPException(
-            status_code=429,
-            detail="Aynı mesaja çok kısa sürede arka arkaya yanıt gönderilemez. Lütfen birkaç saniye bekleyin."
-        )
-    if msg.replied_at and (datetime.utcnow() - msg.replied_at).total_seconds() < REPLY_COOLDOWN_SECONDS:
-        raise HTTPException(
-            status_code=429,
-            detail="Aynı mesaja çok kısa sürede arka arkaya yanıt gönderilemez. Lütfen birkaç saniye bekleyin."
-        )
-
-    _LAST_MESSAGE_REPLY_TS[message_id] = now_ts
-    now_dt = datetime.utcnow()
-    admin_name = admin.name or "Admin"
-
-    email_configured = is_email_configured()
-    initial_email_status = "pending" if email_configured else "failed"
-
-    reply_row = ContactMessageReply(
-        message_id=msg.id,
-        reply_text=clean_reply,
-        replied_by=admin_name,
-        replied_at=now_dt,
-        email_status=initial_email_status
-    )
-    db.add(reply_row)
-
-    msg.reply_text = clean_reply
-    msg.replied_at = now_dt
-    msg.replied_by = admin_name
-    msg.status = "replied"
-    msg.email_status = initial_email_status
-
-    db.commit()
-    db.refresh(msg)
-    db.refresh(reply_row)
-
-    # Always dispatch via FastAPI BackgroundTasks so the admin UI never blocks
-    background_tasks.add_task(
-        background_send_reply_email,
-        msg.id,
-        reply_row.id,
-        msg.email,
-        msg.name,
-        msg.message,
-        clean_reply
-    )
-
-    warning_msg = None if email_configured else "Yanıt kaydedildi ama e-posta gönderilemedi"
-
-    return {
-        "success": True,
-        "email_sent": email_configured,
-        "email_status": initial_email_status,
-        "warning": warning_msg,
-        "data": msg.to_dict()
-    }
-
-
-@app.post("/api/admin/messages/{message_id}/retry-email")
-def retry_contact_message_email(
-    message_id: int,
-    background_tasks: BackgroundTasks,
+    req: Optional[ToggleMessageRepliedRequest] = None,
     db: Session = Depends(get_db),
     admin: User = Depends(require_admin)
 ):
     msg = db.query(ContactMessage).filter(ContactMessage.id == message_id).first()
     if not msg:
         raise HTTPException(status_code=404, detail="Mesaj bulunamadı.")
+    
+    is_currently_replied = bool(msg.status == "replied" or msg.replied_at)
+    target_replied = not is_currently_replied if (req is None or req.replied is None) else req.replied
 
-    latest_reply = (
-        db.query(ContactMessageReply)
-        .filter(ContactMessageReply.message_id == message_id)
-        .order_by(ContactMessageReply.id.desc())
-        .first()
-    )
-    reply_text = (latest_reply.reply_text if latest_reply else msg.reply_text) or ""
-    if not reply_text.strip():
-        raise HTTPException(status_code=400, detail="Bu mesaj için yeniden gönderilecek bir yanıt bulunamadı.")
+    if target_replied:
+        msg.status = "replied"
+        msg.replied_at = datetime.utcnow()
+        msg.replied_by = admin.name or "Admin"
+    else:
+        msg.status = "read"
+        msg.replied_at = None
+        msg.replied_by = None
 
-    email_configured = is_email_configured()
-    if not email_configured:
-        msg.email_status = "failed"
-        if latest_reply:
-            latest_reply.email_status = "failed"
-        db.commit()
-        db.refresh(msg)
-        return {
-            "success": False,
-            "email_sent": False,
-            "email_status": "failed",
-            "warning": "Yanıt kaydedildi ama e-posta gönderilemedi (SMTP / e-posta ayarları tanımlı değil).",
-            "data": msg.to_dict()
-        }
-
-    msg.email_status = "pending"
-    if latest_reply:
-        latest_reply.email_status = "pending"
     db.commit()
     db.refresh(msg)
-
-    background_tasks.add_task(
-        background_send_reply_email,
-        msg.id,
-        latest_reply.id if latest_reply else None,
-        msg.email,
-        msg.name,
-        msg.message,
-        reply_text
-    )
-
     return {
         "success": True,
-        "email_sent": True,
-        "email_status": "pending",
-        "warning": None,
+        "status": msg.status,
+        "is_replied": bool(msg.status == "replied" or msg.replied_at),
         "data": msg.to_dict()
     }
 

@@ -4436,6 +4436,16 @@ function initAdminPage() {
             if (elSug) elSug.textContent = Number(stats.pending_suggestions || 0).toLocaleString('tr-TR');
             if (elBlogs) elBlogs.textContent = Number(stats.pending_blogs || 0).toLocaleString('tr-TR');
             if (elMsg) elMsg.textContent = Number(stats.unread_messages || 0).toLocaleString('tr-TR');
+            const tabMsgBadge = document.getElementById('admin-tab-messages-badge');
+            if (tabMsgBadge) {
+                const unread = Number(stats.unread_messages || 0);
+                if (unread > 0) {
+                    tabMsgBadge.textContent = unread > 99 ? '99+' : unread;
+                    tabMsgBadge.classList.remove('hidden');
+                } else {
+                    tabMsgBadge.classList.add('hidden');
+                }
+            }
             if (elDorms) elDorms.textContent = Number(stats.total_dorms || 0).toLocaleString('tr-TR');
         } catch (err) {
             console.error("Dashboard stats error:", err);
@@ -4711,28 +4721,10 @@ function initAdminPage() {
 
     // 5. Contact Messages Tab
     let currentMessageFilter = 'all';
-    const openReplyBoxIds = new Set();
-
     const msgFilterBtns = document.querySelectorAll('#admin-messages-filters .admin-msg-filter-btn');
-    const msgAlertBox = document.getElementById('admin-messages-alert');
-    const msgAlertText = document.getElementById('admin-messages-alert-text');
-    const msgAlertClose = document.getElementById('admin-messages-alert-close');
-
-    if (msgAlertClose && msgAlertBox) {
-        msgAlertClose.addEventListener('click', () => {
-            msgAlertBox.classList.add('hidden');
-        });
-    }
-
-    function showMessagesWarningBanner(text) {
-        if (!msgAlertBox || !msgAlertText) return;
-        msgAlertText.textContent = text || 'Yanıt kaydedildi ama e-posta gönderilemedi';
-        msgAlertBox.classList.remove('hidden');
-        if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
 
     function isMessageReplied(m) {
-        return Boolean(m.is_replied || m.status === 'replied' || m.reply_text || (Array.isArray(m.replies) && m.replies.length > 0));
+        return Boolean(m.is_replied || m.status === 'replied' || m.replied_at);
     }
 
     function updateMessageFilterButtonsUI() {
@@ -4763,6 +4755,19 @@ function initAdminPage() {
         if (countBadge) {
             countBadge.textContent = `${unreadCount} okunmamış · ${pendingReplyCount} yanıt bekleyen · ${repliedCount} yanıtlanan (${total} toplam)`;
         }
+
+        const tabBadge = document.getElementById('admin-tab-messages-badge');
+        if (tabBadge) {
+            if (unreadCount > 0) {
+                tabBadge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                tabBadge.classList.remove('hidden');
+            } else {
+                tabBadge.classList.add('hidden');
+            }
+        }
+
+        const elMsg = document.getElementById('admin-stat-messages');
+        if (elMsg) elMsg.textContent = unreadCount.toLocaleString('tr-TR');
     }
 
     msgFilterBtns.forEach(btn => {
@@ -4783,8 +4788,7 @@ function initAdminPage() {
                 message_id: m.id,
                 reply_text: m.reply_text,
                 replied_by: m.replied_by || 'Admin',
-                replied_at: m.replied_at,
-                email_status: m.email_status || 'none'
+                replied_at: m.replied_at
             }];
         }
         return [];
@@ -4825,9 +4829,13 @@ function initAdminPage() {
         container.innerHTML = filtered.map(m => {
             const dateStr = m.created_at ? new Date(m.created_at).toLocaleString('tr-TR') : '';
             const replied = isMessageReplied(m);
+            const repliedDateStr = m.replied_at ? new Date(m.replied_at).toLocaleString('tr-TR') : '';
             const repliesList = getReplyHistoryForMessage(m);
-            const isReplyOpen = openReplyBoxIds.has(m.id);
-            const emailStatus = m.email_status || (repliesList.length ? repliesList[repliesList.length - 1].email_status : 'none');
+
+            const senderName = m.sender_name || m.name || 'Öğrenci';
+            const senderEmail = m.sender_email || m.email || '';
+            const subjectStr = m.subject || '';
+            const origMsg = m.message || '';
 
             // Status Badges
             const readOrNewBadge = m.is_read
@@ -4835,41 +4843,20 @@ function initAdminPage() {
                 : `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-950/70 text-rose-400 border border-rose-800/60 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Okunmadı</span>`;
 
             const repliedBadge = replied
-                ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950/70 text-emerald-400 border border-emerald-500/40 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3 h-3"></i> Yanıtlandı${repliesList.length > 1 ? ` (${repliesList.length})` : ''}</span>`
+                ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950/70 text-emerald-400 border border-emerald-500/40 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3 h-3"></i> Yanıtlandı</span>`
                 : `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-950/50 text-amber-400 border border-amber-500/30">Yanıt Bekliyor</span>`;
 
-            let emailBadgeHtml = '';
-            if (replied) {
-                if (emailStatus === 'failed') {
-                    emailBadgeHtml = `
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40 flex items-center gap-1">
-                            <i data-lucide="alert-triangle" class="w-3 h-3 text-rose-400"></i> E-posta gönderilemedi
-                        </span>
-                        <button type="button" class="admin-retry-email-btn px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/40 transition-all flex items-center gap-1 cursor-pointer" data-id="${m.id}">
-                            <i data-lucide="refresh-cw" class="w-3 h-3"></i> Tekrar dene
-                        </button>
-                    `;
-                } else if (emailStatus === 'sent') {
-                    emailBadgeHtml = `
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-950/50 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
-                            <i data-lucide="mail-check" class="w-3 h-3"></i> E-posta iletildi
-                        </span>
-                    `;
-                } else if (emailStatus === 'pending') {
-                    emailBadgeHtml = `
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-sky-950/60 text-sky-300 border border-sky-500/30 flex items-center gap-1">
-                            <i data-lucide="loader" class="w-3 h-3 animate-spin"></i> E-posta gönderiliyor...
-                        </span>
-                    `;
-                }
-            }
+            // mailto link configuration
+            const mailtoSubject = `Re: Kampüs Sesi — ${subjectStr}`;
+            const mailtoBody = `Merhaba ${senderName},\n\n\n\n---\nSenin mesajın:\n${origMsg}`;
+            const mailtoUrl = `mailto:${encodeURIComponent(senderEmail)}?subject=${encodeURIComponent(mailtoSubject)}&body=${encodeURIComponent(mailtoBody)}`;
 
-            // Reply history HTML
+            // Reply history HTML (if previously recorded in DB)
             const repliesHistoryHtml = repliesList.length > 0 ? `
                 <div class="mt-3 pt-3 border-t border-zinc-800/80 space-y-2.5">
                     <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
                         <i data-lucide="corner-down-right" class="w-3.5 h-3.5"></i>
-                        <span>Gönderilen Yanıt${repliesList.length > 1 ? `lar (${repliesList.length})` : ''}</span>
+                        <span>Önceki Yanıt Kayıtları (${repliesList.length})</span>
                     </div>
                     ${repliesList.map((rep, idx) => {
                         const repDate = rep.replied_at ? new Date(rep.replied_at).toLocaleString('tr-TR') : '';
@@ -4886,44 +4873,6 @@ function initAdminPage() {
                 </div>
             ` : '';
 
-            // Collapsible Reply Box HTML
-            const replyBoxHtml = `
-                <div id="admin-reply-box-${m.id}" class="${isReplyOpen ? '' : 'hidden '}mt-4 pt-4 border-t border-zinc-800 space-y-3">
-                    <!-- Reference info above textarea -->
-                    <div class="rounded-xl border border-zinc-800 bg-zinc-950/80 p-3 text-xs space-y-1.5">
-                        <div class="flex flex-wrap items-center justify-between gap-2">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1">
-                                <i data-lucide="reply" class="w-3.5 h-3.5"></i> Yanıtlanan Mesaj Referansı
-                            </span>
-                            <span class="text-[11px] text-zinc-400 font-mono">${escapeHtml(m.sender_name)} &lt;${escapeHtml(m.sender_email)}&gt;</span>
-                        </div>
-                        <div class="text-zinc-400 text-[11px] line-clamp-3 whitespace-pre-wrap italic">"${escapeHtml(m.message)}"</div>
-                    </div>
-
-                    <div>
-                        <textarea
-                            id="admin-reply-textarea-${m.id}"
-                            rows="4"
-                            maxlength="2000"
-                            placeholder="${escapeHtml(m.sender_name)} adlı kullanıcıya gönderilecek yanıtınızı yazın..."
-                            class="w-full bg-zinc-950 border border-zinc-800 focus:border-cyan-400 text-zinc-100 rounded-xl p-3 text-xs leading-relaxed outline-none transition-colors resize-y"
-                        ></textarea>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-2">
-                            <span id="admin-reply-char-${m.id}" class="text-[11px] text-zinc-500">0 / 2000 karakter · Yanıt e-posta olarak da iletilir</span>
-                            <div class="flex items-center justify-end gap-2">
-                                <button type="button" class="admin-cancel-reply-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all cursor-pointer" data-id="${m.id}">
-                                    Vazgeç
-                                </button>
-                                <button type="button" class="admin-send-reply-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-cyan-400 hover:bg-cyan-300 text-zinc-950 transition-all flex items-center gap-1.5 cursor-pointer" data-id="${m.id}">
-                                    <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                                    <span>Gönder</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
             return `
                 <div class="p-5 rounded-2xl border ${m.is_read ? 'border-zinc-800/80 bg-zinc-900/40' : 'border-cyan-500/30 bg-zinc-900/80 shadow-lg shadow-cyan-950/20'} transition-all" data-msg-card-id="${m.id}">
                     <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
@@ -4931,25 +4880,29 @@ function initAdminPage() {
                             <div class="flex flex-wrap items-center gap-2">
                                 ${readOrNewBadge}
                                 ${repliedBadge}
-                                ${emailBadgeHtml}
                                 <span class="text-xs text-zinc-500">${dateStr}</span>
+                                ${replied && repliedDateStr ? `<span class="text-xs text-emerald-400/80 font-medium">· Yanıtlandı: ${repliedDateStr}</span>` : ''}
                             </div>
                             <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-                                <span class="font-bold text-white text-sm">${escapeHtml(m.sender_name)}</span>
-                                <span class="text-cyan-400 font-mono text-[11px]">${escapeHtml(m.sender_email)}</span>
+                                <span class="font-bold text-white text-sm">${escapeHtml(senderName)}</span>
+                                <span class="text-cyan-400 font-mono text-[11px]">${escapeHtml(senderEmail)}</span>
                             </div>
                             <div class="text-xs font-semibold text-zinc-300">
-                                <span class="text-zinc-500">Konu:</span> ${escapeHtml(m.subject)}
+                                <span class="text-zinc-500">Konu:</span> ${escapeHtml(subjectStr)}
                             </div>
                             <div class="text-xs text-zinc-300 bg-zinc-950/60 p-3 rounded-xl border border-zinc-800/80 leading-relaxed whitespace-pre-wrap break-words">
-                                ${escapeHtml(m.message)}
+                                ${escapeHtml(origMsg)}
                             </div>
                         </div>
 
                         <div class="flex flex-wrap items-center gap-2 shrink-0 md:mt-1">
-                            <button type="button" class="admin-open-reply-btn px-3 py-1.5 rounded-xl text-xs font-bold border border-cyan-500/40 bg-cyan-950/30 hover:bg-cyan-900/50 text-cyan-300 transition-all flex items-center gap-1.5 cursor-pointer" data-id="${m.id}">
-                                <i data-lucide="reply" class="w-3.5 h-3.5"></i>
-                                <span>${replied ? 'Ek Yanıt Yaz' : 'Yanıtla'}</span>
+                            <a href="${mailtoUrl}" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-cyan-500/40 bg-cyan-950/30 hover:bg-cyan-900/50 text-cyan-300 transition-all flex items-center gap-1.5 cursor-pointer no-underline">
+                                <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                                <span>Yanıtla</span>
+                            </a>
+                            <button type="button" class="admin-toggle-replied-btn px-3 py-1.5 rounded-xl text-xs font-bold ${replied ? 'border border-emerald-500/40 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/50' : 'border border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200'} transition-all flex items-center gap-1.5 cursor-pointer" data-id="${m.id}" data-replied="${replied}">
+                                <i data-lucide="${replied ? 'check-circle-2' : 'check'}" class="w-3.5 h-3.5 ${replied ? 'text-emerald-400' : 'text-zinc-400'}"></i>
+                                <span>${replied ? 'Yanıtlandı olarak işaretlendi' : 'Yanıtlandı olarak işaretle'}</span>
                             </button>
                             <button type="button" class="admin-toggle-msg-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-zinc-800 hover:border-zinc-700 bg-zinc-950/60 hover:bg-zinc-800 text-zinc-300 transition-all flex items-center gap-1.5 cursor-pointer" data-id="${m.id}" data-is-read="${m.is_read}">
                                 <i data-lucide="${m.is_read ? 'mail' : 'check'}" class="w-3.5 h-3.5 ${m.is_read ? 'text-zinc-400' : 'text-cyan-400'}"></i>
@@ -4959,7 +4912,6 @@ function initAdminPage() {
                     </div>
 
                     ${repliesHistoryHtml}
-                    ${replyBoxHtml}
                 </div>
             `;
         }).join('');
@@ -4988,147 +4940,33 @@ function initAdminPage() {
             });
         });
 
-        // Bind open/toggle reply area
-        container.querySelectorAll('.admin-open-reply-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = parseInt(btn.dataset.id);
-                const box = document.getElementById(`admin-reply-box-${id}`);
-                if (!box) return;
-                if (openReplyBoxIds.has(id)) {
-                    openReplyBoxIds.delete(id);
-                    box.classList.add('hidden');
-                } else {
-                    openReplyBoxIds.add(id);
-                    box.classList.remove('hidden');
-                    const ta = document.getElementById(`admin-reply-textarea-${id}`);
-                    if (ta) setTimeout(() => ta.focus(), 50);
-                }
-            });
-        });
-
-        // Bind cancel reply button
-        container.querySelectorAll('.admin-cancel-reply-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = parseInt(btn.dataset.id);
-                openReplyBoxIds.delete(id);
-                const box = document.getElementById(`admin-reply-box-${id}`);
-                if (box) box.classList.add('hidden');
-            });
-        });
-
-        // Bind textarea char count
-        container.querySelectorAll('[id^="admin-reply-textarea-"]').forEach(ta => {
-            const id = ta.id.replace('admin-reply-textarea-', '');
-            const charEl = document.getElementById(`admin-reply-char-${id}`);
-            ta.addEventListener('input', () => {
-                if (charEl) {
-                    charEl.textContent = `${ta.value.length} / 2000 karakter · Yanıt e-posta olarak da iletilir`;
-                }
-            });
-        });
-
-        // Bind send reply button
-        container.querySelectorAll('.admin-send-reply-btn').forEach(btn => {
+        // Bind toggle replied
+        container.querySelectorAll('.admin-toggle-replied-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
                 const id = parseInt(btn.dataset.id);
-                const ta = document.getElementById(`admin-reply-textarea-${id}`);
-                const replyText = (ta ? ta.value : '').trim();
-
-                if (!replyText) {
-                    showToast('⚠️ Lütfen göndermek için bir yanıt metni yazın.');
-                    if (ta) ta.focus();
-                    return;
-                }
-                if (replyText.length > 2000) {
-                    showToast('⚠️ Yanıt metni en fazla 2000 karakter olabilir.');
-                    return;
-                }
-
-                // Double-click guard on button
-                if (btn.disabled) return;
-                btn.disabled = true;
-                btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> <span>Gönderiliyor...</span>`;
-                if (typeof lucide !== 'undefined') lucide.createIcons();
-
+                const wasReplied = btn.dataset.replied === 'true';
                 try {
-                    const res = await api.replyToAdminMessage(id, replyText);
-                    openReplyBoxIds.delete(id);
-
-                    if (res && res.data) {
-                        const idx = cachedMessages.findIndex(x => x.id === id);
-                        if (idx !== -1) cachedMessages[idx] = res.data;
+                    const res = await api.toggleMessageReplied(id, !wasReplied);
+                    const idx = cachedMessages.findIndex(x => x.id === id);
+                    if (idx !== -1) {
+                        if (res && res.data) {
+                            cachedMessages[idx] = res.data;
+                        } else {
+                            cachedMessages[idx].is_replied = !wasReplied;
+                            cachedMessages[idx].status = !wasReplied ? 'replied' : 'read';
+                            cachedMessages[idx].is_read = true;
+                            if (!wasReplied) {
+                                cachedMessages[idx].replied_at = new Date().toISOString();
+                            } else {
+                                cachedMessages[idx].replied_at = null;
+                            }
+                        }
                     }
-
+                    showToast(!wasReplied ? '✅ Mesaj yanıtlandı olarak işaretlendi.' : 'ℹ️ Mesaj durumu güncellendi.');
                     renderMessagesList();
                     loadStats();
-
-                    if (res && (res.email_status === 'failed' || res.warning)) {
-                        const warn = res.warning || 'Yanıt kaydedildi ama e-posta gönderilemedi';
-                        showMessagesWarningBanner(warn);
-                        showToast(`⚠️ ${warn}`);
-                    } else {
-                        showToast('✅ Yanıt kaydedildi ve e-posta gönderim kuyruğuna alındı.');
-                        // Refresh message status after background email task completes
-                        setTimeout(async () => {
-                            try {
-                                const fresh = await api.getAdminMessages();
-                                cachedMessages = fresh;
-                                const updatedMsg = cachedMessages.find(x => x.id === id);
-                                if (updatedMsg && updatedMsg.email_status === 'failed') {
-                                    showMessagesWarningBanner('Yanıt kaydedildi ama e-posta gönderilemedi');
-                                    showToast('⚠️ Yanıt kaydedildi ama e-posta gönderilemedi');
-                                }
-                                if (currentAdminTab === 'messages') renderMessagesList();
-                            } catch (_) {}
-                        }, 1800);
-                    }
                 } catch (err) {
-                    showToast(`❌ Yanıt gönderilemedi: ${err.message}`);
-                    btn.disabled = false;
-                    btn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i> <span>Gönder</span>`;
-                    if (typeof lucide !== 'undefined') lucide.createIcons();
-                }
-            });
-        });
-
-        // Bind retry email button
-        container.querySelectorAll('.admin-retry-email-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const id = parseInt(btn.dataset.id);
-                if (btn.disabled) return;
-                btn.disabled = true;
-                btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> Deneniyor...`;
-                if (typeof lucide !== 'undefined') lucide.createIcons();
-
-                try {
-                    const res = await api.retryAdminMessageEmail(id);
-                    if (res && res.data) {
-                        const idx = cachedMessages.findIndex(x => x.id === id);
-                        if (idx !== -1) cachedMessages[idx] = res.data;
-                    }
-                    renderMessagesList();
-
-                    if (res && (res.email_status === 'failed' || !res.email_sent)) {
-                        const warn = res.warning || 'Yanıt kaydedildi ama e-posta gönderilemedi';
-                        showMessagesWarningBanner(warn);
-                        showToast(`⚠️ ${warn}`);
-                    } else {
-                        showToast('📨 E-posta gönderimi tekrar başlatıldı.');
-                        setTimeout(async () => {
-                            try {
-                                cachedMessages = await api.getAdminMessages();
-                                const updatedMsg = cachedMessages.find(x => x.id === id);
-                                if (updatedMsg && updatedMsg.email_status === 'failed') {
-                                    showMessagesWarningBanner('Yanıt kaydedildi ama e-posta gönderilemedi');
-                                    showToast('⚠️ Yanıt kaydedildi ama e-posta gönderilemedi');
-                                }
-                                if (currentAdminTab === 'messages') renderMessagesList();
-                            } catch (_) {}
-                        }, 1800);
-                    }
-                } catch (err) {
-                    showToast(`❌ E-posta tekrar gönderilemedi: ${err.message}`);
-                    renderMessagesList();
+                    showToast(`❌ Durum güncellenemedi: ${err.message}`);
                 }
             });
         });

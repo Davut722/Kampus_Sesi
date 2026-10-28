@@ -293,16 +293,14 @@ export const api = {
         });
     },
 
-    async replyToAdminMessage(messageId, replyText) {
-        return await request(`/admin/messages/${messageId}/reply`, {
-            method: 'POST',
-            body: JSON.stringify({ reply_text: replyText })
+    async toggleMessageReplied(messageId, replied = null) {
+        return await request(`/admin/messages/${messageId}/replied`, {
+            method: 'PATCH',
+            body: replied !== null ? JSON.stringify({ replied }) : undefined
         });
     },
 
-    async retryAdminMessageEmail(messageId) {
-        return await request(`/admin/messages/${messageId}/retry-email`, {
-            method: 'POST'
-        });
+    async replyToAdminMessage(messageId) {
+        return await this.toggleMessageReplied(messageId, true);
     }
 };

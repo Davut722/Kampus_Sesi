@@ -3031,7 +3031,9 @@ export const TEMPLATES = {
                             <i data-lucide="check-square" class="w-3.5 h-3.5"></i> Moderasyon
                         </button>
                         <button class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white cursor-pointer transition-all flex items-center gap-1.5" data-tab="messages">
-                            <i data-lucide="mail" class="w-3.5 h-3.5"></i> İletişim
+                            <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                            <span>İletişim</span>
+                            <span id="admin-tab-messages-badge" class="hidden px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500 text-white leading-none">0</span>
                         </button>
                     </div>
                 </div>
@@ -3221,16 +3223,6 @@ export const TEMPLATES = {
                                 Yanıtlanan
                             </button>
                         </div>
-                    </div>
-
-                    <div id="admin-messages-alert" class="hidden rounded-xl border border-amber-500/40 bg-amber-950/30 p-3.5 text-xs text-amber-300 flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400 shrink-0"></i>
-                            <span id="admin-messages-alert-text">Yanıt kaydedildi ama e-posta gönderilemedi</span>
-                        </div>
-                        <button type="button" id="admin-messages-alert-close" class="text-amber-400 hover:text-white p-1 cursor-pointer">
-                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                        </button>
                     </div>
 
                     <div id="admin-messages-list" class="space-y-4">

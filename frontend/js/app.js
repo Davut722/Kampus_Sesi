@@ -116,11 +116,42 @@ window.signOutBackend = async function() {
 function updateNavForUser(user) {
     const navActions = document.getElementById('nav-actions');
     const drawerAdminItem = document.getElementById('drawer-admin-item');
+    const drawerProfileItem = document.getElementById('drawer-profile-item');
+    const drawerAuthItem = document.getElementById('drawer-auth-item');
+
+    const isLoggedIn = user && user.uid !== 'guest';
+    const isAdminOrMod = isLoggedIn && (user.role === 'admin' || user.role === 'moderator');
+
     if (drawerAdminItem) {
-        if (user && (user.role === 'admin' || user.role === 'moderator')) {
-            drawerAdminItem.style.display = 'block';
+        drawerAdminItem.style.display = isAdminOrMod ? 'block' : 'none';
+    }
+    if (drawerProfileItem) {
+        drawerProfileItem.style.display = isLoggedIn ? 'block' : 'none';
+    }
+    if (drawerAuthItem) {
+        if (isLoggedIn) {
+            drawerAuthItem.innerHTML = `
+                <a href="#/home" id="drawer-logout-btn" class="side-drawer__link" style="color: var(--color-danger); font-weight: 600;">
+                    <i data-lucide="log-out"></i> Çıkış Yap
+                </a>
+            `;
+            const drawerLogout = document.getElementById('drawer-logout-btn');
+            if (drawerLogout) {
+                drawerLogout.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const sideDrawer = document.getElementById('side-drawer');
+                    const sideDrawerOverlay = document.getElementById('side-drawer-overlay');
+                    if (sideDrawer) sideDrawer.classList.remove('active');
+                    if (sideDrawerOverlay) sideDrawerOverlay.classList.remove('active');
+                    await window.signOutBackend();
+                });
+            }
         } else {
-            drawerAdminItem.style.display = 'none';
+            drawerAuthItem.innerHTML = `
+                <a href="#/login" class="side-drawer__link" style="color: var(--color-accent); font-weight: 600;">
+                    <i data-lucide="log-in"></i> Giriş Yap / Kayıt Ol
+                </a>
+            `;
         }
     }
 
@@ -128,8 +159,7 @@ function updateNavForUser(user) {
 
     let actionsHtml = '';
 
-    if (user && user.uid !== 'guest') {
-        const isAdminOrMod = user.role === 'admin' || user.role === 'moderator';
+    if (isLoggedIn) {
         const adminBtnHtml = isAdminOrMod ? `
             <a href="#/admin" class="btn btn--outline btn--sm border-cyan-500/40 text-cyan-400 hover:bg-cyan-950/30">
                 <i data-lucide="shield" class="icon-xs"></i> <span>Admin Paneli</span>
@@ -688,10 +718,20 @@ function setupNavEvents() {
 
     function toggleDrawer() {
         if (sideDrawer && sideDrawerOverlay) {
-            sideDrawer.classList.toggle('active');
-            sideDrawerOverlay.classList.toggle('active');
+            const isActive = sideDrawer.classList.toggle('active');
+            sideDrawerOverlay.classList.toggle('active', isActive);
+            document.body.classList.toggle('drawer-open', isActive);
         }
     }
+
+    // Esc key closes drawer
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sideDrawer && sideDrawer.classList.contains('active')) {
+            sideDrawer.classList.remove('active');
+            if (sideDrawerOverlay) sideDrawerOverlay.classList.remove('active');
+            document.body.classList.remove('drawer-open');
+        }
+    });
 
     if (hamburger) {
         hamburger.addEventListener('click', toggleDrawer);
@@ -5211,11 +5251,11 @@ function initAdminPage() {
                             </a>
                             <button type="button" class="admin-toggle-replied-btn px-3 py-1.5 rounded-xl text-xs font-bold ${replied ? 'border border-emerald-500/40 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/50' : 'border border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200'} transition-all flex items-center gap-1.5 cursor-pointer" data-id="${m.id}" data-replied="${replied}">
                                 <i data-lucide="${replied ? 'check-circle-2' : 'check'}" class="w-3.5 h-3.5 ${replied ? 'text-emerald-400' : 'text-zinc-400'}"></i>
-                                <span>${replied ? 'Yanıtlandı olarak işaretlendi' : 'Yanıtlandı olarak işaretle'}</span>
+                                <span>${replied ? '<span class="hidden sm:inline">Yanıtlandı olarak işaretlendi</span><span class="sm:hidden">Yanıtlandı</span>' : '<span class="hidden sm:inline">Yanıtlandı olarak işaretle</span><span class="sm:hidden">Yanıtla İşareti</span>'}</span>
                             </button>
                             <button type="button" class="admin-toggle-msg-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-zinc-800 hover:border-zinc-700 bg-zinc-950/60 hover:bg-zinc-800 text-zinc-300 transition-all flex items-center gap-1.5 cursor-pointer" data-id="${m.id}" data-is-read="${m.is_read}">
                                 <i data-lucide="${m.is_read ? 'mail' : 'check'}" class="w-3.5 h-3.5 ${m.is_read ? 'text-zinc-400' : 'text-cyan-400'}"></i>
-                                <span>${m.is_read ? 'Okunmadı Yap' : 'Okundu Olarak İşaretle'}</span>
+                                <span>${m.is_read ? '<span class="hidden sm:inline">Okunmadı Yap</span><span class="sm:hidden">Okunmadı</span>' : '<span class="hidden sm:inline">Okundu Olarak İşaretle</span><span class="sm:hidden">Okundu Yap</span>'}</span>
                             </button>
                         </div>
                     </div>

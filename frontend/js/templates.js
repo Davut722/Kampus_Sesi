@@ -960,7 +960,7 @@ export const TEMPLATES = {
                 <div class="rounded-3xl border border-zinc-800 bg-zinc-900/60 backdrop-blur-xl overflow-hidden shadow-2xl">
                     
                     <!-- Cover Banner -->
-                    <div class="relative h-32 sm:h-44 w-full bg-gradient-to-r from-cyan-950/80 via-zinc-900 to-indigo-950/80 border-b border-zinc-800/80 overflow-hidden">
+                    <div class="profile-hero-banner relative h-32 sm:h-44 w-full bg-gradient-to-r from-cyan-950/80 via-zinc-900 to-indigo-950/80 border-b border-zinc-800/80 overflow-hidden">
                         <div class="absolute inset-0 opacity-25" style="background-image: radial-gradient(circle at 2px 2px, rgba(34,211,238,0.25) 1px, transparent 0); background-size: 24px 24px;"></div>
                         <div class="absolute -bottom-16 -left-16 w-64 h-64 bg-cyan-400/15 rounded-full blur-2xl"></div>
                         <div class="absolute -top-16 right-12 w-64 h-64 bg-sky-400/10 rounded-full blur-2xl"></div>
@@ -973,17 +973,17 @@ export const TEMPLATES = {
                     </div>
 
                     <!-- Identity Row & Top Stats -->
-                    <div class="px-5 sm:px-8 pb-6 sm:pb-8">
-                        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-12 sm:-mt-14 relative z-10">
+                    <div class="profile-hero-body px-4 sm:px-8 pb-5 sm:pb-8">
+                        <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 -mt-10 sm:-mt-14 relative z-10">
                             
                             <!-- Avatar & User Meta -->
-                            <div class="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-6">
-                                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-zinc-950 border-4 border-zinc-900 ring-1 ring-cyan-500/40 flex items-center justify-center text-2xl sm:text-3xl font-extrabold text-cyan-400 shadow-2xl shrink-0" id="profile-avatar">
+                            <div class="profile-user-row flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-6">
+                                <div class="profile-avatar-box w-20 h-20 sm:w-28 sm:h-28 rounded-2xl bg-zinc-950 border-4 border-zinc-900 ring-1 ring-cyan-500/40 flex items-center justify-center text-2xl sm:text-3xl font-extrabold text-cyan-400 shadow-2xl shrink-0" id="profile-avatar">
                                     MS
                                 </div>
-                                <div class="space-y-1.5 pt-1 sm:pb-1">
-                                    <div class="flex flex-wrap items-center gap-2.5">
-                                        <h1 class="text-2xl sm:text-3xl font-extrabold text-zinc-100 tracking-tight" id="profile-name" style="font-family: var(--font-heading);">
+                                <div class="profile-user-meta space-y-1 pt-1 sm:pb-1 min-w-0">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <h1 class="text-xl sm:text-3xl font-extrabold text-zinc-100 tracking-tight" id="profile-name" style="font-family: var(--font-heading);">
                                             Yükleniyor...
                                         </h1>
                                         <span id="profile-grade-pill" class="hidden items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-cyan-950/50 border border-cyan-500/30 text-cyan-300"></span>
@@ -997,16 +997,16 @@ export const TEMPLATES = {
                             </div>
 
                             <!-- Quick Actions -->
-                            <div class="flex flex-wrap items-center gap-2.5" id="profile-identity-actions">
-                                <a href="#/review-form" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-cyan-400 hover:bg-cyan-300 text-zinc-950 transition-all inline-flex items-center gap-1.5 shadow-lg shadow-cyan-500/10">
+                            <div class="profile-actions-row flex flex-wrap items-center gap-2 sm:gap-2.5" id="profile-identity-actions">
+                                <a href="#/review-form" class="profile-action-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-cyan-400 hover:bg-cyan-300 text-zinc-950 transition-all inline-flex items-center gap-1.5 shadow-lg shadow-cyan-500/10">
                                     <i data-lucide="pen-line" class="w-3.5 h-3.5"></i>
                                     <span>Değerlendir</span>
                                 </a>
-                                <button type="button" id="profile-edit-quick-btn" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 hover:border-zinc-700 transition-all inline-flex items-center gap-1.5 cursor-pointer">
+                                <button type="button" id="profile-edit-quick-btn" class="profile-action-btn px-4 py-2.5 rounded-xl text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 hover:border-zinc-700 transition-all inline-flex items-center gap-1.5 cursor-pointer">
                                     <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-cyan-400"></i>
                                     <span>Profili Düzenle</span>
                                 </button>
-                                <button type="button" id="profile-logout-btn" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-rose-950/30 hover:bg-rose-950/60 text-rose-400 border border-rose-500/30 transition-all inline-flex items-center gap-1.5 cursor-pointer">
+                                <button type="button" id="profile-logout-btn" class="profile-action-btn px-4 py-2.5 rounded-xl text-xs font-semibold bg-rose-950/30 hover:bg-rose-950/60 text-rose-400 border border-rose-500/30 transition-all inline-flex items-center gap-1.5 cursor-pointer">
                                     <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
                                     <span>Çıkış Yap</span>
                                 </button>
@@ -1014,44 +1014,44 @@ export const TEMPLATES = {
                         </div>
 
                         <!-- 4-Column Counter Strip -->
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6 pt-6 border-t border-zinc-800/80" data-stagger="70" aria-label="Profil istatistikleri">
-                            <div class="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-3.5">
-                                <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
-                                    <i data-lucide="message-square" class="w-5 h-5"></i>
+                        <div class="profile-stats-grid grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mt-5 sm:mt-6 pt-5 sm:pt-6 border-t border-zinc-800/80" data-stagger="70" aria-label="Profil istatistikleri">
+                            <div class="profile-stat-card p-3 sm:p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+                                <div class="profile-stat-icon w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+                                    <i data-lucide="message-square" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                                 </div>
-                                <div>
-                                    <div class="text-xl sm:text-2xl font-extrabold text-zinc-100 leading-none" id="stat-review-count">0</div>
-                                    <div class="text-[11px] text-zinc-500 font-medium mt-1">Değerlendirme</div>
-                                </div>
-                            </div>
-
-                            <div class="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-3.5">
-                                <div class="w-10 h-10 rounded-xl bg-amber-950/60 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
-                                    <i data-lucide="thumbs-up" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <div class="text-xl sm:text-2xl font-extrabold text-zinc-100 leading-none" id="stat-upvotes">0</div>
-                                    <div class="text-[11px] text-zinc-500 font-medium mt-1">Toplam Beğeni</div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="profile-stat-val text-lg sm:text-2xl font-extrabold text-zinc-100 leading-none truncate" id="stat-review-count">0</div>
+                                    <div class="profile-stat-lbl text-[11px] text-zinc-500 font-medium mt-1 truncate">Değerlendirme</div>
                                 </div>
                             </div>
 
-                            <div class="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-3.5">
-                                <div class="w-10 h-10 rounded-xl bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-                                    <i data-lucide="file-check-2" class="w-5 h-5"></i>
+                            <div class="profile-stat-card p-3 sm:p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+                                <div class="profile-stat-icon w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-950/60 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                                    <i data-lucide="thumbs-up" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                                 </div>
-                                <div>
-                                    <div class="text-xl sm:text-2xl font-extrabold text-zinc-100 leading-none" id="stat-submissions-count">0</div>
-                                    <div class="text-[11px] text-zinc-500 font-medium mt-1">Başvuru & Öneri</div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="profile-stat-val text-lg sm:text-2xl font-extrabold text-zinc-100 leading-none truncate" id="stat-upvotes">0</div>
+                                    <div class="profile-stat-lbl text-[11px] text-zinc-500 font-medium mt-1 truncate">Toplam Beğeni</div>
                                 </div>
                             </div>
 
-                            <div class="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-3.5">
-                                <div class="w-10 h-10 rounded-xl bg-sky-950/60 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0">
-                                    <i data-lucide="bookmark" class="w-5 h-5"></i>
+                            <div class="profile-stat-card p-3 sm:p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+                                <div class="profile-stat-icon w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                                    <i data-lucide="file-check-2" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                                 </div>
-                                <div>
-                                    <div class="text-xl sm:text-2xl font-extrabold text-zinc-100 leading-none" id="stat-favorites-count">0</div>
-                                    <div class="text-[11px] text-zinc-500 font-medium mt-1">Favori Üniversite</div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="profile-stat-val text-lg sm:text-2xl font-extrabold text-zinc-100 leading-none truncate" id="stat-submissions-count">0</div>
+                                    <div class="profile-stat-lbl text-[11px] text-zinc-500 font-medium mt-1 truncate">Başvuru & Öneri</div>
+                                </div>
+                            </div>
+
+                            <div class="profile-stat-card p-3 sm:p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+                                <div class="profile-stat-icon w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-sky-950/60 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0">
+                                    <i data-lucide="bookmark" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="profile-stat-val text-lg sm:text-2xl font-extrabold text-zinc-100 leading-none truncate" id="stat-favorites-count">0</div>
+                                    <div class="profile-stat-lbl text-[11px] text-zinc-500 font-medium mt-1 truncate">Favori Üniversite</div>
                                 </div>
                             </div>
                         </div>
@@ -1078,7 +1078,7 @@ export const TEMPLATES = {
                                 id="profile-submissions-tab" type="button" role="tab" aria-selected="false"
                                 aria-controls="profile-submissions-panel" data-profile-tab="submissions">
                                 <i data-lucide="layers" class="w-4 h-4"></i>
-                                <span>Başvurularım & Önerilerim</span>
+                                <span class="hidden sm:inline">Başvurularım & Önerilerim</span><span class="sm:hidden">Başvurularım</span>
                                 <span id="tab-badge-submissions" class="px-2 py-0.5 rounded-full text-[11px] bg-zinc-950/60 text-zinc-400 border border-zinc-700/60">0</span>
                             </button>
 

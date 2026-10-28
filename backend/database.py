@@ -72,6 +72,7 @@ class Review(Base):
     university = Column(String(150), index=True, nullable=False)
     rating = Column(Integer, default=5)
     tags_json = Column(Text, default="[]")  # stored as JSON string
+    categories_json = Column(Text, default="[]")  # stored as JSON string
     text = Column(Text, nullable=False)
     timestamp = Column(BigInteger, default=lambda: int(time.time() * 1000))
     date = Column(String(50), nullable=False)
@@ -100,9 +101,14 @@ class Review(Base):
 
     def to_dict(self, current_user_name=None):
         try:
-            tags = json.loads(self.tags_json)
+            cats = json.loads(self.categories_json) if self.categories_json else []
+        except Exception:
+            cats = []
+        try:
+            tags = json.loads(self.tags_json) if self.tags_json else []
         except Exception:
             tags = []
+        effective_categories = cats if isinstance(cats, list) and len(cats) > 0 else (tags if isinstance(tags, list) else [])
         likes = [i.user_name for i in self.interactions if i.interaction_type == "like"]
         dislikes = [i.user_name for i in self.interactions if i.interaction_type == "dislike"]
         return {
@@ -111,7 +117,8 @@ class Review(Base):
             "initials": self.initials,
             "university": self.university,
             "rating": self.rating,
-            "tags": tags,
+            "categories": effective_categories,
+            "tags": effective_categories,
             "text": self.text,
             "is_recommended": self.is_recommended,
             "is_anonymous": bool(self.is_anonymous) if self.is_anonymous is not None else True,
@@ -467,6 +474,11 @@ def init_db():
                 if 'rating_academic' not in r_cols:
                     conn.execute(text("ALTER TABLE reviews ADD COLUMN rating_academic INT DEFAULT NULL"))
                     conn.commit()
+                if 'categories_json' not in r_cols:
+                    conn.execute(text("ALTER TABLE reviews ADD COLUMN categories_json TEXT DEFAULT NULL"))
+                    conn.commit()
+                    conn.execute(text("UPDATE reviews SET categories_json = tags_json WHERE categories_json IS NULL AND tags_json IS NOT NULL"))
+                    conn.commit()
 
             if 'universities' in table_names:
                 u_cols = [c['name'] for c in insp.get_columns('universities')]
@@ -714,7 +726,8 @@ def seed_initial_university_addresses(db):
     """Tüm üniversitelerin doğrulanmış adres ve koordinat verilerini universities.id Foreign Key ile bağlayarak kaydeder."""
     try:
         items_to_seed = list(INITIAL_UNIVERSITY_ADDRESSES)
-        cache_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts", "uni_addresses_cache.json")
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        cache_path = os.path.join(project_root, "data", "uni_addresses_cache.json")
         if os.path.exists(cache_path):
             try:
                 with open(cache_path, "r", encoding="utf-8") as f:

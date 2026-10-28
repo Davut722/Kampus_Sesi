@@ -1,3 +1,12 @@
+import os
+import sys
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BACKEND_DIR = os.path.join(PROJECT_ROOT, "backend")
+for _p in (PROJECT_ROOT, BACKEND_DIR):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
 from database import (
     SessionLocal,
     engine,
@@ -62,7 +71,7 @@ def seed_addresses():
 
         db.commit()
         total = db.query(UniversityAddress).count()
-        print(f"[BASARILI] university_addresses tablosu olusturuldu ve universities.id Foreign Key ile baglandi.")
+        print("[BASARILI] university_addresses tablosu olusturuldu ve universities.id Foreign Key ile baglandi.")
         print(f" -> Yeni eklenen: {inserted} | Guncellenen: {updated} | Toplam Kayit: {total}")
     except Exception as e:
         db.rollback()
@@ -73,4 +82,3 @@ def seed_addresses():
 
 if __name__ == "__main__":
     seed_addresses()
-

@@ -7,7 +7,13 @@ import time
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BACKEND_DIR = os.path.join(PROJECT_ROOT, "backend")
+DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+for _p in (PROJECT_ROOT, BACKEND_DIR):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
 from database import (
     SessionLocal,
     engine,
@@ -16,8 +22,8 @@ from database import (
 )
 from scripts.fetch_and_seed_all_kyk import UNI_CITY_MAP, CITIES_TR
 
-CACHE_FILE = "scripts/uni_addresses_cache.json"
-SQL_FILE = "tam_liste_adresler.sql"
+CACHE_FILE = os.path.join(DATA_DIR, "uni_addresses_cache.json")
+SQL_FILE = os.path.join(DATA_DIR, "tam_liste_adresler.sql")
 
 HEADERS = {
     "User-Agent": "KampusSesiAcademicBot/2.0 (https://github.com/Davut722/kampus-agi; contact@kampussesi.com)",
@@ -889,7 +895,7 @@ def run_bot():
         if "İstanbul Teknik Üniversitesi" in addr_map:
             addr_map["İstanbul Teknik Üniversitesi (İTÜ)"] = addr_map["İstanbul Teknik Üniversitesi"]
 
-        js_uni_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "js", "universities.js")
+        js_uni_path = os.path.join(PROJECT_ROOT, "frontend", "js", "universities.js")
         with open(js_uni_path, "w", encoding="utf-8") as jf:
             jf.write("const TURKISH_UNIVERSITIES = " + json.dumps(uni_names, ensure_ascii=False, indent=4) + ";\n\n")
             jf.write("// MySQL university_addresses tablosu ve Google Haritalar ile birebir senkronize kampüs adres ve koordinat veritabanı\n")

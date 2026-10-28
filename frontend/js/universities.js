@@ -3459,3 +3459,79 @@ window.UNIVERSITY_ADDRESSES_DB = {
     window.formatKykDistance = formatKykDistance;
     window.renderUniversityDorms = renderUniversityDorms;
 })();
+
+
+// ─── Hakkında Kaynak Bağlantısı Okunabilir URL Biçimlendirici ───
+(function () {
+    const prevEscape = function (str) {
+        if (typeof window.escapeHtml === 'function') {
+            return window.escapeHtml(String(str ?? ''));
+        }
+        return String(str ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    };
+
+    function formatReadableAboutSourceHtml(sourceStr) {
+        const raw = String(sourceStr || '').trim();
+        if (!raw) return '';
+        const urlRegex = /(https?:\/\/[^\s,]+)/g;
+        let result = '';
+        let lastIndex = 0;
+        let match;
+        while ((match = urlRegex.exec(raw)) !== null) {
+            if (match.index > lastIndex) {
+                result += prevEscape(raw.slice(lastIndex, match.index));
+            }
+            const url = match[1];
+            let decodedLabel = url;
+            try {
+                decodedLabel = decodeURIComponent(url);
+            } catch (e) {
+                decodedLabel = url;
+            }
+            result += `<a href="${prevEscape(url)}" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">${prevEscape(decodedLabel)}</a>`;
+            lastIndex = match.index + url.length;
+        }
+        if (lastIndex < raw.length) {
+            result += prevEscape(raw.slice(lastIndex));
+        }
+        return result;
+    }
+
+    const origRenderAbout = window.renderUniversityAbout;
+    window.formatAboutSourceHtml = formatReadableAboutSourceHtml;
+    window.renderUniversityAbout = function (uniData) {
+        const contentWrap = document.querySelector('#sec-genel .about-content');
+        const toggleBtn = document.getElementById('about-toggle-btn');
+        if (!contentWrap) return;
+
+        if (toggleBtn) {
+            toggleBtn.style.display = 'none';
+        }
+
+        const aboutRaw = String((uniData && uniData.about) || '').trim();
+        const sourceRaw = String((uniData && uniData.about_source) || '').trim();
+
+        if (aboutRaw) {
+            const paragraphs = aboutRaw
+                .split(/\n\s*\n/)
+                .map(p => p.trim())
+                .filter(Boolean);
+
+            let html = paragraphs
+                .map((p, idx) => `<p${idx === 0 ? ' id="about-text-short"' : ' style="margin-top: 0.75rem;"'}>${prevEscape(p)}</p>`)
+                .join('');
+
+            if (sourceRaw) {
+                html += `<p class="about-source-note">${formatReadableAboutSourceHtml(sourceRaw)}</p>`;
+            }
+            contentWrap.innerHTML = html;
+        } else if (typeof origRenderAbout === 'function') {
+            origRenderAbout(uniData);
+        }
+    };
+})();

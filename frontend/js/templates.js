@@ -319,34 +319,9 @@ export const TEMPLATES = {
                                     <p id="about-text-long"></p>
                                 </div>
                             </div>
-                            <button class="btn btn--text about-toggle-btn" id="about-toggle-btn" type="button">
+                            <button class="btn btn--text about-toggle-btn" id="about-toggle-btn" type="button" style="display: none;">
                                 Daha Fazla Oku <i data-lucide="chevron-down" class="icon-sm"></i>
                             </button>
-                        </div>
-
-                        <!-- Hızlı İnceleme Kutusu (3 Maddeli Özet Bilgi) -->
-                        <div class="uni-quick-grid">
-                            <div class="uni-quick-card">
-                                <div class="uni-quick-card__icon"><i data-lucide="book-open" class="icon-sm"></i></div>
-                                <div class="uni-quick-card__content">
-                                    <h4 class="uni-quick-card__title">Akademik Vizyon</h4>
-                                    <p class="uni-quick-card__desc">Nitelikli akademisyen kadrosu ve uygulama odaklı laboratuvar altyapısı.</p>
-                                </div>
-                            </div>
-                            <div class="uni-quick-card">
-                                <div class="uni-quick-card__icon"><i data-lucide="coffee" class="icon-sm"></i></div>
-                                <div class="uni-quick-card__content">
-                                    <h4 class="uni-quick-card__title">Sosyal Yaşam</h4>
-                                    <p class="uni-quick-card__desc">Öğrenci kulüpleri, spor tesisleri ve yıl boyu süren kültürel etkinlikler.</p>
-                                </div>
-                            </div>
-                            <div class="uni-quick-card">
-                                <div class="uni-quick-card__icon"><i data-lucide="briefcase" class="icon-sm"></i></div>
-                                <div class="uni-quick-card__content">
-                                    <h4 class="uni-quick-card__title">Kariyer & Staj</h4>
-                                    <p class="uni-quick-card__desc">Sanayi ortaklıkları, teknokent imkânları ve mezun kariyer rehberliği.</p>
-                                </div>
-                            </div>
                         </div>
                     </section>
 
@@ -669,7 +644,19 @@ export const TEMPLATES = {
                             </div>
                         </div>
 
-                        <!-- 3. Deneyimin (Tek Metin Alanı) -->
+                        <!-- 3. Kategori Seçimi (Zorunlu - Çoklu Seçim) -->
+                        <div class="rf-field" id="rf-field-categories">
+                            <div class="rf-label-wrap">
+                                <label class="rf-label" id="rf-categories-label">
+                                    Hangi konuda yorum yapıyorsun? <span class="rf-req" aria-label="zorunlu">*</span>
+                                </label>
+                                <span class="rf-hint-pill">Birden fazla seçebilirsin</span>
+                            </div>
+                            <div class="rf-cat-chips" id="rf-category-chips" role="group" aria-labelledby="rf-categories-label"></div>
+                            <div class="rf-error" id="rf-categories-error" aria-live="polite"></div>
+                        </div>
+
+                        <!-- 4. Deneyimin (Tek Metin Alanı) -->
                         <div class="rf-field" id="rf-field-text">
                             <div class="rf-label-wrap">
                                 <label class="rf-label" for="form-review-text">
@@ -927,7 +914,7 @@ export const TEMPLATES = {
                             <div class="rf-bottom-bar__inner">
                                 <div class="rf-bottom-bar__status" id="rf-bottom-status">
                                     <span class="rf-progress-dot"></span>
-                                    <span id="rf-progress-text">Zorunlu alanlar: 0/4 tamam</span>
+                                    <span id="rf-progress-text">Zorunlu alanlar: 0/5 tamam</span>
                                 </div>
                                 <button type="submit" id="rf-submit-btn" class="btn btn--primary rf-submit-btn" aria-disabled="true">
                                     Yorumu paylaş

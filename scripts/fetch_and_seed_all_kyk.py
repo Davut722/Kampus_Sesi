@@ -2,12 +2,17 @@ import os
 import sys
 import json
 import time
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BACKEND_DIR = os.path.join(PROJECT_ROOT, "backend")
+DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+for _p in (PROJECT_ROOT, BACKEND_DIR):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 from concurrent.futures import ThreadPoolExecutor
 from database import SessionLocal, University, KykDorm, engine
 from scripts.fetch_kyk import SEHIRLER, sehir_tara
 
-CACHE_FILE = "scripts/kyk_cache_by_city.json"
+CACHE_FILE = os.path.join(DATA_DIR, "kyk_cache_by_city.json")
 
 # Turkey 81 provinces canonical map
 CITIES_TR = {
@@ -358,7 +363,7 @@ def seed_database_and_generate_sql():
     print(f"Database seeded successfully with {total_inserted} dorm links across all {len(universities)} universities!")
 
     # Write tam_liste_kyk.sql
-    with open("tam_liste_kyk.sql", "w", encoding="utf-8") as f:
+    with open(os.path.join(DATA_DIR, "tam_liste_kyk.sql"), "w", encoding="utf-8") as f:
         f.write("SET FOREIGN_KEY_CHECKS = 0;\n")
         f.write("TRUNCATE TABLE `kyk_dorms`;\n\n")
         f.write("INSERT INTO `kyk_dorms` (`university_id`, `name`, `type`, `distance`, `fee`, `capacity`) VALUES\n")

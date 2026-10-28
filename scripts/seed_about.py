@@ -7,12 +7,15 @@ import unicodedata
 from datetime import date
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+BACKEND_DIR = os.path.join(PROJECT_ROOT, "backend")
+DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+for _p in (PROJECT_ROOT, BACKEND_DIR):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 from database import SessionLocal, University, init_db
 
-DEFAULT_INPUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "about_texts.json")
+DEFAULT_INPUT = os.path.join(DATA_DIR, "about_texts.json")
 
 TR_MAP = str.maketrans({
     "Ç": "c", "ç": "c",

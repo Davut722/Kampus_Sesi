@@ -2374,6 +2374,72 @@ svg.footer-accordion-icon {
   box-shadow: 0 0 0 1px var(--color-accent);
 }
 
+/* Kategori Seçici Chip / Buton Grubu (Çoklu Seçilebilir) */
+.rf-cat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.rf-cat-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  height: 40px;
+  min-height: 40px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+.rf-cat-chip i,
+.rf-cat-chip svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-dim);
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+.rf-cat-chip:hover {
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-hover);
+}
+.rf-cat-chip:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.rf-cat-chip.active,
+.rf-cat-chip[aria-pressed="true"] {
+  background: var(--color-accent-subtle, rgba(217, 72, 15, 0.1));
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+.rf-cat-chip.active i,
+.rf-cat-chip.active svg,
+.rf-cat-chip[aria-pressed="true"] i,
+.rf-cat-chip[aria-pressed="true"] svg {
+  color: var(--color-accent);
+}
+@media (max-width: 600px) {
+  .rf-cat-chips {
+    gap: 8px;
+  }
+  .rf-cat-chip {
+    padding: 0 12px;
+    height: 38px;
+    min-height: 38px;
+    font-size: 0.84rem;
+  }
+}
+
 /* Paylaşım Tercihi / Anonimlik Anahtarı */
 .rf-anon-card {
   display: flex;
@@ -3687,54 +3753,24 @@ svg.footer-accordion-icon {
   color: var(--color-text-muted);
 }
 
-/* Genel: 3 Highlight Cards */
-.uni-quick-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: 1.25rem;
+/* Genel: Hakkında Kartı Düzeni */
+#sec-genel .about-card {
+  padding: 1.5rem 1.75rem;
 }
-@media (max-width: 680px) {
-  .uni-quick-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.uni-quick-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: 14px;
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.uni-quick-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-}
-.uni-quick-card__icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: rgba(217, 72, 15, 0.08);
-  color: var(--color-accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.uni-quick-card__title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--color-text);
-  margin: 0 0 3px;
-}
-.uni-quick-card__desc {
-  font-size: 0.82rem;
-  color: var(--color-text-muted);
-  line-height: 1.4;
+#sec-genel .about-content p {
   margin: 0;
+  color: var(--color-text);
+  line-height: 1.75;
+  font-size: 1rem;
+}
+#sec-genel .about-content p.about-source-note {
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+  word-break: break-word;
 }
 
 /* Reviews: Head & Sort */
@@ -3861,6 +3897,13 @@ svg.footer-accordion-icon {
 }
 .review-block__text {
   color: var(--color-text);
+}
+
+.card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
 }
 
 .btn-reply-toggle,
@@ -4055,7 +4098,6 @@ svg.footer-accordion-icon {
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .ed-uni-tab,
-  .uni-quick-card,
   .uni-dept-card,
   .kyk-card,
   .dorm-chip,

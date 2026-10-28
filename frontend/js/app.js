@@ -2,8 +2,8 @@
    Kampüs Sesi — Shared JavaScript (SPA Architecture + FastAPI Backend)
    ======================================== */
 
-import { api } from './api.js?v=83';
-import { TEMPLATES } from './templates.js?v=87';
+import { api } from './api.js?v=84';
+import { TEMPLATES } from './templates.js?v=89';
 import { initHomeShowcase } from './home.js?v=1';
 
 function getInitials(name) {
@@ -193,9 +193,16 @@ function getSavedReviews() {
 
 window.saveReview = async function(review) {
     const created = await api.createReview(review);
+    const cats = (created && Array.isArray(created.categories) && created.categories.length > 0)
+        ? created.categories
+        : ((created && Array.isArray(created.tags) && created.tags.length > 0)
+            ? created.tags
+            : (review.categories || review.tags || []));
     const savedObj = {
         ...review,
         ...(created || {}),
+        categories: cats,
+        tags: cats,
         rating_dorm: created && created.rating_dorm !== undefined && created.rating_dorm !== null ? created.rating_dorm : review.rating_dorm,
         rating_food: created && created.rating_food !== undefined && created.rating_food !== null ? created.rating_food : review.rating_food,
         rating_transport: created && created.rating_transport !== undefined && created.rating_transport !== null ? created.rating_transport : review.rating_transport,
@@ -291,8 +298,8 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// ─── Utility Functions ───────────────────
-const AVAILABLE_TAGS = [
+// ─── Utility Functions & Shared Category Constant ───────────────────
+export const REVIEW_CATEGORIES = [
     { id: 'kampus', label: 'Kampüs', icon: 'building-2' },
     { id: 'yemekhane', label: 'Yemekhane', icon: 'utensils' },
     { id: 'egitim', label: 'Eğitim', icon: 'graduation-cap' },
@@ -302,8 +309,35 @@ const AVAILABLE_TAGS = [
     { id: 'yurt', label: 'Yurt Olanakları', icon: 'home' },
 ];
 
+const AVAILABLE_TAGS = REVIEW_CATEGORIES;
+
+function normalizeCategoryId(rawVal) {
+    if (!rawVal || typeof rawVal !== 'string') return null;
+    const v = rawVal.trim().toLocaleLowerCase('tr');
+    const byId = REVIEW_CATEGORIES.find(c => c.id === v);
+    if (byId) return byId.id;
+    const byLabel = REVIEW_CATEGORIES.find(c => c.label.toLocaleLowerCase('tr') === v);
+    return byLabel ? byLabel.id : null;
+}
+
+function getReviewCategories(review) {
+    if (!review) return [];
+    const raw = (Array.isArray(review.categories) && review.categories.length > 0)
+        ? review.categories
+        : (Array.isArray(review.tags) ? review.tags : []);
+    const result = [];
+    raw.forEach(item => {
+        const catId = normalizeCategoryId(item);
+        if (catId && !result.includes(catId)) {
+            result.push(catId);
+        }
+    });
+    return result;
+}
+
 function getTagLabel(tagId) {
-    const tag = AVAILABLE_TAGS.find(t => t.id === tagId);
+    const normId = normalizeCategoryId(tagId) || tagId;
+    const tag = REVIEW_CATEGORIES.find(t => t.id === normId);
     return tag ? tag.label : tagId;
 }
 
@@ -317,12 +351,13 @@ function renderStars(rating, interactive = false) {
 }
 
 function renderTags(tagIds) {
-    if (!tagIds) return '';
-    return tagIds.map(id => {
-        const tag = AVAILABLE_TAGS.find(t => t.id === id);
+    if (!tagIds || !Array.isArray(tagIds) || tagIds.length === 0) return '';
+    return tagIds.map(rawId => {
+        const normId = normalizeCategoryId(rawId) || rawId;
+        const tag = REVIEW_CATEGORIES.find(t => t.id === normId);
         const iconHtml = tag ? `<i data-lucide="${tag.icon}" class="icon-xs"></i> ` : '';
-        const label = tag ? tag.label : id;
-        return `<span class="tag">${iconHtml}<span>${label}</span></span>`;
+        const label = tag ? tag.label : rawId;
+        return `<span class="tag" data-cat="${escapeHtml(normId)}">${iconHtml}<span>${escapeHtml(label)}</span></span>`;
     }).join('');
 }
 
@@ -489,8 +524,10 @@ function renderReviewCard(review, options = {}) {
         bodyHtml = `<div class="card__body">${escapeHtml(parsed.plainText || review.text)}</div>`;
     }
 
+    const reviewCats = getReviewCategories(review);
+
     return `
-    <article class="card ed-card review-card" data-anim="fade-up" data-id="${review.id}" data-tags="${review.tags ? review.tags.join(',') : ''}">
+    <article class="card ed-card review-card" data-anim="fade-up" data-id="${review.id}" data-tags="${reviewCats.join(',')}">
       <div class="card__header">
         ${review.is_anonymous ? `
           <div class="card__user">
@@ -517,7 +554,7 @@ function renderReviewCard(review, options = {}) {
       ${bodyHtml}
 
       <div class="card__footer">
-        <div class="card__tags">${renderTags(review.tags || [])}</div>
+        <div class="card__tags">${renderTags(reviewCats)}</div>
         <div class="card__actions">
             <button class="btn-interaction btn-interaction-like ${isLiked ? 'btn-interaction--active-like' : ''}" data-id="${review.id}" type="button" title="Faydalı buldum">
                 <i data-lucide="thumbs-up" class="icon-xs"></i> <span>Faydalı (${ints.likes.length})</span>
@@ -1256,8 +1293,8 @@ function initUniversityPage(initialUni) {
             </button>
         `;
 
-        AVAILABLE_TAGS.forEach(tag => {
-            const tagCount = allReviews.filter(r => r.tags && r.tags.includes(tag.id)).length;
+        REVIEW_CATEGORIES.forEach(tag => {
+            const tagCount = allReviews.filter(r => getReviewCategories(r).includes(tag.id)).length;
             filterHTML += `
                 <button class="tag tag--filter ${currentTagFilter === tag.id ? 'tag--active' : ''}" data-filter="${tag.id}">
                     <i data-lucide="${tag.icon}" class="icon-xs"></i> <span>${tag.label}</span> <span class="tag-count">(${tagCount})</span>
@@ -1271,6 +1308,7 @@ function initUniversityPage(initialUni) {
 
     // Render review cards with sorting and tag filtering
     function renderReviews() {
+        renderFilterBar();
         if (!appDataLoaded && window.AnimUtils) {
             reviewsContainer.innerHTML = window.AnimUtils.reviewSkeleton(3);
             return;
@@ -1278,8 +1316,8 @@ function initUniversityPage(initialUni) {
 
         const allReviews = getAllReviews();
         let filtered = currentTagFilter === 'all'
-            ? allReviews
-            : allReviews.filter(r => r.tags && r.tags.includes(currentTagFilter));
+            ? [...allReviews]
+            : allReviews.filter(r => getReviewCategories(r).includes(currentTagFilter));
 
         // Sort reviews
         if (currentSort === 'helpful') {
@@ -2349,6 +2387,9 @@ function initReviewForm() {
     const recHidden = document.getElementById('form-recommend');
     const recError = document.getElementById('rf-recommend-error');
 
+    const categoryChipsContainer = document.getElementById('rf-category-chips');
+    const categoriesError = document.getElementById('rf-categories-error');
+
     const anonToggle = document.getElementById('rf-anonymous-toggle');
     const anonDesc = document.getElementById('rf-anon-desc');
 
@@ -2424,6 +2465,7 @@ function initReviewForm() {
     // State - Hiçbir alan önceden seçili gelmez
     let selectedRating = 0;
     let isRecommended = null; // null | true | false
+    let selectedCategories = []; // En az 1 kategori seçimi zorunlu (REVIEW_CATEGORIES id'leri)
     let isAnonymous = true;   // Varsayılan: anonim paylaş
     let educationStatus = ''; // '' | 'student' | 'graduate' (Boş başlar)
     let graduationYear = null;
@@ -2440,16 +2482,74 @@ function initReviewForm() {
     // 1a. Tavsiye Durumu (Evet/Hayır)
     function setRecommendation(val) {
         isRecommended = val;
-        if (recHidden) recHidden.value = val ? 'yes' : 'no';
+        if (recHidden) recHidden.value = val === null ? '' : (val ? 'yes' : 'no');
         if (recYesBtn) recYesBtn.classList.toggle('active', val === true);
         if (recNoBtn) recNoBtn.classList.toggle('active', val === false);
-        if (recError) recError.textContent = '';
+        if (val !== null && recError) recError.textContent = '';
         updatePowerMeter();
         validateForm(true);
         saveDraft();
     }
     if (recYesBtn) recYesBtn.addEventListener('click', () => setRecommendation(true));
     if (recNoBtn) recNoBtn.addEventListener('click', () => setRecommendation(false));
+
+    // 1a-2. Kategori Seçimi (Çoklu Seçilebilir Chip/Buton - REVIEW_CATEGORIES)
+    function renderCategorySelector() {
+        if (!categoryChipsContainer) return;
+        categoryChipsContainer.innerHTML = REVIEW_CATEGORIES.map(cat => {
+            const isSelected = selectedCategories.includes(cat.id);
+            return `
+                <button type="button"
+                        class="rf-cat-chip ${isSelected ? 'active' : ''}"
+                        data-cat="${escapeHtml(cat.id)}"
+                        aria-pressed="${isSelected ? 'true' : 'false'}">
+                    <i data-lucide="${escapeHtml(cat.icon)}" class="icon-xs"></i>
+                    <span>${escapeHtml(cat.label)}</span>
+                </button>
+            `;
+        }).join('');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function setCategories(cats, shouldValidate = true) {
+        const normalized = [];
+        (Array.isArray(cats) ? cats : []).forEach(c => {
+            const id = normalizeCategoryId(c);
+            if (id && !normalized.includes(id)) normalized.push(id);
+        });
+        selectedCategories = normalized;
+        if (categoryChipsContainer) {
+            categoryChipsContainer.querySelectorAll('.rf-cat-chip').forEach(btn => {
+                const active = selectedCategories.includes(btn.dataset.cat);
+                btn.classList.toggle('active', active);
+                btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
+        }
+        if (selectedCategories.length > 0 && categoriesError) {
+            categoriesError.textContent = '';
+        }
+        if (shouldValidate) {
+            updatePowerMeter();
+            validateForm(true);
+            saveDraft();
+        }
+    }
+
+    renderCategorySelector();
+
+    if (categoryChipsContainer) {
+        categoryChipsContainer.addEventListener('click', (e) => {
+            const btn = e.target.closest('.rf-cat-chip');
+            if (!btn) return;
+            const catId = btn.dataset.cat;
+            if (!catId) return;
+            if (selectedCategories.includes(catId)) {
+                setCategories(selectedCategories.filter(id => id !== catId), true);
+            } else {
+                setCategories([...selectedCategories, catId], true);
+            }
+        });
+    }
 
     // 1b. Paylaşım Tercihi / Anonimlik
     function setAnonymous(val) {
@@ -2809,7 +2909,16 @@ function initReviewForm() {
             recError.textContent = '';
         }
 
-        // 4. Metin (en az 40 karakter)
+        // 4. Kategori Seçimi (En az 1 kategori zorunlu)
+        if (selectedCategories.length < 1) {
+            isValid = false;
+            if (!silent && categoriesError) categoriesError.textContent = 'Lütfen en az bir kategori seç.';
+            if (!firstError) firstError = { id: 'rf-field-categories', el: categoriesError, msg: 'Lütfen en az bir kategori seç.' };
+        } else if (categoriesError) {
+            categoriesError.textContent = '';
+        }
+
+        // 5. Metin (en az 40 karakter)
         if (totalChars < 40) {
             isValid = false;
             const textMsg = totalChars === 0
@@ -2821,7 +2930,7 @@ function initReviewForm() {
             textError.textContent = '';
         }
 
-        // 5. Onay
+        // 6. Onay
         if (!consent) {
             isValid = false;
             if (!silent && consentError) consentError.textContent = 'Yorumunuzu paylaşmak için Topluluk Kurallarını onaylamalısınız.';
@@ -2830,18 +2939,23 @@ function initReviewForm() {
             consentError.textContent = '';
         }
 
-        // İlerleme Sayacı (5 zorunlu alan)
-        const checks = [Boolean(uni), selectedRating >= 1, isRecommended !== null, totalChars >= 40, Boolean(consent)];
+        // İlerleme Sayacı (5 zorunlu alan: Üniversite, Genel Puan, Tavsiye, Kategori, Deneyim)
+        const checks = [
+            Boolean(uni),
+            selectedRating >= 1,
+            isRecommended !== null,
+            selectedCategories.length >= 1,
+            totalChars >= 40
+        ];
         const completed = checks.filter(Boolean).length;
         if (progressText) progressText.textContent = `Zorunlu alanlar: ${completed}/5 tamam`;
-        if (bottomStatus) bottomStatus.classList.toggle('is-ready', completed === 5);
+        if (bottomStatus) bottomStatus.classList.toggle('is-ready', completed === 5 && Boolean(consent));
 
         if (submitBtn) {
+            submitBtn.removeAttribute('disabled');
             if (isValid) {
-                submitBtn.removeAttribute('disabled');
                 submitBtn.setAttribute('aria-disabled', 'false');
             } else {
-                submitBtn.setAttribute('disabled', 'disabled');
                 submitBtn.setAttribute('aria-disabled', 'true');
             }
         }
@@ -2870,6 +2984,7 @@ function initReviewForm() {
                 uni: uniSelectHidden ? uniSelectHidden.value : '',
                 rating: selectedRating,
                 recommend: isRecommended,
+                categories: selectedCategories,
                 is_anonymous: isAnonymous,
                 edu_status: educationStatus,
                 grad_year: educationStatus === 'graduate' ? graduationYear : null,
@@ -2886,21 +3001,25 @@ function initReviewForm() {
 
     function restoreDraft() {
         try {
-            const raw = localStorage.getItem(DRAFT_KEY);
-            if (!raw) return;
-            const draft = JSON.parse(raw);
-            if (!draft) return;
+            const { params } = parseHash();
+            const preselectedUni = params.get('uni') || params.get('name') || '';
 
-            // Üniversite
-            if (draft.uni && uniSelectHidden) {
-                uniSelectHidden.value = draft.uni;
+            const raw = localStorage.getItem(DRAFT_KEY);
+            const draft = raw ? JSON.parse(raw) : null;
+
+            // Üniversite (URL parametresi varsa öncelikli, yoksa taslaktan)
+            const initialUniVal = preselectedUni || (draft && draft.uni ? draft.uni : '');
+            if (initialUniVal && uniSelectHidden) {
+                uniSelectHidden.value = initialUniVal;
                 const trig = document.querySelector('#custom-uni-select-form .custom-select__text');
                 if (trig) {
-                    trig.textContent = draft.uni;
+                    trig.textContent = initialUniVal;
                     trig.style.color = 'var(--color-text)';
                 }
-                checkExistingReview(draft.uni);
+                checkExistingReview(initialUniVal);
             }
+
+            if (!draft) return;
 
             // Puan
             if (draft.rating >= 1 && draft.rating <= 5) {
@@ -2912,6 +3031,11 @@ function initReviewForm() {
             // Tavsiye
             if (typeof draft.recommend === 'boolean') {
                 setRecommendation(draft.recommend);
+            }
+
+            // Kategoriler
+            if (Array.isArray(draft.categories) && draft.categories.length > 0) {
+                setCategories(draft.categories, false);
             }
 
             // Anonimlik
@@ -2957,14 +3081,12 @@ function initReviewForm() {
             if (draft.consent && consentCheckbox) {
                 consentCheckbox.checked = true;
             }
-
-            updatePowerMeter();
-            validateForm(true);
         } catch (_) {}
     }
 
     restoreDraft();
     updatePowerMeter();
+    validateForm(true);
 
     // 11. Form Gönderimi
     form.addEventListener('submit', (e) => {
@@ -3004,7 +3126,8 @@ function initReviewForm() {
             university: university,
             date: new Date().toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' }),
             rating: selectedRating,
-            tags: [], // Boş etiket listesi
+            categories: [...selectedCategories],
+            tags: [...selectedCategories],
             text: reviewText,
             is_recommended: isRecommended,
             is_anonymous: isAnonymous,
@@ -3037,6 +3160,11 @@ function initReviewForm() {
             // Taslağı temizle
             try { localStorage.removeItem(DRAFT_KEY); } catch (_) {}
 
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Yorumu paylaş';
+            }
+
             // Başarı kartını göster, formu gizle
             form.hidden = true;
             if (successCard) successCard.hidden = false;
@@ -3057,27 +3185,56 @@ function initReviewForm() {
         });
     });
 
+    function clearFormState() {
+        selectedRating = 0;
+        if (ratingHidden) ratingHidden.value = '0';
+        highlightStars(0);
+        setRecommendation(null);
+        setCategories([], false);
+        if (reviewTextInput) reviewTextInput.value = '';
+        setEducationStatus('');
+        Object.keys(criteriaRatings).forEach(k => {
+            criteriaRatings[k] = 0;
+            const item = document.querySelector(`.rf-crit-item[data-crit="${k}"]`);
+            if (item) updateCritDisplay(item, 0);
+        });
+        if (uniSelectHidden) uniSelectHidden.value = '';
+        const trig = document.querySelector('#custom-uni-select-form .custom-select__text');
+        if (trig) {
+            trig.textContent = 'Üniversite seçin...';
+            trig.style.color = '';
+        }
+        if (uniWarning) uniWarning.hidden = true;
+        if (charCountEl) {
+            charCountEl.textContent = '0 / 40 min (maks. 500)';
+            charCountEl.classList.remove('is-valid');
+        }
+        if (charGuidanceEl) {
+            charGuidanceEl.textContent = 'En az 40 karakter yazmalısın.';
+            charGuidanceEl.style.color = '';
+        }
+        if (uniError) uniError.textContent = '';
+        if (ratingError) ratingError.textContent = '';
+        if (recError) recError.textContent = '';
+        if (categoriesError) categoriesError.textContent = '';
+        if (textError) textError.textContent = '';
+        if (consentError) consentError.textContent = '';
+        try { localStorage.removeItem(DRAFT_KEY); } catch (_) {}
+        updatePowerMeter();
+        validateForm(true);
+    }
+
+    form.addEventListener('reset', () => {
+        setTimeout(clearFormState, 0);
+    });
+
     // "Başka bir okula yorum yaz" butonu
     if (btnNew) {
         btnNew.addEventListener('click', () => {
             form.reset();
-            selectedRating = 0;
-            highlightStars(0);
-            if (reviewTextInput) reviewTextInput.value = '';
-            setEducationStatus('');
-            Object.keys(criteriaRatings).forEach(k => {
-                criteriaRatings[k] = 0;
-                const item = document.querySelector(`.rf-crit-item[data-crit="${k}"]`);
-                if (item) updateCritDisplay(item, 0);
-            });
-            if (uniSelectHidden) uniSelectHidden.value = '';
-            const trig = document.querySelector('#custom-uni-select-form .custom-select__text');
-            if (trig) trig.textContent = 'Üniversite seçin...';
-            if (charCountEl) charCountEl.textContent = '0 / 40 min (maks. 500)';
-            if (charGuidanceEl) charGuidanceEl.textContent = 'En az 40 karakter yazmalısın.';
+            clearFormState();
             if (successCard) successCard.hidden = true;
             form.hidden = false;
-            validateForm(true);
         });
     }
 }

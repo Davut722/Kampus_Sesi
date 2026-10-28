@@ -1,7 +1,11 @@
+import os
 import re
 import time
 import requests
 from bs4 import BeautifulSoup
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 
 # Türkiye'nin 81 İli
 SEHIRLER = [
@@ -22,10 +26,11 @@ HEADERS = {
 
 MESAFELER = ["Kampüs İçi", "Kampüse 500m", "Kampüse 1 km", "Kampüse 2 km", "Kampüse 3 km", "Otobüsle 15 dk", "Metroyla 10 dk"]
 
+
 def sehir_tara(sehir):
     url = f"https://www.kykyurtlar.com/{sehir}-kyk-yurtlari/"
     yurtlar = []
-    
+
     try:
         res = requests.get(url, headers=HEADERS, timeout=8)
         if res.status_code != 200:
@@ -33,7 +38,7 @@ def sehir_tara(sehir):
 
         soup = BeautifulSoup(res.text, "html.parser")
         yurt_linkleri = soup.find_all("a", href=re.compile(r"kyk-yurdu", re.I))
-        
+
         gorulenler = set()
         for a in yurt_linkleri:
             yurt_adi = a.get_text(strip=True)
@@ -47,7 +52,7 @@ def sehir_tara(sehir):
                 if yurt_adi not in gorulenler:
                     gorulenler.add(yurt_adi)
                     tur = "Kız" if "kız" in yurt_adi.lower() else ("Erkek" if "erkek" in yurt_adi.lower() else "Karma")
-                    
+
                     yurtlar.append({
                         "name": yurt_adi.replace("'", "''"),
                         "type": tur,
@@ -57,37 +62,37 @@ def sehir_tara(sehir):
     except Exception:
         return []
 
+
 def main():
     print("Türkiye genelindeki 81 ilin KYK yurtları taranıyor, lütfen bekle...")
     tum_yurtlar = []
-    
+
     for i, sehir in enumerate(SEHIRLER, 1):
         bulunan = sehir_tara(sehir)
         tum_yurtlar.extend(bulunan)
         print(f"[{i}/81] {sehir.capitalize()}: {len(bulunan)} yurt eklendi. (Toplam: {len(tum_yurtlar)})")
-        time.sleep(0.3)  # Hızlı ve kesintisiz çekim
+        time.sleep(0.3)
 
-    # SQL dosyasını oluştur
-    sql_dosyasi = "tam_liste_kyk.sql"
+    sql_dosyasi = os.path.join(DATA_DIR, "tam_liste_kyk.sql")
     with open(sql_dosyasi, mode="w", encoding="utf-8") as f:
         f.write("SET FOREIGN_KEY_CHECKS = 0;\n")
         f.write("TRUNCATE TABLE `kyk_dorms`;\n\n")
         f.write("INSERT INTO `kyk_dorms` (`university_id`, `name`, `type`, `distance`, `fee`, `capacity`) VALUES\n")
-        
+
         satirlar = []
         for idx, y in enumerate(tum_yurtlar, 1):
-            # Üniversite ID'lerine dengeli dağıt (örneğin ilk 10 üniversite veya mevcut üniversiteler)
             uni_id = (idx % 10) + 1
             mesafe = MESAFELER[idx % len(MESAFELER)]
-            kapasite = f"{(idx % 12 + 4) * 100} Kişi"  # 400 - 1500 arası gerçekçi kapasite
+            kapasite = f"{(idx % 12 + 4) * 100} Kişi"
             satirlar.append(f"({uni_id}, '{y['name']}', '{y['type']}', '{mesafe}', 'Standart KYK Ücreti', '{kapasite}')")
 
         f.write(",\n".join(satirlar) + ";\n\n")
         f.write("SET FOREIGN_KEY_CHECKS = 1;\n")
 
-    print(f"\n==========================================")
+    print("\n==========================================")
     print(f"BİTTİ! Toplam {len(tum_yurtlar)} adet GERÇEK yurt '{sql_dosyasi}' dosyasına yazıldı.")
-    print(f"==========================================")
+    print("==========================================")
+
 
 if __name__ == "__main__":
     main()

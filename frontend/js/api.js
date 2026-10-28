@@ -114,12 +114,17 @@ export const api = {
         const ratingSocial = reviewData.rating_social || reviewData.criteria?.sosyal || null;
         const ratingAcademic = reviewData.rating_academic || reviewData.criteria?.egitim || reviewData.criteria?.akademik || null;
 
+        const cats = Array.isArray(reviewData.categories) && reviewData.categories.length > 0
+            ? reviewData.categories
+            : (Array.isArray(reviewData.tags) ? reviewData.tags : []);
+
         return await request('/reviews', {
             method: 'POST',
             body: JSON.stringify({
                 university: reviewData.university,
                 rating: reviewData.rating,
-                tags: reviewData.tags || [],
+                categories: cats,
+                tags: cats,
                 text: reviewData.text,
                 is_recommended: reviewData.is_recommended,
                 is_anonymous: reviewData.is_anonymous,

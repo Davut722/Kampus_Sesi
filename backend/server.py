@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import time
 from typing import Optional, List, Dict, Any
@@ -9,6 +10,12 @@ from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
+for _p in (BACKEND_DIR, PROJECT_ROOT):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 from database import (
     init_db, get_db, User, Review, Reply, Interaction,
@@ -45,10 +52,52 @@ class LoginRequest(BaseModel):
     email: str
     password: str
 
+VALID_REVIEW_CATEGORIES = {
+    "kampus": "Kampüs",
+    "yemekhane": "Yemekhane",
+    "egitim": "Eğitim",
+    "kutuphane": "Kütüphane",
+    "sosyal": "Sosyal Hayat",
+    "ulasim": "Ulaşım",
+    "yurt": "Yurt Olanakları",
+}
+
+def _tr_lower(s: str) -> str:
+    return s.replace("İ", "i").replace("I", "ı").lower()
+
+
+CATEGORY_LABEL_TO_ID = {
+    _tr_lower(label): cat_id for cat_id, label in VALID_REVIEW_CATEGORIES.items()
+}
+
+
+def normalize_review_categories(raw_list: Optional[List[str]]) -> List[str]:
+    if not raw_list or not isinstance(raw_list, list):
+        return []
+    normalized = []
+    for item in raw_list:
+        if not isinstance(item, str):
+            raise HTTPException(status_code=400, detail="Geçersiz kategori seçimi.")
+        val = item.strip()
+        if not val:
+            continue
+        lower_val = _tr_lower(val)
+        if lower_val in VALID_REVIEW_CATEGORIES:
+            cat_id = lower_val
+        elif lower_val in CATEGORY_LABEL_TO_ID:
+            cat_id = CATEGORY_LABEL_TO_ID[lower_val]
+        else:
+            raise HTTPException(status_code=400, detail=f"Geçersiz kategori: {val}")
+        if cat_id not in normalized:
+            normalized.append(cat_id)
+    return normalized
+
+
 class ReviewCreateRequest(BaseModel):
     university: str
     rating: int
-    tags: List[str]
+    categories: Optional[List[str]] = None
+    tags: Optional[List[str]] = None
     text: str
     is_recommended: bool
     is_anonymous: bool = True
@@ -445,6 +494,11 @@ def create_review(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    raw_categories = req.categories if req.categories is not None else (req.tags if req.tags is not None else [])
+    normalized_categories = normalize_review_categories(raw_categories)
+    if len(normalized_categories) < 1:
+        raise HTTPException(status_code=400, detail="Lütfen en az bir kategori seç.")
+
     now_ms = int(time.time() * 1000)
     turkish_months = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"]
     now = time.localtime()
@@ -483,7 +537,8 @@ def create_review(
         initials=current_user.initials,
         university=req.university.strip(),
         rating=max(1, min(5, req.rating)),
-        tags_json=json.dumps(req.tags),
+        categories_json=json.dumps(normalized_categories, ensure_ascii=False),
+        tags_json=json.dumps(normalized_categories, ensure_ascii=False),
         text=req.text.strip(),
         is_recommended=bool(req.is_recommended),
         is_anonymous=bool(req.is_anonymous),
@@ -1034,26 +1089,28 @@ def toggle_message_read(
 
 # ─── Static Frontend Serving ──────────────
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
 
-if os.path.exists(os.path.join(BASE_DIR, "css")):
-    app.mount("/css", StaticFiles(directory=os.path.join(BASE_DIR, "css")), name="css")
-if os.path.exists(os.path.join(BASE_DIR, "js")):
-    app.mount("/js", StaticFiles(directory=os.path.join(BASE_DIR, "js")), name="js")
-if os.path.exists(os.path.join(BASE_DIR, "img")):
-    app.mount("/img", StaticFiles(directory=os.path.join(BASE_DIR, "img")), name="img")
+if os.path.exists(os.path.join(FRONTEND_DIR, "css")):
+    app.mount("/css", StaticFiles(directory=os.path.join(FRONTEND_DIR, "css")), name="css")
+if os.path.exists(os.path.join(FRONTEND_DIR, "js")):
+    app.mount("/js", StaticFiles(directory=os.path.join(FRONTEND_DIR, "js")), name="js")
+if os.path.exists(os.path.join(FRONTEND_DIR, "img")):
+    app.mount("/img", StaticFiles(directory=os.path.join(FRONTEND_DIR, "img")), name="img")
+if os.path.exists(os.path.join(FRONTEND_DIR, "assets")):
+    app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIR, "assets")), name="assets")
 
 @app.get("/")
 def serve_index():
     return FileResponse(
-        os.path.join(BASE_DIR, "index.html"),
+        os.path.join(FRONTEND_DIR, "index.html"),
         headers={"Cache-Control": "no-cache, no-store, must-revalidate"}
     )
 
 @app.get("/index.html")
 def serve_index_html():
     return FileResponse(
-        os.path.join(BASE_DIR, "index.html"),
+        os.path.join(FRONTEND_DIR, "index.html"),
         headers={"Cache-Control": "no-cache, no-store, must-revalidate"}
     )
 
@@ -1065,4 +1122,4 @@ if __name__ == "__main__":
     print("API Docs: http://localhost:8000/docs")
     print("Veritabani:  MySQL (Kampüs Sesi)")
     print("="*50 + "\n")
-    uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=True, app_dir=BACKEND_DIR)

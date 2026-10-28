@@ -5,8 +5,11 @@ import os
 import sys
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+BACKEND_DIR = os.path.join(PROJECT_ROOT, "backend")
+DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+for _p in (PROJECT_ROOT, BACKEND_DIR):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 from database import (
     SessionLocal,
@@ -22,8 +25,8 @@ from scripts.geocode_dorms import normalize_tr, load_dorm_city_map, result_match
 MAX_DORM_DISTANCE_KM = 10.0
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-GEOCODE_CACHE_PATH = os.path.join(SCRIPT_DIR, "dorm_geocode_cache.json")
-UNMATCHED_PATH = os.path.join(SCRIPT_DIR, "dorm_geocode_unmatched.json")
+GEOCODE_CACHE_PATH = os.path.join(DATA_DIR, "dorm_geocode_cache.json")
+UNMATCHED_PATH = os.path.join(DATA_DIR, "dorm_geocode_unmatched.json")
 
 
 def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:

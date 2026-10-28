@@ -2,7 +2,31 @@
    Kampüs Sesi — REST API Client (FastAPI Backend)
    ======================================== */
 
-const API_BASE = 'http://127.0.0.1:8000/api';
+// Akıllı API Base tespiti:
+// 1. Tarayıcıda http://localhost:8000 veya tünel (ngrok/Cloudflare)/canlı domain açıldığında -> kendi origin'i (/api)
+// 2. VS Code Live Server (port 5500/5501 vb.), Vite (5173), Webpack/React (3000) veya file:// ile açıldığında -> FastAPI varsayılan portu olan http://localhost:8000/api
+function resolveApiBase() {
+    if (typeof window === 'undefined' || !window.location) {
+        return 'http://localhost:8000/api';
+    }
+
+    const { protocol, hostname, port, origin } = window.location;
+
+    // file:// doğrudan dosya olarak açıldıysa
+    if (protocol === 'file:' || origin === 'null' || !origin) {
+        return 'http://localhost:8000/api';
+    }
+
+    // Yerel bir geliştirme sunucusunda (Live Server 5500, Vite vb.) backend portu dışında açıldıysa
+    if (port && port !== '8000' && (hostname === 'localhost' || hostname === '127.0.0.1')) {
+        return `http://${hostname}:8000/api`;
+    }
+
+    // FastAPI tarafından doğrudan sunuluyorsa (port 8000) veya ngrok / domain üzerindeyse
+    return `${origin}/api`;
+}
+
+export const API_BASE = resolveApiBase();
 
 function getToken() {
     return localStorage.getItem('kampus_sesi_token');
@@ -29,10 +53,16 @@ async function request(endpoint, options = {}) {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(url, {
-        ...options,
-        headers
-    });
+    let response;
+    try {
+        response = await fetch(url, {
+            ...options,
+            headers
+        });
+    } catch (networkErr) {
+        console.error(`[Kampüs Sesi] API bağlantı hatası (${url}):`, networkErr);
+        throw new Error(`Backend sunucusuna bağlanılamadı (${API_BASE}). Lütfen 'python backend/server.py' çalıştırıp 'http://localhost:8000' adresini açın.`);
+    }
 
     if (!response.ok) {
         let errorMsg = 'Bir hata oluştu.';
@@ -44,6 +74,19 @@ async function request(endpoint, options = {}) {
     }
 
     return await response.json();
+}
+
+// FastAPI'nin rota bulunamadığında döndüğü varsayılan detay "Not Found"dur.
+// Yeni eklenen uç noktalarda bu, sunucunun eski kodla çalıştığı (yeniden başlatılmadığı) anlamına gelir.
+async function requestNewEndpoint(endpoint, options = {}) {
+    try {
+        return await request(endpoint, options);
+    } catch (err) {
+        if (err && err.message === 'Not Found') {
+            throw new Error('Sunucu eski sürümle çalışıyor. Backend\'i durdurup yeniden başlatın (baslat.bat veya python backend/server.py).');
+        }
+        throw err;
+    }
 }
 
 export const api = {
@@ -277,8 +320,40 @@ export const api = {
         });
     },
 
-    async deleteAdminReview(reviewId) {
-        return await request(`/admin/reviews/${reviewId}`, {
+    async getAdminReviews(query = '', university = '') {
+        const params = new URLSearchParams();
+        if (query) params.append('q', query);
+        if (university) params.append('university', university);
+        const qs = params.toString() ? `?${params.toString()}` : '';
+        return await requestNewEndpoint(`/admin/reviews${qs}`);
+    },
+
+    // Not: Eski /api/reviews/{id} uç noktasına sessizce düşülmez; o yol kullanıcıya bildirim üretmez.
+    async deleteAdminReview(reviewId, reason = '') {
+        return await requestNewEndpoint(`/admin/reviews/${reviewId}`, {
+            method: 'DELETE',
+            body: reason ? JSON.stringify({ reason }) : undefined
+        });
+    },
+
+    async getMyNotifications() {
+        return await requestNewEndpoint('/users/me/notifications');
+    },
+
+    async markNotificationRead(notificationId) {
+        return await request(`/users/me/notifications/${notificationId}/read`, {
+            method: 'PATCH'
+        });
+    },
+
+    async markAllNotificationsRead() {
+        return await request('/users/me/notifications/read-all', {
+            method: 'POST'
+        });
+    },
+
+    async deleteNotification(notificationId) {
+        return await request(`/users/me/notifications/${notificationId}`, {
             method: 'DELETE'
         });
     },

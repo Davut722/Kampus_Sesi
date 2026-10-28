@@ -6,8 +6,9 @@ import html
 import urllib.request
 import urllib.error
 from datetime import datetime
+from collections import defaultdict
 from typing import Optional, List, Dict, Any
-from fastapi import FastAPI, Depends, HTTPException, status, Header
+from fastapi import FastAPI, Depends, HTTPException, status, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -53,27 +54,62 @@ _load_dotenv_files()
 from database import (
     init_db, get_db, SessionLocal, User, Review, Reply, Interaction,
     University, UniversityAddress, KykDorm, UniversityDorm, SchoolSuggestion,
-    ContactMessage, ContactMessageReply, BlogSubmission, UserFavorite
+    ContactMessage, ContactMessageReply, BlogSubmission, UserFavorite, UserNotification
 )
 from auth_utils import hash_password, verify_password, create_access_token, decode_access_token
 
 # Initialize database tables & seed
 init_db()
 
+ENABLE_DOCS = os.getenv("ENABLE_DOCS", "false").lower() in ("true", "1")
+
 app = FastAPI(
     title="Kampüs Sesi API",
     description="Üniversite Değerlendirme Platformu REST API ve Veritabanı Backend Servisi",
-    version="1.0.0"
+    version="1.0.0",
+    docs_url="/docs" if ENABLE_DOCS else None,
+    redoc_url="/redoc" if ENABLE_DOCS else None,
+    openapi_url="/openapi.json" if ENABLE_DOCS else None,
 )
 
-# CORS Middleware
+# Security Headers Middleware
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+    return response
+
+# CORS Middleware (allow_credentials=False complies with wildcard allow_origins)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ─── In-Memory Rate Limiting ──────────────
+_RATE_LIMIT_STORE: Dict[str, List[float]] = defaultdict(list)
+
+def check_rate_limit(key: str, max_requests: int, window_seconds: int = 60):
+    now = time.time()
+    timestamps = _RATE_LIMIT_STORE[key]
+    _RATE_LIMIT_STORE[key] = [t for t in timestamps if (now - t) < window_seconds]
+    if len(_RATE_LIMIT_STORE[key]) >= max_requests:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Çok fazla istek gönderdiniz. Lütfen bir süre sonra tekrar deneyin."
+        )
+    _RATE_LIMIT_STORE[key].append(now)
+
+def get_client_ip(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
 
 # ─── Pydantic Schemas ─────────────────────
 
@@ -275,18 +311,30 @@ def calc_initials(name: str) -> str:
 # ─── Auth Endpoints ───────────────────────
 
 @app.post("/api/auth/register")
-def register(req: RegisterRequest, db: Session = Depends(get_db)):
-    existing = db.query(User).filter(User.email == req.email.strip().lower()).first()
-    if existing:
-        raise HTTPException(status_code=400, detail="Bu e-posta adresi zaten kullanımda.")
+def register(req: RegisterRequest, request: Request, db: Session = Depends(get_db)):
+    client_ip = get_client_ip(request)
+    check_rate_limit(f"register:{client_ip}", max_requests=5, window_seconds=60)
+
+    clean_email = req.email.strip().lower()
+    if "@" not in clean_email or "." not in clean_email or len(clean_email) > 150:
+        raise HTTPException(status_code=400, detail="Geçerli bir e-posta adresi giriniz.")
+
+    name = req.name.strip()
+    if not name or len(name) > 100:
+        raise HTTPException(status_code=400, detail="İsim 1-100 karakter arasında olmalıdır.")
 
     if len(req.password) < 6:
         raise HTTPException(status_code=400, detail="Şifre en az 6 karakter olmalıdır.")
+    if len(req.password) > 128:
+        raise HTTPException(status_code=400, detail="Şifre en fazla 128 karakter olabilir.")
 
-    name = req.name.strip()
+    existing = db.query(User).filter(User.email == clean_email).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Bu e-posta adresi zaten kullanımda.")
+
     user = User(
         name=name,
-        email=req.email.strip().lower(),
+        email=clean_email,
         password_hash=hash_password(req.password),
         initials=calc_initials(name)
     )
@@ -307,8 +355,12 @@ def register(req: RegisterRequest, db: Session = Depends(get_db)):
     }
 
 @app.post("/api/auth/login")
-def login(req: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == req.email.strip().lower()).first()
+def login(req: LoginRequest, request: Request, db: Session = Depends(get_db)):
+    client_ip = get_client_ip(request)
+    clean_email = req.email.strip().lower()
+    check_rate_limit(f"login:{client_ip}:{clean_email}", max_requests=10, window_seconds=60)
+
+    user = db.query(User).filter(User.email == clean_email).first()
     if not user or not verify_password(req.password, user.password_hash):
         raise HTTPException(status_code=400, detail="E-posta veya şifre hatalı.")
 
@@ -360,6 +412,10 @@ def get_my_profile(
         (BlogSubmission.author_info.ilike(f"%{current_user.email}%"))
     ).count()
     fav_count = db.query(UserFavorite).filter(UserFavorite.user_id == current_user.id).count()
+    unread_notifications = db.query(UserNotification).filter(
+        UserNotification.user_id == current_user.id,
+        UserNotification.is_read == False
+    ).count()
 
     return {
         "id": current_user.id,
@@ -376,9 +432,64 @@ def get_my_profile(
             "review_count": review_count,
             "upvote_count": upvote_count,
             "submission_count": sug_count + blog_count,
-            "favorite_count": fav_count
+            "favorite_count": fav_count,
+            "unread_notifications": unread_notifications
         }
     }
+
+@app.get("/api/users/me/notifications")
+def get_my_notifications(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    notifs = db.query(UserNotification).filter(
+        UserNotification.user_id == current_user.id
+    ).order_by(UserNotification.id.desc()).all()
+    return [n.to_dict() for n in notifs]
+
+@app.patch("/api/users/me/notifications/{notification_id}/read")
+def mark_notification_read(
+    notification_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    notif = db.query(UserNotification).filter(
+        UserNotification.id == notification_id,
+        UserNotification.user_id == current_user.id
+    ).first()
+    if not notif:
+        raise HTTPException(status_code=404, detail="Bildirim bulunamadı.")
+    notif.is_read = True
+    db.commit()
+    return {"success": True, "message": "Bildirim okundu olarak işaretlendi."}
+
+@app.post("/api/users/me/notifications/read-all")
+def mark_all_notifications_read(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    db.query(UserNotification).filter(
+        UserNotification.user_id == current_user.id,
+        UserNotification.is_read == False
+    ).update({"is_read": True})
+    db.commit()
+    return {"success": True, "message": "Tüm bildirimler okundu olarak işaretlendi."}
+
+@app.delete("/api/users/me/notifications/{notification_id}")
+def delete_notification(
+    notification_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    notif = db.query(UserNotification).filter(
+        UserNotification.id == notification_id,
+        UserNotification.user_id == current_user.id
+    ).first()
+    if not notif:
+        raise HTTPException(status_code=404, detail="Bildirim bulunamadı.")
+    db.delete(notif)
+    db.commit()
+    return {"success": True, "message": "Bildirim silindi."}
 
 @app.get("/api/users/me/reviews")
 def get_my_reviews(
@@ -527,6 +638,14 @@ def create_review(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    check_rate_limit(f"review_user:{current_user.id}", max_requests=6, window_seconds=60)
+
+    clean_text = req.text.strip()
+    if len(clean_text) < 10:
+        raise HTTPException(status_code=400, detail="Değerlendirme metni en az 10 karakter olmalıdır.")
+    if len(clean_text) > 4000:
+        raise HTTPException(status_code=400, detail="Değerlendirme metni en fazla 4000 karakter olabilir.")
+
     raw_categories = req.categories if req.categories is not None else (req.tags if req.tags is not None else [])
     normalized_categories = normalize_review_categories(raw_categories)
     if len(normalized_categories) < 1:
@@ -572,7 +691,7 @@ def create_review(
         rating=max(1, min(5, req.rating)),
         categories_json=json.dumps(normalized_categories, ensure_ascii=False),
         tags_json=json.dumps(normalized_categories, ensure_ascii=False),
-        text=req.text.strip(),
+        text=clean_text,
         is_anonymous=bool(req.is_anonymous),
         education_status=(req.education_status or "student").strip() if req.education_status else None,
         graduation_year=grad_year,
@@ -592,6 +711,7 @@ def create_review(
 @app.delete("/api/reviews/{review_id}")
 def delete_review(
     review_id: int,
+    req: Optional[ReviewDeleteRequest] = None,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -599,8 +719,42 @@ def delete_review(
     if not review:
         raise HTTPException(status_code=404, detail="Değerlendirme bulunamadı.")
     
-    if review.user_id != current_user.id and review.user_name != current_user.name:
+    is_author = (review.user_id is not None and review.user_id == current_user.id)
+    is_admin = (current_user.role in ["admin", "moderator"])
+    if not (is_author or is_admin):
         raise HTTPException(status_code=403, detail="Yalnızca kendi değerlendirmenizi silebilirsiniz.")
+
+    # Eğer yönetici veya moderatör siliyorsa kural ihlali bildirimi ve geri dönüş mesajı oluştur:
+    if is_admin:
+        target_uid = review.user_id
+        if not target_uid and review.user_name:
+            matched = db.query(User).filter(
+                (User.name == review.user_name) |
+                (User.name.like(f"%{review.user_name}%")) |
+                (User.email.like(f"%{review.user_name}%"))
+            ).first()
+            if matched:
+                target_uid = matched.id
+
+        custom_reason = (req.reason.strip() if req and req.reason and req.reason.strip() else None)
+        feedback_text = custom_reason if custom_reason else "Site kurallarımız ve topluluk ilkelerimiz çerçevesi dışındaki içerik veya üslup."
+
+        final_msg = (
+            f"🏛️ Üniversite: {review.university}\n"
+            f"⭐ Değerlendirme Puanı: {review.rating}/5\n"
+            f"📝 Silinen Yorumunuz:\n\"{review.text}\"\n\n"
+            f"📢 Yönetim Geri Dönüşü & Kaldırılma Gerekçesi:\n"
+            f"Yorumunuz site kurallarımız çerçevesi dışında olduğu için yönetim tarafından kaldırılmıştır.\n"
+            f"Geri Dönüş Notu: {feedback_text}"
+        )
+
+        if target_uid and not is_author:
+            db.add(UserNotification(
+                user_id=target_uid,
+                title="Yorumunuz Kaldırıldı (Kural İhlali)",
+                message=final_msg,
+                notification_type="warning"
+            ))
 
     db.delete(review)
     db.commit()
@@ -613,6 +767,11 @@ def add_reply(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    check_rate_limit(f"reply_user:{current_user.id}", max_requests=10, window_seconds=60)
+    clean_text = req.text.strip()
+    if not clean_text or len(clean_text) > 1500:
+        raise HTTPException(status_code=400, detail="Yanıt 1-1500 karakter arasında olmalıdır.")
+
     review = db.query(Review).filter(Review.id == review_id).first()
     if not review:
         raise HTTPException(status_code=404, detail="Değerlendirme bulunamadı.")
@@ -624,7 +783,7 @@ def add_reply(
     reply = Reply(
         review_id=review.id,
         user_name=current_user.name,
-        text=req.text.strip(),
+        text=clean_text,
         date=date_str,
         timestamp=int(time.time() * 1000)
     )
@@ -821,17 +980,38 @@ def get_university(uni_name: str, db: Session = Depends(get_db)):
 # ─── Suggestions, Contact, Blog & Favorites Endpoints ────
 
 @app.post("/api/suggestions/school")
-def create_school_suggestion(req: SchoolSuggestionCreate, db: Session = Depends(get_db)):
-    if not req.uni_name.strip() or not req.city.strip() or not req.email.strip():
-        raise HTTPException(status_code=400, detail="Üniversite adı, şehir ve e-posta zorunludur.")
-    
+def create_school_suggestion(req: SchoolSuggestionCreate, request: Request, db: Session = Depends(get_db)):
+    client_ip = get_client_ip(request)
+    check_rate_limit(f"sug:{client_ip}", max_requests=5, window_seconds=60)
+
+    clean_email = req.email.strip().lower()
+    if "@" not in clean_email or "." not in clean_email or len(clean_email) > 150:
+        raise HTTPException(status_code=400, detail="Geçerli bir e-posta adresi giriniz.")
+
+    clean_uni = req.uni_name.strip()
+    clean_city = req.city.strip()
+    if not clean_uni or not clean_city or len(clean_uni) > 150 or len(clean_city) > 100:
+        raise HTTPException(status_code=400, detail="Üniversite adı ve şehir zorunludur (en fazla 150 karakter).")
+
+    clean_website = (req.website or "").strip()
+    if clean_website:
+        w_lower = clean_website.lower()
+        if not (w_lower.startswith("http://") or w_lower.startswith("https://")):
+            raise HTTPException(status_code=400, detail="Web sitesi adresi 'http://' veya 'https://' ile başlamalıdır.")
+        if len(clean_website) > 255:
+            raise HTTPException(status_code=400, detail="Web sitesi adresi en fazla 255 karakter olabilir.")
+
+    clean_notes = (req.notes or "").strip()
+    if len(clean_notes) > 1000:
+        raise HTTPException(status_code=400, detail="Notlar en fazla 1000 karakter olabilir.")
+
     suggestion = SchoolSuggestion(
-        uni_name=req.uni_name.strip(),
-        city=req.city.strip(),
-        campus=req.campus.strip() if req.campus else "",
-        website=req.website.strip() if req.website else "",
-        email=req.email.strip(),
-        notes=req.notes.strip() if req.notes else ""
+        uni_name=clean_uni,
+        city=clean_city,
+        campus=(req.campus or "").strip()[:150],
+        website=clean_website,
+        email=clean_email,
+        notes=clean_notes
     )
     db.add(suggestion)
     db.commit()
@@ -839,7 +1019,10 @@ def create_school_suggestion(req: SchoolSuggestionCreate, db: Session = Depends(
     return {"success": True, "message": "Üniversite öneriniz başarıyla kaydedildi.", "data": suggestion.to_dict()}
 
 @app.get("/api/suggestions/school")
-def get_school_suggestions(db: Session = Depends(get_db)):
+def get_school_suggestions(
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_moderator_or_admin)
+):
     suggestions = db.query(SchoolSuggestion).order_by(SchoolSuggestion.created_at.desc()).all()
     return [s.to_dict() for s in suggestions]
 
@@ -878,15 +1061,31 @@ def notify_discord_new_message(name: str, email: str, subject: str, message: str
 
 
 @app.post("/api/contact")
-def create_contact_message(req: ContactMessageCreate, db: Session = Depends(get_db)):
-    if not req.name.strip() or not req.email.strip() or not req.message.strip():
+def create_contact_message(req: ContactMessageCreate, request: Request, db: Session = Depends(get_db)):
+    client_ip = get_client_ip(request)
+    check_rate_limit(f"contact:{client_ip}", max_requests=5, window_seconds=60)
+
+    clean_name = req.name.strip()
+    clean_email = req.email.strip().lower()
+    clean_subj = req.subject.strip()
+    clean_msg = req.message.strip()
+
+    if not clean_name or not clean_email or not clean_msg:
         raise HTTPException(status_code=400, detail="Ad, e-posta ve mesaj alanları zorunludur.")
-    
+    if "@" not in clean_email or "." not in clean_email or len(clean_email) > 150:
+        raise HTTPException(status_code=400, detail="Geçerli bir e-posta adresi giriniz.")
+    if len(clean_name) > 100:
+        raise HTTPException(status_code=400, detail="İsim en fazla 100 karakter olabilir.")
+    if len(clean_subj) > 150:
+        raise HTTPException(status_code=400, detail="Konu en fazla 150 karakter olabilir.")
+    if len(clean_msg) > 3000:
+        raise HTTPException(status_code=400, detail="Mesaj en fazla 3000 karakter olabilir.")
+
     msg = ContactMessage(
-        name=req.name.strip(),
-        email=req.email.strip(),
-        subject=req.subject.strip(),
-        message=req.message.strip()
+        name=clean_name,
+        email=clean_email,
+        subject=clean_subj,
+        message=clean_msg
     )
     db.add(msg)
     db.commit()
@@ -906,23 +1105,39 @@ def create_contact_message(req: ContactMessageCreate, db: Session = Depends(get_
     return {"success": True, "message": "Mesajınız başarıyla iletildi.", "data": msg.to_dict()}
 
 @app.get("/api/contact")
-def get_contact_messages(db: Session = Depends(get_db)):
+def get_contact_messages(
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin)
+):
     msgs = db.query(ContactMessage).order_by(ContactMessage.created_at.desc()).all()
     return [m.to_dict() for m in msgs]
 
 @app.post("/api/blog/submissions")
-def create_blog_submission(req: BlogSubmissionCreate, db: Session = Depends(get_db)):
-    if not req.title.strip() or not req.content.strip() or not req.author_name.strip():
+def create_blog_submission(req: BlogSubmissionCreate, request: Request, db: Session = Depends(get_db)):
+    client_ip = get_client_ip(request)
+    check_rate_limit(f"blog:{client_ip}", max_requests=5, window_seconds=60)
+
+    clean_title = req.title.strip()
+    clean_content = req.content.strip()
+    clean_author = req.author_name.strip()
+
+    if not clean_title or not clean_content or not clean_author:
         raise HTTPException(status_code=400, detail="Başlık, yazar adı ve içerik alanları zorunludur.")
-    
+    if len(clean_title) > 200:
+        raise HTTPException(status_code=400, detail="Başlık en fazla 200 karakter olabilir.")
+    if len(clean_author) > 100:
+        raise HTTPException(status_code=400, detail="Yazar adı en fazla 100 karakter olabilir.")
+    if len(clean_content) > 20000:
+        raise HTTPException(status_code=400, detail="Blog içeriği en fazla 20.000 karakter olabilir.")
+
     sub = BlogSubmission(
-        title=req.title.strip(),
-        category=req.category.strip(),
-        read_time=req.read_time.strip() if req.read_time else "4 dk okuma",
-        author_name=req.author_name.strip(),
-        author_info=req.author_info.strip(),
-        summary=req.summary.strip() if req.summary else "",
-        content=req.content.strip()
+        title=clean_title,
+        category=req.category.strip()[:50] if req.category else "Genel",
+        read_time=(req.read_time or "4 dk okuma").strip()[:30],
+        author_name=clean_author,
+        author_info=(req.author_info or "").strip()[:200],
+        summary=(req.summary or "").strip()[:500],
+        content=clean_content
     )
     db.add(sub)
     db.commit()
@@ -930,7 +1145,10 @@ def create_blog_submission(req: BlogSubmissionCreate, db: Session = Depends(get_
     return {"success": True, "message": "Blog yazınız başarıyla kaydedildi.", "data": sub.to_dict()}
 
 @app.get("/api/blog/submissions")
-def get_blog_submissions(db: Session = Depends(get_db)):
+def get_blog_submissions(
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_moderator_or_admin)
+):
     subs = db.query(BlogSubmission).order_by(BlogSubmission.created_at.desc()).all()
     return [s.to_dict() for s in subs]
 
@@ -1130,9 +1348,47 @@ def moderate_content(
     db.commit()
     return {"success": True, "message": f"İçerik '{new_status}' olarak güncellendi."}
 
+class ReviewDeleteRequest(BaseModel):
+    reason: Optional[str] = None
+
+
+@app.get("/api/admin/reviews")
+def get_admin_reviews(
+    q: Optional[str] = None,
+    university: Optional[str] = None,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_moderator_or_admin)
+):
+    query = db.query(Review)
+    if university and university.strip():
+        query = query.filter(Review.university == university.strip())
+    if q and q.strip():
+        kw = f"%{q.strip().lower()}%"
+        query = query.filter(
+            (Review.text.ilike(kw)) |
+            (Review.university.ilike(kw)) |
+            (Review.user_name.ilike(kw))
+        )
+    # En son eklenen yorum daima en başta:
+    reviews = query.order_by(Review.id.desc()).limit(200).all()
+    results = []
+    for r in reviews:
+        d = r.to_dict()
+        if r.user_id:
+            u = db.query(User).filter(User.id == r.user_id).first()
+            d["author_email"] = u.email if u else None
+            d["author_id"] = r.user_id
+        else:
+            d["author_email"] = None
+            d["author_id"] = None
+        results.append(d)
+    return results
+
+
 @app.delete("/api/admin/reviews/{review_id}")
 def admin_delete_review(
     review_id: int,
+    req: Optional[ReviewDeleteRequest] = None,
     db: Session = Depends(get_db),
     admin: User = Depends(require_moderator_or_admin)
 ):
@@ -1140,9 +1396,43 @@ def admin_delete_review(
     if not review:
         raise HTTPException(status_code=404, detail="Yorum bulunamadı.")
 
+    custom_reason = (req.reason.strip() if req and req.reason and req.reason.strip() else None)
+    feedback_text = custom_reason if custom_reason else "Site kurallarımız ve topluluk ilkelerimiz çerçevesi dışındaki içerik veya üslup."
+
+    final_msg = (
+        f"🏛️ Üniversite: {review.university}\n"
+        f"⭐ Değerlendirme Puanı: {review.rating}/5\n"
+        f"📝 Silinen Yorumunuz:\n\"{review.text}\"\n\n"
+        f"📢 Yönetim Geri Dönüşü & Kaldırılma Gerekçesi:\n"
+        f"Yorumunuz site kurallarımız çerçevesi dışında olduğu için yönetim tarafından kaldırılmıştır.\n"
+        f"Geri Dönüş Notu: {feedback_text}"
+    )
+
+    # Yorum kayıtlı bir üyeye aitse profil bildirim kutusuna düşür
+    target_user_id = review.user_id
+    if not target_user_id and review.user_name:
+        matched_user = db.query(User).filter(
+            (User.name == review.user_name) |
+            (User.name.like(f"%{review.user_name}%")) |
+            (User.email.like(f"%{review.user_name}%"))
+        ).first()
+        if matched_user:
+            target_user_id = matched_user.id
+
+    if target_user_id:
+        db.add(UserNotification(
+            user_id=target_user_id,
+            title="Yorumunuz Kaldırıldı (Kural İhlali)",
+            message=final_msg,
+            notification_type="warning"
+        ))
+
     db.delete(review)
     db.commit()
-    return {"success": True, "message": "Yorum yayından kaldırıldı."}
+    return {
+        "success": True,
+        "message": "Yorum yayından kaldırıldı ve kullanıcıya bildirim iletildi."
+    }
 
 class ToggleMessageRepliedRequest(BaseModel):
     replied: Optional[bool] = None
@@ -1246,10 +1536,12 @@ def serve_index_html():
 
 if __name__ == "__main__":
     import uvicorn
+    should_reload = os.getenv("UVICORN_RELOAD", "true").lower() in ("true", "1")
     print("\n" + "="*50)
-    print("Kampüs Sesi Sunucusu Baslatiliyor...")
+    print("Kampüs Sesi Sunucusu Başlatılıyor...")
     print("Web Sitesi: http://localhost:8000")
-    print("API Docs: http://localhost:8000/docs")
-    print("Veritabani:  MySQL (Kampüs Sesi)")
+    print(f"API Docs:   {'http://localhost:8000/docs (Aktif)' if ENABLE_DOCS else 'Devre Dışı (Güvenli)'}")
+    print(f"Hot Reload: {'Açık (Geliştirme)' if should_reload else 'Kapalı (Performans / Demo)'}")
+    print("Veritabanı: MySQL (Kampüs Sesi)")
     print("="*50 + "\n")
-    uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=True, app_dir=BACKEND_DIR)
+    uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=should_reload, app_dir=BACKEND_DIR)

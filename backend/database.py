@@ -452,6 +452,31 @@ class UserFavorite(Base):
             "created_at": self.created_at.isoformat() if self.created_at else None
         }
 
+class UserNotification(Base):
+    __tablename__ = "user_notifications"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    title = Column(String(150), default="Yorumunuz Kaldırıldı", nullable=False)
+    message = Column(Text, nullable=False)
+    notification_type = Column(String(50), default="warning")  # warning, info, danger, success
+    is_read = Column(Boolean, default=False, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", backref="notifications")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "title": self.title,
+            "message": self.message,
+            "notification_type": self.notification_type,
+            "is_read": self.is_read,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "date": self.created_at.strftime("%d.%m.%Y %H:%M") if self.created_at else ""
+        }
+
 def init_db():
     # Create missing tables without deleting persisted user data.
     Base.metadata.create_all(bind=engine)
@@ -570,16 +595,21 @@ def init_db():
         # Ensure at least one admin user exists for management
         admin_user = db.query(User).filter(User.role == "admin").first()
         if not admin_user:
-            # Promote Davut or first user to admin
-            davut = db.query(User).filter(User.email.ilike("%davut%")).first()
-            if davut:
-                davut.role = "admin"
+            try:
+                from auth_utils import hash_password
+                default_admin = User(
+                    name="Sistem Yöneticisi",
+                    email="admin@kampussesi.com",
+                    password_hash=hash_password("DemoAdmin2026!"),
+                    role="admin",
+                    initials="SY"
+                )
+                db.add(default_admin)
                 db.commit()
-            else:
-                first_u = db.query(User).first()
-                if first_u:
-                    first_u.role = "admin"
-                    db.commit()
+                print("[INFO] Varsayılan yönetici hesabı oluşturuldu (admin@kampussesi.com / DemoAdmin2026!)")
+            except Exception as admin_err:
+                db.rollback()
+                print(f"[WARN] Varsayılan yönetici oluşturulamadı: {admin_err}")
 
         if db.query(Review).count() == 0:
             sample_reviews = [

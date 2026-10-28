@@ -34,6 +34,18 @@
         };
     </script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        // file:// protokolü ile açıldığında kullanıcıyı bilgilendir
+        if (typeof window !== 'undefined' && window.location && window.location.protocol === 'file:') {
+            window.addEventListener('DOMContentLoaded', function() {
+                var banner = document.createElement('div');
+                banner.id = 'file-protocol-warning';
+                banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999999;background:#b91c1c;color:#fff;padding:12px 20px;font-family:system-ui,-apple-system,sans-serif;font-size:13px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,0.5);line-height:1.5;';
+                banner.innerHTML = '<strong>⚠️ Doğrudan Dosya Olarak Açıldı:</strong> Tarayıcı güvenlik (CORS) kısıtlamaları nedeniyle web uygulaması veritabanına bağlanmak için sunucu üzerinden açılmalıdır.<br>Lütfen <strong>baslat.bat</strong> dosyasını çalıştırın veya terminalde <code>python backend/server.py</code> komutunu verdikten sonra <a href="http://localhost:8000" style="color:#fde047;font-weight:bold;text-decoration:underline;">http://localhost:8000</a> adresini açın.';
+                document.body.prepend(banner);
+            });
+        }
+    </script>
 </head>
 
 <body>
@@ -249,7 +261,7 @@
 
     <script src="js/universities.js?v=90"></script>
     <script src="js/animations.js?v=1"></script>
-    <script type="module" src="js/app.js?v=91"></script>
+    <script type="module" src="js/app.js?v=95"></script>
 </body>
 
 </html>

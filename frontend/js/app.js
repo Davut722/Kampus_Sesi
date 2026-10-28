@@ -2,8 +2,8 @@
    Kampüs Sesi — Shared JavaScript (SPA Architecture + FastAPI Backend)
    ======================================== */
 
-import { api } from './api.js?v=86';
-import { TEMPLATES } from './templates.js?v=91';
+import { api } from './api.js?v=89';
+import { TEMPLATES } from './templates.js?v=92';
 import { initHomeShowcase } from './home.js?v=1';
 
 function getInitials(name) {
@@ -175,9 +175,12 @@ export async function refreshAppData() {
         globalReviewsState = reviews || [];
         globalInteractionsState = interactions || {};
         appDataFailed = false;
+        const offlineBanner = document.getElementById('backend-offline-banner');
+        if (offlineBanner) offlineBanner.remove();
     } catch (e) {
         appDataFailed = true;
         console.warn("Veri yüklenirken hata oluştu:", e);
+        showBackendOfflineBanner();
     } finally {
         appDataLoaded = true;
         if (currentRoute === 'home' && activeRenderers.home) activeRenderers.home();
@@ -186,6 +189,37 @@ export async function refreshAppData() {
         if (currentRoute === 'compare' && activeRenderers.compare) activeRenderers.compare();
     }
 }
+
+function showBackendOfflineBanner() {
+    if (document.getElementById('backend-offline-banner')) return;
+    const banner = document.createElement('div');
+    banner.id = 'backend-offline-banner';
+    banner.className = 'fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-50 p-4 rounded-2xl bg-zinc-900 border border-amber-500/50 shadow-2xl shadow-black text-xs text-zinc-300 space-y-2';
+    banner.innerHTML = `
+        <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-2 font-bold text-amber-400">
+                <i data-lucide="wifi-off" class="w-4 h-4 shrink-0"></i>
+                <span>Backend Bağlantısı Kurulamadı</span>
+            </div>
+            <button type="button" onclick="this.closest('#backend-offline-banner').remove()" class="text-zinc-500 hover:text-white p-1 cursor-pointer">
+                ✕
+            </button>
+        </div>
+        <p class="text-[11px] text-zinc-400 leading-relaxed">
+            Veritabanı ve değerlendirmelerin yüklenmesi için Python backend sunucusunun çalışması gerekir:
+            <code class="block mt-1 p-1.5 rounded bg-zinc-950 font-mono text-cyan-400 border border-zinc-800">python backend/server.py</code>
+            Ardından tarayıcınızda <a href="http://localhost:8000" class="text-cyan-400 underline font-semibold">http://localhost:8000</a> adresini açın veya <strong>baslat.bat</strong> dosyasını çalıştırın.
+        </p>
+        <div class="flex items-center justify-end pt-1">
+            <button type="button" onclick="window.refreshAppData && window.refreshAppData()" class="px-3 py-1 rounded-lg bg-cyan-400 hover:bg-cyan-300 text-zinc-950 font-bold text-[11px] cursor-pointer transition-all">
+                Tekrar Dene
+            </button>
+        </div>
+    `;
+    document.body.appendChild(banner);
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+window.refreshAppData = refreshAppData;
 
 function getSavedReviews() {
     return globalReviewsState;
@@ -219,6 +253,42 @@ window.saveReview = async function(review) {
 window.removeSavedReview = async function(id) {
     await api.deleteReview(id);
     globalReviewsState = globalReviewsState.filter(r => String(r.id) !== String(id));
+};
+
+window.handleAdminDeleteReviewClick = function(btn) {
+    if (!btn) return;
+    const id = btn.getAttribute('data-id');
+    const uni = btn.getAttribute('data-uni') || '';
+    const user = btn.getAttribute('data-user') || 'Öğrenci';
+    window.adminDeleteReview(id, uni, user);
+};
+
+window.adminDeleteReview = async function(id, uni = '', user = 'Kullanıcı') {
+    const isAdmin = CURRENT_USER && (CURRENT_USER.role === 'admin' || CURRENT_USER.role === 'moderator');
+    if (!isAdmin) {
+        showToast('⚠️ Bu işlem için yönetici yetkisi gereklidir.');
+        return;
+    }
+
+    const promptMsg = `"${uni || 'Üniversite'}" hakkındaki bu değerlendirmeyi silmek istediğinize emin misiniz?\n\nSilindiğinde kullanıcıya ("${user}") bildirim gönderilecektir:\n"Yorumunuz site kurallarımız çerçevesi dışında olduğu için kaldırılmıştır."\n\nVarsa ek kural ihlali gerekçesi belirtebilirsiniz (isteğe bağlı):`;
+    const defaultReason = "Topluluk kurallarımız ve site ilkelerimiz çerçevesi dışındaki içerik.";
+
+    const reason = prompt(promptMsg, defaultReason);
+    if (reason === null) return; // İptal edildi
+
+    try {
+        await api.deleteAdminReview(id, reason.trim());
+        showToast(`✅ Değerlendirme silindi ve ${user} kullanıcısına kural ihlali bildirimi iletildi.`);
+        globalReviewsState = globalReviewsState.filter(r => String(r.id) !== String(id));
+        if (activeRenderers.university) activeRenderers.university();
+        if (activeRenderers.home) activeRenderers.home();
+        if (activeRenderers.profile) activeRenderers.profile();
+        if (typeof window.refreshAdminReviews === 'function') {
+            window.refreshAdminReviews();
+        }
+    } catch (err) {
+        showToast(`❌ Silme başarısız: ${err.message}`);
+    }
 };
 
 function getInteractions() {
@@ -453,6 +523,7 @@ function renderReviewCard(review, options = {}) {
     const userIdentifier = CURRENT_USER.name;
     const isLiked = ints.likes.includes(userIdentifier);
     const parsed = parseReviewContent(review);
+    const isAdmin = CURRENT_USER && (CURRENT_USER.role === 'admin' || CURRENT_USER.role === 'moderator');
 
     // Process replies
     const replies = review.replies || [];
@@ -558,7 +629,11 @@ function renderReviewCard(review, options = {}) {
             <button type="button" class="btn btn--text btn--sm btn-report-review" onclick="window.reportReview('${review.id}')" title="Bu yorumu bildir">
                 <i data-lucide="flag" class="icon-xs"></i> <span>Şikayet et</span>
             </button>
-            ${showDelete ? `<button class="btn btn--danger btn--sm" onclick="deleteReview('${review.id}')"><i data-lucide="trash-2" class="icon-xs"></i> Sil</button>` : ''}
+            ${isAdmin ? `
+                <button type="button" class="btn btn--danger btn--sm btn-admin-delete-review" data-id="${review.id}" data-uni="${escapeHtml(review.university || '')}" data-user="${escapeHtml(review.user || review.user_name || 'Öğrenci')}" onclick="window.handleAdminDeleteReviewClick(this)" title="Yönetici olarak sil ve kural ihlali bildir">
+                    <i data-lucide="trash-2" class="icon-xs"></i> <span>Yorumu Sil</span>
+                </button>
+            ` : (showDelete ? `<button class="btn btn--danger btn--sm" onclick="deleteReview('${review.id}')"><i data-lucide="trash-2" class="icon-xs"></i> Sil</button>` : '')}
         </div>
       </div>
 
@@ -2332,6 +2407,9 @@ function initUniversityPage(initialUni) {
     // Execute Initial Page Rendering
     updateHero();
     renderReviews();
+    if (typeof refreshAppData === 'function') {
+        refreshAppData().catch(() => {});
+    }
     initStickyTabs();
     initCampusMapToggle();
     initDormControls();
@@ -3257,10 +3335,12 @@ function initProfilePage(params) {
     const reviewsTab = document.getElementById('profile-reviews-tab');
     const submissionsTab = document.getElementById('profile-submissions-tab');
     const settingsTab = document.getElementById('profile-settings-tab');
+    const notificationsTab = document.getElementById('profile-notifications-tab');
 
     const reviewsPanel = document.getElementById('profile-reviews-panel');
     const submissionsPanel = document.getElementById('profile-submissions-panel');
     const settingsPanel = document.getElementById('profile-settings-panel');
+    const notificationsPanel = document.getElementById('profile-notifications-panel');
 
     const logoutButton = document.getElementById('profile-logout-btn');
     const editQuickBtn = document.getElementById('profile-edit-quick-btn');
@@ -3273,6 +3353,7 @@ function initProfilePage(params) {
     let reviews = isCurrentUser ? [] : getAllReviewsGlobal().filter(review => review.user === targetUser);
     let submissions = [];
     let favorites = [];
+    let cachedNotifications = [];
     let activeSubmissionFilter = 'all';
 
     // Populate University Datalist in Settings Form
@@ -3292,6 +3373,8 @@ function initProfilePage(params) {
         if (submissionsPanel) submissionsPanel.hidden = true;
         if (settingsTab) settingsTab.hidden = true;
         if (settingsPanel) settingsPanel.hidden = true;
+        if (notificationsTab) notificationsTab.hidden = true;
+        if (notificationsPanel) notificationsPanel.hidden = true;
         if (logoutButton) logoutButton.hidden = true;
         if (editQuickBtn) editQuickBtn.hidden = true;
     }
@@ -3318,6 +3401,14 @@ function initProfilePage(params) {
             const hideSet = tabName !== 'settings' || !isCurrentUser;
             settingsPanel.hidden = hideSet;
             settingsPanel.classList.toggle('hidden', hideSet);
+        }
+        if (notificationsPanel) {
+            const hideNotif = tabName !== 'notifications' || !isCurrentUser;
+            notificationsPanel.hidden = hideNotif;
+            notificationsPanel.classList.toggle('hidden', hideNotif);
+            if (!hideNotif) {
+                loadNotifications();
+            }
         }
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -3443,6 +3534,148 @@ function initProfilePage(params) {
         }).join('');
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // ─── Render Notifications ───
+    function renderNotificationsList() {
+        const notifContainer = document.getElementById('user-notifications-list');
+        if (!notifContainer) return;
+
+        const unreadCount = cachedNotifications.filter(n => !n.is_read).length;
+        const totalCount = cachedNotifications.length;
+
+        // Update badges
+        const tabBadgeNotif = document.getElementById('tab-badge-notifications');
+        if (tabBadgeNotif) {
+            if (unreadCount > 0) {
+                tabBadgeNotif.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                tabBadgeNotif.classList.remove('hidden');
+            } else {
+                tabBadgeNotif.classList.add('hidden');
+            }
+        }
+
+        const countPill = document.getElementById('profile-notif-count-pill');
+        if (countPill) {
+            countPill.textContent = unreadCount > 0
+                ? `${totalCount} bildirim (${unreadCount} okunmamış)`
+                : `${totalCount} bildirim`;
+        }
+
+        if (totalCount === 0) {
+            notifContainer.innerHTML = `
+                <div class="p-10 rounded-2xl border border-zinc-800 bg-zinc-900/40 text-center space-y-3">
+                    <div class="w-12 h-12 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 mx-auto">
+                        <i data-lucide="bell-off" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-sm font-bold text-zinc-200">Henüz bir bildiriminiz yok</h4>
+                    <p class="text-xs text-zinc-500 max-w-md mx-auto">Yorum moderasyonları ve site kuralları hakkındaki bilgilendirmeler burada görünür.</p>
+                </div>
+            `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            return;
+        }
+
+        notifContainer.innerHTML = cachedNotifications.map(n => {
+            const isWarning = n.notification_type === 'warning';
+            const iconName = isWarning ? 'alert-triangle' : 'bell';
+            const iconColor = isWarning ? 'text-amber-400 bg-amber-950/40 border-amber-500/30' : 'text-cyan-400 bg-cyan-950/40 border-cyan-500/30';
+            const dateStr = formatSubmissionDate(n.created_at);
+
+            return `
+                <article class="p-5 rounded-2xl border ${!n.is_read ? 'border-amber-500/40 bg-zinc-900/80 shadow-lg shadow-amber-950/20' : 'border-zinc-800 bg-zinc-900/40'} space-y-3 transition-all" data-notif-id="${n.id}">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 ${iconColor}">
+                                <i data-lucide="${iconName}" class="w-4 h-4"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h4 class="text-sm font-bold text-zinc-100 flex items-center gap-2 truncate">
+                                    ${escapeHtml(n.title || 'Sistem Bildirimi')}
+                                    ${!n.is_read ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-950/70 text-amber-400 border border-amber-800/60 inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Yeni</span>' : '<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-zinc-800 text-zinc-400 border border-zinc-700">Okundu</span>'}
+                                </h4>
+                                <span class="text-[11px] text-zinc-500">${escapeHtml(dateStr)}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 shrink-0">
+                            ${!n.is_read ? `
+                                <button type="button" class="notif-mark-read-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition-all flex items-center gap-1.5 cursor-pointer" data-id="${n.id}">
+                                    <i data-lucide="check" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                    <span>Okundu</span>
+                                </button>
+                            ` : ''}
+                            <button type="button" class="notif-delete-btn p-1.5 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-zinc-800 transition-all cursor-pointer" data-id="${n.id}" title="Bildirimi Sil">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap bg-zinc-950/70 p-3.5 rounded-xl border border-zinc-800/80">
+                        ${escapeHtml(n.message)}
+                    </div>
+                </article>
+            `;
+        }).join('');
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+
+        // Bind mark single read
+        notifContainer.querySelectorAll('.notif-mark-read-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = parseInt(btn.dataset.id);
+                try {
+                    await api.markNotificationRead(id);
+                    const item = cachedNotifications.find(x => x.id === id);
+                    if (item) item.is_read = true;
+                    renderNotificationsList();
+                } catch (err) {
+                    showToast(`❌ Hata: ${err.message}`);
+                }
+            });
+        });
+
+        // Bind delete single notification
+        notifContainer.querySelectorAll('.notif-delete-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = parseInt(btn.dataset.id);
+                try {
+                    await api.deleteNotification(id);
+                    cachedNotifications = cachedNotifications.filter(x => x.id !== id);
+                    renderNotificationsList();
+                    showToast('Bildirim silindi.');
+                } catch (err) {
+                    showToast(`❌ Hata: ${err.message}`);
+                }
+            });
+        });
+    }
+
+    // Bind "Tümünü Okundu Say" button
+    const markAllBtn = document.getElementById('profile-mark-all-notifs-btn');
+    if (markAllBtn) {
+        markAllBtn.addEventListener('click', async () => {
+            try {
+                await api.markAllNotificationsRead();
+                cachedNotifications.forEach(n => { n.is_read = true; });
+                renderNotificationsList();
+                showToast('✅ Tüm bildirimler okundu olarak işaretlendi.');
+            } catch (err) {
+                showToast(`❌ Hata: ${err.message}`);
+            }
+        });
+    }
+
+    async function loadNotifications() {
+        if (!isCurrentUser) return;
+        try {
+            const notifs = await api.getMyNotifications();
+            cachedNotifications = Array.isArray(notifs) ? notifs : [];
+            renderNotificationsList();
+        } catch (err) {
+            console.error("Bildirimler yüklenirken hata:", err);
+            showToast(`⚠️ Bildirimler alınamadı: ${err.message}`);
+        }
     }
 
     // ─── Render Right Sidebar Widgets ───
@@ -3702,8 +3935,9 @@ function initProfilePage(params) {
                 .join('');
         }
 
-        // Render Submissions & Sidebar
+        // Render Submissions, Notifications & Sidebar
         renderSubmissionsList();
+        renderNotificationsList();
         renderSidebarWidgets(totalUpvotes);
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -3715,12 +3949,18 @@ function initProfilePage(params) {
             api.getMyProfile().catch(() => null),
             api.getMyReviews().catch(() => []),
             api.getMySubmissions().catch(() => ({ submissions: [] })),
-            api.getFavorites().catch(() => [])
-        ]).then(([userProfile, userReviews, userSubmissions, userFavorites]) => {
+            api.getFavorites().catch(() => []),
+            api.getMyNotifications().catch(err => {
+                console.error('Bildirimler alınamadı:', err);
+                showToast(`⚠️ Bildirimler alınamadı: ${err.message}`);
+                return [];
+            })
+        ]).then(([userProfile, userReviews, userSubmissions, userFavorites, userNotifs]) => {
             profile = userProfile;
             reviews = userReviews || [];
             submissions = userSubmissions?.submissions || [];
             favorites = Array.isArray(userFavorites) ? userFavorites : [];
+            cachedNotifications = Array.isArray(userNotifs) ? userNotifs : [];
             render();
         }).catch(error => {
             listContainer.innerHTML = `<div class="p-8 rounded-2xl border border-rose-500/30 bg-rose-950/20 text-center text-xs text-rose-400">${escapeHtml(error.message)}</div>`;
@@ -4372,7 +4612,8 @@ function initAdminPage() {
         'dashboard': document.getElementById('admin-tab-dashboard'),
         'users': document.getElementById('admin-tab-users'),
         'moderation': document.getElementById('admin-tab-moderation'),
-        'messages': document.getElementById('admin-tab-messages')
+        'messages': document.getElementById('admin-tab-messages'),
+        'reviews': document.getElementById('admin-tab-reviews')
     };
 
     function switchAdminTab(targetTab) {
@@ -4404,6 +4645,7 @@ function initAdminPage() {
         else if (targetTab === 'users') loadUsers();
         else if (targetTab === 'moderation') loadModeration();
         else if (targetTab === 'messages') loadMessages();
+        else if (targetTab === 'reviews') loadAdminReviews();
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
@@ -4444,6 +4686,16 @@ function initAdminPage() {
                     tabMsgBadge.classList.remove('hidden');
                 } else {
                     tabMsgBadge.classList.add('hidden');
+                }
+            }
+            const tabRevBadge = document.getElementById('admin-tab-reviews-badge');
+            if (tabRevBadge) {
+                const totalRev = Number(stats.total_reviews || 0);
+                if (totalRev > 0) {
+                    tabRevBadge.textContent = totalRev > 999 ? '999+' : totalRev;
+                    tabRevBadge.classList.remove('hidden');
+                } else {
+                    tabRevBadge.classList.add('hidden');
                 }
             }
             if (elDorms) elDorms.textContent = Number(stats.total_dorms || 0).toLocaleString('tr-TR');
@@ -4643,7 +4895,13 @@ function initAdminPage() {
                             <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-400">
                                 <span><strong class="text-zinc-500">Şehir:</strong> ${escapeHtml(s.city)}</span>
                                 ${s.campus_name ? `<span><strong class="text-zinc-500">Yerleşke:</strong> ${escapeHtml(s.campus_name)}</span>` : ''}
-                                ${s.website ? `<span><strong class="text-zinc-500">Web:</strong> <a href="${escapeHtml(s.website)}" target="_blank" class="text-cyan-400 hover:underline">${escapeHtml(s.website)}</a></span>` : ''}
+                                ${(() => {
+                                    if (!s.website) return '';
+                                    const raw = String(s.website).trim();
+                                    const isSafe = /^https?:\/\//i.test(raw);
+                                    const safeHref = isSafe ? raw : `https://${raw.replace(/^(javascript|data|vbscript):/i, '')}`;
+                                    return `<span><strong class="text-zinc-500">Web:</strong> <a href="${escapeHtml(safeHref)}" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">${escapeHtml(raw)}</a></span>`;
+                                })()}
                                 <span><strong class="text-zinc-500">Öneren:</strong> ${escapeHtml(s.submitter_email || 'Anonim')}</span>
                             </div>
                             ${s.notes ? `<p class="text-xs text-zinc-400 bg-zinc-950/60 p-2.5 rounded-xl border border-zinc-800 mt-2">${escapeHtml(s.notes)}</p>` : ''}
@@ -4984,6 +5242,146 @@ function initAdminPage() {
         } catch (err) {
             container.innerHTML = `<div class="p-8 text-center text-rose-400">İletişim mesajları alınamadı: ${escapeHtml(err.message)}</div>`;
         }
+    }
+
+    // 6. Review Management Tab (Search, Newest First, Delete with Rule Violation Notification)
+    let cachedAdminReviews = [];
+    const reviewsSearchInput = document.getElementById('admin-reviews-search');
+
+    async function loadAdminReviews(searchQuery = '') {
+        const container = document.getElementById('admin-reviews-list');
+        const countBadge = document.getElementById('admin-reviews-count');
+        if (!container) return;
+
+        container.innerHTML = `<div class="p-8 text-center text-zinc-500">Değerlendirmeler aranıyor...</div>`;
+
+        try {
+            cachedAdminReviews = await api.getAdminReviews(searchQuery);
+            const total = cachedAdminReviews.length;
+
+            if (countBadge) {
+                countBadge.textContent = searchQuery
+                    ? `"${escapeHtml(searchQuery)}" araması için ${total} değerlendirme bulundu`
+                    : `Toplam ${total} değerlendirme listeleniyor (En yeni ilk sırada)`;
+            }
+
+            if (total === 0) {
+                container.innerHTML = `
+                    <div class="p-12 text-center rounded-2xl border border-zinc-800 bg-zinc-900/40">
+                        <i data-lucide="message-square-off" class="w-12 h-12 text-zinc-600 mx-auto mb-3"></i>
+                        <h4 class="text-base font-bold text-white mb-1">Değerlendirme bulunamadı</h4>
+                        <p class="text-xs text-zinc-500">${searchQuery ? 'Arama kriterlerinize uyan değerlendirme bulunamadı.' : 'Henüz platformda kayıtlı bir değerlendirme yok.'}</p>
+                    </div>
+                `;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = cachedAdminReviews.map(r => {
+                const authorName = r.user_name || r.user || 'Anonim';
+                const authorInitials = r.initials || getInitials(authorName);
+                const ratingNum = Number(r.rating) || 5;
+                const starsHtml = '★'.repeat(ratingNum) + '☆'.repeat(Math.max(0, 5 - ratingNum));
+                const categories = Array.isArray(r.categories) ? r.categories : [];
+
+                return `
+                    <div class="p-5 rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-zinc-700 transition-all space-y-4" data-admin-review-id="${r.id}">
+                        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                            <div class="space-y-1.5 flex-1 min-w-0">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="text-xs font-bold text-cyan-400 bg-cyan-950/60 px-2.5 py-0.5 rounded-full border border-cyan-500/30 flex items-center gap-1">
+                                        <i data-lucide="building-2" class="w-3.5 h-3.5"></i>
+                                        <span>${escapeHtml(r.university || 'Üniversite')}</span>
+                                    </span>
+                                    <span class="text-xs font-bold text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded-full border border-amber-500/30 font-mono">
+                                        ${starsHtml} ${ratingNum}.0
+                                    </span>
+                                    <span class="text-xs text-zinc-500 flex items-center gap-1">
+                                        <i data-lucide="calendar" class="w-3 h-3"></i>
+                                        <span>${escapeHtml(r.date || 'Yakın zamanda')}</span>
+                                    </span>
+                                    <span class="text-[11px] text-zinc-600 font-mono">#${r.id}</span>
+                                </div>
+
+                                <div class="flex flex-wrap items-center gap-2 pt-0.5 text-xs">
+                                    <div class="w-6 h-6 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center font-bold text-[10px] text-cyan-400">
+                                        ${escapeHtml(authorInitials)}
+                                    </div>
+                                    <span class="font-bold text-zinc-200">${escapeHtml(authorName)}</span>
+                                    ${r.author_email ? `<span class="text-zinc-500 font-mono text-[11px]">(${escapeHtml(r.author_email)})</span>` : ''}
+                                    ${r.author_id ? `<span class="text-[10px] text-zinc-600">Kullanıcı ID: #${r.author_id}</span>` : ''}
+                                </div>
+                            </div>
+
+                            <button type="button" class="admin-delete-review-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border border-rose-500/40 bg-rose-950/30 hover:bg-rose-900/50 text-rose-300 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer self-start" data-id="${r.id}" data-uni="${escapeHtml(r.university || '')}" data-user="${escapeHtml(authorName)}">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-400"></i>
+                                <span>Yorumu Sil</span>
+                            </button>
+                        </div>
+
+                        <div class="text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap bg-zinc-950/70 p-4 rounded-xl border border-zinc-800/80">
+                            ${escapeHtml(r.text || '')}
+                        </div>
+
+                        ${categories.length > 0 ? `
+                            <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                                ${categories.map(c => `
+                                    <span class="text-[10px] font-medium text-zinc-400 bg-zinc-800/70 px-2 py-0.5 rounded-md border border-zinc-700/60">
+                                        ${escapeHtml(c)}
+                                    </span>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+
+            // Bind delete button
+            container.querySelectorAll('.admin-delete-review-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = parseInt(btn.dataset.id);
+                    const uni = btn.dataset.uni || 'üniversite';
+                    const user = btn.dataset.user || 'Kullanıcı';
+
+                    const promptMsg = `"${uni}" hakkındaki bu değerlendirmeyi silmek istediğinize emin misiniz?\n\nSilindiğinde kullanıcıya ("${user}") bildirim gönderilecektir:\n"Yorumunuz site kurallarımız çerçevesi dışında olduğu için kaldırılmıştır."\n\nVarsa ek kural ihlali gerekçesi belirtebilirsiniz (isteğe bağlı):`;
+                    const defaultReason = "Topluluk kurallarımız ve site ilkelerimiz çerçevesi dışındaki içerik.";
+
+                    const reason = prompt(promptMsg, defaultReason);
+                    if (reason === null) return; // İptal
+
+                    try {
+                        await api.deleteAdminReview(id, reason.trim());
+                        showToast(`✅ Değerlendirme silindi ve ${user} kullanıcısına kural ihlali bildirimi iletildi.`);
+                        cachedAdminReviews = cachedAdminReviews.filter(x => x.id !== id);
+                        globalReviewsState = globalReviewsState.filter(r => String(r.id) !== String(id));
+                        loadAdminReviews(reviewsSearchInput?.value.trim() || '');
+                        loadStats();
+                    } catch (err) {
+                        showToast(`❌ Silme başarısız: ${err.message}`);
+                    }
+                });
+            });
+
+            window.refreshAdminReviews = () => {
+                loadAdminReviews(reviewsSearchInput?.value.trim() || '');
+                loadStats();
+            };
+
+        } catch (err) {
+            container.innerHTML = `<div class="p-8 text-center text-rose-400">Değerlendirmeler alınamadı: ${escapeHtml(err.message)}</div>`;
+        }
+    }
+
+    if (reviewsSearchInput) {
+        let revDebounceTimer;
+        reviewsSearchInput.addEventListener('input', () => {
+            clearTimeout(revDebounceTimer);
+            revDebounceTimer = setTimeout(() => {
+                loadAdminReviews(reviewsSearchInput.value.trim());
+            }, 300);
+        });
     }
 
     // Initialize with Dashboard

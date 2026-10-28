@@ -1,10 +1,14 @@
+import os
 import bcrypt
 import jwt
 from datetime import datetime, timedelta
 
-SECRET_KEY = "Kampüs Sesi_super_secret_jwt_key_2026"
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "kampus_sesi_super_secret_jwt_key_2026_demo_secure_32bytes")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_DAYS = 30
+try:
+    ACCESS_TOKEN_EXPIRE_DAYS = int(os.getenv("ACCESS_TOKEN_EXPIRE_DAYS", "7"))
+except ValueError:
+    ACCESS_TOKEN_EXPIRE_DAYS = 7
 
 def hash_password(password: str) -> str:
     salt = bcrypt.gensalt()

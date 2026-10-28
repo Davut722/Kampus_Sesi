@@ -1083,6 +1083,14 @@ export const TEMPLATES = {
                             </button>
 
                             <button class="profile-tab-v2 flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
+                                id="profile-notifications-tab" type="button" role="tab" aria-selected="false"
+                                aria-controls="profile-notifications-panel" data-profile-tab="notifications">
+                                <i data-lucide="bell" class="w-4 h-4"></i>
+                                <span>Bildirimler</span>
+                                <span id="tab-badge-notifications" class="hidden px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-500 text-white">0</span>
+                            </button>
+
+                            <button class="profile-tab-v2 flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
                                 id="profile-settings-tab" type="button" role="tab" aria-selected="false"
                                 aria-controls="profile-settings-panel" data-profile-tab="settings">
                                 <i data-lucide="settings" class="w-4 h-4"></i>
@@ -1230,6 +1238,24 @@ export const TEMPLATES = {
                                     </button>
                                 </div>
                             </form>
+                        </section>
+
+                        <!-- SEKME 4: BİLDİRİMLERİM -->
+                        <section class="profile-panel-v2 space-y-4" id="profile-notifications-panel" role="tabpanel" aria-labelledby="profile-notifications-tab" hidden>
+                            <div class="flex items-center justify-between p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="bell" class="w-4 h-4 text-cyan-400"></i>
+                                    <span class="text-sm font-bold text-zinc-100">Sistem Bildirimleri</span>
+                                    <span id="profile-notif-count-pill" class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-zinc-800 text-zinc-400">0 bildirim</span>
+                                </div>
+                                <button type="button" id="profile-mark-all-notifs-btn" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-zinc-950 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 transition-all cursor-pointer">
+                                    Tümünü Okundu Say
+                                </button>
+                            </div>
+
+                            <div id="user-notifications-list" class="space-y-3" aria-live="polite">
+                                <div class="p-8 text-center text-zinc-500">Bildirimler yükleniyor...</div>
+                            </div>
                         </section>
                     </div>
 
@@ -3035,6 +3061,11 @@ export const TEMPLATES = {
                             <span>İletişim</span>
                             <span id="admin-tab-messages-badge" class="hidden px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500 text-white leading-none">0</span>
                         </button>
+                        <button class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white cursor-pointer transition-all flex items-center gap-1.5" data-tab="reviews">
+                            <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                            <span>Yorumlar</span>
+                            <span id="admin-tab-reviews-badge" class="hidden px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-400 text-zinc-950 leading-none">0</span>
+                        </button>
                     </div>
                 </div>
 
@@ -3104,6 +3135,10 @@ export const TEMPLATES = {
                                 <i data-lucide="zap" class="w-4 h-4 text-cyan-400"></i> Hızlı Moderasyon Eylemleri
                             </h3>
                             <div class="space-y-2 text-xs">
+                                <button class="admin-quick-action w-full p-3 rounded-xl bg-zinc-950/60 border border-zinc-800 hover:border-zinc-700 hover:bg-zinc-800/80 transition-all text-left flex items-center justify-between text-zinc-200" data-jump="reviews">
+                                    <span class="flex items-center gap-2"><i data-lucide="message-square" class="w-4 h-4 text-amber-400"></i> Tüm Kullanıcı Yorumlarını Yönet & Denetle</span>
+                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-zinc-500"></i>
+                                </button>
                                 <button class="admin-quick-action w-full p-3 rounded-xl bg-zinc-950/60 border border-zinc-800 hover:border-zinc-700 hover:bg-zinc-800/80 transition-all text-left flex items-center justify-between text-zinc-200" data-jump="moderation">
                                     <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-purple-400"></i> Bekleyen Okul ve Blog Başvurularını İncele</span>
                                     <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-zinc-500"></i>
@@ -3227,6 +3262,28 @@ export const TEMPLATES = {
 
                     <div id="admin-messages-list" class="space-y-4">
                         <div class="p-8 text-center text-zinc-500">Mesajlar yükleniyor...</div>
+                    </div>
+                </div>
+
+                <!-- 5. TAB: TÜM YORUMLAR (EN SON BAŞTA, ARAMA & SİLME) -->
+                <div id="admin-tab-reviews" class="hidden space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i data-lucide="message-square" class="w-4 h-4 text-amber-400"></i> Öğrenci Değerlendirmeleri
+                            </h3>
+                            <span id="admin-reviews-count" class="text-xs text-zinc-500 block mt-0.5">Yükleniyor...</span>
+                        </div>
+
+                        <!-- Canlı Arama Kutusu -->
+                        <div class="relative w-full sm:w-80">
+                            <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                            <input type="text" id="admin-reviews-search" placeholder="Yorum metni, okul veya öğrenci ara..." class="w-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs rounded-xl pl-10 pr-4 py-2.5 outline-none focus:border-cyan-400 transition-colors">
+                        </div>
+                    </div>
+
+                    <div id="admin-reviews-list" class="space-y-4">
+                        <div class="p-8 text-center text-zinc-500">Değerlendirmeler yükleniyor...</div>
                     </div>
                 </div>
 

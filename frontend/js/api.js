@@ -126,7 +126,6 @@ export const api = {
                 categories: cats,
                 tags: cats,
                 text: reviewData.text,
-                is_recommended: reviewData.is_recommended,
                 is_anonymous: reviewData.is_anonymous,
                 education_status: reviewData.education_status,
                 graduation_year: reviewData.graduation_year,
@@ -291,6 +290,19 @@ export const api = {
     async toggleMessageRead(messageId) {
         return await request(`/admin/messages/${messageId}/read`, {
             method: 'PATCH'
+        });
+    },
+
+    async replyToAdminMessage(messageId, replyText) {
+        return await request(`/admin/messages/${messageId}/reply`, {
+            method: 'POST',
+            body: JSON.stringify({ reply_text: replyText })
+        });
+    },
+
+    async retryAdminMessageEmail(messageId) {
+        return await request(`/admin/messages/${messageId}/retry-email`, {
+            method: 'POST'
         });
     }
 };

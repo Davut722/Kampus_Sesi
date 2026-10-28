@@ -2286,8 +2286,15 @@ svg.footer-accordion-icon {
 /* Büyük Yıldızlar */
 .rf-stars-wrap {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 10px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
 }
 .rf-stars {
   display: inline-flex;
@@ -2319,59 +2326,6 @@ svg.footer-accordion-icon {
   font-weight: 600;
   color: var(--color-text-secondary);
   min-height: 1.3em;
-}
-
-/* 2. Genel Puan + Tavsiye Yan Yana Satır */
-.rf-rating-rec-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 24px;
-}
-.rf-rating-rec-row .rf-field {
-  margin-bottom: 0;
-}
-@media (max-width: 680px) {
-  .rf-rating-rec-row {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
-
-/* Tavsiye Eder misin? Düğme Grubu */
-.rf-rec-group {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.rf-rec-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 0 14px;
-  height: 44px;
-  min-height: 44px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  font-family: inherit;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--color-text);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.rf-rec-btn:hover {
-  border-color: var(--color-border-hover);
-  background: var(--color-surface-hover);
-}
-/* Tekil Vurgu Rengi Seçili Durum */
-.rf-rec-btn.active {
-  background: var(--color-surface-hover);
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-  box-shadow: 0 0 0 1px var(--color-accent);
 }
 
 /* Kategori Seçici Chip / Buton Grubu (Çoklu Seçilebilir) */

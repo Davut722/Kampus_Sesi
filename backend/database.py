@@ -76,7 +76,6 @@ class Review(Base):
     text = Column(Text, nullable=False)
     timestamp = Column(BigInteger, default=lambda: int(time.time() * 1000))
     date = Column(String(50), nullable=False)
-    is_recommended = Column(Boolean, nullable=True)
     is_anonymous = Column(Boolean, default=True, nullable=False)
     education_status = Column(String(50), nullable=True)
     graduation_year = Column(Integer, nullable=True)
@@ -120,7 +119,6 @@ class Review(Base):
             "categories": effective_categories,
             "tags": effective_categories,
             "text": self.text,
-            "is_recommended": self.is_recommended,
             "is_anonymous": bool(self.is_anonymous) if self.is_anonymous is not None else True,
             "education_status": self.education_status,
             "graduation_year": self.graduation_year,
@@ -341,9 +339,22 @@ class ContactMessage(Base):
     subject = Column(String(150), nullable=False)
     message = Column(Text, nullable=False)
     status = Column(String(50), default="unread")  # unread, read, replied
+    reply_text = Column(Text, nullable=True, default=None)
+    replied_at = Column(DateTime, nullable=True, default=None)
+    replied_by = Column(String(100), nullable=True, default=None)
+    email_status = Column(String(30), nullable=True, default="none")  # none, pending, sent, failed
     created_at = Column(DateTime, default=datetime.utcnow)
 
+    replies = relationship(
+        "ContactMessageReply",
+        back_populates="contact_message",
+        cascade="all, delete-orphan",
+        order_by="ContactMessageReply.replied_at.asc()"
+    )
+
     def to_dict(self):
+        replies_list = [r.to_dict() for r in (self.replies or [])]
+        is_replied = bool(self.reply_text) or len(replies_list) > 0 or self.status == "replied"
         return {
             "id": self.id,
             "name": self.name,
@@ -352,9 +363,41 @@ class ContactMessage(Base):
             "sender_email": self.email,
             "subject": self.subject,
             "message": self.message,
-            "status": self.status,
-            "is_read": self.status != "unread",
+            "status": "replied" if is_replied else self.status,
+            "is_read": self.status != "unread" or is_replied,
+            "is_replied": is_replied,
+            "reply_text": self.reply_text or (replies_list[-1]["reply_text"] if replies_list else None),
+            "replied_at": (
+                self.replied_at.isoformat() if self.replied_at
+                else (replies_list[-1]["replied_at"] if replies_list else None)
+            ),
+            "replied_by": self.replied_by or (replies_list[-1]["replied_by"] if replies_list else None),
+            "email_status": self.email_status or (replies_list[-1]["email_status"] if replies_list else "none"),
+            "replies": replies_list,
             "created_at": self.created_at.isoformat() if self.created_at else None
+        }
+
+
+class ContactMessageReply(Base):
+    __tablename__ = "contact_message_replies"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    message_id = Column(Integer, ForeignKey("contact_messages.id", ondelete="CASCADE"), nullable=False, index=True)
+    reply_text = Column(Text, nullable=False)
+    replied_by = Column(String(100), nullable=True, default="Admin")
+    replied_at = Column(DateTime, default=datetime.utcnow)
+    email_status = Column(String(30), default="none")  # none, pending, sent, failed
+
+    contact_message = relationship("ContactMessage", back_populates="replies")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "message_id": self.message_id,
+            "reply_text": self.reply_text,
+            "replied_by": self.replied_by or "Admin",
+            "replied_at": self.replied_at.isoformat() if self.replied_at else None,
+            "email_status": self.email_status or "none"
         }
 
 class BlogSubmission(Base):
@@ -445,11 +488,29 @@ def init_db():
                     conn.execute(text("ALTER TABLE blog_submissions ADD COLUMN admin_note TEXT"))
                     conn.commit()
 
+            if 'contact_messages' in table_names:
+                cm_cols = [c['name'] for c in insp.get_columns('contact_messages')]
+                if 'reply_text' not in cm_cols:
+                    conn.execute(text("ALTER TABLE contact_messages ADD COLUMN reply_text TEXT DEFAULT NULL"))
+                    conn.commit()
+                if 'replied_at' not in cm_cols:
+                    conn.execute(text("ALTER TABLE contact_messages ADD COLUMN replied_at DATETIME DEFAULT NULL"))
+                    conn.commit()
+                if 'replied_by' not in cm_cols:
+                    conn.execute(text("ALTER TABLE contact_messages ADD COLUMN replied_by VARCHAR(100) DEFAULT NULL"))
+                    conn.commit()
+                if 'email_status' not in cm_cols:
+                    conn.execute(text("ALTER TABLE contact_messages ADD COLUMN email_status VARCHAR(30) DEFAULT 'none'"))
+                    conn.commit()
+
             if 'reviews' in table_names:
                 r_cols = [c['name'] for c in insp.get_columns('reviews')]
-                if 'is_recommended' not in r_cols:
-                    conn.execute(text("ALTER TABLE reviews ADD COLUMN is_recommended BOOLEAN DEFAULT NULL"))
-                    conn.commit()
+                if 'is_recommended' in r_cols:
+                    try:
+                        conn.execute(text("ALTER TABLE reviews DROP COLUMN is_recommended"))
+                        conn.commit()
+                    except Exception as drop_err:
+                        print(f"[WARN] Could not drop is_recommended column: {drop_err}")
                 if 'is_anonymous' not in r_cols:
                     conn.execute(text("ALTER TABLE reviews ADD COLUMN is_anonymous BOOLEAN DEFAULT 1"))
                     conn.commit()

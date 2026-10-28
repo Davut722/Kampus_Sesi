@@ -2,8 +2,8 @@
    Kampüs Sesi — Shared JavaScript (SPA Architecture + FastAPI Backend)
    ======================================== */
 
-import { api } from './api.js?v=84';
-import { TEMPLATES } from './templates.js?v=89';
+import { api } from './api.js?v=86';
+import { TEMPLATES } from './templates.js?v=91';
 import { initHomeShowcase } from './home.js?v=1';
 
 function getInitials(name) {
@@ -480,20 +480,13 @@ function renderReviewCard(review, options = {}) {
         </form>
     ` : `<div style="font-size:0.8rem; color: var(--color-text-muted); padding-top: 5px;">Yanıt yazmak için <a href="#/login">giriş yapın</a>.</div>`;
 
-    // Metadata Badges (Department, Class, Scholarship, Recommendation, Education Status)
-    const recBadgeHtml = (review.is_recommended === true || review.is_recommended === 1)
-        ? `<span class="ed-badge ed-badge--rec"><i data-lucide="thumbs-up" class="icon-xs"></i> Tavsiye Ediyor</span>`
-        : ((review.is_recommended === false || review.is_recommended === 0)
-            ? `<span class="ed-badge ed-badge--nonrec"><i data-lucide="thumbs-down" class="icon-xs"></i> Tavsiye Etmiyor</span>`
-            : '');
-
+    // Metadata Badges (Department, Class, Scholarship, Education Status)
     const eduBadgeHtml = review.education_status === 'graduate'
         ? `<span class="ed-badge"><i data-lucide="graduation-cap" class="icon-xs"></i> Mezun${review.graduation_year ? ` (${review.graduation_year})` : ''}</span>`
         : (review.education_status === 'student' ? `<span class="ed-badge"><i data-lucide="user-check" class="icon-xs"></i> Öğrenci</span>` : '');
 
-    const badgesHtml = (parsed.dept || parsed.sClass || parsed.scholarship || recBadgeHtml || eduBadgeHtml) ? `
+    const badgesHtml = (parsed.dept || parsed.sClass || parsed.scholarship || eduBadgeHtml) ? `
         <div class="card__meta-badges">
-            ${recBadgeHtml}
             ${eduBadgeHtml}
             ${parsed.dept ? `<span class="ed-badge"><i data-lucide="book-open" class="icon-xs"></i> ${escapeHtml(parsed.dept)}</span>` : ''}
             ${parsed.sClass ? `<span class="ed-badge"><i data-lucide="graduation-cap" class="icon-xs"></i> ${escapeHtml(parsed.sClass)}${parsed.sClass !== 'Mezun' ? '. Sınıf' : ''}</span>` : ''}
@@ -1742,12 +1735,10 @@ function initUniversityPage(initialUni) {
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    // Update Statistics (Average Score, Counts, Recommendation Rate, Low Review Warning)
+    // Update Statistics (Average Score, Counts, Low Review Warning)
     function updateStats(reviews) {
         const statAvg = document.getElementById('stat-avg');
         const statCount = document.getElementById('stat-count');
-        const recBadge = document.getElementById('hero-rec-badge');
-        const recText = document.getElementById('hero-rec-text');
         const lowReviewsNote = document.getElementById('hero-low-reviews-note');
         const rankBadge = document.getElementById('stat-rank-badge');
         const statRank = document.getElementById('stat-rank');
@@ -1769,22 +1760,9 @@ function initUniversityPage(initialUni) {
                 const rounded = Math.round(parseFloat(avg));
                 starsDisplay.textContent = '★'.repeat(rounded) + '☆'.repeat(Math.max(0, 5 - rounded));
             }
-
-            // Recommendation Rate (Gerçek tavsiye verisinden hesaplanır; veri yoksa rozet gizlenir)
-            const recResponses = reviews.filter(r => r.is_recommended !== null && r.is_recommended !== undefined);
-            if (recResponses.length > 0) {
-                const positiveCount = recResponses.filter(r => r.is_recommended === true || r.is_recommended === 1).length;
-                const recRate = Math.round((positiveCount / recResponses.length) * 100);
-                if (recText) recText.textContent = `%${recRate} Tavsiye Ediyor`;
-                if (recBadge) recBadge.style.display = 'inline-flex';
-            } else {
-                if (recBadge) recBadge.style.display = 'none';
-            }
         } else {
             if (statAvg) statAvg.textContent = '—';
             if (starsDisplay) starsDisplay.textContent = '☆☆☆☆☆';
-            if (recText) recText.textContent = '— Tavsiye';
-            if (recBadge) recBadge.style.display = 'none';
         }
 
         // Less than 10 reviews rule: show warning, hide rank badge
@@ -2382,11 +2360,6 @@ function initReviewForm() {
     const ratingLabel = document.getElementById('rf-rating-label');
     const ratingError = document.getElementById('rf-rating-error');
 
-    const recYesBtn = document.getElementById('rf-rec-yes');
-    const recNoBtn = document.getElementById('rf-rec-no');
-    const recHidden = document.getElementById('form-recommend');
-    const recError = document.getElementById('rf-recommend-error');
-
     const categoryChipsContainer = document.getElementById('rf-category-chips');
     const categoriesError = document.getElementById('rf-categories-error');
 
@@ -2464,7 +2437,6 @@ function initReviewForm() {
 
     // State - Hiçbir alan önceden seçili gelmez
     let selectedRating = 0;
-    let isRecommended = null; // null | true | false
     let selectedCategories = []; // En az 1 kategori seçimi zorunlu (REVIEW_CATEGORIES id'leri)
     let isAnonymous = true;   // Varsayılan: anonim paylaş
     let educationStatus = ''; // '' | 'student' | 'graduate' (Boş başlar)
@@ -2479,21 +2451,7 @@ function initReviewForm() {
     };
     const DRAFT_KEY = 'kampus_sesi_review_draft';
 
-    // 1a. Tavsiye Durumu (Evet/Hayır)
-    function setRecommendation(val) {
-        isRecommended = val;
-        if (recHidden) recHidden.value = val === null ? '' : (val ? 'yes' : 'no');
-        if (recYesBtn) recYesBtn.classList.toggle('active', val === true);
-        if (recNoBtn) recNoBtn.classList.toggle('active', val === false);
-        if (val !== null && recError) recError.textContent = '';
-        updatePowerMeter();
-        validateForm(true);
-        saveDraft();
-    }
-    if (recYesBtn) recYesBtn.addEventListener('click', () => setRecommendation(true));
-    if (recNoBtn) recNoBtn.addEventListener('click', () => setRecommendation(false));
-
-    // 1a-2. Kategori Seçimi (Çoklu Seçilebilir Chip/Buton - REVIEW_CATEGORIES)
+    // 1a. Kategori Seçimi (Çoklu Seçilebilir Chip/Buton - REVIEW_CATEGORIES)
     function renderCategorySelector() {
         if (!categoryChipsContainer) return;
         categoryChipsContainer.innerHTML = REVIEW_CATEGORIES.map(cat => {
@@ -2821,8 +2779,8 @@ function initReviewForm() {
         else if (totalChars >= 40 && totalChars < 120) score += 35;
         else if (totalChars >= 120) score += 50;
 
-        // Tavsiye (15)
-        if (isRecommended !== null) score += 15;
+        // Kategori seçimi (15)
+        if (selectedCategories.length >= 1) score += 15;
 
         // Bölüm (15)
         const dept = (educationStatus && deptHidden) ? deptHidden.value.trim() : '';
@@ -2900,16 +2858,7 @@ function initReviewForm() {
             ratingError.textContent = '';
         }
 
-        // 3. Tavsiye (Zorunlu)
-        if (isRecommended === null) {
-            isValid = false;
-            if (!silent && recError) recError.textContent = 'Lütfen bu üniversiteyi tavsiye edip etmediğinizi belirtin.';
-            if (!firstError) firstError = { id: 'rf-field-recommend', el: recError, msg: 'Lütfen bu üniversiteyi tavsiye edip etmediğinizi belirtin.' };
-        } else if (recError) {
-            recError.textContent = '';
-        }
-
-        // 4. Kategori Seçimi (En az 1 kategori zorunlu)
+        // 3. Kategori Seçimi (En az 1 kategori zorunlu)
         if (selectedCategories.length < 1) {
             isValid = false;
             if (!silent && categoriesError) categoriesError.textContent = 'Lütfen en az bir kategori seç.';
@@ -2918,7 +2867,7 @@ function initReviewForm() {
             categoriesError.textContent = '';
         }
 
-        // 5. Metin (en az 40 karakter)
+        // 4. Metin (en az 40 karakter)
         if (totalChars < 40) {
             isValid = false;
             const textMsg = totalChars === 0
@@ -2930,7 +2879,7 @@ function initReviewForm() {
             textError.textContent = '';
         }
 
-        // 6. Onay
+        // 5. Onay
         if (!consent) {
             isValid = false;
             if (!silent && consentError) consentError.textContent = 'Yorumunuzu paylaşmak için Topluluk Kurallarını onaylamalısınız.';
@@ -2939,17 +2888,16 @@ function initReviewForm() {
             consentError.textContent = '';
         }
 
-        // İlerleme Sayacı (5 zorunlu alan: Üniversite, Genel Puan, Tavsiye, Kategori, Deneyim)
+        // İlerleme Sayacı (4 zorunlu alan: Üniversite, Genel Puan, Kategori, Deneyim)
         const checks = [
             Boolean(uni),
             selectedRating >= 1,
-            isRecommended !== null,
             selectedCategories.length >= 1,
             totalChars >= 40
         ];
         const completed = checks.filter(Boolean).length;
-        if (progressText) progressText.textContent = `Zorunlu alanlar: ${completed}/5 tamam`;
-        if (bottomStatus) bottomStatus.classList.toggle('is-ready', completed === 5 && Boolean(consent));
+        if (progressText) progressText.textContent = `Zorunlu alanlar: ${completed}/4 tamam`;
+        if (bottomStatus) bottomStatus.classList.toggle('is-ready', completed === 4 && Boolean(consent));
 
         if (submitBtn) {
             submitBtn.removeAttribute('disabled');
@@ -2983,7 +2931,6 @@ function initReviewForm() {
             const draft = {
                 uni: uniSelectHidden ? uniSelectHidden.value : '',
                 rating: selectedRating,
-                recommend: isRecommended,
                 categories: selectedCategories,
                 is_anonymous: isAnonymous,
                 edu_status: educationStatus,
@@ -3026,11 +2973,6 @@ function initReviewForm() {
                 selectedRating = draft.rating;
                 if (ratingHidden) ratingHidden.value = draft.rating;
                 highlightStars(selectedRating);
-            }
-
-            // Tavsiye
-            if (typeof draft.recommend === 'boolean') {
-                setRecommendation(draft.recommend);
             }
 
             // Kategoriler
@@ -3129,7 +3071,6 @@ function initReviewForm() {
             categories: [...selectedCategories],
             tags: [...selectedCategories],
             text: reviewText,
-            is_recommended: isRecommended,
             is_anonymous: isAnonymous,
             education_status: educationStatus || null,
             graduation_year: gradYearVal,
@@ -3189,7 +3130,6 @@ function initReviewForm() {
         selectedRating = 0;
         if (ratingHidden) ratingHidden.value = '0';
         highlightStars(0);
-        setRecommendation(null);
         setCategories([], false);
         if (reviewTextInput) reviewTextInput.value = '';
         setEducationStatus('');
@@ -3215,7 +3155,6 @@ function initReviewForm() {
         }
         if (uniError) uniError.textContent = '';
         if (ratingError) ratingError.textContent = '';
-        if (recError) recError.textContent = '';
         if (categoriesError) categoriesError.textContent = '';
         if (textError) textError.textContent = '';
         if (consentError) consentError.textContent = '';
@@ -4771,82 +4710,439 @@ function initAdminPage() {
     }
 
     // 5. Contact Messages Tab
+    let currentMessageFilter = 'all';
+    const openReplyBoxIds = new Set();
+
+    const msgFilterBtns = document.querySelectorAll('#admin-messages-filters .admin-msg-filter-btn');
+    const msgAlertBox = document.getElementById('admin-messages-alert');
+    const msgAlertText = document.getElementById('admin-messages-alert-text');
+    const msgAlertClose = document.getElementById('admin-messages-alert-close');
+
+    if (msgAlertClose && msgAlertBox) {
+        msgAlertClose.addEventListener('click', () => {
+            msgAlertBox.classList.add('hidden');
+        });
+    }
+
+    function showMessagesWarningBanner(text) {
+        if (!msgAlertBox || !msgAlertText) return;
+        msgAlertText.textContent = text || 'Yanıt kaydedildi ama e-posta gönderilemedi';
+        msgAlertBox.classList.remove('hidden');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function isMessageReplied(m) {
+        return Boolean(m.is_replied || m.status === 'replied' || m.reply_text || (Array.isArray(m.replies) && m.replies.length > 0));
+    }
+
+    function updateMessageFilterButtonsUI() {
+        const total = cachedMessages.length;
+        const unreadCount = cachedMessages.filter(m => !m.is_read).length;
+        const pendingReplyCount = cachedMessages.filter(m => !isMessageReplied(m)).length;
+        const repliedCount = cachedMessages.filter(m => isMessageReplied(m)).length;
+
+        const countsMap = {
+            all: `Tümü (${total})`,
+            unread: `Okunmamış (${unreadCount})`,
+            pending_reply: `Yanıt bekleyen (${pendingReplyCount})`,
+            replied: `Yanıtlanan (${repliedCount})`
+        };
+
+        msgFilterBtns.forEach(btn => {
+            const fKey = btn.dataset.msgFilter || 'all';
+            if (countsMap[fKey]) btn.textContent = countsMap[fKey];
+            const isActive = (fKey === currentMessageFilter);
+            if (isActive) {
+                btn.className = 'admin-msg-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-cyan-400 text-zinc-950 border border-cyan-400 cursor-pointer transition-all';
+            } else {
+                btn.className = 'admin-msg-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer transition-all';
+            }
+        });
+
+        const countBadge = document.getElementById('admin-messages-count');
+        if (countBadge) {
+            countBadge.textContent = `${unreadCount} okunmamış · ${pendingReplyCount} yanıt bekleyen · ${repliedCount} yanıtlanan (${total} toplam)`;
+        }
+    }
+
+    msgFilterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentMessageFilter = btn.dataset.msgFilter || 'all';
+            updateMessageFilterButtonsUI();
+            renderMessagesList();
+        });
+    });
+
+    function getReplyHistoryForMessage(m) {
+        if (Array.isArray(m.replies) && m.replies.length > 0) {
+            return m.replies;
+        }
+        if (m.reply_text) {
+            return [{
+                id: 0,
+                message_id: m.id,
+                reply_text: m.reply_text,
+                replied_by: m.replied_by || 'Admin',
+                replied_at: m.replied_at,
+                email_status: m.email_status || 'none'
+            }];
+        }
+        return [];
+    }
+
+    function renderMessagesList() {
+        const container = document.getElementById('admin-messages-list');
+        if (!container) return;
+
+        updateMessageFilterButtonsUI();
+
+        const filtered = cachedMessages.filter(m => {
+            const replied = isMessageReplied(m);
+            if (currentMessageFilter === 'unread') return !m.is_read;
+            if (currentMessageFilter === 'pending_reply') return !replied;
+            if (currentMessageFilter === 'replied') return replied;
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            const emptyLabels = {
+                all: 'Henüz iletişim formundan iletilen bir talep bulunmuyor.',
+                unread: 'Okunmamış iletişim mesajı bulunmuyor.',
+                pending_reply: 'Yanıt bekleyen iletişim mesajı bulunmuyor.',
+                replied: 'Henüz yanıtlanmış bir mesaj bulunmuyor.'
+            };
+            container.innerHTML = `
+                <div class="p-12 text-center rounded-2xl border border-zinc-800 bg-zinc-900/40">
+                    <i data-lucide="mail-open" class="w-12 h-12 text-zinc-600 mx-auto mb-3"></i>
+                    <h4 class="text-base font-bold text-white mb-1">Bu filtrede mesaj bulunamadı</h4>
+                    <p class="text-xs text-zinc-500">${emptyLabels[currentMessageFilter] || emptyLabels.all}</p>
+                </div>
+            `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            return;
+        }
+
+        container.innerHTML = filtered.map(m => {
+            const dateStr = m.created_at ? new Date(m.created_at).toLocaleString('tr-TR') : '';
+            const replied = isMessageReplied(m);
+            const repliesList = getReplyHistoryForMessage(m);
+            const isReplyOpen = openReplyBoxIds.has(m.id);
+            const emailStatus = m.email_status || (repliesList.length ? repliesList[repliesList.length - 1].email_status : 'none');
+
+            // Status Badges
+            const readOrNewBadge = m.is_read
+                ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-zinc-800 text-zinc-400 border border-zinc-700">Okundu</span>`
+                : `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-950/70 text-rose-400 border border-rose-800/60 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Okunmadı</span>`;
+
+            const repliedBadge = replied
+                ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950/70 text-emerald-400 border border-emerald-500/40 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3 h-3"></i> Yanıtlandı${repliesList.length > 1 ? ` (${repliesList.length})` : ''}</span>`
+                : `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-950/50 text-amber-400 border border-amber-500/30">Yanıt Bekliyor</span>`;
+
+            let emailBadgeHtml = '';
+            if (replied) {
+                if (emailStatus === 'failed') {
+                    emailBadgeHtml = `
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40 flex items-center gap-1">
+                            <i data-lucide="alert-triangle" class="w-3 h-3 text-rose-400"></i> E-posta gönderilemedi
+                        </span>
+                        <button type="button" class="admin-retry-email-btn px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/40 transition-all flex items-center gap-1 cursor-pointer" data-id="${m.id}">
+                            <i data-lucide="refresh-cw" class="w-3 h-3"></i> Tekrar dene
+                        </button>
+                    `;
+                } else if (emailStatus === 'sent') {
+                    emailBadgeHtml = `
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-950/50 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                            <i data-lucide="mail-check" class="w-3 h-3"></i> E-posta iletildi
+                        </span>
+                    `;
+                } else if (emailStatus === 'pending') {
+                    emailBadgeHtml = `
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-sky-950/60 text-sky-300 border border-sky-500/30 flex items-center gap-1">
+                            <i data-lucide="loader" class="w-3 h-3 animate-spin"></i> E-posta gönderiliyor...
+                        </span>
+                    `;
+                }
+            }
+
+            // Reply history HTML
+            const repliesHistoryHtml = repliesList.length > 0 ? `
+                <div class="mt-3 pt-3 border-t border-zinc-800/80 space-y-2.5">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                        <i data-lucide="corner-down-right" class="w-3.5 h-3.5"></i>
+                        <span>Gönderilen Yanıt${repliesList.length > 1 ? `lar (${repliesList.length})` : ''}</span>
+                    </div>
+                    ${repliesList.map((rep, idx) => {
+                        const repDate = rep.replied_at ? new Date(rep.replied_at).toLocaleString('tr-TR') : '';
+                        return `
+                            <div class="rounded-xl border border-emerald-500/25 bg-emerald-950/15 p-3 text-xs space-y-1">
+                                <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-400">
+                                    <span class="font-semibold text-emerald-300">${escapeHtml(rep.replied_by || 'Admin')}${repliesList.length > 1 ? ` · #${idx + 1}` : ''}</span>
+                                    <span>${escapeHtml(repDate)}</span>
+                                </div>
+                                <div class="text-zinc-200 whitespace-pre-wrap leading-relaxed">${escapeHtml(rep.reply_text)}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            ` : '';
+
+            // Collapsible Reply Box HTML
+            const replyBoxHtml = `
+                <div id="admin-reply-box-${m.id}" class="${isReplyOpen ? '' : 'hidden '}mt-4 pt-4 border-t border-zinc-800 space-y-3">
+                    <!-- Reference info above textarea -->
+                    <div class="rounded-xl border border-zinc-800 bg-zinc-950/80 p-3 text-xs space-y-1.5">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1">
+                                <i data-lucide="reply" class="w-3.5 h-3.5"></i> Yanıtlanan Mesaj Referansı
+                            </span>
+                            <span class="text-[11px] text-zinc-400 font-mono">${escapeHtml(m.sender_name)} &lt;${escapeHtml(m.sender_email)}&gt;</span>
+                        </div>
+                        <div class="text-zinc-400 text-[11px] line-clamp-3 whitespace-pre-wrap italic">"${escapeHtml(m.message)}"</div>
+                    </div>
+
+                    <div>
+                        <textarea
+                            id="admin-reply-textarea-${m.id}"
+                            rows="4"
+                            maxlength="2000"
+                            placeholder="${escapeHtml(m.sender_name)} adlı kullanıcıya gönderilecek yanıtınızı yazın..."
+                            class="w-full bg-zinc-950 border border-zinc-800 focus:border-cyan-400 text-zinc-100 rounded-xl p-3 text-xs leading-relaxed outline-none transition-colors resize-y"
+                        ></textarea>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-2">
+                            <span id="admin-reply-char-${m.id}" class="text-[11px] text-zinc-500">0 / 2000 karakter · Yanıt e-posta olarak da iletilir</span>
+                            <div class="flex items-center justify-end gap-2">
+                                <button type="button" class="admin-cancel-reply-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all cursor-pointer" data-id="${m.id}">
+                                    Vazgeç
+                                </button>
+                                <button type="button" class="admin-send-reply-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-cyan-400 hover:bg-cyan-300 text-zinc-950 transition-all flex items-center gap-1.5 cursor-pointer" data-id="${m.id}">
+                                    <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                                    <span>Gönder</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            return `
+                <div class="p-5 rounded-2xl border ${m.is_read ? 'border-zinc-800/80 bg-zinc-900/40' : 'border-cyan-500/30 bg-zinc-900/80 shadow-lg shadow-cyan-950/20'} transition-all" data-msg-card-id="${m.id}">
+                    <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                        <div class="space-y-2 flex-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
+                                ${readOrNewBadge}
+                                ${repliedBadge}
+                                ${emailBadgeHtml}
+                                <span class="text-xs text-zinc-500">${dateStr}</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                                <span class="font-bold text-white text-sm">${escapeHtml(m.sender_name)}</span>
+                                <span class="text-cyan-400 font-mono text-[11px]">${escapeHtml(m.sender_email)}</span>
+                            </div>
+                            <div class="text-xs font-semibold text-zinc-300">
+                                <span class="text-zinc-500">Konu:</span> ${escapeHtml(m.subject)}
+                            </div>
+                            <div class="text-xs text-zinc-300 bg-zinc-950/60 p-3 rounded-xl border border-zinc-800/80 leading-relaxed whitespace-pre-wrap break-words">
+                                ${escapeHtml(m.message)}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2 shrink-0 md:mt-1">
+                            <button type="button" class="admin-open-reply-btn px-3 py-1.5 rounded-xl text-xs font-bold border border-cyan-500/40 bg-cyan-950/30 hover:bg-cyan-900/50 text-cyan-300 transition-all flex items-center gap-1.5 cursor-pointer" data-id="${m.id}">
+                                <i data-lucide="reply" class="w-3.5 h-3.5"></i>
+                                <span>${replied ? 'Ek Yanıt Yaz' : 'Yanıtla'}</span>
+                            </button>
+                            <button type="button" class="admin-toggle-msg-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-zinc-800 hover:border-zinc-700 bg-zinc-950/60 hover:bg-zinc-800 text-zinc-300 transition-all flex items-center gap-1.5 cursor-pointer" data-id="${m.id}" data-is-read="${m.is_read}">
+                                <i data-lucide="${m.is_read ? 'mail' : 'check'}" class="w-3.5 h-3.5 ${m.is_read ? 'text-zinc-400' : 'text-cyan-400'}"></i>
+                                <span>${m.is_read ? 'Okunmadı Yap' : 'Okundu Olarak İşaretle'}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    ${repliesHistoryHtml}
+                    ${replyBoxHtml}
+                </div>
+            `;
+        }).join('');
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+
+        // Bind toggle read
+        container.querySelectorAll('.admin-toggle-msg-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = parseInt(btn.dataset.id);
+                try {
+                    const res = await api.toggleMessageRead(id);
+                    const idx = cachedMessages.findIndex(x => x.id === id);
+                    if (idx !== -1) {
+                        if (res && res.data) {
+                            cachedMessages[idx] = res.data;
+                        } else {
+                            cachedMessages[idx].is_read = !cachedMessages[idx].is_read;
+                        }
+                    }
+                    renderMessagesList();
+                    loadStats();
+                } catch (err) {
+                    showToast(`❌ Mesaj durumu güncellenemedi: ${err.message}`);
+                }
+            });
+        });
+
+        // Bind open/toggle reply area
+        container.querySelectorAll('.admin-open-reply-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = parseInt(btn.dataset.id);
+                const box = document.getElementById(`admin-reply-box-${id}`);
+                if (!box) return;
+                if (openReplyBoxIds.has(id)) {
+                    openReplyBoxIds.delete(id);
+                    box.classList.add('hidden');
+                } else {
+                    openReplyBoxIds.add(id);
+                    box.classList.remove('hidden');
+                    const ta = document.getElementById(`admin-reply-textarea-${id}`);
+                    if (ta) setTimeout(() => ta.focus(), 50);
+                }
+            });
+        });
+
+        // Bind cancel reply button
+        container.querySelectorAll('.admin-cancel-reply-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = parseInt(btn.dataset.id);
+                openReplyBoxIds.delete(id);
+                const box = document.getElementById(`admin-reply-box-${id}`);
+                if (box) box.classList.add('hidden');
+            });
+        });
+
+        // Bind textarea char count
+        container.querySelectorAll('[id^="admin-reply-textarea-"]').forEach(ta => {
+            const id = ta.id.replace('admin-reply-textarea-', '');
+            const charEl = document.getElementById(`admin-reply-char-${id}`);
+            ta.addEventListener('input', () => {
+                if (charEl) {
+                    charEl.textContent = `${ta.value.length} / 2000 karakter · Yanıt e-posta olarak da iletilir`;
+                }
+            });
+        });
+
+        // Bind send reply button
+        container.querySelectorAll('.admin-send-reply-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = parseInt(btn.dataset.id);
+                const ta = document.getElementById(`admin-reply-textarea-${id}`);
+                const replyText = (ta ? ta.value : '').trim();
+
+                if (!replyText) {
+                    showToast('⚠️ Lütfen göndermek için bir yanıt metni yazın.');
+                    if (ta) ta.focus();
+                    return;
+                }
+                if (replyText.length > 2000) {
+                    showToast('⚠️ Yanıt metni en fazla 2000 karakter olabilir.');
+                    return;
+                }
+
+                // Double-click guard on button
+                if (btn.disabled) return;
+                btn.disabled = true;
+                btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> <span>Gönderiliyor...</span>`;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+
+                try {
+                    const res = await api.replyToAdminMessage(id, replyText);
+                    openReplyBoxIds.delete(id);
+
+                    if (res && res.data) {
+                        const idx = cachedMessages.findIndex(x => x.id === id);
+                        if (idx !== -1) cachedMessages[idx] = res.data;
+                    }
+
+                    renderMessagesList();
+                    loadStats();
+
+                    if (res && (res.email_status === 'failed' || res.warning)) {
+                        const warn = res.warning || 'Yanıt kaydedildi ama e-posta gönderilemedi';
+                        showMessagesWarningBanner(warn);
+                        showToast(`⚠️ ${warn}`);
+                    } else {
+                        showToast('✅ Yanıt kaydedildi ve e-posta gönderim kuyruğuna alındı.');
+                        // Refresh message status after background email task completes
+                        setTimeout(async () => {
+                            try {
+                                const fresh = await api.getAdminMessages();
+                                cachedMessages = fresh;
+                                const updatedMsg = cachedMessages.find(x => x.id === id);
+                                if (updatedMsg && updatedMsg.email_status === 'failed') {
+                                    showMessagesWarningBanner('Yanıt kaydedildi ama e-posta gönderilemedi');
+                                    showToast('⚠️ Yanıt kaydedildi ama e-posta gönderilemedi');
+                                }
+                                if (currentAdminTab === 'messages') renderMessagesList();
+                            } catch (_) {}
+                        }, 1800);
+                    }
+                } catch (err) {
+                    showToast(`❌ Yanıt gönderilemedi: ${err.message}`);
+                    btn.disabled = false;
+                    btn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i> <span>Gönder</span>`;
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }
+            });
+        });
+
+        // Bind retry email button
+        container.querySelectorAll('.admin-retry-email-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = parseInt(btn.dataset.id);
+                if (btn.disabled) return;
+                btn.disabled = true;
+                btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> Deneniyor...`;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+
+                try {
+                    const res = await api.retryAdminMessageEmail(id);
+                    if (res && res.data) {
+                        const idx = cachedMessages.findIndex(x => x.id === id);
+                        if (idx !== -1) cachedMessages[idx] = res.data;
+                    }
+                    renderMessagesList();
+
+                    if (res && (res.email_status === 'failed' || !res.email_sent)) {
+                        const warn = res.warning || 'Yanıt kaydedildi ama e-posta gönderilemedi';
+                        showMessagesWarningBanner(warn);
+                        showToast(`⚠️ ${warn}`);
+                    } else {
+                        showToast('📨 E-posta gönderimi tekrar başlatıldı.');
+                        setTimeout(async () => {
+                            try {
+                                cachedMessages = await api.getAdminMessages();
+                                const updatedMsg = cachedMessages.find(x => x.id === id);
+                                if (updatedMsg && updatedMsg.email_status === 'failed') {
+                                    showMessagesWarningBanner('Yanıt kaydedildi ama e-posta gönderilemedi');
+                                    showToast('⚠️ Yanıt kaydedildi ama e-posta gönderilemedi');
+                                }
+                                if (currentAdminTab === 'messages') renderMessagesList();
+                            } catch (_) {}
+                        }, 1800);
+                    }
+                } catch (err) {
+                    showToast(`❌ E-posta tekrar gönderilemedi: ${err.message}`);
+                    renderMessagesList();
+                }
+            });
+        });
+    }
+
     async function loadMessages() {
         const container = document.getElementById('admin-messages-list');
-        const countBadge = document.getElementById('admin-messages-count');
         if (!container) return;
 
         container.innerHTML = `<div class="p-8 text-center text-zinc-500">İletişim mesajları yükleniyor...</div>`;
 
         try {
             cachedMessages = await api.getAdminMessages();
-            const unreadCount = cachedMessages.filter(m => !m.is_read).length;
-
-            if (countBadge) countBadge.textContent = `${unreadCount} okunmamış / ${cachedMessages.length} toplam`;
-
-            if (cachedMessages.length === 0) {
-                container.innerHTML = `
-                    <div class="p-12 text-center rounded-2xl border border-zinc-800 bg-zinc-900/40">
-                        <i data-lucide="mail-open" class="w-12 h-12 text-zinc-600 mx-auto mb-3"></i>
-                        <h4 class="text-base font-bold text-white mb-1">Gelen mesaj kutusu boş</h4>
-                        <p class="text-xs text-zinc-500">Henüz iletişim formundan iletilen bir talep bulunmuyor.</p>
-                    </div>
-                `;
-                if (typeof lucide !== 'undefined') lucide.createIcons();
-                return;
-            }
-
-            container.innerHTML = cachedMessages.map(m => {
-                const dateStr = m.created_at ? new Date(m.created_at).toLocaleString('tr-TR') : '';
-                return `
-                    <div class="p-5 rounded-2xl border ${m.is_read ? 'border-zinc-800/80 bg-zinc-900/40' : 'border-cyan-500/30 bg-zinc-900/80 shadow-lg shadow-cyan-950/20'} transition-all flex flex-col md:flex-row md:items-start justify-between gap-4">
-                        <div class="space-y-2 flex-1">
-                            <div class="flex items-center gap-2">
-                                ${m.is_read 
-                                    ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-zinc-800 text-zinc-400 border border-zinc-700">Okundu</span>`
-                                    : `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-950/70 text-rose-400 border border-rose-800/60 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Yeni Mesaj</span>`
-                                }
-                                <span class="text-xs text-zinc-500">${dateStr}</span>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-x-3 text-xs">
-                                <span class="font-bold text-white text-sm">${escapeHtml(m.sender_name)}</span>
-                                <a href="mailto:${escapeHtml(m.sender_email)}" class="text-cyan-400 hover:underline font-mono text-[11px]">${escapeHtml(m.sender_email)}</a>
-                            </div>
-                            <div class="text-xs font-semibold text-zinc-300">
-                                <span class="text-zinc-500">Konu:</span> ${escapeHtml(m.subject)}
-                            </div>
-                            <div class="text-xs text-zinc-300 bg-zinc-950/60 p-3 rounded-xl border border-zinc-800/80 leading-relaxed whitespace-pre-wrap">
-                                ${escapeHtml(m.message)}
-                            </div>
-                        </div>
-                        <div class="shrink-0 md:mt-1">
-                            <button class="admin-toggle-msg-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-zinc-800 hover:border-zinc-700 bg-zinc-950/60 hover:bg-zinc-800 text-zinc-300 transition-all flex items-center gap-1.5 cursor-pointer" data-id="${m.id}" data-is-read="${m.is_read}">
-                                <i data-lucide="${m.is_read ? 'mail' : 'check'}" class="w-3.5 h-3.5 ${m.is_read ? 'text-zinc-400' : 'text-cyan-400'}"></i>
-                                <span>${m.is_read ? 'Okunmadı Yap' : 'Okundu Olarak İşaretle'}</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-
-            // Bind toggle read
-            container.querySelectorAll('.admin-toggle-msg-btn').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const id = parseInt(btn.dataset.id);
-                    const currentRead = (btn.dataset.isRead === 'true');
-                    const nextRead = !currentRead;
-                    try {
-                        await api.toggleMessageRead(id, nextRead);
-                        loadMessages();
-                        loadStats();
-                    } catch (err) {
-                        showToast(`❌ Mesaj durumu güncellenemedi: ${err.message}`);
-                    }
-                });
-            });
-
+            renderMessagesList();
         } catch (err) {
             container.innerHTML = `<div class="p-8 text-center text-rose-400">İletişim mesajları alınamadı: ${escapeHtml(err.message)}</div>`;
         }

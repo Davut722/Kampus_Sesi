@@ -259,10 +259,6 @@ export const TEMPLATES = {
                                     <span class="ed-uni-hero__rev-count" id="stat-count-label"><span id="stat-count">0</span> değerlendirme</span>
                                 </div>
                             </div>
-                            <div class="ed-uni-hero__recommend-badge" id="hero-rec-badge">
-                                <i data-lucide="thumbs-up" class="icon-xs"></i>
-                                <span id="hero-rec-text">%-- Tavsiye Ediyor</span>
-                            </div>
                             <div class="ed-uni-hero__low-badge" id="hero-low-reviews-note" style="display: none;">
                                 <i data-lucide="info" class="icon-xs"></i>
                                 <span>Az sayıda yoruma dayanır</span>
@@ -603,45 +599,26 @@ export const TEMPLATES = {
                             <div class="rf-error" id="rf-uni-error" aria-live="polite"></div>
                         </div>
 
-                        <!-- 2. Genel Puan + Tavsiye (Yan Yana) -->
-                        <div class="rf-rating-rec-row">
-                            <!-- Genel Puan -->
-                            <div class="rf-field" id="rf-field-rating">
+                        <!-- 2. Genel Puan -->
+                        <div class="rf-field" id="rf-field-rating">
+                            <div class="rf-label-wrap">
                                 <label class="rf-label">
                                     Genel Puanınız <span class="rf-req" aria-label="zorunlu">*</span>
                                 </label>
-                                <div class="rf-stars-wrap">
-                                    <div id="star-rating" class="rf-stars" role="radiogroup" aria-label="Genel Puan">
-                                        <span class="rf-star" data-value="1" role="radio" aria-label="1 yıldız" tabindex="0">★</span>
-                                        <span class="rf-star" data-value="2" role="radio" aria-label="2 yıldız" tabindex="0">★</span>
-                                        <span class="rf-star" data-value="3" role="radio" aria-label="3 yıldız" tabindex="0">★</span>
-                                        <span class="rf-star" data-value="4" role="radio" aria-label="4 yıldız" tabindex="0">★</span>
-                                        <span class="rf-star" data-value="5" role="radio" aria-label="5 yıldız" tabindex="0">★</span>
-                                    </div>
-                                    <div id="rf-rating-label" class="rf-rating-desc" aria-live="polite">Puan seçin (1-5)</div>
-                                </div>
-                                <input type="hidden" id="form-rating" value="0" required>
-                                <div class="rf-error" id="rf-rating-error" aria-live="polite"></div>
+                                <span class="rf-hint-pill">1 ile 5 yıldız arası</span>
                             </div>
-
-                            <!-- Tavsiye Eder misin? -->
-                            <div class="rf-field" id="rf-field-recommend">
-                                <label class="rf-label">
-                                    Tavsiye eder misin? <span class="rf-req" aria-label="zorunlu">*</span>
-                                </label>
-                                <div class="rf-rec-group" role="radiogroup" aria-label="Tavsiye Durumu">
-                                    <button type="button" class="rf-rec-btn" data-value="yes" id="rf-rec-yes">
-                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
-                                        <span>Evet, tavsiye ederim</span>
-                                    </button>
-                                    <button type="button" class="rf-rec-btn" data-value="no" id="rf-rec-no">
-                                        <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg>
-                                        <span>Hayır, tavsiye etmem</span>
-                                    </button>
+                            <div class="rf-stars-wrap">
+                                <div id="star-rating" class="rf-stars" role="radiogroup" aria-label="Genel Puan">
+                                    <span class="rf-star" data-value="1" role="radio" aria-label="1 yıldız" tabindex="0">★</span>
+                                    <span class="rf-star" data-value="2" role="radio" aria-label="2 yıldız" tabindex="0">★</span>
+                                    <span class="rf-star" data-value="3" role="radio" aria-label="3 yıldız" tabindex="0">★</span>
+                                    <span class="rf-star" data-value="4" role="radio" aria-label="4 yıldız" tabindex="0">★</span>
+                                    <span class="rf-star" data-value="5" role="radio" aria-label="5 yıldız" tabindex="0">★</span>
                                 </div>
-                                <input type="hidden" id="form-recommend" value="">
-                                <div class="rf-error" id="rf-recommend-error" aria-live="polite"></div>
+                                <div id="rf-rating-label" class="rf-rating-desc" aria-live="polite">Puan seçin (1-5)</div>
                             </div>
+                            <input type="hidden" id="form-rating" value="0" required>
+                            <div class="rf-error" id="rf-rating-error" aria-live="polite"></div>
                         </div>
 
                         <!-- 3. Kategori Seçimi (Zorunlu - Çoklu Seçim) -->
@@ -894,7 +871,6 @@ export const TEMPLATES = {
                             <svg class="crit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                             <p>
                                 Lütfen kişileri doğrudan adıyla hedef almayın ve kişisel iletişim bilgisi paylaşmayın.
-                                Gönderilen yorumlar topluluk güvenliği için moderasyon incelemesinden geçtikten sonra yayınlanır.
                             </p>
                         </div>
 
@@ -914,7 +890,7 @@ export const TEMPLATES = {
                             <div class="rf-bottom-bar__inner">
                                 <div class="rf-bottom-bar__status" id="rf-bottom-status">
                                     <span class="rf-progress-dot"></span>
-                                    <span id="rf-progress-text">Zorunlu alanlar: 0/5 tamam</span>
+                                    <span id="rf-progress-text">Zorunlu alanlar: 0/4 tamam</span>
                                 </div>
                                 <button type="submit" id="rf-submit-btn" class="btn btn--primary rf-submit-btn" aria-disabled="true">
                                     Yorumu paylaş
@@ -1443,7 +1419,7 @@ export const TEMPLATES = {
                             <h3>2. Yurt ve Üniversite Yorumlarının Hukuki Sorumluluğu</h3>
                             <p>Platformda üniversiteler, akademisyenler, kampüsler, KYK yurtları veya özel yurtlar hakkında yayınlanan her türlü yorum, eleştiri ve puanlamanın <strong>tüm hukuki, cezai ve mali sorumluluğu münhasıran o içeriği yazan kullanıcıya aittir.</strong> Kullanıcı; TCK m. 125 (Hakaret), TCK m. 267 (İftira), kişilik hakları ihlali veya gerçeğe aykırı ticari karalama niteliği taşıyan ifadelerden doğabilecek her türlü dava ve tazminat talebinden bizzat sorumludur; Kampüs Sesi hiçbir hukuki/cezai sorumluluk kabul etmez.</p>
                             <h3>3. Kurumlar İçin "Uyar-Kaldır" Sistemi</h3>
-                            <p>Kişilik haklarının veya kurumsal itibarının ihlal edildiğini düşünen kişi ve kurumlar <a href="mailto:destek@kampussesi.com">destek@kampussesi.com</a> adresine ilgili URL ve açıklama ile başvurabilir. Usulüne uygun bildirimler <strong>24–48 saat</strong> içinde incelenerek hukuka aykırı içerikler yayından kaldırılır.</p>
+                            <p>Kişilik haklarının veya kurumsal itibarının ihlal edildiğini düşünen kişi ve kurumlar <a href="#/iletisim">İletişim &amp; Destek formu</a> üzerinden ilgili URL ve açıklama ile başvurabilir. Usulüne uygun bildirimler <strong>24–48 saat</strong> içinde incelenerek hukuka aykırı içerikler yayından kaldırılır.</p>
                             <h3>4. Moderasyon ve Yürürlük</h3>
                             <p>Kampüs Sesi, topluluk kurallarına aykırı veya spam içerikleri kaldırma ve ilgili hesabı askıya alma hakkını saklı tutar.</p>
                         </div>
@@ -1457,7 +1433,7 @@ export const TEMPLATES = {
                             <h3>2. Öğrenci Mahremiyeti ve Veri Aktarımı</h3>
                             <p>Değerlendirme yapan öğrencilerin e-posta ve kimlik bilgileri <strong>asla üniversite yönetimleriyle, yurt idareleriyle veya reklam şirketleriyle paylaşılmaz.</strong> Veriler yalnızca bağlayıcı resmi mahkeme/savcılık talebi halinde yetkili makamlarla paylaşılabilir.</p>
                             <h3>3. KVKK Madde 11 Kapsamındaki Haklarınız</h3>
-                            <p>Dilediğiniz zaman profilinizden yorumlarınızı silebilir veya kişisel verilerinizin silinmesi/düzeltilmesi taleplerinizi <a href="mailto:destek@kampussesi.com">destek@kampussesi.com</a> adresine iletebilirsiniz.</p>
+                            <p>Dilediğiniz zaman profilinizden yorumlarınızı silebilir veya kişisel verilerinizin silinmesi/düzeltilmesi taleplerinizi <a href="#/iletisim">İletişim &amp; Destek formu</a> üzerinden iletebilirsiniz.</p>
                         </div>
                     </div>
 
@@ -2380,10 +2356,11 @@ export const TEMPLATES = {
                     <div class="md:col-span-5 space-y-6">
                         <div class="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-7 space-y-6">
                             <div>
-                                <span class="text-xs font-semibold text-zinc-500 uppercase tracking-wider block mb-1">E-posta Adresi</span>
-                                <a href="mailto:destek@kampussesi.com" class="text-lg font-bold text-cyan-400 hover:underline flex items-center gap-2">
-                                    <i data-lucide="mail" class="w-4 h-4"></i> destek@kampussesi.com
-                                </a>
+                                <span class="text-xs font-semibold text-zinc-500 uppercase tracking-wider block mb-1.5">İletişim Kanalı</span>
+                                <div class="flex items-start gap-2.5 text-sm text-zinc-200 leading-relaxed">
+                                    <i data-lucide="message-square-reply" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                                    <span>Mesajını formdan ilet, yanıtımız doğrudan <strong>e-posta adresine</strong> gelir.</span>
+                                </div>
                             </div>
 
                             <div class="pt-4 border-t border-zinc-800">
@@ -2391,24 +2368,6 @@ export const TEMPLATES = {
                                 <div class="flex items-center gap-2 text-sm text-zinc-300">
                                     <i data-lucide="clock" class="w-4 h-4 text-cyan-400 shrink-0"></i>
                                     <span>En geç <strong>24 saat</strong> içinde dönüş yapıyoruz.</span>
-                                </div>
-                            </div>
-
-                            <div class="pt-4 border-t border-zinc-800">
-                                <span class="text-xs font-semibold text-zinc-500 uppercase tracking-wider block mb-2">Sosyal Medyada Biz</span>
-                                <div class="flex items-center gap-3">
-                                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition-colors" title="Twitter / X">
-                                        <i data-lucide="twitter" class="w-4 h-4"></i>
-                                    </a>
-                                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition-colors" title="Instagram">
-                                        <i data-lucide="instagram" class="w-4 h-4"></i>
-                                    </a>
-                                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition-colors" title="LinkedIn">
-                                        <i data-lucide="linkedin" class="w-4 h-4"></i>
-                                    </a>
-                                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition-colors" title="GitHub">
-                                        <i data-lucide="github" class="w-4 h-4"></i>
-                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -2516,7 +2475,7 @@ export const TEMPLATES = {
                             6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, <strong>Kampüs Sesi</strong> platformu ("Platform"), kullanıcıların ve ziyaretçilerin kişisel verilerinin işlenmesi süreçlerinde "Veri Sorumlusu" sıfatıyla hareket etmektedir. İşbu Aydınlatma ve Gizlilik Politikası, üniversite ve yurt değerlendirmeleri yapılan platformumuzda hangi verilerin hangi amaçlarla işlendiğini ve nasıl korunduğunu açıklamak amacıyla hazırlanmıştır.
                         </p>
                         <p class="text-zinc-400 text-sm leading-relaxed">
-                            Veri sorumlusu sıfatıyla bize her türlü soru, talep ve başvurunuz için resmi iletişim adresimiz olan <a href="mailto:destek@kampussesi.com" class="text-cyan-400 hover:underline font-medium">destek@kampussesi.com</a> üzerinden ulaşabilirsiniz.
+                            Veri sorumlusu sıfatıyla bize her türlü soru, talep ve başvurunuz için resmi <a href="#/iletisim" class="text-cyan-400 hover:underline font-medium">İletişim &amp; Destek formumuz</a> üzerinden ulaşabilirsiniz.
                         </p>
                     </div>
 
@@ -2594,7 +2553,7 @@ export const TEMPLATES = {
                             KVKK'nın 11. maddesi uyarınca her kullanıcı; kişisel verilerinin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, işlenme amacına uygun kullanılıp kullanılmadığını öğrenme, eksik veya yanlış işlenmişse düzeltilmesini isteme ve KVKK'nın 7. maddesi çerçevesinde kişisel verilerinin silinmesini veya yok edilmesini talep etme hakkına sahiptir.
                         </p>
                         <p class="text-zinc-300 text-sm leading-relaxed">
-                            Bu haklarınıza ilişkin taleplerinizi kayıtlı e-posta adresiniz üzerinden <a href="mailto:destek@kampussesi.com" class="text-cyan-400 hover:underline font-medium">destek@kampussesi.com</a> adresine iletebilirsiniz. Başvurularınız talebin niteliğine göre en kısa sürede ve en geç otuz (30) gün içinde ücretsiz olarak sonuçlandırılır.
+                            Bu haklarınıza ilişkin taleplerinizi kayıtlı e-posta adresinizle <a href="#/iletisim" class="text-cyan-400 hover:underline font-medium">İletişim &amp; Destek formumuz</a> üzerinden iletebilirsiniz. Başvurularınız talebin niteliğine göre en kısa sürede ve en geç otuz (30) gün içinde ücretsiz olarak sonuçlandırılır.
                         </p>
                     </div>
                 </div>
@@ -2790,10 +2749,10 @@ export const TEMPLATES = {
                             Kampüs Sesi, 5651 sayılı Kanun'un 5. maddesinin 2. fıkrası çerçevesinde hukuka saygılı bir platform olarak etkin bir <strong>"Uyar-Kaldır" (Notice and Take-Down)</strong> prosedürü işletmektedir.
                         </p>
                         <p class="text-zinc-300 text-sm leading-relaxed mb-3">
-                            Herhangi bir üniversite yönetimi, özel/devlet yurt işletmesi, akademisyen veya gerçek/tüzel kişi; platformda yer alan bir yorumun kişilik haklarını, ticari itibarını veya yürürlükteki mevzuatı ihlal ettiğini düşünüyorsa, doğrudan yargı yoluna başvurmadan önce resmi iletişim adresimiz olan <a href="mailto:destek@kampussesi.com" class="text-cyan-400 hover:underline font-bold">destek@kampussesi.com</a> üzerinden "Uyar-Kaldır" talebinde bulunabilir.
+                            Herhangi bir üniversite yönetimi, özel/devlet yurt işletmesi, akademisyen veya gerçek/tüzel kişi; platformda yer alan bir yorumun kişilik haklarını, ticari itibarını veya yürürlükteki mevzuatı ihlal ettiğini düşünüyorsa, doğrudan yargı yoluna başvurmadan önce resmi <a href="#/iletisim" class="text-cyan-400 hover:underline font-bold">İletişim &amp; Destek formumuz</a> üzerinden "Uyar-Kaldır" talebinde bulunabilir.
                         </p>
                         <p class="text-zinc-300 text-sm leading-relaxed">
-                            <strong>Başvuru Usulü:</strong> <a href="mailto:destek@kampussesi.com" class="text-cyan-400 hover:underline">destek@kampussesi.com</a> adresine gönderilecek bildirimde; (1) İhlale konu yorumun bulunduğu sayfa bağlantısı (URL) veya ekran görüntüsü, (2) İçeriğin hangi açıdan hukuka veya kişilik haklarına aykırı olduğunun somut açıklaması ve (3) Başvuran kişinin yetki belgesi veya kimlik teyidi yer almalıdır. Usulüne uygun olarak iletilen bildirimler hukuk ve moderasyon ekibimizce <strong>en geç 24 ila 48 saat içerisinde</strong> incelenir; hukuka aykırılığı tespit edilen içerikler derhal yayından kaldırılır ve başvuru sahibine yazılı bilgi verilir.
+                            <strong>Başvuru Usulü:</strong> <a href="#/iletisim" class="text-cyan-400 hover:underline">İletişim &amp; Destek formu</a> üzerinden gönderilecek bildirimde; (1) İhlale konu yorumun bulunduğu sayfa bağlantısı (URL) veya ekran görüntüsü, (2) İçeriğin hangi açıdan hukuka veya kişilik haklarına aykırı olduğunun somut açıklaması ve (3) Başvuran kişinin yetki belgesi veya kimlik teyidi yer almalıdır. Usulüne uygun olarak iletilen bildirimler hukuk ve moderasyon ekibimizce <strong>en geç 24 ila 48 saat içerisinde</strong> incelenir; hukuka aykırılığı tespit edilen içerikler derhal yayından kaldırılır ve başvuru sahibine yazılı bilgi verilir.
                         </p>
                     </div>
 
@@ -2820,7 +2779,7 @@ export const TEMPLATES = {
                             <h2 class="text-xl font-bold text-white">6. Yürürlük ve Uyuşmazlıkların Çözümü</h2>
                         </div>
                         <p class="text-zinc-300 text-sm leading-relaxed">
-                            Kullanıcı, üyelik kayıt formundaki onay kutusunu işaretleyerek veya platformu kullanarak işbu Sözleşme hükümlerini okuduğunu ve kabul ettiğini beyan eder. İşbu Sözleşme'den doğabilecek her türlü hukuki uyuşmazlıkta Türkiye Cumhuriyeti kanunları uygulanır. Her türlü bildirim ve yasal iletişim için resmi adresimiz <a href="mailto:destek@kampussesi.com" class="text-cyan-400 hover:underline font-medium">destek@kampussesi.com</a>'dur.
+                            Kullanıcı, üyelik kayıt formundaki onay kutusunu işaretleyerek veya platformu kullanarak işbu Sözleşme hükümlerini okuduğunu ve kabul ettiğini beyan eder. İşbu Sözleşme'den doğabilecek her türlü hukuki uyuşmazlıkta Türkiye Cumhuriyeti kanunları uygulanır. Her türlü bildirim ve yasal iletişim için resmi kanalımız <a href="#/iletisim" class="text-cyan-400 hover:underline font-medium">İletişim &amp; Destek formumuzdur</a>.
                         </p>
                     </div>
                 </div>
@@ -3238,12 +3197,40 @@ export const TEMPLATES = {
                 </div>
 
                 <!-- 4. TAB: İLETİŞİM MESAJLARI -->
-                <div id="admin-tab-messages" class="hidden space-y-6">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i data-lucide="mail" class="w-4 h-4 text-rose-400"></i> Gelen İletişim Mesajları
-                        </h3>
-                        <span id="admin-messages-count" class="text-xs text-zinc-500">Yükleniyor...</span>
+                <div id="admin-tab-messages" class="hidden space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i data-lucide="mail" class="w-4 h-4 text-rose-400"></i> Gelen İletişim Mesajları
+                            </h3>
+                            <span id="admin-messages-count" class="text-xs text-zinc-500 block mt-0.5">Yükleniyor...</span>
+                        </div>
+
+                        <!-- Mesaj Durumu Filtreleri -->
+                        <div id="admin-messages-filters" class="flex flex-wrap items-center gap-1.5">
+                            <button type="button" class="admin-msg-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-cyan-400 text-zinc-950 border border-cyan-400 cursor-pointer transition-all" data-msg-filter="all">
+                                Tümü
+                            </button>
+                            <button type="button" class="admin-msg-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer transition-all" data-msg-filter="unread">
+                                Okunmamış
+                            </button>
+                            <button type="button" class="admin-msg-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer transition-all" data-msg-filter="pending_reply">
+                                Yanıt bekleyen
+                            </button>
+                            <button type="button" class="admin-msg-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:border-zinc-700 hover:text-zinc-200 cursor-pointer transition-all" data-msg-filter="replied">
+                                Yanıtlanan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="admin-messages-alert" class="hidden rounded-xl border border-amber-500/40 bg-amber-950/30 p-3.5 text-xs text-amber-300 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400 shrink-0"></i>
+                            <span id="admin-messages-alert-text">Yanıt kaydedildi ama e-posta gönderilemedi</span>
+                        </div>
+                        <button type="button" id="admin-messages-alert-close" class="text-amber-400 hover:text-white p-1 cursor-pointer">
+                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                        </button>
                     </div>
 
                     <div id="admin-messages-list" class="space-y-4">

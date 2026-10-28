@@ -4246,53 +4246,6 @@ function initComparePage() {
 
     const normKey = (s) => String(s || '').replace(/\s*\([^)]*\)/g, '').trim().toLocaleLowerCase('tr');
 
-    const UNIS_WITH_PHOTO_INSTEAD_OF_LOGO = new Set([
-        'Boğaziçi Üniversitesi',
-        'İstanbul Teknik Üniversitesi',
-        'Sabancı Üniversitesi',
-        'Koç Üniversitesi',
-        'Özyeğin Üniversitesi',
-        'Galatasaray Üniversitesi',
-        'Mimar Sinan Güzel Sanatlar Üniversitesi',
-        'Anadolu Üniversitesi',
-        'Kadir Has Üniversitesi',
-        'Bahçeşehir Üniversitesi',
-        'Fenerbahçe Üniversitesi',
-        'Işık Üniversitesi',
-        'Yaşar Üniversitesi',
-        'Çankaya Üniversitesi',
-        'İstanbul Kültür Üniversitesi',
-        'Ankara Medipol Üniversitesi',
-        'Ankara Sosyal Bilimler Üniversitesi',
-        'Çanakkale Onsekiz Mart Üniversitesi',
-        'Burdur Mehmet Akif Ersoy Üniversitesi',
-        'Erzincan Binali Yıldırım Üniversitesi',
-        'İzmir Katip Çelebi Üniversitesi',
-        'İzmir Demokrasi Üniversitesi',
-        'İzmir Tınaztepe Üniversitesi',
-        'Karadeniz Teknik Üniversitesi',
-        'Trabzon Üniversitesi',
-        'Osmaniye Korkut Ata Üniversitesi',
-        'Siirt Üniversitesi',
-        'İskenderun Teknik Üniversitesi',
-        'Recep Tayyip Erdoğan Üniversitesi',
-        'Gebze Teknik Üniversitesi',
-        'Avrasya Üniversitesi',
-        'Mudanya Üniversitesi',
-        'Kıbrıs İlim Üniversitesi',
-        'Kahramanmaraş İstiklal Üniversitesi',
-        'Antalya Akev Üniversitesi',
-        'Çağ Üniversitesi',
-        'Yüksek İhtisas Üniversitesi',
-        'İstanbul Sağlık ve Sosyal Bilimler Meslek Yüksekokulu',
-        'Kilis 7 Aralık Üniversitesi',
-        'İstanbul Esenyurt Üniversitesi',
-        'Nişantaşı Üniversitesi',
-        'Anka Teknoloji Üniversitesi',
-        'İstanbul Sağlık ve Teknoloji Üniversitesi',
-        'Toros Üniversitesi'
-    ]);
-
     function getUniAcronym(name) {
         if (!name) return 'ÜNİ';
         const paren = name.match(/\(([^)]+)\)/);
@@ -4306,10 +4259,9 @@ function initComparePage() {
 
     function isPhotoUrlOrKnownNonLogo(name, url) {
         if (!url) return true;
-        if (name && UNIS_WITH_PHOTO_INSTEAD_OF_LOGO.has(name)) return true;
         const lower = url.toLowerCase();
         if (lower.includes('ui-avatars.com')) return true;
-        if (lower.includes('.svg') || lower.includes('logo') || lower.includes('emblem') || lower.includes('arma') || lower.includes('seal') || lower.includes('simge')) {
+        if (lower.includes('.svg') || lower.includes('logo') || lower.includes('arma') || lower.includes('emblem') || lower.includes('seal') || lower.includes('simge')) {
             return false;
         }
         if (lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.includes('campus') || lower.includes('panoramio') || lower.includes('binas') || lower.includes('giris') || lower.includes('giri%c5%9f') || lower.includes('armory') || lower.includes('front_door')) {

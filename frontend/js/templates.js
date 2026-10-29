@@ -2947,7 +2947,7 @@ export const TEMPLATES = {
                         Üniversite Sıralaması
                     </h1>
                     <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                        Doğrulanmış 15.000+ öğrenci değerlendirmesi; akademik kalite, yurt/yemekhane, kampüs yaşamı ve ulaşım kriterleri baz alınarak oluşturulan güncel sıralama.
+                        Öğrencilerin yaptığı gerçek değerlendirmeler; akademik kalite, yurt/yemekhane, kampüs yaşamı ve ulaşım puanları baz alınarak oluşturulan dinamik sıralama (En az 10 değerlendirme şartı aranmaktadır).
                     </p>
                 </div>
 

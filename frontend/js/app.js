@@ -6362,223 +6362,57 @@ function initCitiesPage() {
 
 // ─── Sıralama Sayfası Mantığı (Ranking) ───────────────────
 
-function initRankingPage() {
+async function initRankingPage() {
     const podiumContainer = document.getElementById('top-podium-cards');
     const listContainer = document.getElementById('ranking-list');
     const searchInput = document.getElementById('ranking-search-input');
+    const filterTabsWrapper = document.getElementById('ranking-filter-tabs')?.closest('.rounded-2xl');
     const tabButtons = document.querySelectorAll('#ranking-filter-tabs .rank-tab-btn');
-    if (!podiumContainer || !listContainer) return;
+    if (!listContainer) return;
 
-    const RANKING_DATA = [
-        {
-            id: 'odtu',
-            name: 'Orta Doğu Teknik Üniversitesi (ODTÜ)',
-            shortName: 'ODTÜ',
-            city: 'Ankara',
-            type: 'Devlet',
-            overall: 9.8,
-            academic: 9.9,
-            campus: 9.8,
-            dorm: 9.4,
-            transport: 9.6,
-            reviewsCount: 1420,
-            badge: 'Türkiye 1.si',
-            quote: 'Yalıncak ormanı, Eymir Gölü, devrim stadyumu ve ödün vermeyen mühendislik disiplini.',
-            logoLetter: 'O'
-        },
-        {
-            id: 'boun',
-            name: 'Boğaziçi Üniversitesi',
-            shortName: 'Boğaziçi',
-            city: 'İstanbul',
-            type: 'Devlet',
-            overall: 9.7,
-            academic: 9.8,
-            campus: 9.9,
-            dorm: 8.8,
-            transport: 9.5,
-            reviewsCount: 1180,
-            badge: 'Türkiye 2.si',
-            quote: 'Güney Meydan manzarası, özgür düşünce ortamı ve dünya çapında mezun ağı.',
-            logoLetter: 'B'
-        },
-        {
-            id: 'itu',
-            name: 'İstanbul Teknik Üniversitesi (İTÜ)',
-            shortName: 'İTÜ',
-            city: 'İstanbul',
-            type: 'Devlet',
-            overall: 9.6,
-            academic: 9.8,
-            campus: 9.4,
-            dorm: 9.2,
-            transport: 9.8,
-            reviewsCount: 1650,
-            badge: 'Türkiye 3.sü',
-            quote: '250 yılı aşkın mühendislik hafızası, Arı Teknokent ve Ayazağa metro avantajı.',
-            logoLetter: 'İ'
-        },
-        {
-            id: 'bilkent',
-            name: 'Bilkent Üniversitesi',
-            shortName: 'Bilkent',
-            city: 'Ankara',
-            type: 'Vakıf',
-            overall: 9.5,
-            academic: 9.8,
-            campus: 9.6,
-            dorm: 9.6,
-            transport: 9.1,
-            reviewsCount: 890,
-            badge: 'Vakıf Lideri',
-            quote: 'Kütüphane olanakları, uluslararası yayın ortalaması ve kusursuz kampüs yönetimi.',
-            logoLetter: 'B'
-        },
-        {
-            id: 'koc',
-            name: 'Koç Üniversitesi',
-            shortName: 'Koç Üni',
-            city: 'İstanbul',
-            type: 'Vakıf',
-            overall: 9.5,
-            academic: 9.8,
-            campus: 9.7,
-            dorm: 9.7,
-            transport: 8.4,
-            reviewsCount: 760,
-            badge: 'Öne Çıkan',
-            quote: 'Sarıyer sırtlarında dünya standartlarında laboratuvarlar ve yüksek burs olanakları.',
-            logoLetter: 'K'
-        },
-        {
-            id: 'sabanci',
-            name: 'Sabancı Üniversitesi',
-            shortName: 'Sabancı',
-            city: 'İstanbul',
-            type: 'Vakıf',
-            overall: 9.4,
-            academic: 9.7,
-            campus: 9.5,
-            dorm: 9.6,
-            transport: 8.3,
-            reviewsCount: 680,
-            badge: 'Yenilikçi',
-            quote: 'Bölüm seçme özgürlüğü, disiplinlerarası müfredat ve güçlü teknoloji merkezi.',
-            logoLetter: 'S'
-        },
-        {
-            id: 'hacettepe',
-            name: 'Hacettepe Üniversitesi',
-            shortName: 'Hacettepe',
-            city: 'Ankara',
-            type: 'Devlet',
-            overall: 9.3,
-            academic: 9.6,
-            campus: 9.2,
-            dorm: 8.9,
-            transport: 9.1,
-            reviewsCount: 1340,
-            badge: 'Sağlık & Tıp Lideri',
-            quote: 'Beytepe yeşilliği, Sıhhiye tıp geleneği ve Türkiye\'nin en başarılı sağlık kadroları.',
-            logoLetter: 'H'
-        },
-        {
-            id: 'ytu',
-            name: 'Yıldız Teknik Üniversitesi (YTÜ)',
-            shortName: 'YTÜ',
-            city: 'İstanbul',
-            type: 'Devlet',
-            overall: 9.2,
-            academic: 9.3,
-            campus: 9.1,
-            dorm: 8.7,
-            transport: 9.6,
-            reviewsCount: 1450,
-            badge: 'Teknopark Öncüsü',
-            quote: 'Davutpaşa tarihi kışla yerleşkesi, devasa Yıldız Teknopark ve sanayi entegrasyonu.',
-            logoLetter: 'Y'
-        },
-        {
-            id: 'gsu',
-            name: 'Galatasaray Üniversitesi (GSÜ)',
-            shortName: 'GSÜ',
-            city: 'İstanbul',
-            type: 'Devlet',
-            overall: 9.1,
-            academic: 9.5,
-            campus: 8.9,
-            dorm: 7.9,
-            transport: 9.7,
-            reviewsCount: 520,
-            badge: 'Butik Frankofon',
-            quote: 'Ortaköy boğaz kıyısında Fransızca eğitim, güçlü hukuk ve diplomasi ekolü.',
-            logoLetter: 'G'
-        },
-        {
-            id: 'ege',
-            name: 'Ege Üniversitesi',
-            shortName: 'Ege Üni',
-            city: 'İzmir',
-            type: 'Devlet',
-            overall: 9.0,
-            academic: 9.1,
-            campus: 9.3,
-            dorm: 8.8,
-            transport: 9.5,
-            reviewsCount: 1120,
-            badge: 'Ege\'nin İncisi',
-            quote: 'Bornova kampüsünün metro bağlantısı, dev hastane kompleksi ve Akdeniz yaşam enerjisi.',
-            logoLetter: 'E'
-        },
-        {
-            id: 'anadolu',
-            name: 'Anadolu Üniversitesi',
-            shortName: 'Anadolu Üni',
-            city: 'Eskişehir',
-            type: 'Devlet',
-            overall: 8.9,
-            academic: 8.8,
-            campus: 9.6,
-            dorm: 9.2,
-            transport: 9.4,
-            reviewsCount: 960,
-            badge: 'Öğrenci Kenti',
-            quote: 'Yunus Emre Kampüsü\'nün sanatsal atmosferi, yeşil çimleri ve Eskişehir sosyal hayatı.',
-            logoLetter: 'A'
-        },
-        {
-            id: 'deu',
-            name: 'Dokuz Eylül Üniversitesi',
-            shortName: 'DEÜ',
-            city: 'İzmir',
-            type: 'Devlet',
-            overall: 8.8,
-            academic: 8.9,
-            campus: 8.7,
-            dorm: 8.4,
-            transport: 9.0,
-            reviewsCount: 880,
-            badge: 'Köklü Devlet',
-            quote: 'Tınaztepe kampüsü, Alsancak rektörlük çevresi ve Denizcilik/Tıp başarıları.',
-            logoLetter: 'D'
-        },
-        {
-            id: 'gtu',
-            name: 'Gebze Teknik Üniversitesi (GTÜ)',
-            shortName: 'GTÜ',
-            city: 'Kocaeli',
-            type: 'Devlet',
-            overall: 8.7,
-            academic: 9.4,
-            campus: 8.2,
-            dorm: 8.5,
-            transport: 8.9,
-            reviewsCount: 580,
-            badge: 'Araştırma Odağı',
-            quote: 'Marmaray durağı hemen kampüsün içinde; sanayinin kalbinde yüksek akademik yayın performansı.',
-            logoLetter: 'G'
-        }
-    ];
+    if (podiumContainer) podiumContainer.style.display = 'none';
+    listContainer.innerHTML = `
+        <div class="py-16 text-center">
+            <div class="inline-block animate-spin w-8 h-8 border-4 border-amber-400 border-t-transparent rounded-full mb-3"></div>
+            <p class="text-zinc-400 text-sm">Güncel sıralama verileri hesaplanıyor...</p>
+        </div>
+    `;
+
+    let rankingData = [];
+    try {
+        const resp = await api.getRankings(10);
+        rankingData = (resp && Array.isArray(resp.data)) ? resp.data : [];
+    } catch (e) {
+        console.warn('API rankings alınamadı, yerel değerlendirmeler kontrol ediliyor:', e);
+        const grouped = {};
+        (globalReviewsState || []).forEach(r => {
+            if (!r.university) return;
+            const u = r.university.trim();
+            if (!grouped[u]) grouped[u] = [];
+            grouped[u].push(r);
+        });
+        Object.entries(grouped).forEach(([uniName, revs]) => {
+            if (revs.length >= 10) {
+                const count = revs.length;
+                const overallAvg = revs.reduce((s, r) => s + (Number(r.rating) || 0), 0) / count;
+                rankingData.push({
+                    id: uniName,
+                    name: uniName,
+                    shortName: uniName.split('(')[0].trim(),
+                    city: 'Türkiye',
+                    type: 'Devlet',
+                    overall: Math.round(overallAvg * 10) / 10,
+                    academic: Math.round(overallAvg * 10) / 10,
+                    campus: Math.round(overallAvg * 10) / 10,
+                    dorm: Math.round(overallAvg * 10) / 10,
+                    transport: Math.round(overallAvg * 10) / 10,
+                    reviewsCount: count,
+                    quote: revs[0].text ? (revs[0].text.slice(0, 100) + '...') : 'Öğrenci değerlendirmelerine göre sıralanmıştır.',
+                    logoLetter: uniName[0].toUpperCase()
+                });
+            }
+        });
+    }
 
     const metricLabels = {
         'overall': 'Genel Memnuniyet',
@@ -6591,14 +6425,54 @@ function initRankingPage() {
     let activeSort = 'overall';
     let searchQuery = '';
 
+    function renderEmptyRankingState() {
+        if (podiumContainer) podiumContainer.style.display = 'none';
+        if (filterTabsWrapper) filterTabsWrapper.style.display = 'none';
+
+        listContainer.innerHTML = `
+            <div class="py-12 px-6 sm:px-10 max-w-2xl mx-auto text-center rounded-3xl border border-zinc-800 bg-zinc-900/60 shadow-2xl backdrop-blur-xl">
+                <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mb-5">
+                    <i data-lucide="bar-chart-3" class="w-8 h-8"></i>
+                </div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 border border-amber-500/20 text-amber-400 mb-3">
+                    <i data-lucide="info" class="w-3.5 h-3.5"></i> Minimum 10 Değerlendirme Kriteri
+                </span>
+                <h3 class="text-2xl sm:text-3xl font-bold text-white mb-3" style="font-family: var(--font-heading);">
+                    Henüz Sıralama Verisi Oluşmadı
+                </h3>
+                <p class="text-zinc-300 text-sm leading-relaxed mb-6">
+                    Üniversite sıralaması, öğrencilerin yaptığı gerçek ve doğrulanmış değerlendirmelere göre dinamik olarak hesaplanmaktadır. Tarafsız ve güvenilir bir sıralama sunabilmek için bir üniversitenin en az <strong>10 değerlendirme</strong> almış olması gerekmektedir. Şu anda henüz bu baraja ulaşmış üniversite bulunmamaktadır.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <a href="#/review-form" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-zinc-950 font-bold text-sm transition-all shadow-lg shadow-amber-500/20">
+                        <i data-lucide="pen-line" class="w-4 h-4"></i>
+                        <span>Üniversiteni Değerlendir</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#/university" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-semibold text-sm transition-all">
+                        <span>Üniversiteleri İncele</span>
+                    </a>
+                </div>
+            </div>
+        `;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
     function renderRanking() {
+        if (!rankingData || rankingData.length === 0) {
+            renderEmptyRankingState();
+            return;
+        }
+
+        if (filterTabsWrapper) filterTabsWrapper.style.display = 'flex';
+
         // 1. Filter
         const q = searchQuery.toLowerCase().trim();
-        const filtered = RANKING_DATA.filter(uni => {
+        const filtered = rankingData.filter(uni => {
             return !q ||
                 uni.name.toLowerCase().includes(q) ||
-                uni.city.toLowerCase().includes(q) ||
-                uni.quote.toLowerCase().includes(q);
+                (uni.city && uni.city.toLowerCase().includes(q)) ||
+                (uni.quote && uni.quote.toLowerCase().includes(q));
         });
 
         // 2. Sort
@@ -6610,7 +6484,7 @@ function initRankingPage() {
         });
 
         if (sorted.length === 0) {
-            podiumContainer.innerHTML = '';
+            if (podiumContainer) podiumContainer.style.display = 'none';
             listContainer.innerHTML = `
                 <div class="py-16 text-center">
                     <div class="w-16 h-16 mx-auto rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-500 flex items-center justify-center mb-4">
@@ -6626,8 +6500,8 @@ function initRankingPage() {
             return;
         }
 
-        // Render Podium if not searching or if at least 3 items exist
-        if (!q && sorted.length >= 3) {
+        // Render Podium if not searching and if at least 3 items exist
+        if (!q && sorted.length >= 3 && podiumContainer) {
             podiumContainer.style.display = 'grid';
             const first = sorted[0];
             const second = sorted[1];
@@ -6650,7 +6524,7 @@ function initRankingPage() {
                         <div class="flex items-end justify-between mb-3">
                             <div>
                                 <span class="text-[11px] text-zinc-500 uppercase block font-semibold">${metricLabels[activeSort]}</span>
-                                <span class="text-3xl font-black text-zinc-200">${second[activeSort].toFixed(1)}<span class="text-xs text-zinc-500 font-normal"> /10</span></span>
+                                <span class="text-3xl font-black text-zinc-200">${second[activeSort].toFixed(1)}<span class="text-xs text-zinc-500 font-normal"> / 5.0</span></span>
                             </div>
                             <span class="text-xs text-zinc-400 flex items-center gap-1">
                                 <i data-lucide="message-square" class="w-3.5 h-3.5 text-cyan-400"></i> ${second.reviewsCount} Yorum
@@ -6682,7 +6556,7 @@ function initRankingPage() {
                         <div class="flex items-end justify-between mb-3">
                             <div>
                                 <span class="text-[11px] text-amber-400/90 uppercase block font-semibold">${metricLabels[activeSort]}</span>
-                                <span class="text-4xl font-black text-amber-400">${first[activeSort].toFixed(1)}<span class="text-xs text-zinc-400 font-normal"> /10</span></span>
+                                <span class="text-4xl font-black text-amber-400">${first[activeSort].toFixed(1)}<span class="text-xs text-zinc-400 font-normal"> / 5.0</span></span>
                             </div>
                             <span class="text-xs text-zinc-300 flex items-center gap-1">
                                 <i data-lucide="message-square" class="w-3.5 h-3.5 text-amber-400"></i> ${first.reviewsCount} Yorum
@@ -6711,7 +6585,7 @@ function initRankingPage() {
                         <div class="flex items-end justify-between mb-3">
                             <div>
                                 <span class="text-[11px] text-zinc-500 uppercase block font-semibold">${metricLabels[activeSort]}</span>
-                                <span class="text-3xl font-black text-amber-500/90">${third[activeSort].toFixed(1)}<span class="text-xs text-zinc-500 font-normal"> /10</span></span>
+                                <span class="text-3xl font-black text-amber-500/90">${third[activeSort].toFixed(1)}<span class="text-xs text-zinc-500 font-normal"> / 5.0</span></span>
                             </div>
                             <span class="text-xs text-zinc-400 flex items-center gap-1">
                                 <i data-lucide="message-square" class="w-3.5 h-3.5 text-cyan-400"></i> ${third.reviewsCount} Yorum
@@ -6724,11 +6598,11 @@ function initRankingPage() {
                     </div>
                 </div>
             `;
-        } else {
+        } else if (podiumContainer) {
             podiumContainer.style.display = 'none';
         }
 
-        // Render List for remaining ranks (or all if searched)
+        // Render List for remaining ranks (or all if searched or < 3)
         const itemsForList = (!q && sorted.length >= 3) ? sorted.slice(3) : sorted;
         const startIndex = (!q && sorted.length >= 3) ? 3 : 0;
 
@@ -6779,10 +6653,10 @@ function initRankingPage() {
                             <div class="text-xl sm:text-2xl font-black text-amber-400 flex items-center gap-1 justify-end">
                                 <i data-lucide="star" class="w-4 h-4 fill-amber-400 text-amber-400"></i>
                                 <span>${item[activeSort].toFixed(1)}</span>
-                                <span class="text-xs text-zinc-500 font-normal">/10</span>
+                                <span class="text-xs text-zinc-500 font-normal">/ 5.0</span>
                             </div>
                             <div class="text-[10px] text-zinc-500 flex items-center gap-1 justify-end">
-                                <i data-lucide="check-circle" class="w-3 h-3 text-emerald-400"></i> ${item.reviewsCount} onaylı yorum
+                                <i data-lucide="check-circle" class="w-3 text-emerald-400"></i> ${item.reviewsCount} onaylı değerlendirme
                             </div>
                         </div>
 

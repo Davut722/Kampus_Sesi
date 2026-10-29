@@ -219,6 +219,11 @@ export const api = {
         return await request('/interactions');
     },
 
+    // Rankings
+    async getRankings(minReviews = 10) {
+        return await request(`/rankings?min_reviews=${encodeURIComponent(minReviews)}`);
+    },
+
     // Universities
     async getUniversities() {
         return await request('/universities');

@@ -8,7 +8,7 @@ import urllib.error
 from datetime import datetime
 from collections import defaultdict
 from typing import Optional, List, Dict, Any
-from fastapi import FastAPI, Depends, HTTPException, status, Header, Request
+from fastapi import FastAPI, Depends, HTTPException, status, Header, Request, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -613,6 +613,114 @@ def update_my_profile(
         "grade": current_user.grade or "",
         "bio": current_user.bio or "",
         "role": current_user.role or "user"
+    }
+
+# ─── Rankings Endpoints ───────────────────
+
+@app.get("/api/rankings")
+def get_university_rankings(
+    min_reviews: int = Query(10, ge=1, le=100),
+    db: Session = Depends(get_db)
+):
+    """
+    Üniversite sıralamasını gerçek öğrenci değerlendirmelerine göre hesaplar.
+    Yalnızca en az `min_reviews` (varsayılan: 10) değerlendirmesi olan üniversiteler dahil edilir.
+    """
+    review_stats = (
+        db.query(
+            Review.university,
+            func.count(Review.id).label("reviews_count"),
+            func.avg(Review.rating).label("avg_overall"),
+            func.avg(Review.rating_academic).label("avg_academic"),
+            func.avg(Review.rating_social).label("avg_campus"),
+            func.avg(Review.rating_dorm).label("avg_dorm"),
+            func.avg(Review.rating_food).label("avg_food"),
+            func.avg(Review.rating_transport).label("avg_transport"),
+        )
+        .filter(Review.university.isnot(None), Review.university != "")
+        .group_by(Review.university)
+        .having(func.count(Review.id) >= min_reviews)
+        .all()
+    )
+
+    if not review_stats:
+        return {
+            "total": 0,
+            "min_reviews_required": min_reviews,
+            "data": []
+        }
+
+    all_unis = db.query(University).all()
+    uni_map = {u.name.lower(): u for u in all_unis}
+
+    addresses = db.query(UniversityAddress).all()
+    addr_map = {a.university_id: a for a in addresses}
+
+    rankings = []
+    for row in review_stats:
+        uni_name = row.university
+        uni_obj = uni_map.get(uni_name.lower())
+
+        city = "Türkiye"
+        if uni_obj and uni_obj.id in addr_map and addr_map[uni_obj.id].city:
+            city = addr_map[uni_obj.id].city
+
+        uni_type = "Vakıf" if any(w in uni_name.lower() for w in [
+            "vakıf", "vakfi", "koç", "bilkent", "sabancı", "yeditepe", "bahçeşehir",
+            "özyeğin", "istinye", "medipol", "başkent", "arel", "aydın", "gelişim",
+            "fenerbahçe", "beykent", "doğuş", "kadir has", "nişantaşı", "altınbaş",
+            "kültür", "okan"
+        ]) else "Devlet"
+
+        overall = round(float(row.avg_overall or 0), 1)
+        academic = round(float(row.avg_academic if row.avg_academic is not None else overall), 1)
+        campus = round(float(row.avg_campus if row.avg_campus is not None else overall), 1)
+
+        dorm_val = row.avg_dorm
+        food_val = row.avg_food
+        if dorm_val is not None and food_val is not None:
+            dorm = round((float(dorm_val) + float(food_val)) / 2.0, 1)
+        elif dorm_val is not None:
+            dorm = round(float(dorm_val), 1)
+        elif food_val is not None:
+            dorm = round(float(food_val), 1)
+        else:
+            dorm = overall
+
+        transport = round(float(row.avg_transport if row.avg_transport is not None else overall), 1)
+
+        latest_rev = db.query(Review).filter(Review.university == uni_name).order_by(Review.timestamp.desc()).first()
+        quote = latest_rev.text[:120] + "..." if latest_rev and latest_rev.text else "Öğrenciler tarafından yapılan değerlendirmeler doğrultusunda sıralamaya girmiştir."
+
+        rankings.append({
+            "id": uni_obj.id if uni_obj else uni_name,
+            "name": uni_name,
+            "shortName": uni_name.split("(")[0].strip(),
+            "city": city,
+            "type": uni_type,
+            "overall": overall,
+            "academic": academic,
+            "campus": campus,
+            "dorm": dorm,
+            "transport": transport,
+            "reviewsCount": int(row.reviews_count),
+            "quote": quote,
+            "logoLetter": uni_name[0].upper()
+        })
+
+    rankings.sort(key=lambda x: (x["overall"], x["reviewsCount"]), reverse=True)
+
+    if len(rankings) > 0:
+        rankings[0]["badge"] = "Türkiye 1.si"
+    if len(rankings) > 1:
+        rankings[1]["badge"] = "Türkiye 2.si"
+    if len(rankings) > 2:
+        rankings[2]["badge"] = "Türkiye 3.sü"
+
+    return {
+        "total": len(rankings),
+        "min_reviews_required": min_reviews,
+        "data": rankings
     }
 
 # ─── Reviews Endpoints ────────────────────

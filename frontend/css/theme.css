@@ -1061,7 +1061,7 @@ svg.footer-accordion-icon {
 /* --------------------------------------------------------------------------
    5. Ana sayfa — iki sütunlu hero ve farklı boyutlu ızgaralar
    -------------------------------------------------------------------------- */
-.ed-home { background: var(--color-bg); color: var(--color-text); overflow: hidden; }
+.ed-home { background: var(--color-bg); color: var(--color-text); overflow-x: clip; }
 
 .ed-kicker {
   display: flex;
@@ -4142,11 +4142,20 @@ body.drawer-open {
 }
 
 @media (max-width: 640px) {
-  /* 1. Global Temel Kurallar & Taşma Önleme */
-  html, body {
+  /* 1. Global Temel Kurallar & Taşma Önleme (Dikey kaydırma garantili) */
+  html {
     max-width: 100%;
     overflow-x: hidden;
     -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    min-height: 100%;
+    position: relative;
   }
 
   *, *::before, *::after {

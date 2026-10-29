@@ -143,6 +143,7 @@ function updateNavForUser(user) {
                     const sideDrawerOverlay = document.getElementById('side-drawer-overlay');
                     if (sideDrawer) sideDrawer.classList.remove('active');
                     if (sideDrawerOverlay) sideDrawerOverlay.classList.remove('active');
+                    document.body.classList.remove('drawer-open');
                     await window.signOutBackend();
                 });
             }
@@ -752,6 +753,7 @@ function setupNavEvents() {
             link.addEventListener('click', () => {
                 sideDrawer.classList.remove('active');
                 if (sideDrawerOverlay) sideDrawerOverlay.classList.remove('active');
+                document.body.classList.remove('drawer-open');
             });
         });
     }
@@ -4545,6 +4547,13 @@ function initComparePage() {
 // ─── SPA Route Renderer ───────────────────
 
 export function renderCurrentRoute() {
+    // Mobil menü açıksa kapat ve body scroll kilidini sıfırla
+    const sideDrawer = document.getElementById('side-drawer');
+    const sideDrawerOverlay = document.getElementById('side-drawer-overlay');
+    if (sideDrawer) sideDrawer.classList.remove('active');
+    if (sideDrawerOverlay) sideDrawerOverlay.classList.remove('active');
+    document.body.classList.remove('drawer-open');
+
     const { route, params } = parseHash();
     currentRoute = route;
     currentParams = params;

@@ -3712,12 +3712,14 @@ svg.icon-lg {
     z-index: 999;
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .side-drawer-overlay.active {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
 }
 
 .side-drawer {
@@ -4617,11 +4619,13 @@ svg.icon-lg {
     justify-content: center;
     padding: 20px;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.2s ease;
 }
 
 .auth-legal-modal--open {
     opacity: 1;
+    pointer-events: auto;
 }
 
 .auth-legal-modal__backdrop {

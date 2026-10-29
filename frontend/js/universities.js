@@ -3447,6 +3447,16 @@ window.UNIVERSITY_ADDRESSES_DB = {
                    </div>`
                 : '';
 
+            const locLabel = yurt.district
+                ? `${yurt.district}${yurt.city ? ', ' + yurt.city : ''}`
+                : (yurt.city || '');
+            const locHtml = locLabel
+                ? `<div class="kyk-detail">
+                        <i data-lucide="compass" class="icon-sm"></i>
+                        <span>${escapeDormHtml(locLabel)}</span>
+                   </div>`
+                : '';
+
             html += `
                 <div class="kyk-card ed-card">
                     <div class="kyk-card__header">
@@ -3455,6 +3465,7 @@ window.UNIVERSITY_ADDRESSES_DB = {
                     </div>
                     <div class="kyk-details-grid">
                         ${distHtml}
+                        ${locHtml}
                         <div class="kyk-detail">
                             <i data-lucide="wallet" class="icon-sm"></i>
                             <span>${escapeDormHtml(yurt.ucret || 'Ücret bilgisi yok')}</span>

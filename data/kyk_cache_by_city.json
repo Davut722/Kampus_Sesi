@@ -465,47 +465,79 @@
     {
       "name": "Yarbay Vecihibey Kyk Kız Öğrenci Yurdu",
       "type": "Kız",
-      "sehir": "Balikesir"
+      "sehir": "Balikesir",
+      "ilce": "Bandırma",
+      "district": "Bandırma"
     },
     {
       "name": "Zağnos Paşa Kyk Erkek Öğrenci Yurdu",
       "type": "Erkek",
-      "sehir": "Balikesir"
+      "sehir": "Balikesir",
+      "ilce": "Bandırma",
+      "district": "Bandırma"
     },
     {
       "name": "Bandırma Kuş Cenneti Kyk Erkek Öğrenci Yurdu",
       "type": "Erkek",
-      "sehir": "Balikesir"
+      "sehir": "Balikesir",
+      "ilce": "Bandırma",
+      "district": "Bandırma"
     },
     {
       "name": "Altıeylül Kyk Kız Öğrenci Yurdu",
       "type": "Kız",
-      "sehir": "Balikesir"
+      "sehir": "Balikesir",
+      "ilce": "Altıeylül",
+      "district": "Altıeylül"
     },
     {
       "name": "Burhaniye Kyk Kız Öğrenci Yurdu",
       "type": "Kız",
-      "sehir": "Balikesir"
+      "sehir": "Balikesir",
+      "ilce": "Burhaniye",
+      "district": "Burhaniye"
     },
     {
       "name": "Karesi Kyk Erkek Öğrenci Yurdu",
       "type": "Erkek",
-      "sehir": "Balikesir"
+      "sehir": "Balikesir",
+      "ilce": "Karesi",
+      "district": "Karesi"
     },
     {
       "name": "Edremit Kyk Kız ve Erkek Öğrenci Yurdu",
       "type": "Kız",
-      "sehir": "Balikesir"
+      "sehir": "Balikesir",
+      "ilce": "Edremit",
+      "district": "Edremit"
     },
     {
       "name": "Ayvalık Kyk Kız Ve Erkek Öğrenci Yurdu",
       "type": "Kız",
-      "sehir": "Balikesir"
+      "sehir": "Balikesir",
+      "ilce": "Ayvalık",
+      "district": "Ayvalık"
     },
     {
       "name": "Fatma Ana Kyk Kız Öğrenci Yurdu",
       "type": "Kız",
-      "sehir": "Balikesir"
+      "sehir": "Balikesir",
+      "ilce": "Bandırma",
+      "district": "Bandırma"
+    },
+    {
+      "name": "Bandırma Kyk Kız Öğrenci Yurdu",
+      "type": "Kız",
+      "sehir": "Balıkesir",
+      "ilce": "Bandırma",
+      "district": "Bandırma"
+    },
+    {
+      "name": "Ayhan Songar Kyk Erkek Öğrenci Yurdu",
+      "type": "Erkek",
+      "sehir": "Balıkesir",
+      "ilce": "Bandırma",
+      "district": "Bandırma"
     }
   ],
   "bartin": [

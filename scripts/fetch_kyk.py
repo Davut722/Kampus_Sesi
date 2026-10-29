@@ -27,8 +27,34 @@ HEADERS = {
 MESAFELER = ["Kampüs İçi", "Kampüse 500m", "Kampüse 1 km", "Kampüse 2 km", "Kampüse 3 km", "Otobüsle 15 dk", "Metroyla 10 dk"]
 
 
-def sehir_tara(sehir):
-    url = f"https://www.kykyurtlar.com/{sehir}-kyk-yurtlari/"
+def extract_district_from_name(name: str, sehir: str = "") -> str:
+    """Yurt adından veya şehir bağlamından ilçe adını çıkarır."""
+    if not name:
+        return ""
+    name_clean = name.lower()
+    # Bilinen ilçe ipuçları
+    for hint in [
+        "bandırma", "altıeylül", "karesi", "edremit", "ayvalık", "burhaniye",
+        "gönen", "erdek", "bigadiç", "dursunbey", "susurluk", "sındırgı",
+        "çankaya", "yenimahalle", "keçiören", "altındağ", "mamak", "gölbaşı",
+        "kadıköy", "beşiktaş", "üsküdar", "avcılar", "fatih", "sarıyer", "şişli",
+        "bornova", "buca", "çiğli", "karşıyaka", "konak", "urla",
+        "nilüfer", "osmangazi", "yıldırım", "gemlik", "mudanya", "inegöl",
+        "alanya", "kepez", "muratpaşa", "konyaaltı", "kumluca", "manavgat",
+        "erciş", "gevaş", "tuşba", "ipekyolu", "edremit"
+    ]:
+        if hint in name_clean:
+            return hint.capitalize()
+    return ""
+
+
+def sehir_tara(sehir, ilce=None):
+    """
+    Şehir ve opsiyonel olarak ilçe bazlı kykyurtlar.com sayfasını tarar.
+    Yurt adını, türünü ve ilçe bilgisini döndürür.
+    """
+    slug = sehir.lower()
+    url = f"https://www.kykyurtlar.com/{slug}-kyk-yurtlari/"
     yurtlar = []
 
     try:
@@ -46,21 +72,35 @@ def sehir_tara(sehir):
                 yurt_adi = a.get("title", "").strip()
 
             if ("yurt" in yurt_adi.lower() or "yurdu" in yurt_adi.lower()) and "kyk" in yurt_adi.lower():
-                if yurt_adi.strip().lower() in [f"{sehir} kyk yurtları", f"{sehir}'daki kyk yurtları"]:
+                if yurt_adi.strip().lower() in [f"{slug} kyk yurtları", f"{slug}'daki kyk yurtları"]:
                     continue
 
                 if yurt_adi not in gorulenler:
                     gorulenler.add(yurt_adi)
                     tur = "Kız" if "kız" in yurt_adi.lower() else ("Erkek" if "erkek" in yurt_adi.lower() else "Karma")
+                    tespit_edilen_ilce = extract_district_from_name(yurt_adi, sehir) or (ilce or "")
 
                     yurtlar.append({
                         "name": yurt_adi.replace("'", "''"),
                         "type": tur,
-                        "sehir": sehir.capitalize()
+                        "sehir": sehir.capitalize(),
+                        "ilce": tespit_edilen_ilce,
+                        "district": tespit_edilen_ilce
                     })
         return yurtlar
     except Exception:
         return []
+
+
+def fetch_dorms_for_university_location(city: str, district: str = ""):
+    """
+    Üniversitenin bulunduğu il ve ilçeye özel yurtları tarar ve döndürür.
+    """
+    dorms = sehir_tara(city, ilce=district)
+    if district:
+        # Öncelik ilçeye ait yurtlar
+        return [d for d in dorms if (d.get("ilce") or "").lower() == district.lower()] or dorms
+    return dorms
 
 
 def main():

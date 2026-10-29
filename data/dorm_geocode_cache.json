@@ -4638,5 +4638,23 @@
     "lng": 29.9407361,
     "query": "Kocaeli, Kocaeli",
     "display_name": "Kocaeli, İzmit, Kocaeli, Marmara Bölgesi, 41040, Türkiye"
+  },
+  "Balıkesir::Bandırma Kyk Kız Öğrenci Yurdu": {
+    "name": "Bandırma Kyk Kız Öğrenci Yurdu",
+    "city": "Balıkesir",
+    "district": "Bandırma",
+    "lat": 40.3333803,
+    "lng": 27.9944696,
+    "query": "Bandırma KYK Kız Öğrenci Yurdu, Bandırma, Balıkesir",
+    "display_name": "Bandırma KYK Kız Öğrenci Yurdu C Blok, 381, Atatürk Caddesi, 600 Evler Mahallesi, Bandırma, Balıkesir"
+  },
+  "Balıkesir::Ayhan Songar Kyk Erkek Öğrenci Yurdu": {
+    "name": "Ayhan Songar Kyk Erkek Öğrenci Yurdu",
+    "city": "Balıkesir",
+    "district": "Bandırma",
+    "lat": 40.3494877,
+    "lng": 28.0069548,
+    "query": "Çanakkale Şehitleri, Kayacık, Bandırma, Balıkesir",
+    "display_name": "Bandırma Yurt Müdürlüğü Erkek Öğrenci A Blok, 6/3, Çanakkale Şehitleri Sokağı, Kayacık Mahallesi, Bandırma, Balıkesir"
   }
 }

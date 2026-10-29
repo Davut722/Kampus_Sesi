@@ -3346,19 +3346,24 @@ window.UNIVERSITY_ADDRESSES_DB = {
     }
 
     function formatKykDistance(yurt) {
-        if (yurt && yurt.distance_km !== undefined && yurt.distance_km !== null && !Number.isNaN(Number(yurt.distance_km))) {
+        if (!yurt) return '';
+        if (yurt.distance_km !== undefined && yurt.distance_km !== null && !Number.isNaN(Number(yurt.distance_km))) {
             const d = Number(yurt.distance_km);
+            const isFar = Boolean(yurt.is_far || d > 10.0);
+            let distStr = '';
             if (d < 1.0) {
                 const meters = Math.max(1, Math.round(d * 1000));
-                return `Kuş uçuşu ${meters} m`;
+                distStr = `Kuş uçuşu ${meters} m`;
+            } else {
+                distStr = `Kuş uçuşu ${d.toFixed(1).replace('.', ',')} km`;
             }
-            return `Kuş uçuşu ${d.toFixed(1).replace('.', ',')} km`;
+            return isFar ? `${distStr} (Kampüsten uzak)` : distStr;
         }
-        const rawMesafe = String((yurt && yurt.mesafe) || '').trim();
-        if (rawMesafe.startsWith('Kuş uçuşu')) {
+        const rawMesafe = String(yurt.mesafe || '').trim();
+        if (rawMesafe && rawMesafe !== 'Mesafe bilinmiyor') {
             return rawMesafe;
         }
-        return '';
+        return 'Mesafe bilinmiyor';
     }
 
     function renderUniversityDorms(options) {
@@ -3369,7 +3374,13 @@ window.UNIVERSITY_ADDRESSES_DB = {
         const tabDormCountEl = document.getElementById('tab-dorms-count');
         if (!grid) return;
 
-        const rawDorms = Array.isArray(opts.dorms) ? opts.dorms : [];
+        const rawDorms = (Array.isArray(opts.dorms) ? opts.dorms : []).filter(y => {
+            if (!y) return false;
+            // Adresi/koordinati belli olmayanlari veya mesafesi 30 km ustu olanlari gosterme
+            const hasCoords = y.lat !== null && y.lat !== undefined && y.lng !== null && y.lng !== undefined;
+            const hasValidDist = y.distance_km !== undefined && y.distance_km !== null && !Number.isNaN(Number(y.distance_km));
+            return hasCoords && hasValidDist && Number(y.distance_km) <= 30.0;
+        });
         const currentDormFilter = opts.filter || 'all';
         const dormsExpanded = Boolean(opts.expanded);
 
@@ -3424,9 +3435,14 @@ window.UNIVERSITY_ADDRESSES_DB = {
             else if (tipLower.includes('erkek')) badgeClass = 'kyk-badge--erkek';
 
             const distLabel = formatKykDistance(yurt);
+            const isFar = Boolean(yurt.is_far || (yurt.distance_km !== undefined && yurt.distance_km !== null && Number(yurt.distance_km) > 10.0));
+            const isUnknown = distLabel === 'Mesafe bilinmiyor';
+            const iconName = isUnknown ? 'help-circle' : (isFar ? 'navigation' : 'map-pin');
+            const farClass = isFar ? 'kyk-detail--far' : (isUnknown ? 'kyk-detail--unknown' : '');
+
             const distHtml = distLabel
-                ? `<div class="kyk-detail">
-                        <i data-lucide="map-pin" class="icon-sm"></i>
+                ? `<div class="kyk-detail ${farClass}">
+                        <i data-lucide="${iconName}" class="icon-sm"></i>
                         <span>${escapeDormHtml(distLabel)}</span>
                    </div>`
                 : '';

@@ -27,7 +27,7 @@ function escapeHtml(str) {
 // ─── SPA Router State ─────────────────────
 let currentRoute = 'home';
 let currentParams = new URLSearchParams();
-let selectedUniState = 'Bandırma Onyedi Eylül Üniversitesi';
+let selectedUniState = 'Boğaziçi Üniversitesi';
 
 const activeRenderers = {
     university: null,
@@ -1038,13 +1038,13 @@ function initOrUpdateCampusMap(uniName, dbAddress = null) {
     // senkronize UNIVERSITY_ADDRESSES_DB / CAMPUS_MAP_DATA kaydını kullan
     const matchedEntry = findCampusMapEntry(uniName);
     const fallbackData = matchedEntry || {
-        name: uniName || 'Bandırma Onyedi Eylül Üniversitesi',
-        campus: 'Merkez Kampüs Yerleşkesi',
-        lat: 40.3374521,
-        lng: 27.9360007,
+        name: uniName || 'Boğaziçi Üniversitesi',
+        campus: 'Güney Kampüs',
+        lat: 41.0836,
+        lng: 29.0506,
         zoom: 16,
-        info: `${uniName || 'Bandırma Onyedi Eylül Üniversitesi'} ana yerleşkesi ve şehir içi toplu taşıma bağlantı noktası.`,
-        googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(uniName || 'Bandırma Onyedi Eylül Üniversitesi')}`
+        info: `${uniName || 'Boğaziçi Üniversitesi'} ana yerleşkesi ve şehir içi toplu taşıma bağlantı noktası.`,
+        googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(uniName || 'Boğaziçi Üniversitesi')}`
     };
 
     const mapData = dbAddress ? {
@@ -1323,7 +1323,7 @@ function initUniversityPage(initialUni) {
     const ALL_MOCK = [];
 
     // Selected University
-    let selectedUni = initialUni || selectedUniState || 'Bandırma Onyedi Eylül Üniversitesi';
+    let selectedUni = initialUni || 'Boğaziçi Üniversitesi';
     selectedUniState = selectedUni;
 
     // Filter & sort state
@@ -2076,6 +2076,8 @@ function initUniversityPage(initialUni) {
         const input = document.getElementById('uni-combobox-input');
         const listbox = document.getElementById('uni-combobox-listbox');
         const clearBtn = document.getElementById('uni-combobox-clear');
+        const chevronIcon = document.getElementById('uni-combobox-chevron');
+        const comboboxContainer = document.getElementById('uni-search-combobox');
         if (!input || !listbox) return;
 
         const uniList = (typeof TURKISH_UNIVERSITIES !== 'undefined' && Array.isArray(TURKISH_UNIVERSITIES))
@@ -2201,19 +2203,8 @@ function initUniversityPage(initialUni) {
         function filterUniversities(rawQuery) {
             const q = (rawQuery || '').trim();
             if (!q) {
-                const popular = [
-                    'Orta Doğu Teknik Üniversitesi (ODTÜ)',
-                    'İstanbul Teknik Üniversitesi (İTÜ)',
-                    'Boğaziçi Üniversitesi',
-                    'Yıldız Teknik Üniversitesi (YTÜ)',
-                    'Hacettepe Üniversitesi',
-                    'Koç Üniversitesi',
-                    'Sabancı Üniversitesi',
-                    'İhsan Doğramacı Bilkent Üniversitesi',
-                    'Dokuz Eylül Üniversitesi',
-                    'Bandırma Onyedi Eylül Üniversitesi'
-                ];
-                return uniList.filter(u => popular.some(p => u.includes(p) || p.includes(u))).slice(0, 8);
+                // Arama kutusuna tıklandığında veya kutu boşken tüm üniversiteler combobox olarak listelenir
+                return [...uniList];
             }
 
             const qLower = q.toLowerCase();
@@ -2273,7 +2264,7 @@ function initUniversityPage(initialUni) {
             });
 
             results.sort((a, b) => b.score - a.score);
-            return results.slice(0, 10).map(r => r.name);
+            return results.map(r => r.name);
         }
 
         function highlightMatch(text, query) {
@@ -2290,28 +2281,29 @@ function initUniversityPage(initialUni) {
             if (items.length === 0) {
                 listbox.innerHTML = `
                     <li class="uni-search-combobox__empty">
-                        <i data-lucide="help-circle" class="icon-xs"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
                         <span>"${escapeHtml(query)}" için üniversite bulunamadı</span>
                     </li>
                 `;
                 listbox.style.display = 'block';
                 input.setAttribute('aria-expanded', 'true');
-                if (typeof lucide !== 'undefined') lucide.createIcons();
+                if (comboboxContainer) comboboxContainer.setAttribute('data-open', 'true');
                 return;
             }
 
             let html = '';
             items.forEach((uni, idx) => {
                 const paren = extractParenAcronym(uni);
+                const isCurrent = (uni === selectedUni);
                 html += `
-                    <li class="uni-search-combobox__item"
+                    <li class="uni-search-combobox__item ${isCurrent ? 'uni-search-combobox__item--selected' : ''}"
                         role="option"
                         id="uni-combobox-opt-${idx}"
                         data-index="${idx}"
                         data-uni="${escapeHtml(uni)}"
-                        aria-selected="false">
+                        aria-selected="${isCurrent ? 'true' : 'false'}">
                         <div class="uni-search-combobox__item-content">
-                            <i data-lucide="graduation-cap" class="icon-xs uni-search-combobox__item-icon"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs uni-search-combobox__item-icon"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
                             <span class="uni-search-combobox__item-name">${highlightMatch(uni, query)}</span>
                         </div>
                         ${paren ? `<span class="uni-search-combobox__item-badge">${escapeHtml(paren)}</span>` : ''}
@@ -2322,14 +2314,21 @@ function initUniversityPage(initialUni) {
             listbox.innerHTML = html;
             listbox.style.display = 'block';
             input.setAttribute('aria-expanded', 'true');
-            if (typeof lucide !== 'undefined') lucide.createIcons();
+            if (comboboxContainer) comboboxContainer.setAttribute('data-open', 'true');
+
+            if (!query && selectedUni) {
+                const currentItem = listbox.querySelector('.uni-search-combobox__item--selected');
+                if (currentItem) {
+                    currentItem.scrollIntoView({ block: 'nearest' });
+                }
+            }
 
             listbox.querySelectorAll('.uni-search-combobox__item').forEach(item => {
                 item.addEventListener('mouseenter', () => {
                     const idx = parseInt(item.dataset.index, 10);
                     setActiveIndex(idx);
                 });
-                item.addEventListener('mousedown', (e) => {
+                item.addEventListener('click', (e) => {
                     e.preventDefault();
                     selectUniversity(item.dataset.uni);
                 });
@@ -2340,6 +2339,7 @@ function initUniversityPage(initialUni) {
             listbox.style.display = 'none';
             input.setAttribute('aria-expanded', 'false');
             input.removeAttribute('aria-activedescendant');
+            if (comboboxContainer) comboboxContainer.removeAttribute('data-open');
             activeIndex = -1;
         }
 
@@ -2374,12 +2374,19 @@ function initUniversityPage(initialUni) {
             closeDropdown();
             input.value = '';
             if (clearBtn) clearBtn.style.display = 'none';
-            window.location.hash = `#/university?name=${encodeURIComponent(uniName)}`;
+            if (chevronIcon) chevronIcon.style.display = 'inline-flex';
+            const targetHash = `#/university?name=${encodeURIComponent(uniName)}`;
+            if (window.location.hash === targetHash) {
+                initUniversityPage(uniName);
+            } else {
+                window.location.hash = targetHash;
+            }
         }
 
         input.addEventListener('input', () => {
             const val = input.value;
             if (clearBtn) clearBtn.style.display = val ? 'inline-flex' : 'none';
+            if (chevronIcon) chevronIcon.style.display = val ? 'none' : 'inline-flex';
             const matches = filterUniversities(val);
             renderDropdown(matches, val);
         });
@@ -2388,11 +2395,34 @@ function initUniversityPage(initialUni) {
             openDropdown();
         });
 
-        input.addEventListener('blur', () => {
-            setTimeout(() => {
-                closeDropdown();
-            }, 200);
+        input.addEventListener('click', () => {
+            if (listbox.style.display !== 'block') {
+                openDropdown();
+            }
         });
+
+        listbox.addEventListener('mousedown', (e) => {
+            // Dropdown scroll veya tıklamalarda input'un blur olup erkenden kapanmasını engeller
+            e.preventDefault();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (comboboxContainer && !comboboxContainer.contains(e.target)) {
+                closeDropdown();
+            }
+        });
+
+        if (chevronIcon) {
+            chevronIcon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (listbox.style.display === 'block') {
+                    closeDropdown();
+                } else {
+                    input.focus();
+                    openDropdown();
+                }
+            });
+        }
 
         input.addEventListener('keydown', (e) => {
             const isOpen = listbox.style.display === 'block';
@@ -2436,8 +2466,10 @@ function initUniversityPage(initialUni) {
         if (clearBtn) {
             clearBtn.addEventListener('click', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 input.value = '';
                 clearBtn.style.display = 'none';
+                if (chevronIcon) chevronIcon.style.display = 'inline-flex';
                 input.focus();
                 openDropdown();
             });
@@ -4655,7 +4687,8 @@ export function renderCurrentRoute() {
 
     // Initialize Route-Specific Logic
     if (route === 'university') {
-        const initialUni = params.get('name') || selectedUniState || 'Bandırma Onyedi Eylül Üniversitesi';
+        const initialUni = params.get('name') || 'Boğaziçi Üniversitesi';
+        selectedUniState = initialUni;
         activeRenderers.university = initUniversityPage(initialUni);
     } else if (route === 'cities') {
         initCitiesPage();

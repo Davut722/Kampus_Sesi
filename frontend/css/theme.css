@@ -3098,6 +3098,8 @@ svg.footer-accordion-icon {
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 50;
 }
 .uni-top-bar .ed-breadcrumb {
   margin-bottom: 0;
@@ -3129,7 +3131,7 @@ svg.footer-accordion-icon {
 }
 .uni-search-combobox__input {
   width: 100%;
-  padding: 8px 32px 8px 34px;
+  padding: 8px 34px 8px 34px;
   font-family: inherit;
   font-size: 0.88rem;
   background: var(--color-surface);
@@ -3138,12 +3140,14 @@ svg.footer-accordion-icon {
   color: var(--color-text);
   transition: all 0.2s ease;
   box-shadow: var(--shadow-sm);
+  cursor: pointer;
 }
 .uni-search-combobox__input:focus {
   outline: 2px solid var(--color-accent);
   outline-offset: 1px;
   border-color: var(--color-accent);
   background: var(--color-surface);
+  cursor: text;
 }
 .uni-search-combobox__input::placeholder {
   color: var(--color-text-muted);
@@ -3162,9 +3166,30 @@ svg.footer-accordion-icon {
   justify-content: center;
   border-radius: 4px;
   transition: color 0.15s ease;
+  z-index: 2;
 }
 .uni-search-combobox__clear:hover {
   color: var(--color-text);
+}
+.uni-search-combobox__chevron {
+  position: absolute;
+  right: 10px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: transform 0.2s ease, color 0.15s ease;
+  pointer-events: auto;
+}
+.uni-search-combobox__chevron:hover {
+  color: var(--color-text);
+}
+.uni-search-combobox[data-open="true"] .uni-search-combobox__chevron {
+  transform: rotate(180deg);
+  color: var(--color-accent);
 }
 
 /* Combobox Dropdown Suggestions List */
@@ -3173,7 +3198,7 @@ svg.footer-accordion-icon {
   top: calc(100% + 6px);
   left: 0;
   right: 0;
-  max-height: 320px;
+  max-height: 340px;
   overflow-y: auto;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -3183,6 +3208,19 @@ svg.footer-accordion-icon {
   list-style: none;
   padding: 6px;
   margin: 0;
+}
+.uni-search-combobox__dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+.uni-search-combobox__dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+.uni-search-combobox__dropdown::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 999px;
+}
+.uni-search-combobox__dropdown::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
 }
 .uni-search-combobox__item {
   display: flex;
@@ -3234,6 +3272,14 @@ svg.footer-accordion-icon {
 .uni-search-combobox__item:hover .uni-search-combobox__item-badge {
   background: rgba(217, 72, 15, 0.15);
   border-color: rgba(217, 72, 15, 0.3);
+}
+.uni-search-combobox__item--selected {
+  font-weight: 600;
+  background: rgba(217, 72, 15, 0.08);
+  color: var(--color-accent);
+}
+.uni-search-combobox__item--selected .uni-search-combobox__item-icon {
+  color: var(--color-accent);
 }
 .uni-search-combobox__mark {
   background: transparent;
@@ -3996,6 +4042,13 @@ svg.footer-accordion-icon {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+.kyk-detail--far {
+  color: #d97706;
+  font-weight: 500;
+}
+.kyk-detail--unknown {
+  color: var(--color-text-muted);
 }
 .kyk-detail--date {
   grid-column: 1 / -1;

@@ -257,17 +257,26 @@ class KykDorm(Base):
     capacity = Column(String(50), default="")
     lat = Column(Float(precision=53), nullable=True)
     lng = Column(Float(precision=53), nullable=True)
+    city = Column(String(100), nullable=True)
+    district = Column(String(100), nullable=True)
+    source = Column(String(50), default="system")
 
     university = relationship("University", back_populates="dorms")
 
     def to_dict(self, distance_km=None, nearest_campus=None):
         mesafe_str = self.distance
+        is_far = False
         if distance_km is not None:
             d = float(distance_km)
             if d < 1.0:
                 mesafe_str = f"Kuş uçuşu {int(round(d * 1000))} m"
             else:
                 mesafe_str = f"Kuş uçuşu {d:.1f} km".replace(".", ",")
+            if d > 10.0:
+                is_far = True
+        else:
+            mesafe_str = "Mesafe bilinmiyor"
+
         data = {
             "id": self.id,
             "ad": self.name,
@@ -277,9 +286,15 @@ class KykDorm(Base):
             "kapasite": self.capacity,
             "lat": self.lat,
             "lng": self.lng,
+            "city": self.city,
+            "district": self.district,
+            "source": self.source,
+            "is_far": is_far,
         }
         if distance_km is not None:
             data["distance_km"] = round(float(distance_km), 2)
+        else:
+            data["distance_km"] = None
         if nearest_campus:
             data["nearest_campus"] = nearest_campus
         return data
@@ -290,7 +305,7 @@ class UniversityDorm(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     university_id = Column(Integer, ForeignKey("universities.id", ondelete="CASCADE"), nullable=False, index=True)
     dorm_id = Column(Integer, ForeignKey("kyk_dorms.id", ondelete="CASCADE"), nullable=False, index=True)
-    distance_km = Column(Float(precision=53), nullable=False)
+    distance_km = Column(Float(precision=53), nullable=True)
     nearest_campus = Column(String(200), nullable=True)
 
     __table_args__ = (

@@ -203,9 +203,9 @@ export const TEMPLATES = {
                     <span class="ed-breadcrumb__sep">/</span>
                     <a href="#/ranking" class="ed-breadcrumb__link">Üniversiteler</a>
                     <span class="ed-breadcrumb__sep">/</span>
-                    <span class="ed-breadcrumb__text" id="uni-bc-city">Balıkesir</span>
+                    <span class="ed-breadcrumb__text" id="uni-bc-city">İstanbul</span>
                     <span class="ed-breadcrumb__sep">/</span>
-                    <span class="ed-breadcrumb__current" id="uni-bc-name">Bandırma Onyedi Eylül Üniversitesi</span>
+                    <span class="ed-breadcrumb__current" id="uni-bc-name">Boğaziçi Üniversitesi</span>
                 </nav>
 
                 <div class="uni-search-combobox" id="uni-search-combobox">
@@ -224,6 +224,7 @@ export const TEMPLATES = {
                         <button type="button" class="uni-search-combobox__clear" id="uni-combobox-clear" aria-label="Aramayı temizle" style="display: none;">
                             <i data-lucide="x" class="icon-xs"></i>
                         </button>
+                        <i data-lucide="chevron-down" class="icon-xs uni-search-combobox__chevron" id="uni-combobox-chevron"></i>
                     </div>
                     <ul id="uni-combobox-listbox"
                         class="uni-search-combobox__dropdown"
@@ -238,16 +239,16 @@ export const TEMPLATES = {
                 <div class="ed-uni-hero__main">
                     <div class="ed-uni-hero__logo-box">
                         <img id="hero-img" class="ed-uni-hero__logo"
-                            src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=2070"
+                            src="img/bogazici-universitesi.jpg"
                             alt="Üniversite Logosu">
                     </div>
                     <div class="ed-uni-hero__header-info">
                         <div class="ed-uni-hero__meta-chips">
                             <span class="ed-chip" id="uni-hero-type">Devlet Üniversitesi</span>
-                            <span class="ed-chip" id="uni-hero-city-chip"><i data-lucide="map-pin" class="icon-xs"></i> <span id="uni-hero-city">Balıkesir</span></span>
-                            <span class="ed-chip" id="uni-hero-year-chip"><i data-lucide="calendar" class="icon-xs"></i> <span id="uni-hero-year">Kuruluş: 2015</span></span>
+                            <span class="ed-chip" id="uni-hero-city-chip"><i data-lucide="map-pin" class="icon-xs"></i> <span id="uni-hero-city">İstanbul</span></span>
+                            <span class="ed-chip" id="uni-hero-year-chip"><i data-lucide="calendar" class="icon-xs"></i> <span id="uni-hero-year">Kuruluş: 1863</span></span>
                         </div>
-                        <h1 class="ed-uni-hero__title" id="uni-hero-title">Bandırma Onyedi Eylül Üniversitesi</h1>
+                        <h1 class="ed-uni-hero__title" id="uni-hero-title">Boğaziçi Üniversitesi</h1>
                         <p class="ed-uni-hero__subtitle" id="uni-hero-subtitle" style="display:none;"></p>
 
                         <!-- Puan ve Tavsiye Bloğu -->
@@ -395,7 +396,7 @@ export const TEMPLATES = {
                                 <div class="campus-map-header">
                                     <div class="campus-map-header__info">
                                         <span class="campus-map-header__dot"></span>
-                                        <span class="campus-map-header__title" id="campus-map-label">Bandırma Onyedi Eylül Üniversitesi — Merkez Yerleşke</span>
+                                        <span class="campus-map-header__title" id="campus-map-label">Boğaziçi Üniversitesi — Güney Kampüs</span>
                                     </div>
                                     <div class="campus-map-header__actions">
                                         <button type="button" class="campus-map-reset-btn" id="campus-map-reset-btn" title="Kampüs konumuna odakla">
@@ -418,10 +419,10 @@ export const TEMPLATES = {
                                     <div class="campus-map-edge-card" id="campus-map-edge-card">
                                         <div class="campus-map-edge-card__popover">
                                             <span class="map-popup__badge">Canlı Kampüs Konumu</span>
-                                            <h4 class="campus-map-edge-card__title" id="campus-map-edge-title">Bandırma Onyedi Eylül Üniversitesi</h4>
+                                            <h4 class="campus-map-edge-card__title" id="campus-map-edge-title">Boğaziçi Üniversitesi</h4>
                                             <p class="campus-map-edge-card__desc" id="campus-map-edge-desc">Ana yerleşke ve çevre ulaşım bağlantıları.</p>
                                         </div>
-                                        <a href="https://www.google.com/maps?q=40.3414,27.9344" target="_blank" rel="noopener noreferrer" class="map-popup__btn" id="campus-map-gmaps-btn">
+                                        <a href="https://www.google.com/maps?q=41.0836,29.0506" target="_blank" rel="noopener noreferrer" class="map-popup__btn" id="campus-map-gmaps-btn">
                                             <i data-lucide="map-pin" class="icon-xs"></i>
                                             <span>Google Haritalar'da Aç</span>
                                         </a>

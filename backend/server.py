@@ -944,14 +944,18 @@ def get_university_dorms(uni_identifier: str, db: Session = Depends(get_db)):
 
     matches = (
         db.query(UniversityDorm)
-        .filter(UniversityDorm.university_id == target_uid)
+        .filter(
+            UniversityDorm.university_id == target_uid,
+            UniversityDorm.distance_km != None,
+            UniversityDorm.distance_km <= 30.0
+        )
         .order_by(UniversityDorm.distance_km.asc())
         .all()
     )
     return [
         m.dorm.to_dict(distance_km=m.distance_km, nearest_campus=m.nearest_campus)
         for m in matches
-        if m.dorm is not None
+        if m.dorm is not None and m.dorm.lat is not None and m.dorm.lng is not None
     ]
 
 @app.get("/api/universities/{uni_name}")

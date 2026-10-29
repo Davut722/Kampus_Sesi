@@ -8,8 +8,9 @@ from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 # ---------------------------------------------------------------------------
 # Database configuration
 # ---------------------------------------------------------------------------
-# MySQL bağlantısı – XAMPP varsayılan: kullanıcı root, şifre boş.
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:@localhost/unireview?charset=utf8mb4"
+# MySQL baglantisi -- XAMPP varsayilani: kullanici root, sifre bos.
+# Kampus Sesi veritabani (varsayilan: kampus_sesi, geriye donuk uyumluluk: unireview)
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:@localhost/kampus_sesi?charset=utf8mb4"
 DATABASE_URL = os.getenv("DATABASE_URL", SQLALCHEMY_DATABASE_URL)
 
 # Engine creation – SQLite uses a special connect_args, MySQL (or others) do not.
@@ -833,7 +834,9 @@ def seed_initial_university_addresses(db):
     try:
         items_to_seed = list(INITIAL_UNIVERSITY_ADDRESSES)
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        cache_path = os.path.join(project_root, "data", "uni_addresses_cache.json")
+        primary_cache = os.path.join(project_root, "data", "kampus_sesi_addresses_cache.json")
+        fallback_cache = os.path.join(project_root, "data", "uni_addresses_cache.json")
+        cache_path = primary_cache if os.path.exists(primary_cache) else fallback_cache
         if os.path.exists(cache_path):
             try:
                 with open(cache_path, "r", encoding="utf-8") as f:

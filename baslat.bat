@@ -11,7 +11,7 @@ echo [1/2] Tarayıcı http://localhost:8000 adresinde açılıyor...
 timeout /t 2 >nul
 start "" "http://localhost:8000"
 
-echo [2/2] FastAPI backend sunucusu ve MySQL veritabanı bağlantısı başlatılıyor...
+echo [2/2] FastAPI backend sunucusu ve MySQL veritabanı başlatılıyor...
 echo Sunucu adresi: http://localhost:8000
 echo.
 echo Sunucuyu durdurmak için bu pencerede CTRL+C tuşlarına basabilirsiniz.
@@ -32,4 +32,3 @@ if %ERRORLEVEL% NEQ 0 (
     echo.
     pause
 )
-

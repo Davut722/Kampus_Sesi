@@ -22,11 +22,11 @@ from database import (
 )
 from scripts.fetch_and_seed_all_kyk import UNI_CITY_MAP, CITIES_TR
 
-CACHE_FILE = os.path.join(DATA_DIR, "uni_addresses_cache.json")
+CACHE_FILE = os.path.join(DATA_DIR, "kampus_sesi_addresses_cache.json")
 SQL_FILE = os.path.join(DATA_DIR, "tam_liste_adresler.sql")
 
 HEADERS = {
-    "User-Agent": "KampusSesiAcademicBot/2.0 (https://github.com/Davut722/kampus-agi; contact@kampussesi.com)",
+    "User-Agent": "KampusSesiAcademicBot/2.0 (https://github.com/Davut722/kampus-sesi; contact@kampussesi.com)",
     "Accept-Language": "tr-TR,tr;q=0.9",
 }
 

@@ -1,0 +1,20 @@
+{
+  "name": "kampus-sesi",
+  "version": "1.0.0",
+  "description": "Kampüs Sesi — Üniversite Değerlendirme ve Öğrenci Rehberi Platformu",
+  "main": "backend/server.py",
+  "scripts": {
+    "start": "python backend/server.py",
+    "backend": "python backend/server.py",
+    "seed:kyk": "python -m scripts.fetch_and_seed_all_kyk",
+    "seed:addresses": "python -m scripts.fetch_and_seed_all_addresses"
+  },
+  "keywords": [
+    "kampus-sesi",
+    "universite-degerlendirme",
+    "kyk-yurtlari",
+    "ogrenci-rehberi"
+  ],
+  "author": "Kampüs Sesi Ekibi",
+  "license": "MIT"
+}

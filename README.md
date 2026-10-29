@@ -5,7 +5,7 @@ Türkiye'deki üniversiteler için doğrulanmış öğrenci yorumları, kampüs 
 ## Proje Dizin Yapısı
 
 ```text
-uni-review/
+kampus-sesi/
 ├── backend/                # FastAPI sunucusu, veritabanı modelleri ve kimlik doğrulama
 │   ├── server.py           # REST API uçları ve statik önyüz sunumu
 │   ├── database.py         # SQLAlchemy ORM modelleri ve veritabanı bağlantısı
